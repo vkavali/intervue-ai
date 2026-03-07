@@ -1,0 +1,217 @@
+import { NextRequest, NextResponse } from "next/server"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
+import { prisma } from "@/lib/prisma"
+
+// GET /api/sessions/[id] - Get session details with AI interactions, notes, and audit
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email! },
+    })
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
+    }
+
+    const interviewSession = await prisma.interviewSession.findUnique({
+      where: { id: params.id },
+      include: {
+        template: {
+          include: { questions: { orderBy: { orderIndex: "asc" } } },
+        },
+        candidate: { select: { id: true, name: true, email: true } },
+        interviewer: { select: { id: true, name: true, email: true } },
+        aiInteractions: { orderBy: { timestamp: "asc" } },
+        aiLevelOverrides: {
+          orderBy: { timestamp: "asc" },
+          include: {
+            overriddenBy: { select: { id: true, name: true, email: true } },
+          },
+        },
+        auditReport: true,
+        interviewerNotes: {
+          orderBy: { timestamp: "asc" },
+          include: {
+            interviewer: { select: { id: true, name: true, email: true } },
+          },
+        },
+      },
+    })
+
+    if (!interviewSession) {
+      return NextResponse.json(
+        { error: "Session not found" },
+        { status: 404 }
+      )
+    }
+
+    // Verify the user has access to this session
+    const hasAccess =
+      (user.role === "COMPANY_ADMIN" &&
+        user.companyId === interviewSession.companyId) ||
+      interviewSession.candidateId === user.id ||
+      interviewSession.interviewerId === user.id
+
+    if (!hasAccess) {
+      return NextResponse.json(
+        { error: "Access denied to this session" },
+        { status: 403 }
+      )
+    }
+
+    return NextResponse.json(interviewSession)
+  } catch (error) {
+    console.error("GET /api/sessions/[id] error:", error)
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    )
+  }
+}
+
+// PATCH /api/sessions/[id] - Update session state
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email! },
+    })
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
+    }
+
+    const interviewSession = await prisma.interviewSession.findUnique({
+      where: { id: params.id },
+    })
+
+    if (!interviewSession) {
+      return NextResponse.json(
+        { error: "Session not found" },
+        { status: 404 }
+      )
+    }
+
+    // Verify the user has access to modify this session
+    const hasAccess =
+      (user.role === "COMPANY_ADMIN" &&
+        user.companyId === interviewSession.companyId) ||
+      interviewSession.candidateId === user.id ||
+      interviewSession.interviewerId === user.id
+
+    if (!hasAccess) {
+      return NextResponse.json(
+        { error: "Access denied to this session" },
+        { status: 403 }
+      )
+    }
+
+    const body = await req.json()
+    const { action, code, language, aiLevel, currentQuestionIndex } = body
+
+    const updateData: Record<string, unknown> = {}
+
+    // Handle action-based updates
+    if (action === "start") {
+      if (interviewSession.status !== "PENDING") {
+        return NextResponse.json(
+          { error: "Session can only be started from PENDING status" },
+          { status: 400 }
+        )
+      }
+      updateData.status = "ACTIVE"
+      updateData.startedAt = new Date()
+    } else if (action === "end") {
+      if (interviewSession.status !== "ACTIVE") {
+        return NextResponse.json(
+          { error: "Session can only be ended from ACTIVE status" },
+          { status: 400 }
+        )
+      }
+      updateData.status = "COMPLETED"
+      updateData.endedAt = new Date()
+    } else if (action === "cancel") {
+      if (
+        interviewSession.status === "COMPLETED" ||
+        interviewSession.status === "CANCELLED"
+      ) {
+        return NextResponse.json(
+          { error: "Cannot cancel a completed or already cancelled session" },
+          { status: 400 }
+        )
+      }
+      updateData.status = "CANCELLED"
+      updateData.endedAt = new Date()
+    }
+
+    // Handle field updates
+    if (code !== undefined) {
+      updateData.code = code
+    }
+
+    if (language !== undefined) {
+      updateData.language = language
+    }
+
+    if (aiLevel !== undefined) {
+      if (typeof aiLevel !== "number" || aiLevel < 0 || aiLevel > 4) {
+        return NextResponse.json(
+          { error: "AI level must be a number between 0 and 4" },
+          { status: 400 }
+        )
+      }
+      updateData.aiLevel = aiLevel
+    }
+
+    if (currentQuestionIndex !== undefined) {
+      if (typeof currentQuestionIndex !== "number" || currentQuestionIndex < 0) {
+        return NextResponse.json(
+          { error: "currentQuestionIndex must be a non-negative number" },
+          { status: 400 }
+        )
+      }
+      updateData.currentQuestionIndex = currentQuestionIndex
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      return NextResponse.json(
+        { error: "No valid update fields provided" },
+        { status: 400 }
+      )
+    }
+
+    const updated = await prisma.interviewSession.update({
+      where: { id: params.id },
+      data: updateData,
+      include: {
+        template: true,
+        candidate: { select: { id: true, name: true, email: true } },
+        interviewer: { select: { id: true, name: true, email: true } },
+      },
+    })
+
+    return NextResponse.json(updated)
+  } catch (error) {
+    console.error("PATCH /api/sessions/[id] error:", error)
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    )
+  }
+}
