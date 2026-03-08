@@ -1,7 +1,6 @@
 import { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
-import crypto from 'crypto'
 import { prisma } from '@/lib/prisma'
 
 export enum UserRole {
@@ -14,7 +13,6 @@ declare module 'next-auth' {
   interface User {
     id: string
     role: UserRole
-    activeSessionToken?: string
   }
 
   interface Session {
@@ -32,8 +30,6 @@ declare module 'next-auth/jwt' {
   interface JWT {
     id: string
     role: UserRole
-    activeSessionToken?: string
-    currentSessionToken?: string
   }
 }
 
@@ -67,24 +63,11 @@ export const authOptions: NextAuthOptions = {
           throw new Error('Invalid password')
         }
 
-        // Generate a new session token for single-device enforcement
-        const sessionToken = crypto.randomUUID()
-
-        // Update user's active session token (invalidates any existing sessions)
-        await prisma.user.update({
-          where: { id: user.id },
-          data: {
-            activeSessionToken: sessionToken,
-            lastLoginAt: new Date(),
-          },
-        })
-
         return {
           id: user.id,
           email: user.email,
           name: user.name,
           role: user.role as UserRole,
-          activeSessionToken: sessionToken,
         }
       },
     }),
@@ -98,10 +81,6 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id
         token.role = user.role
-        // Store both the token assigned at login (currentSessionToken)
-        // and what the DB considers active (activeSessionToken)
-        token.currentSessionToken = user.activeSessionToken
-        token.activeSessionToken = user.activeSessionToken
       }
       return token
     },
