@@ -1,7 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
+import { PROBLEM_BANK } from "@/data/problem-bank";
+
+const ITEMS_PER_PAGE = 24;
+
+const COMPANY_FILTERS = ["All", "Google", "Amazon", "Meta", "Apple", "Netflix", "General"];
+const DIFFICULTY_FILTERS = ["All", "EASY", "MEDIUM", "HARD"];
+const CATEGORY_FILTERS = ["All", "Arrays", "Strings", "LinkedLists", "Trees", "Graph", "DynamicProgramming", "Sorting", "StackQueue", "Design", "Math", "Greedy", "Backtracking", "SlidingWindow", "Recursion"];
 
 const AI_LEVEL_OPTIONS = [
   { value: 0, label: "L0 No AI", description: "Solve independently", color: "text-red-400", border: "border-red-500/30", bg: "bg-red-500/10" },
@@ -11,105 +18,8 @@ const AI_LEVEL_OPTIONS = [
   { value: 4, label: "L4 Copilot", description: "Full AI assistance", color: "text-green-400", border: "border-green-500/30", bg: "bg-green-500/10" },
 ];
 
-// Original practice problems - NOT copied from any copyrighted source
-const PRACTICE_PROBLEMS = [
-  {
-    id: "two-sum",
-    title: "Pair Finder",
-    difficulty: "EASY",
-    description:
-      "Given a collection of numbers and a target sum, find two distinct elements whose values add up to the target. Return their positions in the collection. Assume exactly one valid answer exists.",
-    tags: ["Array", "Hash Table"],
-  },
-  {
-    id: "reverse-linked-list",
-    title: "Chain Reversal",
-    difficulty: "EASY",
-    description:
-      "You have a chain of connected nodes where each node points to the next. Reverse the direction of all connections so the last node becomes the first. Try both loop-based and recursive approaches.",
-    tags: ["Linked List", "Recursion"],
-  },
-  {
-    id: "valid-parentheses",
-    title: "Bracket Validator",
-    difficulty: "EASY",
-    description:
-      "Given a text containing only bracket characters - round (), square [], and curly {} - determine if every opening bracket has a matching closing bracket of the same type, closed in the proper nested order.",
-    tags: ["Stack", "String"],
-  },
-  {
-    id: "merge-intervals",
-    title: "Time Slot Merger",
-    difficulty: "MEDIUM",
-    description:
-      "A calendar has multiple time slots represented as [start, end] pairs. Some slots overlap. Merge all overlapping slots into non-overlapping ranges that cover the same total time.",
-    tags: ["Array", "Sorting"],
-  },
-  {
-    id: "lru-cache",
-    title: "Recent Items Cache",
-    difficulty: "MEDIUM",
-    description:
-      "Build a fixed-size storage system that keeps the most recently accessed items. When full, remove the item that hasn't been used for the longest time. Both reading and writing should be instant (O(1) time).",
-    tags: ["Hash Table", "Linked List", "Design"],
-  },
-  {
-    id: "binary-tree-level-order",
-    title: "Tree Layer Scanner",
-    difficulty: "MEDIUM",
-    description:
-      "Given a hierarchical tree structure where each node can have a left and right child, collect all node values grouped by their depth level, reading left to right within each level.",
-    tags: ["Tree", "BFS", "Queue"],
-  },
-  {
-    id: "rate-limiter",
-    title: "Request Rate Limiter",
-    difficulty: "MEDIUM",
-    description:
-      "Design a rate limiter that allows at most N requests per time window of W seconds for each unique client ID. Implement allow(clientId, timestamp) that returns true if the request should be permitted, false if it exceeds the rate limit. Handle multiple clients independently.",
-    tags: ["Design", "Hash Table", "Queue"],
-  },
-  {
-    id: "flatten-nested-data",
-    title: "Nested Data Flattener",
-    difficulty: "EASY",
-    description:
-      "Given a deeply nested data structure (arrays within arrays, to any depth), produce a single flat array containing all the values in order. For example, [1, [2, [3, 4], 5], 6] becomes [1, 2, 3, 4, 5, 6]. Do not use any built-in flatten methods.",
-    tags: ["Recursion", "Array"],
-  },
-  {
-    id: "event-emitter",
-    title: "Event System",
-    difficulty: "MEDIUM",
-    description:
-      "Implement a publish-subscribe event system with three methods: on(eventName, callback) to register a listener, off(eventName, callback) to remove a listener, and emit(eventName, ...args) to trigger all listeners for that event with the given arguments. Support multiple listeners per event.",
-    tags: ["Design", "Callbacks"],
-  },
-  {
-    id: "debounce-throttle",
-    title: "Call Frequency Controller",
-    difficulty: "MEDIUM",
-    description:
-      "Implement two utility functions: (1) debounce(fn, delay) - delays execution until no calls happen for 'delay' ms, and (2) throttle(fn, interval) - ensures fn is called at most once per 'interval' ms. Both should handle arguments correctly and return wrapper functions.",
-    tags: ["Closures", "Timing"],
-  },
-  {
-    id: "string-compressor",
-    title: "Text Compressor",
-    difficulty: "EASY",
-    description:
-      "Implement basic string compression using counts of repeated characters. For example, 'aabcccccaaa' becomes 'a2b1c5a3'. If the compressed string is not shorter than the original, return the original string. Handle edge cases like empty strings and single characters.",
-    tags: ["String", "Two Pointers"],
-  },
-  {
-    id: "task-scheduler",
-    title: "Task Queue Scheduler",
-    difficulty: "HARD",
-    description:
-      "Design a task scheduler that processes tasks with priorities and cooldown periods. Each task has a type and must wait at least N time units before the same type can run again. Given a list of tasks and cooldown N, find the minimum time units needed to execute all tasks. Idle slots can be inserted when necessary.",
-    tags: ["Greedy", "Priority Queue", "Design"],
-  },
-];
+// Use the problem bank - includes original hardcoded problems as featured
+const FEATURED_IDS = ["two-sum", "reverse-linked-list", "valid-parentheses", "merge-intervals", "lru-cache", "binary-tree-level-order", "rate-limiter", "flatten-nested-data", "event-emitter", "debounce-throttle", "string-compressor", "task-scheduler"];
 
 interface GeneratedProblem {
   id: string;
@@ -131,6 +41,36 @@ const difficultyColors: Record<string, { text: string; bg: string; border: strin
 export default function PracticeModePage() {
   const [selectedAiLevel, setSelectedAiLevel] = useState(2);
   const [activeTab, setActiveTab] = useState<"problems" | "generate">("problems");
+
+  // Filter state
+  const [searchQuery, setSearchQuery] = useState("");
+  const [companyFilter, setCompanyFilter] = useState("All");
+  const [difficultyFilter, setDifficultyFilter] = useState("All");
+  const [categoryFilter, setCategoryFilter] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Filtered problems
+  const filteredProblems = useMemo(() => {
+    return PROBLEM_BANK.filter((p) => {
+      if (searchQuery && !p.title.toLowerCase().includes(searchQuery.toLowerCase()) && !p.description.toLowerCase().includes(searchQuery.toLowerCase()) && !p.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()))) return false;
+      if (companyFilter !== "All") {
+        if (companyFilter === "General") { if (p.company) return false; }
+        else { if (p.company !== companyFilter) return false; }
+      }
+      if (difficultyFilter !== "All" && p.difficulty !== difficultyFilter) return false;
+      if (categoryFilter !== "All" && p.category !== categoryFilter) return false;
+      return true;
+    });
+  }, [searchQuery, companyFilter, difficultyFilter, categoryFilter]);
+
+  const totalPages = Math.ceil(filteredProblems.length / ITEMS_PER_PAGE);
+  const paginatedProblems = filteredProblems.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+
+  // Reset page when filters change
+  const updateFilter = (setter: (v: string) => void, value: string) => {
+    setter(value);
+    setCurrentPage(1);
+  };
 
   // AI Generator state
   const [company, setCompany] = useState("");
@@ -175,8 +115,16 @@ export default function PracticeModePage() {
     }
   }
 
-  function renderProblemCard(problem: { id: string; title: string; difficulty: string; description: string; tags: string[] }, isGenerated: boolean = false) {
+  function renderProblemCard(problem: { id: string; title: string; difficulty: string; description: string; tags: string[]; company?: string }, isGenerated: boolean = false) {
     const diff = difficultyColors[problem.difficulty] || difficultyColors.MEDIUM;
+    // Featured problems have starter code in [problemId] page, others go to custom editor
+    const isFeatured = FEATURED_IDS.includes(problem.id);
+    const href = isGenerated
+      ? `/practice/custom?aiLevel=${selectedAiLevel}&problem=${encodeURIComponent(JSON.stringify(problem))}`
+      : isFeatured
+        ? `/practice/${problem.id}?aiLevel=${selectedAiLevel}`
+        : `/practice/custom?aiLevel=${selectedAiLevel}&problem=${encodeURIComponent(JSON.stringify(problem))}`;
+
     return (
       <div
         key={problem.id}
@@ -188,23 +136,30 @@ export default function PracticeModePage() {
           >
             {problem.difficulty}
           </span>
-          {isGenerated && (
-            <span className="inline-flex items-center rounded-full bg-purple-500/10 border border-purple-500/30 px-2 py-0.5 text-[10px] text-purple-400">
-              AI Generated
-            </span>
-          )}
+          <div className="flex gap-1">
+            {problem.company && (
+              <span className="inline-flex items-center rounded-full bg-blue-500/10 border border-blue-500/30 px-2 py-0.5 text-[10px] text-blue-400">
+                {problem.company}
+              </span>
+            )}
+            {isGenerated && (
+              <span className="inline-flex items-center rounded-full bg-purple-500/10 border border-purple-500/30 px-2 py-0.5 text-[10px] text-purple-400">
+                AI Generated
+              </span>
+            )}
+          </div>
         </div>
 
         <h3 className="text-base font-semibold text-white mb-2 group-hover:text-purple-300 transition-colors">
           {problem.title}
         </h3>
 
-        <p className="text-sm text-gray-400 mb-4 line-clamp-3">
+        <p className="text-sm text-gray-400 mb-4 line-clamp-2">
           {problem.description}
         </p>
 
         <div className="flex flex-wrap gap-1.5 mb-5">
-          {problem.tags.map((tag) => (
+          {problem.tags.slice(0, 3).map((tag) => (
             <span
               key={tag}
               className="rounded bg-gray-800 px-2 py-0.5 text-xs text-gray-400"
@@ -215,11 +170,7 @@ export default function PracticeModePage() {
         </div>
 
         <Link
-          href={
-            isGenerated
-              ? `/practice/custom?aiLevel=${selectedAiLevel}&problem=${encodeURIComponent(JSON.stringify(problem))}`
-              : `/practice/${problem.id}?aiLevel=${selectedAiLevel}`
-          }
+          href={href}
           className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-purple-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-purple-500"
         >
           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -300,7 +251,7 @@ export default function PracticeModePage() {
                 : "border-transparent text-gray-500 hover:text-gray-300"
             }`}
           >
-            Practice Problems ({PRACTICE_PROBLEMS.length})
+            Practice Problems ({PROBLEM_BANK.length})
           </button>
           <button
             onClick={() => setActiveTab("generate")}
@@ -320,9 +271,53 @@ export default function PracticeModePage() {
         {/* Problems Tab */}
         {activeTab === "problems" && (
           <div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {PRACTICE_PROBLEMS.map((problem) => renderProblemCard(problem))}
+            {/* Search and Filters */}
+            <div className="mb-6 space-y-3">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => updateFilter(setSearchQuery, e.target.value)}
+                placeholder="Search problems by title, description, or tag..."
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+              />
+              <div className="flex flex-wrap gap-2">
+                <select value={companyFilter} onChange={(e) => updateFilter(setCompanyFilter, e.target.value)} className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white focus:border-purple-500 focus:outline-none">
+                  {COMPANY_FILTERS.map(c => <option key={c} value={c}>{c === "All" ? "All Companies" : c}</option>)}
+                </select>
+                <select value={difficultyFilter} onChange={(e) => updateFilter(setDifficultyFilter, e.target.value)} className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white focus:border-purple-500 focus:outline-none">
+                  {DIFFICULTY_FILTERS.map(d => <option key={d} value={d}>{d === "All" ? "All Difficulties" : d}</option>)}
+                </select>
+                <select value={categoryFilter} onChange={(e) => updateFilter(setCategoryFilter, e.target.value)} className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white focus:border-purple-500 focus:outline-none">
+                  {CATEGORY_FILTERS.map(c => <option key={c} value={c}>{c === "All" ? "All Categories" : c}</option>)}
+                </select>
+                <span className="flex items-center text-xs text-gray-500 ml-auto">
+                  {filteredProblems.length} problems found
+                </span>
+              </div>
             </div>
+
+            {/* Problem Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {paginatedProblems.map((problem) => renderProblemCard(problem))}
+            </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="mt-8 flex items-center justify-center gap-2">
+                <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="rounded-lg bg-gray-800 px-3 py-1.5 text-sm text-gray-300 hover:bg-gray-700 disabled:opacity-30">Prev</button>
+                {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
+                  let page: number;
+                  if (totalPages <= 7) page = i + 1;
+                  else if (currentPage <= 4) page = i + 1;
+                  else if (currentPage >= totalPages - 3) page = totalPages - 6 + i;
+                  else page = currentPage - 3 + i;
+                  return (
+                    <button key={page} onClick={() => setCurrentPage(page)} className={`rounded-lg px-3 py-1.5 text-sm ${currentPage === page ? "bg-purple-600 text-white" : "bg-gray-800 text-gray-300 hover:bg-gray-700"}`}>{page}</button>
+                  );
+                })}
+                <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="rounded-lg bg-gray-800 px-3 py-1.5 text-sm text-gray-300 hover:bg-gray-700 disabled:opacity-30">Next</button>
+              </div>
+            )}
           </div>
         )}
 

@@ -139,6 +139,12 @@ function CustomPracticeContent() {
         const { runJavaScriptInWorker } = await import("@/lib/code-runner");
         const result = await runJavaScriptInWorker(code);
         setExecOutput(result);
+      } else if (data.error && data.error.includes("No code execution service")) {
+        setExecOutput({
+          output: "",
+          error: `${language.charAt(0).toUpperCase() + language.slice(1)} execution requires a server-side runtime.\n\nIn practice mode, JavaScript and TypeScript run directly in your browser.\nFor other languages, switch to JavaScript/TypeScript or use the AI assistant to verify your logic.`,
+          exitCode: 1,
+        });
       } else {
         setExecOutput({
           output: data.output || "",

@@ -286,13 +286,13 @@ const PRACTICE_PROBLEMS: Record<string, PracticeProblem> = {
 // ─── Constants ──────────────────────────────────────────────────────────────────
 
 const languages = [
-  { value: "javascript", label: "JavaScript" },
-  { value: "typescript", label: "TypeScript" },
-  { value: "python", label: "Python" },
-  { value: "java", label: "Java" },
-  { value: "cpp", label: "C++" },
-  { value: "go", label: "Go" },
-  { value: "rust", label: "Rust" },
+  { value: "javascript", label: "JavaScript", runnable: true },
+  { value: "typescript", label: "TypeScript", runnable: true },
+  { value: "python", label: "Python", runnable: false },
+  { value: "java", label: "Java", runnable: false },
+  { value: "cpp", label: "C++", runnable: false },
+  { value: "go", label: "Go", runnable: false },
+  { value: "rust", label: "Rust", runnable: false },
 ];
 
 const aiLevelLabels: Record<number, { label: string; color: string }> = {
@@ -392,6 +392,18 @@ export default function PracticeProblemPage() {
         return;
       }
 
+      // Check if language is runnable
+      const langInfo = languages.find(l => l.value === language);
+      if (!langInfo?.runnable) {
+        setExecOutput({
+          output: "",
+          error: `${langInfo?.label || language} code execution is not available in practice mode.\n\nOnly JavaScript and TypeScript can run in the browser.\nSelect JavaScript or TypeScript to execute your code, or use the AI assistant to review your ${langInfo?.label || language} solution.`,
+          exitCode: 1,
+        });
+        return;
+      }
+
+      // For other runnable languages, try server-side execution
       const res = await fetch("/api/execute", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -402,6 +414,13 @@ export default function PracticeProblemPage() {
         const { runJavaScriptInWorker } = await import("@/lib/code-runner");
         const result = await runJavaScriptInWorker(code);
         setExecOutput(result);
+      } else if (data.error && data.error.includes("No code execution service")) {
+        // Friendly message for practice mode
+        setExecOutput({
+          output: "",
+          error: `${language.charAt(0).toUpperCase() + language.slice(1)} execution requires a server-side runtime.\n\nIn practice mode, JavaScript and TypeScript run directly in your browser.\nFor other languages, switch to JavaScript/TypeScript or use the AI assistant to verify your logic.`,
+          exitCode: 1,
+        });
       } else {
         setExecOutput({
           output: data.output || "",
@@ -529,10 +548,13 @@ export default function PracticeProblemPage() {
           >
             {languages.map((lang) => (
               <option key={lang.value} value={lang.value}>
-                {lang.label}
+                {lang.label}{lang.runnable ? "" : " (editor only)"}
               </option>
             ))}
           </select>
+          {!languages.find(l => l.value === language)?.runnable && (
+            <span className="text-[10px] text-yellow-400">Editor only</span>
+          )}
 
           {/* AI Level Selector */}
           <select
