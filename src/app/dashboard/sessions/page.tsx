@@ -23,6 +23,8 @@ export default async function SessionsPage() {
     createdAt: Date;
     startedAt: Date | null;
     endedAt: Date | null;
+    scheduledAt: Date | null;
+    totalDurationMinutes: number | null;
     candidate: { name: string; email: string };
     interviewer: { name: string; email: string } | null;
     template: { title: string; role: string; seniority: string };
@@ -84,6 +86,9 @@ export default async function SessionsPage() {
                   Status
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+                  Timer
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
                   Score
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
@@ -140,6 +145,23 @@ export default async function SessionsPage() {
                     >
                       {s.status}
                     </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    {s.status === "PENDING" && s.scheduledAt ? (
+                      <span className="text-xs text-yellow-400">
+                        Starts {new Date(s.scheduledAt).toLocaleDateString()}
+                      </span>
+                    ) : s.status === "ACTIVE" && s.startedAt && s.totalDurationMinutes ? (
+                      <span className="text-xs text-green-400 font-mono">
+                        {s.totalDurationMinutes}m total
+                      </span>
+                    ) : s.status === "COMPLETED" && s.startedAt && s.endedAt ? (
+                      <span className="text-xs text-blue-400 font-mono">
+                        {Math.round((new Date(s.endedAt).getTime() - new Date(s.startedAt).getTime()) / 60000)}m
+                      </span>
+                    ) : (
+                      <span className="text-xs text-gray-500">--</span>
+                    )}
                   </td>
                   <td className="px-6 py-4">
                     {s.auditReport ? (

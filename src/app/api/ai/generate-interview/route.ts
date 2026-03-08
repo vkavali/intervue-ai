@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
+import { prisma } from "@/lib/prisma"
 import Anthropic from "@anthropic-ai/sdk"
+import { checkUserRateLimit } from "@/lib/rate-limiter"
 
 const anthropic = new Anthropic()
 
@@ -24,12 +26,37 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    // Rate limit check
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email! },
+      include: { company: true },
+    })
+    const plan = user?.company?.plan || null
+    const rateCheck = checkUserRateLimit(session.user.id, "aiGenerations", plan)
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        {
+          error: `Interview generation limit reached (${rateCheck.limit}/day). Upgrade your plan for more.`,
+          remaining: 0,
+          limit: rateCheck.limit,
+        },
+        { status: 429, headers: { "Retry-After": String(rateCheck.resetIn) } }
+      )
+    }
+
     const body = await req.json()
-    const { prompt, role, seniority } = body
+    const { prompt, role, seniority, interviewType, industry } = body
 
     if (!prompt || typeof prompt !== "string" || prompt.trim().length === 0) {
       return NextResponse.json(
         { error: "A prompt describing the interview is required" },
+        { status: 400 }
+      )
+    }
+
+    if (prompt.trim().length < 20 && !role) {
+      return NextResponse.json(
+        { error: "Please provide a more detailed prompt (at least 20 characters) or specify a target role." },
         { status: 400 }
       )
     }
@@ -75,14 +102,19 @@ Guidelines:
 - Make questions practical and relevant to the specified role
 - Provide actionable assessment criteria and interviewer guidance
 - Ensure the total time of all questions is reasonable (typically 30-90 minutes)
-- Questions should progress in difficulty and build on related concepts`
+- Questions should progress in difficulty and build on related concepts
+- IMPORTANT: If the interviewType is BEHAVIORAL, PROJECT_MANAGEMENT, or BUSINESS_ANALYST, generate scenario-based and situational questions, NOT coding/algorithm questions.
+- If the interviewType is SQL, generate SQL query and database design questions.
+- Match questions to the specified industry when provided.`
 
     const userPrompt = `Generate a complete interview template based on this description:
 
 "${prompt}"
 
 ${role ? `Additional context - Target Role: ${role}` : ""}
-${seniority ? `Additional context - Seniority Level: ${seniority}` : ""}`
+${seniority ? `Additional context - Seniority Level: ${seniority}` : ""}
+${interviewType ? `Additional context - Interview Type: ${interviewType}` : ""}
+${industry ? `Additional context - Industry: ${industry}` : ""}`
 
     const response = await anthropic.messages.create({
       model: "claude-sonnet-4-20250514",
@@ -159,6 +191,8 @@ ${seniority ? `Additional context - Seniority Level: ${seniority}` : ""}`
         ? parsed.template.seniority
         : seniority || "MID",
       roundType: parsed.template.roundType || "Technical",
+      interviewType: interviewType || parsed.template.roundType || "Technical",
+      industry: industry || "",
       defaultAiLevel:
         typeof parsed.template.defaultAiLevel === "number" &&
         parsed.template.defaultAiLevel >= 0 &&

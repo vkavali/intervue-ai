@@ -123,7 +123,7 @@ export async function PATCH(
     }
 
     const body = await req.json()
-    const { action, code, language, aiLevel, currentQuestionIndex } = body
+    const { action, code, language, aiLevel, currentQuestionIndex, interviewerId: newInterviewerId } = body
 
     const updateData: Record<string, unknown> = {}
 
@@ -135,8 +135,25 @@ export async function PATCH(
           { status: 400 }
         )
       }
+
+      // Only the candidate can start the session
+      if (interviewSession.candidateId !== user.id) {
+        return NextResponse.json(
+          { error: "Only the candidate can start the session" },
+          { status: 403 }
+        )
+      }
+
+      // Compute totalDurationMinutes from question time limits
+      const template = await prisma.interviewTemplate.findUnique({
+        where: { id: interviewSession.templateId },
+        include: { questions: true },
+      })
+      const totalMinutes = template?.questions.reduce((sum, q) => sum + q.timeLimit, 0) || 0
+
       updateData.status = "ACTIVE"
       updateData.startedAt = new Date()
+      updateData.totalDurationMinutes = totalMinutes > 0 ? totalMinutes : null
     } else if (action === "end") {
       if (interviewSession.status !== "ACTIVE") {
         return NextResponse.json(
@@ -189,6 +206,30 @@ export async function PATCH(
       updateData.currentQuestionIndex = currentQuestionIndex
     }
 
+    // Handle interviewer reassignment (admin only)
+    if (newInterviewerId !== undefined) {
+      if (user.role !== "COMPANY_ADMIN") {
+        return NextResponse.json(
+          { error: "Only company admins can reassign interviewers" },
+          { status: 403 }
+        )
+      }
+      if (newInterviewerId === null) {
+        updateData.interviewerId = null
+      } else {
+        const interviewer = await prisma.user.findUnique({
+          where: { id: newInterviewerId },
+        })
+        if (!interviewer || (interviewer.role !== "INTERVIEWER" && interviewer.role !== "COMPANY_ADMIN")) {
+          return NextResponse.json(
+            { error: "Invalid interviewer" },
+            { status: 400 }
+          )
+        }
+        updateData.interviewerId = newInterviewerId
+      }
+    }
+
     if (Object.keys(updateData).length === 0) {
       return NextResponse.json(
         { error: "No valid update fields provided" },
@@ -205,6 +246,20 @@ export async function PATCH(
         interviewer: { select: { id: true, name: true, email: true } },
       },
     })
+
+    // Create session log entries for significant actions
+    const logAction = action === "start" ? "JOIN" : action === "end" ? "LEAVE" :
+      code !== undefined ? "CODE_CHANGE" : language !== undefined ? "LANGUAGE_CHANGE" : null
+    if (logAction) {
+      prisma.sessionLog.create({
+        data: {
+          sessionId: params.id,
+          userId: user.id,
+          action: logAction,
+          details: logAction === "LANGUAGE_CHANGE" ? language : undefined,
+        },
+      }).catch(() => {}) // Don't fail main request if logging fails
+    }
 
     return NextResponse.json(updated)
   } catch (error) {

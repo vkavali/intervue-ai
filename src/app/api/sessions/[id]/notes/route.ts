@@ -137,6 +137,15 @@ export async function POST(
       },
     })
 
+    // Log the note addition
+    prisma.sessionLog.create({
+      data: {
+        sessionId: params.id,
+        userId: user.id,
+        action: "NOTE_ADDED",
+      },
+    }).catch(() => {})
+
     return NextResponse.json(note, { status: 201 })
   } catch (error) {
     console.error("POST /api/sessions/[id]/notes error:", error)

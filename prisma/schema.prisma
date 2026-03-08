@@ -19,14 +19,17 @@ datasource db {
 // ─── User ───────────────────────────────────────────────────────────────────────
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String
-  password  String
-  role      String   // COMPANY_ADMIN | INTERVIEWER | CANDIDATE
-  companyId String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                 String   @id @default(cuid())
+  email              String   @unique
+  name               String
+  password           String
+  role               String   // COMPANY_ADMIN | INTERVIEWER | CANDIDATE
+  companyId          String?
+  activeSessionToken String?  // Current active session token for single-device enforcement
+  lastLoginAt        DateTime? // Track last login time
+  lastLoginIp        String?  // Track last login IP
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   company             Company?           @relation(fields: [companyId], references: [id])
   candidateSessions   InterviewSession[] @relation("CandidateSessions")
@@ -35,6 +38,12 @@ model User {
   interviewerNotes    InterviewerNote[]  @relation("InterviewerNotes")
   candidatePipelines  CandidatePipeline[] @relation("CandidatePipelines")
   notifications       Notification[]     @relation("UserNotifications")
+  practiceProblems    PracticeProblem[]  @relation("UserPracticeProblems")
+  practiceProgress    PracticeProgress[] @relation("UserPracticeProgress")
+  violations          Violation[]        @relation("UserViolations")
+  chatMessages        ChatMessage[]      @relation("UserChatMessages")
+  sessionLogs         SessionLog[]       @relation("UserSessionLogs")
+  availability        InterviewerAvailability[] @relation("InterviewerAvailability")
 }
 
 // ─── Company ────────────────────────────────────────────────────────────────────
@@ -57,14 +66,17 @@ model Company {
 // ─── InterviewTemplate ──────────────────────────────────────────────────────────
 
 model InterviewTemplate {
-  id             String   @id @default(cuid())
-  companyId      String
-  title          String
-  role           String
-  seniority      String   // JUNIOR | MID | SENIOR | STAFF | PRINCIPAL
-  roundType      String
-  defaultAiLevel Int      @default(0) // 0-4
-  createdAt      DateTime @default(now())
+  id                   String   @id @default(cuid())
+  companyId            String
+  title                String
+  role                 String
+  seniority            String   // JUNIOR | MID | SENIOR | STAFF | PRINCIPAL
+  roundType            String
+  defaultAiLevel       Int      @default(0) // 0-4
+  industry             String?
+  interviewType        String   @default("TECHNICAL") // TECHNICAL | SYSTEM_DESIGN | SQL | BEHAVIORAL | BUSINESS_ANALYST | PROJECT_MANAGEMENT | DEVOPS | GENERAL
+  totalDurationMinutes Int?
+  createdAt            DateTime @default(now())
 
   company           Company            @relation(fields: [companyId], references: [id])
   questions         Question[]
@@ -104,6 +116,7 @@ model InterviewSession {
   code                 String?
   language             String?
   aiLevel              Int       @default(0) // 0-4
+  totalDurationMinutes Int?
   createdAt            DateTime  @default(now())
 
   template         InterviewTemplate @relation(fields: [templateId], references: [id])
@@ -114,6 +127,9 @@ model InterviewSession {
   aiLevelOverrides AILevelOverride[]
   auditReport      AuditReport?
   interviewerNotes InterviewerNote[]
+  violations       Violation[]
+  chatMessages     ChatMessage[]
+  sessionLogs      SessionLog[]
 }
 
 // ─── AIInteraction ──────────────────────────────────────────────────────────────
@@ -228,4 +244,119 @@ model Notification {
   createdAt DateTime @default(now())
 
   user User @relation("UserNotifications", fields: [userId], references: [id])
+}
+
+// ─── PracticeProblem ─────────────────────────────────────────────────────────
+// AI-generated practice problems persisted for users
+
+model PracticeProblem {
+  id          String   @id @default(cuid())
+  userId      String
+  title       String
+  difficulty  String   // EASY | MEDIUM | HARD
+  description String
+  constraints String?
+  examples    String?
+  tags        String   // JSON array as text
+  starterCode String?  // JSON object as text { javascript: "...", python: "..." }
+  company     String?  // Company context if generated for specific company
+  role        String?  // Role context if generated for specific role
+  createdAt   DateTime @default(now())
+
+  user     User               @relation("UserPracticeProblems", fields: [userId], references: [id])
+  progress PracticeProgress[] @relation("ProblemProgress")
+}
+
+// ─── PracticeProgress ────────────────────────────────────────────────────────
+// Tracks user progress on practice problems (both bank and AI-generated)
+
+model PracticeProgress {
+  id               String    @id @default(cuid())
+  userId           String
+  problemId        String?   // FK to PracticeProblem (for AI-generated)
+  bankProblemId    String?   // ID from problem bank (for static problems)
+  code             String?   // Last saved code
+  language         String?   // Last used language
+  status           String    @default("IN_PROGRESS") // IN_PROGRESS | COMPLETED | ABANDONED
+  timeSpentSeconds Int       @default(0)
+  lastSavedAt      DateTime  @default(now())
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  user    User             @relation("UserPracticeProgress", fields: [userId], references: [id])
+  problem PracticeProblem? @relation("ProblemProgress", fields: [problemId], references: [id])
+
+  @@unique([userId, problemId])
+  @@unique([userId, bankProblemId])
+}
+
+// ─── Violation ──────────────────────────────────────────────────────────────
+// Persisted anti-cheat violation events
+
+model Violation {
+  id        String   @id @default(cuid())
+  sessionId String
+  userId    String
+  type      String   // TAB_SWITCH, COPY_ATTEMPT, PASTE_ATTEMPT, WINDOW_BLUR, etc.
+  details   String?
+  timestamp DateTime @default(now())
+
+  session InterviewSession @relation(fields: [sessionId], references: [id])
+  user    User             @relation("UserViolations", fields: [userId], references: [id])
+}
+
+// ─── ChatMessage ────────────────────────────────────────────────────────────
+// In-session chat between interviewer and candidate
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  sessionId String
+  senderId  String
+  content   String
+  timestamp DateTime @default(now())
+
+  session InterviewSession @relation(fields: [sessionId], references: [id])
+  sender  User             @relation("UserChatMessages", fields: [senderId], references: [id])
+}
+
+// ─── SessionLog ─────────────────────────────────────────────────────────────
+// Activity logs for session events
+
+model SessionLog {
+  id        String   @id @default(cuid())
+  sessionId String
+  userId    String
+  action    String   // JOIN, LEAVE, CODE_CHANGE, LANGUAGE_CHANGE, AI_REQUEST, NOTE_ADDED, OVERRIDE, VIOLATION
+  details   String?
+  timestamp DateTime @default(now())
+
+  session InterviewSession @relation(fields: [sessionId], references: [id])
+  user    User             @relation("UserSessionLogs", fields: [userId], references: [id])
+}
+
+// ─── InterviewerAvailability ────────────────────────────────────────────────
+// Scheduling availability for interviewers
+
+model InterviewerAvailability {
+  id            String   @id @default(cuid())
+  interviewerId String
+  date          DateTime
+  startTime     String   // HH:mm format
+  endTime       String   // HH:mm format
+  createdAt     DateTime @default(now())
+
+  interviewer User @relation("InterviewerAvailability", fields: [interviewerId], references: [id])
+}
+
+// ─── EnrichedBankProblem ────────────────────────────────────────────────────
+// Cached AI-enriched data for bank problems (constraints, starter code, test cases)
+
+model EnrichedBankProblem {
+  id            String   @id @default(cuid())
+  bankProblemId String   @unique
+  constraints   String?
+  examples      String?
+  starterCode   String?  // JSON: { javascript: "...", python: "...", java: "..." }
+  testCases     String?  // JSON: [{ input: "...", expected: "..." }]
+  createdAt     DateTime @default(now())
 }

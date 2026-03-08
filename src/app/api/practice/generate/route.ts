@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import Anthropic from "@anthropic-ai/sdk";
+import { checkUserRateLimit } from "@/lib/rate-limiter";
+import { validateGenerationPrompt } from "@/lib/ai-prompt-validator";
 
 const anthropic = process.env.ANTHROPIC_API_KEY
   ? new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
@@ -15,8 +20,54 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const session = await getServerSession(authOptions);
+
+    // Rate limit check
+    let userId = "anonymous";
+    let plan: string | null = null;
+
+    if (session?.user) {
+      const user = await prisma.user.findUnique({
+        where: { email: session.user.email! },
+        include: { company: true },
+      });
+      if (user) {
+        userId = user.id;
+        plan = user.company?.plan || null;
+      }
+    }
+
+    const rateCheck = checkUserRateLimit(userId, "aiGenerations", plan);
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        {
+          error: `Question generation limit reached (${rateCheck.limit}/day). ${session?.user ? "Upgrade your plan for more." : "Sign in for more generations."}`,
+          remaining: 0,
+          limit: rateCheck.limit,
+        },
+        {
+          status: 429,
+          headers: { "Retry-After": String(rateCheck.resetIn) },
+        }
+      );
+    }
+
     const body = await req.json();
     const { company, role, jobDescription, difficulty, count } = body;
+
+    // Validate prompt content
+    const validation = validateGenerationPrompt({
+      role,
+      company,
+      jobDescription,
+      difficulty,
+    });
+    if (!validation.valid) {
+      return NextResponse.json(
+        { error: validation.error },
+        { status: 400 }
+      );
+    }
 
     if (!role) {
       return NextResponse.json(
@@ -75,7 +126,6 @@ Include at least JavaScript and Python starter code for each problem.`;
     // Parse JSON from response
     let problems;
     try {
-      // Try to extract JSON from the response
       const jsonMatch = text.match(/\[[\s\S]*\]/);
       if (jsonMatch) {
         problems = JSON.parse(jsonMatch[0]);
@@ -89,7 +139,38 @@ Include at least JavaScript and Python starter code for each problem.`;
       );
     }
 
-    return NextResponse.json({ problems });
+    // Persist generated problems if user is logged in
+    if (session?.user && userId !== "anonymous") {
+      try {
+        for (const problem of problems) {
+          await prisma.practiceProblem.create({
+            data: {
+              userId,
+              title: problem.title || "Untitled",
+              difficulty: problem.difficulty || "MEDIUM",
+              description: problem.description || "",
+              constraints: problem.constraints || null,
+              examples: problem.examples || null,
+              tags: JSON.stringify(problem.tags || []),
+              starterCode: problem.starterCode
+                ? JSON.stringify(problem.starterCode)
+                : null,
+              company: company || null,
+              role: role || null,
+            },
+          });
+        }
+      } catch (err) {
+        // Don't fail the request if persistence fails
+        console.error("Failed to persist practice problems:", err);
+      }
+    }
+
+    return NextResponse.json({
+      problems,
+      remaining: rateCheck.remaining,
+      limit: rateCheck.limit,
+    });
   } catch (error) {
     console.error("Practice generate error:", error);
     return NextResponse.json(

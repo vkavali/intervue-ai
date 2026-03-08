@@ -2,6 +2,21 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { INTERVIEW_TYPES, INDUSTRIES } from "@/data/interview-types";
+
+const NON_CODING_TYPES = ["BEHAVIORAL", "BUSINESS_ANALYST", "PROJECT_MANAGEMENT"];
+
+const TRIVIAL_PATTERNS = [
+  /trivia/i,
+  /quiz\s*game/i,
+  /fun\s*facts/i,
+  /pop\s*culture/i,
+  /movie\s*quotes/i,
+  /sports\s*scores/i,
+  /celebrity/i,
+  /joke/i,
+  /riddle/i,
+];
 
 interface Question {
   id: string;
@@ -44,6 +59,8 @@ export default function NewInterviewPage() {
   const [role, setRole] = useState("");
   const [seniority, setSeniority] = useState("MID");
   const [roundType, setRoundType] = useState("Technical");
+  const [industry, setIndustry] = useState("");
+  const [interviewType, setInterviewType] = useState("TECHNICAL");
   const [defaultAiLevel, setDefaultAiLevel] = useState(0);
   const [questions, setQuestions] = useState<Question[]>([emptyQuestion()]);
   const [loading, setLoading] = useState(false);
@@ -79,6 +96,23 @@ export default function NewInterviewPage() {
 
   async function handleGenerateInterview() {
     if (!aiInterviewPrompt.trim()) return;
+
+    // Pre-validation: require role OR a prompt >= 20 chars
+    const promptText = aiInterviewPrompt.trim();
+    if (!role.trim() && promptText.length < 20) {
+      setError(
+        "Please provide a role or write a more detailed prompt (at least 20 characters) so AI can generate a relevant interview."
+      );
+      return;
+    }
+
+    // Check for trivial / irrelevant prompts
+    if (TRIVIAL_PATTERNS.some((pattern) => pattern.test(promptText))) {
+      setError(
+        "The prompt appears to be unrelated to interviewing. Please describe a real interview scenario."
+      );
+      return;
+    }
 
     setAiInterviewLoading(true);
     setError("");
@@ -232,6 +266,8 @@ export default function NewInterviewPage() {
         role,
         seniority,
         roundType,
+        industry: industry || undefined,
+        interviewType,
         defaultAiLevel,
         questions: questions.map((q) => ({
           title: q.title,
@@ -439,9 +475,58 @@ export default function NewInterviewPage() {
                 <option value="Behavioral">Behavioral</option>
                 <option value="Take Home">Take Home</option>
                 <option value="Live Coding">Live Coding</option>
+                <option value="SQL">SQL</option>
+                <option value="Business Analysis">Business Analysis</option>
+                <option value="Project Management">Project Management</option>
+                <option value="DevOps">DevOps</option>
               </select>
             </div>
 
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                Industry
+              </label>
+              <select
+                value={industry}
+                onChange={(e) => setIndustry(e.target.value)}
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+              >
+                <option value="">Select industry (optional)</option>
+                {INDUSTRIES.map((ind) => (
+                  <option key={ind} value={ind}>
+                    {ind}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                Interview Type
+              </label>
+              <select
+                value={interviewType}
+                onChange={(e) => setInterviewType(e.target.value)}
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+              >
+                {INTERVIEW_TYPES.map((t) => (
+                  <option key={t.value} value={t.value}>
+                    {t.label}
+                  </option>
+                ))}
+              </select>
+              {INTERVIEW_TYPES.find((t) => t.value === interviewType)
+                ?.description && (
+                <p className="mt-1 text-xs text-gray-500">
+                  {
+                    INTERVIEW_TYPES.find((t) => t.value === interviewType)
+                      ?.description
+                  }
+                </p>
+              )}
+            </div>
+
+            {!NON_CODING_TYPES.includes(interviewType) && (
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1.5">
                 Default AI Level
@@ -469,6 +554,7 @@ export default function NewInterviewPage() {
                 </p>
               </div>
             </div>
+            )}
           </div>
         </div>
 

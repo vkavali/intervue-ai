@@ -3,6 +3,8 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { getAIResponse } from "@/lib/ai-levels"
+import { checkUserRateLimit } from "@/lib/rate-limiter"
+import { validateAIPrompt } from "@/lib/ai-prompt-validator"
 
 // POST /api/sessions/[id]/ai - AI assist endpoint
 export async function POST(
@@ -17,10 +19,28 @@ export async function POST(
 
     const user = await prisma.user.findUnique({
       where: { email: session.user.email! },
+      include: { company: true },
     })
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
+    }
+
+    // Rate limit check
+    const plan = user.company?.plan || null
+    const rateCheck = checkUserRateLimit(user.id, "aiCalls", plan)
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        {
+          error: `AI usage limit reached. You have used all ${rateCheck.limit} AI calls for today. Resets in ${Math.ceil(rateCheck.resetIn / 3600)} hours.`,
+          remaining: 0,
+          limit: rateCheck.limit,
+        },
+        {
+          status: 429,
+          headers: { "Retry-After": String(rateCheck.resetIn) },
+        }
+      )
     }
 
     const interviewSession = await prisma.interviewSession.findUnique({
@@ -56,9 +76,11 @@ export async function POST(
     const body = await req.json()
     const { prompt, code, questionContext } = body
 
-    if (!prompt) {
+    // Validate prompt
+    const validation = validateAIPrompt({ prompt, code, questionContext })
+    if (!validation.valid) {
       return NextResponse.json(
-        { error: "Prompt is required" },
+        { error: validation.error },
         { status: 400 }
       )
     }
@@ -70,7 +92,7 @@ export async function POST(
       const interaction = await prisma.aIInteraction.create({
         data: {
           sessionId: params.id,
-          prompt,
+          prompt: validation.sanitizedPrompt!,
           response: "AI assistance is locked for this session (Level 0).",
           aiLevel: currentAiLevel,
         },
@@ -80,31 +102,44 @@ export async function POST(
         response: "AI assistance is locked for this session (Level 0).",
         aiLevel: currentAiLevel,
         interactionId: interaction.id,
+        remaining: rateCheck.remaining,
       })
     }
 
     // Get AI response based on current level
     const aiResponse = await getAIResponse({
       level: currentAiLevel,
-      prompt,
-      code: code ?? "",
-      questionContext: questionContext ?? "",
+      prompt: validation.sanitizedPrompt!,
+      code: validation.sanitizedCode ?? "",
+      questionContext: validation.sanitizedContext ?? "",
     })
 
     // Save the interaction
     const interaction = await prisma.aIInteraction.create({
       data: {
         sessionId: params.id,
-        prompt,
+        prompt: validation.sanitizedPrompt!,
         response: aiResponse,
         aiLevel: currentAiLevel,
       },
     })
 
+    // Log AI request
+    prisma.sessionLog.create({
+      data: {
+        sessionId: params.id,
+        userId: user.id,
+        action: "AI_REQUEST",
+        details: `Level ${currentAiLevel}`,
+      },
+    }).catch(() => {})
+
     return NextResponse.json({
       response: aiResponse,
       aiLevel: currentAiLevel,
       interactionId: interaction.id,
+      remaining: rateCheck.remaining,
+      limit: rateCheck.limit,
     })
   } catch (error) {
     console.error("POST /api/sessions/[id]/ai error:", error)

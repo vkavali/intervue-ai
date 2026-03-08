@@ -18,9 +18,6 @@ const AI_LEVEL_OPTIONS = [
   { value: 4, label: "L4 Copilot", description: "Full AI assistance", color: "text-green-400", border: "border-green-500/30", bg: "bg-green-500/10" },
 ];
 
-// Use the problem bank - includes original hardcoded problems as featured
-const FEATURED_IDS = ["two-sum", "reverse-linked-list", "valid-parentheses", "merge-intervals", "lru-cache", "binary-tree-level-order", "rate-limiter", "flatten-nested-data", "event-emitter", "debounce-throttle", "string-compressor", "task-scheduler"];
-
 interface GeneratedProblem {
   id: string;
   title: string;
@@ -117,13 +114,11 @@ export default function PracticeModePage() {
 
   function renderProblemCard(problem: { id: string; title: string; difficulty: string; description: string; tags: string[]; company?: string }, isGenerated: boolean = false) {
     const diff = difficultyColors[problem.difficulty] || difficultyColors.MEDIUM;
-    // Featured problems have starter code in [problemId] page, others go to custom editor
-    const isFeatured = FEATURED_IDS.includes(problem.id);
+    // All bank problems route to /practice/{id} which handles enrichment on demand
+    // Generated problems go to custom editor since they aren't in the bank
     const href = isGenerated
       ? `/practice/custom?aiLevel=${selectedAiLevel}&problem=${encodeURIComponent(JSON.stringify(problem))}`
-      : isFeatured
-        ? `/practice/${problem.id}?aiLevel=${selectedAiLevel}`
-        : `/practice/custom?aiLevel=${selectedAiLevel}&problem=${encodeURIComponent(JSON.stringify(problem))}`;
+      : `/practice/${problem.id}?aiLevel=${selectedAiLevel}`;
 
     return (
       <div

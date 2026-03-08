@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Editor from "@monaco-editor/react";
 import Link from "next/link";
+import { PROBLEM_BANK } from "@/data/problem-bank";
 
 // ─── Practice problem data ──────────────────────────────────────────────────────
 
@@ -288,8 +289,8 @@ const PRACTICE_PROBLEMS: Record<string, PracticeProblem> = {
 const languages = [
   { value: "javascript", label: "JavaScript", runnable: true },
   { value: "typescript", label: "TypeScript", runnable: true },
-  { value: "python", label: "Python", runnable: false },
-  { value: "java", label: "Java", runnable: false },
+  { value: "python", label: "Python", runnable: true },
+  { value: "java", label: "Java", runnable: true },
   { value: "cpp", label: "C++", runnable: false },
   { value: "go", label: "Go", runnable: false },
   { value: "rust", label: "Rust", runnable: false },
@@ -316,7 +317,47 @@ export default function PracticeProblemPage() {
   const searchParams = useSearchParams();
   const problemId = params.problemId as string;
 
-  const problem = PRACTICE_PROBLEMS[problemId];
+  const hardcodedProblem = PRACTICE_PROBLEMS[problemId];
+  const bankProblem = !hardcodedProblem ? PROBLEM_BANK.find((p) => p.id === problemId) : null;
+
+  const [enrichedData, setEnrichedData] = useState<{
+    constraints?: string;
+    examples?: string;
+    starterCode?: Record<string, string>;
+    testCases?: { input: string; expected: string }[];
+  } | null>(null);
+  const [enriching, setEnriching] = useState(false);
+
+  // Enrich bank problem on demand
+  useEffect(() => {
+    if (bankProblem && !enrichedData && !enriching) {
+      setEnriching(true);
+      fetch("/api/practice/enrich", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bankProblemId: problemId }),
+      })
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data) setEnrichedData(data);
+        })
+        .catch(() => {})
+        .finally(() => setEnriching(false));
+    }
+  }, [bankProblem, problemId, enrichedData, enriching]);
+
+  // Build unified problem object
+  const problem: PracticeProblem | null = useMemo(() => {
+    return hardcodedProblem || (bankProblem ? {
+      id: bankProblem.id,
+      title: bankProblem.title,
+      difficulty: bankProblem.difficulty,
+      description: bankProblem.description,
+      constraints: enrichedData?.constraints || "",
+      examples: enrichedData?.examples || "",
+      starterCode: enrichedData?.starterCode || {},
+    } : null);
+  }, [hardcodedProblem, bankProblem, enrichedData]);
 
   const [language, setLanguage] = useState("javascript");
   const [code, setCode] = useState("");
@@ -358,6 +399,28 @@ export default function PracticeProblemPage() {
     }, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  // Auto-save progress every 30 seconds
+  const lastSavedCode = useRef(code);
+  useEffect(() => {
+    const saveInterval = setInterval(() => {
+      if (code !== lastSavedCode.current && code.trim()) {
+        lastSavedCode.current = code;
+        fetch("/api/practice/progress", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            bankProblemId: problemId,
+            code,
+            language,
+            status: "IN_PROGRESS",
+            timeSpentSeconds: elapsedTime,
+          }),
+        }).catch(() => {}); // Silently fail for non-authenticated users
+      }
+    }, 30000);
+    return () => clearInterval(saveInterval);
+  }, [code, language, problemId, elapsedTime]);
 
   // Scroll AI chat to bottom
   useEffect(() => {
@@ -501,6 +564,22 @@ export default function PracticeProblemPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleRunCode]);
 
+  // Loading state for bank problem enrichment
+  if (bankProblem && enriching) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-gray-950">
+        <div className="text-center">
+          <svg className="animate-spin h-8 w-8 text-purple-500 mx-auto mb-4" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          </svg>
+          <p className="text-gray-400">Enriching problem with AI...</p>
+          <p className="text-xs text-gray-600 mt-2">Generating constraints, examples, and starter code</p>
+        </div>
+      </div>
+    );
+  }
+
   // 404 for unknown problem
   if (!problem) {
     return (
@@ -548,7 +627,7 @@ export default function PracticeProblemPage() {
           >
             {languages.map((lang) => (
               <option key={lang.value} value={lang.value}>
-                {lang.label}{lang.runnable ? "" : " (editor only)"}
+                {lang.label}{!lang.runnable ? " (editor only)" : ""}
               </option>
             ))}
           </select>

@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
+import { prisma } from "@/lib/prisma"
 import Anthropic from "@anthropic-ai/sdk"
+import { checkUserRateLimit } from "@/lib/rate-limiter"
 
 const anthropic = new Anthropic()
 
@@ -24,8 +26,26 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    // Rate limit check
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email! },
+      include: { company: true },
+    })
+    const plan = user?.company?.plan || null
+    const rateCheck = checkUserRateLimit(session.user.id, "aiGenerations", plan)
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        {
+          error: `Question generation limit reached (${rateCheck.limit}/day). Upgrade your plan for more.`,
+          remaining: 0,
+          limit: rateCheck.limit,
+        },
+        { status: 429, headers: { "Retry-After": String(rateCheck.resetIn) } }
+      )
+    }
+
     const body = await req.json()
-    const { role, seniority, roundType, count, topics, difficulty } = body
+    const { role, seniority, roundType, count, topics, difficulty, interviewType } = body
 
     // Validate required fields
     if (!role || !seniority || !roundType || !count) {
@@ -89,7 +109,9 @@ Guidelines for generating questions:
 - Provide examples that cover normal cases and at least one edge case
 - Set aiLevel based on difficulty: harder questions may warrant higher AI levels
 - Time limits should be realistic for the difficulty level
-- Ensure variety in the question set - avoid repetitive patterns`
+- Ensure variety in the question set - avoid repetitive patterns
+- IMPORTANT: If the round type or interview type is non-technical (Behavioral, PM, BA), generate scenario-based questions, NOT coding questions.
+- For SQL interviews, generate SQL query/schema design questions.`
 
     const userPrompt = `Generate ${questionCount} coding interview question${questionCount > 1 ? "s" : ""} with the following requirements:
 
@@ -98,6 +120,7 @@ Guidelines for generating questions:
 - Round Type: ${roundType}
 ${topics ? `- Specific Topics to Cover: ${topics}` : ""}
 ${difficulty && difficulty !== "MIX" ? `- All questions should be ${difficulty} difficulty` : difficulty === "MIX" ? "- Include a mix of EASY, MEDIUM, and HARD questions" : ""}
+${interviewType ? `- Interview Type: ${interviewType}` : ""}
 
 Generate exactly ${questionCount} question${questionCount > 1 ? "s" : ""}.`
 

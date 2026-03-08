@@ -3,6 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { ReassignInterviewerForm } from "./ReassignInterviewerForm";
 
 const statusColors: Record<string, string> = {
   PENDING: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30",
@@ -19,21 +20,40 @@ const aiLevelLabels: Record<number, string> = {
   4: "L4 Copilot",
 };
 
+const logActionLabels: Record<string, { label: string; color: string }> = {
+  JOIN: { label: "Joined", color: "text-green-400" },
+  LEAVE: { label: "Left", color: "text-red-400" },
+  CODE_CHANGE: { label: "Code Change", color: "text-blue-400" },
+  LANGUAGE_CHANGE: { label: "Language Change", color: "text-cyan-400" },
+  AI_REQUEST: { label: "AI Request", color: "text-purple-400" },
+  NOTE_ADDED: { label: "Note Added", color: "text-yellow-400" },
+  OVERRIDE: { label: "AI Override", color: "text-orange-400" },
+  VIOLATION: { label: "Violation", color: "text-red-500" },
+};
+
 export default async function SessionDetailPage({
   params,
 }: {
   params: { id: string };
 }) {
   const authSession = await getServerSession(authOptions);
+  if (!authSession?.user) {
+    notFound();
+  }
+
   const user = await prisma.user.findUnique({
-    where: { email: authSession!.user.email! },
+    where: { email: authSession.user.email! },
   });
+
+  if (!user?.companyId) {
+    notFound();
+  }
 
   const interviewSession = await prisma.interviewSession.findUnique({
     where: { id: params.id },
     include: {
-      candidate: { select: { name: true, email: true } },
-      interviewer: { select: { name: true, email: true } },
+      candidate: { select: { id: true, name: true, email: true } },
+      interviewer: { select: { id: true, name: true, email: true } },
       template: {
         select: {
           title: true,
@@ -53,17 +73,36 @@ export default async function SessionDetailPage({
         orderBy: { timestamp: "asc" },
         include: { interviewer: { select: { name: true } } },
       },
+      violations: {
+        orderBy: { timestamp: "asc" },
+        include: { user: { select: { name: true } } },
+      },
+      sessionLogs: {
+        orderBy: { timestamp: "asc" },
+        include: { user: { select: { name: true } } },
+      },
     },
   });
 
-  if (!interviewSession || interviewSession.companyId !== user?.companyId) {
+  if (!interviewSession || interviewSession.companyId !== user.companyId) {
     notFound();
   }
 
+  // Fetch available interviewers in this company for the reassignment form
+  const companyInterviewers = await prisma.user.findMany({
+    where: {
+      companyId: user.companyId,
+      role: { in: ["INTERVIEWER", "COMPANY_ADMIN"] },
+    },
+    select: { id: true, name: true, email: true },
+    orderBy: { name: "asc" },
+  });
+
   const s = interviewSession;
+  const violationCount = s.violations.length;
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-950">
       {/* Header */}
       <div className="mb-8">
         <Link
@@ -78,20 +117,20 @@ export default async function SessionDetailPage({
           </h1>
           <span
             className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium ${
-              statusColors[s.status] || ""
+              statusColors[s.status] || "bg-gray-500/10 text-gray-400 border-gray-500/30"
             }`}
           >
             {s.status}
           </span>
         </div>
         <p className="mt-1 text-sm text-gray-400">
-          {s.candidate.name} &middot; {s.template.role} &middot;{" "}
-          {s.template.seniority}
+          {s.template.role} &middot; {s.template.seniority} &middot;{" "}
+          {s.template.roundType}
         </p>
       </div>
 
       {/* Session Info Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">
             Candidate
@@ -116,9 +155,25 @@ export default async function SessionDetailPage({
         </div>
         <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">
+            AI Level
+          </h3>
+          <p className="text-sm font-medium text-purple-400">
+            {aiLevelLabels[s.aiLevel] || `L${s.aiLevel}`}
+          </p>
+          <p className="text-xs text-gray-400 mt-1">
+            {s.aiInteractions.length} interaction{s.aiInteractions.length !== 1 ? "s" : ""}
+          </p>
+        </div>
+        <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">
             Timing
           </h3>
           <div className="space-y-1 text-sm">
+            {s.scheduledAt && (
+              <p className="text-gray-300">
+                Scheduled: {new Date(s.scheduledAt).toLocaleString()}
+              </p>
+            )}
             {s.startedAt && (
               <p className="text-gray-300">
                 Started: {new Date(s.startedAt).toLocaleString()}
@@ -129,14 +184,83 @@ export default async function SessionDetailPage({
                 Ended: {new Date(s.endedAt).toLocaleString()}
               </p>
             )}
-            {!s.startedAt && (
-              <p className="text-gray-500">Not started yet</p>
+            {!s.startedAt && !s.scheduledAt && (
+              <p className="text-gray-500">Not scheduled yet</p>
             )}
           </div>
         </div>
       </div>
 
-      {/* Audit Report */}
+      {/* Interviewer Reassignment */}
+      <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 mb-8">
+        <h2 className="text-lg font-semibold text-white mb-4">
+          Interviewer Assignment
+        </h2>
+        <ReassignInterviewerForm
+          sessionId={s.id}
+          currentInterviewerId={s.interviewerId}
+          interviewers={companyInterviewers}
+        />
+      </div>
+
+      {/* Violation Summary */}
+      <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 mb-8">
+        <h2 className="text-lg font-semibold text-white mb-4">
+          Violations ({violationCount})
+        </h2>
+        {violationCount === 0 ? (
+          <p className="text-sm text-gray-500 py-2">
+            No violations detected during this session.
+          </p>
+        ) : (
+          <div className="space-y-3">
+            {/* Summary by type */}
+            <div className="flex flex-wrap gap-3 mb-4">
+              {Object.entries(
+                s.violations.reduce<Record<string, number>>((acc, v) => {
+                  acc[v.type] = (acc[v.type] || 0) + 1;
+                  return acc;
+                }, {})
+              ).map(([type, count]) => (
+                <div
+                  key={type}
+                  className="rounded-lg border border-red-500/20 bg-red-500/5 px-3 py-2"
+                >
+                  <span className="text-xs font-medium text-red-400">
+                    {type.replace(/_/g, " ")}
+                  </span>
+                  <span className="ml-2 text-sm font-bold text-red-300">{count}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Individual violations */}
+            <div className="max-h-60 overflow-y-auto space-y-2">
+              {s.violations.map((v) => (
+                <div
+                  key={v.id}
+                  className="flex items-center gap-4 rounded-lg border border-gray-700 bg-gray-800 p-3"
+                >
+                  <span className="text-xs text-gray-500">
+                    {new Date(v.timestamp).toLocaleTimeString()}
+                  </span>
+                  <span className="text-xs font-medium text-red-400">
+                    {v.type.replace(/_/g, " ")}
+                  </span>
+                  <span className="text-xs text-gray-400">{v.user.name}</span>
+                  {v.details && (
+                    <span className="text-xs text-gray-500 italic truncate">
+                      {v.details}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Audit Report Summary */}
       {s.auditReport && (
         <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 mb-8">
           <h2 className="text-lg font-semibold text-white mb-6">
@@ -220,6 +344,59 @@ export default async function SessionDetailPage({
         </div>
       )}
 
+      {/* Session Timeline / Logs */}
+      <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 mb-8">
+        <h2 className="text-lg font-semibold text-white mb-4">
+          Session Timeline ({s.sessionLogs.length})
+        </h2>
+
+        {s.sessionLogs.length === 0 ? (
+          <p className="text-sm text-gray-500 py-4">
+            No activity logs recorded for this session.
+          </p>
+        ) : (
+          <div className="relative max-h-96 overflow-y-auto">
+            {/* Timeline line */}
+            <div className="absolute left-4 top-0 bottom-0 w-px bg-gray-700" />
+
+            <div className="space-y-4 pl-10">
+              {s.sessionLogs.map((log) => {
+                const actionInfo = logActionLabels[log.action] || {
+                  label: log.action,
+                  color: "text-gray-400",
+                };
+
+                return (
+                  <div key={log.id} className="relative">
+                    {/* Timeline dot */}
+                    <div className="absolute -left-[26px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-gray-700 bg-gray-900" />
+
+                    <div className="rounded-lg border border-gray-700 bg-gray-800 p-3">
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-3">
+                          <span className={`text-xs font-medium ${actionInfo.color}`}>
+                            {actionInfo.label}
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            {log.user.name}
+                          </span>
+                        </div>
+                        <span className="text-xs text-gray-500">
+                          {new Date(log.timestamp).toLocaleTimeString()}
+                        </span>
+                      </div>
+                      {log.details && (
+                        <p className="text-xs text-gray-400 mt-1">{log.details}</p>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* AI Interaction Log */}
       <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 mb-8">
         <h2 className="text-lg font-semibold text-white mb-4">
@@ -302,7 +479,7 @@ export default async function SessionDetailPage({
       )}
 
       {/* Interviewer Notes */}
-      <div className="rounded-xl border border-gray-800 bg-gray-900 p-6">
+      <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 mb-8">
         <h2 className="text-lg font-semibold text-white mb-4">
           Interviewer Notes ({s.interviewerNotes.length})
         </h2>
@@ -331,6 +508,34 @@ export default async function SessionDetailPage({
             ))}
           </div>
         )}
+      </div>
+
+      {/* Questions from Template */}
+      <div className="rounded-xl border border-gray-800 bg-gray-900 p-6">
+        <h2 className="text-lg font-semibold text-white mb-4">
+          Questions ({s.template.questions.length})
+        </h2>
+        <div className="space-y-3">
+          {s.template.questions.map((q, idx) => (
+            <div
+              key={q.id}
+              className="rounded-lg border border-gray-700 bg-gray-800 p-4"
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-gray-700 text-xs font-bold text-gray-300">
+                  {idx + 1}
+                </span>
+                <h4 className="text-sm font-medium text-white">{q.title}</h4>
+                <span className="text-xs text-gray-500">{q.difficulty}</span>
+                <span className="text-xs text-purple-400">
+                  {aiLevelLabels[q.aiLevel] || `L${q.aiLevel}`}
+                </span>
+                <span className="text-xs text-gray-500">{q.timeLimit} min</span>
+              </div>
+              <p className="text-xs text-gray-400 line-clamp-2">{q.description}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

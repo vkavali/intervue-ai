@@ -109,6 +109,16 @@ export async function POST(
       }),
     ])
 
+    // Log the override
+    prisma.sessionLog.create({
+      data: {
+        sessionId: params.id,
+        userId: user.id,
+        action: "OVERRIDE",
+        details: `AI level ${previousLevel} -> ${newLevel}: ${reason}`,
+      },
+    }).catch(() => {})
+
     return NextResponse.json({
       override,
       session: updatedSession,
