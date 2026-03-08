@@ -95,7 +95,9 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json()
-    const { templateId, candidateEmail, interviewerEmail, scheduledAt } = body
+    const { templateId, candidateEmail: rawCandidateEmail, interviewerEmail: rawInterviewerEmail, scheduledAt } = body
+    const candidateEmail = rawCandidateEmail?.toLowerCase().trim()
+    const interviewerEmail = rawInterviewerEmail?.toLowerCase().trim()
 
     if (!templateId || !candidateEmail) {
       return NextResponse.json(

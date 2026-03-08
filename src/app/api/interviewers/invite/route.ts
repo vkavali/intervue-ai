@@ -23,7 +23,8 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { email, name } = body;
+    const { email: rawEmail, name } = body;
+    const email = rawEmail?.toLowerCase().trim();
 
     if (!email || !name) {
       return NextResponse.json(

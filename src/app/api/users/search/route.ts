@@ -23,9 +23,9 @@ export async function GET(req: NextRequest) {
     }
 
     const { searchParams } = new URL(req.url)
-    const email = searchParams.get('email')
+    const rawEmail = searchParams.get('email')
 
-    if (!email) {
+    if (!rawEmail) {
       return NextResponse.json(
         { error: 'Missing required query parameter: email' },
         { status: 400 }
@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
     }
 
     const user = await prisma.user.findUnique({
-      where: { email },
+      where: { email: rawEmail.toLowerCase().trim() },
       select: {
         id: true,
         name: true,
