@@ -131,7 +131,7 @@ export function StageDropdown({
       </button>
 
       {open && (
-        <div className="absolute right-0 z-20 mt-1 w-44 max-h-64 overflow-y-auto rounded-lg border border-gray-700 bg-gray-900 py-1 shadow-xl">
+        <div className="absolute right-0 bottom-full z-50 mb-1 w-44 max-h-64 overflow-y-auto rounded-lg border border-gray-700 bg-gray-900 py-1 shadow-xl">
           {STAGES.map((stage) => (
             <button
               key={stage}

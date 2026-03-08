@@ -54,9 +54,23 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    if (prompt.trim().length < 20 && !role) {
+    if (!role || typeof role !== "string" || role.trim().length === 0) {
       return NextResponse.json(
-        { error: "Please provide a more detailed prompt (at least 20 characters) or specify a target role." },
+        { error: "Role is required to generate a relevant interview template" },
+        { status: 400 }
+      )
+    }
+
+    if (!interviewType || typeof interviewType !== "string" || interviewType.trim().length === 0) {
+      return NextResponse.json(
+        { error: "Interview type is required to generate appropriate questions" },
+        { status: 400 }
+      )
+    }
+
+    if (!industry || typeof industry !== "string" || industry.trim().length === 0) {
+      return NextResponse.json(
+        { error: "Industry is required for generating domain-relevant questions" },
         { status: 400 }
       )
     }
@@ -103,9 +117,14 @@ Guidelines:
 - Provide actionable assessment criteria and interviewer guidance
 - Ensure the total time of all questions is reasonable (typically 30-90 minutes)
 - Questions should progress in difficulty and build on related concepts
-- IMPORTANT: If the interviewType is BEHAVIORAL, PROJECT_MANAGEMENT, or BUSINESS_ANALYST, generate scenario-based and situational questions, NOT coding/algorithm questions.
+- IMPORTANT: Generate questions ONLY relevant to the specified role, interview type, and industry. Do NOT generate general knowledge, trivia, geography, history, or off-topic content.
+- If the interviewType is BEHAVIORAL, PROJECT_MANAGEMENT, or BUSINESS_ANALYST, generate scenario-based and situational questions, NOT coding/algorithm questions.
+- For DEVOPS interviews: generate infrastructure, CI/CD, cloud, monitoring, and deployment questions, NOT coding algorithm problems.
+- For BUSINESS_ANALYST interviews: generate requirements gathering, case study, and stakeholder analysis questions, NOT algorithm problems.
+- For PROJECT_MANAGEMENT interviews: generate project planning, risk management, and stakeholder scenario questions, NOT code.
 - If the interviewType is SQL, generate SQL query and database design questions.
-- Match questions to the specified industry when provided.`
+- Match questions to the specified industry when provided.
+- For non-coding interview types, do NOT generate coding or algorithm questions. Generate scenario-based, analytical, or domain-specific questions appropriate for the interview type.`
 
     const userPrompt = `Generate a complete interview template based on this description:
 

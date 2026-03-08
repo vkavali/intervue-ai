@@ -117,6 +117,10 @@ export default function InterviewerSessionView({
   const [violations, setViolations] = useState<ViolationRecord[]>([]);
   const [prevViolationCount, setPrevViolationCount] = useState(0);
   const [violationAlert, setViolationAlert] = useState(false);
+  const [candidateOnline, setCandidateOnline] = useState(false);
+  const [candidateEditing, setCandidateEditing] = useState(false);
+  const [lastEditTime, setLastEditTime] = useState<string | null>(null);
+  const prevCodeRef = useRef(initialData.code);
   const interactionLogRef = useRef<HTMLDivElement>(null);
   const notesRef = useRef<HTMLDivElement>(null);
 
@@ -126,6 +130,16 @@ export default function InterviewerSessionView({
       const res = await fetch(`/api/sessions/${sessionId}`);
       if (res.ok) {
         const data = await res.json();
+        // Detect if candidate is editing (code changed since last poll)
+        if (data.code !== prevCodeRef.current) {
+          setCandidateEditing(true);
+          setLastEditTime(new Date().toLocaleTimeString());
+          prevCodeRef.current = data.code;
+          // Reset editing indicator after 3s of no changes
+          setTimeout(() => setCandidateEditing(false), 3000);
+        }
+        // Consider candidate online if session is ACTIVE and has recent logs
+        setCandidateOnline(data.status === "ACTIVE");
         setSessionData(data);
       }
     } catch {
@@ -274,7 +288,16 @@ export default function InterviewerSessionView({
             Intervue<span className="text-blue-400">.AI</span>
           </span>
           <span className="text-xs text-gray-500">|</span>
-          <span className="text-sm text-gray-300">Watching: {sessionData.candidate.name}</span>
+          <div className="flex items-center gap-2">
+            <span className={`inline-block h-2 w-2 rounded-full ${candidateOnline ? "bg-green-400" : "bg-gray-500"}`} />
+            <span className="text-sm text-gray-300">{sessionData.candidate.name}</span>
+            {candidateEditing && (
+              <span className="text-[10px] text-yellow-400 animate-pulse">editing...</span>
+            )}
+            {lastEditTime && !candidateEditing && (
+              <span className="text-[10px] text-gray-600">last edit {lastEditTime}</span>
+            )}
+          </div>
           <span className="text-xs text-gray-500">|</span>
           <span className="text-sm text-gray-400">{sessionData.template.title}</span>
         </div>

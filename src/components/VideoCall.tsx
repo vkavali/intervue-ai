@@ -19,12 +19,14 @@ export default function VideoCall({ sessionId, userId }: VideoCallProps) {
   const [isScreenSharing, setIsScreenSharing] = useState(false);
   const [connectionState, setConnectionState] = useState<string>("disconnected");
   const [remoteConnected, setRemoteConnected] = useState(false);
+  const [isAudioOnly, setIsAudioOnly] = useState(false);
 
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
   const pcRef = useRef<RTCPeerConnection | null>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
+  const pollIntervalRef = useRef<number>(1000);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -41,6 +43,11 @@ export default function VideoCall({ sessionId, userId }: VideoCallProps) {
       setConnectionState(pc.iceConnectionState);
       if (pc.iceConnectionState === "connected" || pc.iceConnectionState === "completed") {
         setRemoteConnected(true);
+        // Slow down polling once connected
+        if (pollIntervalRef.current !== 2000) {
+          pollIntervalRef.current = 2000;
+          startSignalPolling();
+        }
       }
       if (pc.iceConnectionState === "disconnected" || pc.iceConnectionState === "failed") {
         setRemoteConnected(false);
@@ -72,12 +79,15 @@ export default function VideoCall({ sessionId, userId }: VideoCallProps) {
     return pc;
   }, [sessionId, userId]);
 
-  async function startCall() {
+  async function startCall(audioOnly?: boolean) {
+    const useAudioOnly = audioOnly ?? isAudioOnly;
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
+        video: !useAudioOnly,
         audio: true,
       });
+      setIsAudioOnly(useAudioOnly);
+      setIsCameraOn(!useAudioOnly);
 
       localStreamRef.current = stream;
       if (localVideoRef.current) {
@@ -126,7 +136,7 @@ export default function VideoCall({ sessionId, userId }: VideoCallProps) {
       } catch {
         /* silent */
       }
-    }, 2000);
+    }, pollIntervalRef.current);
   }
 
   async function handleSignal(signal: { type: string; sdp?: RTCSessionDescriptionInit; candidate?: RTCIceCandidateInit }) {
@@ -178,6 +188,13 @@ export default function VideoCall({ sessionId, userId }: VideoCallProps) {
     setConnectionState("disconnected");
     setRemoteConnected(false);
     setIsScreenSharing(false);
+    pollIntervalRef.current = 1000;
+  }
+
+  async function reconnect() {
+    const wasAudioOnly = isAudioOnly;
+    endCall();
+    await startCall(wasAudioOnly);
   }
 
   function toggleCamera() {
@@ -247,13 +264,22 @@ export default function VideoCall({ sessionId, userId }: VideoCallProps) {
     return (
       <div className="flex items-center gap-2">
         <button
-          onClick={startCall}
+          onClick={() => startCall(false)}
           className="inline-flex items-center gap-1.5 rounded-lg bg-green-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-500 transition-colors"
         >
           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
           </svg>
           Start Call
+        </button>
+        <button
+          onClick={() => startCall(true)}
+          className="inline-flex items-center gap-1.5 rounded-lg bg-gray-700 px-3 py-1.5 text-xs font-medium text-white hover:bg-gray-600 transition-colors"
+        >
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+          </svg>
+          Audio Only
         </button>
       </div>
     );
@@ -282,22 +308,47 @@ export default function VideoCall({ sessionId, userId }: VideoCallProps) {
         </div>
       </div>
 
+      {/* Reconnect Banner */}
+      {(connectionState === "failed" || connectionState === "disconnected") && isCallActive && (
+        <div className="flex items-center justify-center">
+          <button
+            onClick={reconnect}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-yellow-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-yellow-500 transition-colors"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Reconnect
+          </button>
+        </div>
+      )}
+
       {/* Local Video (PiP) */}
       <div className="relative rounded-lg overflow-hidden bg-gray-800 border border-gray-600" style={{ width: 120, height: 90 }}>
-        <video
-          ref={localVideoRef}
-          autoPlay
-          playsInline
-          muted
-          className="w-full h-full object-cover mirror"
-          style={{ transform: "scaleX(-1)" }}
-        />
-        {!isCameraOn && (
+        {isAudioOnly ? (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-800">
-            <svg className="w-6 h-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+            <svg className="w-6 h-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
             </svg>
           </div>
+        ) : (
+          <>
+            <video
+              ref={localVideoRef}
+              autoPlay
+              playsInline
+              muted
+              className="w-full h-full object-cover mirror"
+              style={{ transform: "scaleX(-1)" }}
+            />
+            {!isCameraOn && (
+              <div className="absolute inset-0 flex items-center justify-center bg-gray-800">
+                <svg className="w-6 h-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                </svg>
+              </div>
+            )}
+          </>
         )}
       </div>
 
@@ -336,6 +387,32 @@ export default function VideoCall({ sessionId, userId }: VideoCallProps) {
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+        </button>
+
+        <button
+          onClick={() => {
+            if (isAudioOnly) {
+              // Switch to video mode: restart the call with video
+              reconnect();
+              setIsAudioOnly(false);
+            } else {
+              // Switch to audio-only: stop video track and update state
+              if (localStreamRef.current) {
+                localStreamRef.current.getVideoTracks().forEach((t) => t.stop());
+              }
+              setIsAudioOnly(true);
+              setIsCameraOn(false);
+            }
+          }}
+          className={`rounded p-1.5 transition-colors ${isAudioOnly ? "bg-purple-600 text-white" : "bg-gray-700 text-white hover:bg-gray-600"}`}
+          title={isAudioOnly ? "Switch to video" : "Audio only"}
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isAudioOnly
+              ? "M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+              : "M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+            } />
           </svg>
         </button>
 

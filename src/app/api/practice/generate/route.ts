@@ -88,6 +88,8 @@ IMPORTANT RULES:
 - Problems should test skills relevant to the role and job description.
 - Each problem should feel like a real interview question for that company/role.
 - Focus on practical scenarios the candidate might face on the job.
+- Ensure the problem is solvable and test cases match expected output.
+- EVERY problem MUST include: constraints, examples, starter code (JS + Python + Java), and test cases with concrete input/output.
 
 Return a JSON array with this exact structure (no markdown, just pure JSON):
 [
@@ -96,13 +98,17 @@ Return a JSON array with this exact structure (no markdown, just pure JSON):
     "title": "Problem Title",
     "difficulty": "EASY|MEDIUM|HARD",
     "description": "Full problem description with context",
-    "constraints": "Input constraints and limits",
-    "examples": "Input/Output examples with explanations",
+    "constraints": "Input constraints and limits (REQUIRED - never leave empty)",
+    "examples": "Input/Output examples with explanations (REQUIRED - include at least 2 examples)",
     "tags": ["Array", "Hash Table"],
     "starterCode": {
       "javascript": "// Starter code with function signature and test cases using console.log",
-      "python": "# Starter code with function signature and test cases using print"
-    }
+      "python": "# Starter code with function signature and test cases using print",
+      "java": "// Java starter code with class, main method, and test cases"
+    },
+    "testCases": [
+      { "input": "concrete input value", "expected": "expected output value" }
+    ]
   }
 ]
 
@@ -112,7 +118,8 @@ Make the problems practical and relevant. For example:
 - For data roles: Data transformation, aggregation, analysis
 - For system design roles: Rate limiter, URL shortener logic, LRU cache
 
-Include at least JavaScript and Python starter code for each problem.`;
+Include 3-5 test cases per problem with concrete input and expected output. The test cases MUST be correct and verifiable.
+Include at least JavaScript, Python, and Java starter code for each problem.`;
 
     const response = await anthropic.messages.create({
       model: "claude-sonnet-4-20250514",

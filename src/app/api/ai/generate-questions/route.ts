@@ -110,8 +110,13 @@ Guidelines for generating questions:
 - Set aiLevel based on difficulty: harder questions may warrant higher AI levels
 - Time limits should be realistic for the difficulty level
 - Ensure variety in the question set - avoid repetitive patterns
-- IMPORTANT: If the round type or interview type is non-technical (Behavioral, PM, BA), generate scenario-based questions, NOT coding questions.
-- For SQL interviews, generate SQL query/schema design questions.`
+- IMPORTANT: Generate questions ONLY relevant to the specified role and round type. Do NOT generate general knowledge, trivia, geography, history, or off-topic content.
+- If the round type or interview type is non-technical (Behavioral, PM, BA), generate scenario-based questions, NOT coding questions.
+- For DevOps rounds: generate infrastructure, CI/CD, cloud, monitoring, and deployment questions, NOT coding algorithm problems.
+- For Business Analysis rounds: generate requirements gathering, case study, and stakeholder analysis questions, NOT algorithm problems.
+- For Project Management rounds: generate project planning, risk management, and stakeholder scenario questions, NOT code.
+- For SQL interviews, generate SQL query/schema design questions.
+- For non-coding round types, do NOT generate coding or algorithm questions. Generate scenario-based, analytical, or domain-specific questions appropriate for the round type.`
 
     const userPrompt = `Generate ${questionCount} coding interview question${questionCount > 1 ? "s" : ""} with the following requirements:
 

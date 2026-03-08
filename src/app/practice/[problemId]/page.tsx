@@ -8,6 +8,11 @@ import { PROBLEM_BANK } from "@/data/problem-bank";
 
 // ─── Practice problem data ──────────────────────────────────────────────────────
 
+interface TestCase {
+  input: string;
+  expected: string;
+}
+
 interface PracticeProblem {
   id: string;
   title: string;
@@ -16,6 +21,7 @@ interface PracticeProblem {
   constraints: string;
   examples: string;
   starterCode: Record<string, string>;
+  testCases?: TestCase[];
 }
 
 const PRACTICE_PROBLEMS: Record<string, PracticeProblem> = {
@@ -45,6 +51,11 @@ const PRACTICE_PROBLEMS: Record<string, PracticeProblem> = {
       rust:
         'fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {\n    // Your solution here\n    vec![]\n}\n\nfn main() {\n    println!("{:?}", two_sum(vec![2, 7, 11, 15], 9));\n    println!("{:?}", two_sum(vec![3, 2, 4], 6));\n}\n',
     },
+    testCases: [
+      { input: "twoSum([2, 7, 11, 15], 9)", expected: "[0,1]" },
+      { input: "twoSum([3, 2, 4], 6)", expected: "[1,2]" },
+      { input: "twoSum([3, 3], 6)", expected: "[0,1]" },
+    ],
   },
   "reverse-linked-list": {
     id: "reverse-linked-list",
@@ -98,6 +109,13 @@ const PRACTICE_PROBLEMS: Record<string, PracticeProblem> = {
       rust:
         'fn is_valid(s: &str) -> bool {\n    // Your solution here\n    false\n}\n\nfn main() {\n    println!("{}", is_valid("()"));      // true\n    println!("{}", is_valid("()[]{}"));  // true\n    println!("{}", is_valid("(]"));      // false\n}\n',
     },
+    testCases: [
+      { input: 'isValid("()")', expected: "true" },
+      { input: 'isValid("()[]{}")', expected: "true" },
+      { input: 'isValid("(]")', expected: "false" },
+      { input: 'isValid("([])")', expected: "true" },
+      { input: 'isValid("")', expected: "true" },
+    ],
   },
   "merge-intervals": {
     id: "merge-intervals",
@@ -125,6 +143,10 @@ const PRACTICE_PROBLEMS: Record<string, PracticeProblem> = {
       rust:
         'fn merge(mut intervals: Vec<Vec<i32>>) -> Vec<Vec<i32>> {\n    // Your solution here\n    intervals.sort_by_key(|a| a[0]);\n    vec![]\n}\n\nfn main() {\n    println!("{:?}", merge(vec![vec![1,3],vec![2,6],vec![8,10],vec![15,18]]));\n}\n',
     },
+    testCases: [
+      { input: "merge([[1,3],[2,6],[8,10],[15,18]])", expected: "[[1,6],[8,10],[15,18]]" },
+      { input: "merge([[1,4],[4,5]])", expected: "[[1,5]]" },
+    ],
   },
   "lru-cache": {
     id: "lru-cache",
@@ -371,6 +393,8 @@ export default function PracticeProblemPage() {
   } | null>(null);
   const [showOutput, setShowOutput] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [testResults, setTestResults] = useState<{ input: string; expected: string; actual: string; passed: boolean }[]>([]);
+  const [runningTests, setRunningTests] = useState(false);
   const aiChatRef = useRef<HTMLDivElement>(null);
 
   // Initialize from URL params and problem starter code
@@ -497,6 +521,42 @@ export default function PracticeProblemPage() {
       setExecuting(false);
     }
   }, [language, code, executing]);
+
+  // Run test cases
+  const handleRunTests = useCallback(async () => {
+    if (runningTests || !problem?.testCases?.length) return;
+    if (language !== "javascript" && language !== "typescript") {
+      setTestResults([{
+        input: "--",
+        expected: "--",
+        actual: "Test cases only run with JavaScript/TypeScript in the browser.",
+        passed: false,
+      }]);
+      setShowOutput(true);
+      return;
+    }
+
+    setRunningTests(true);
+    setShowOutput(true);
+    const results: { input: string; expected: string; actual: string; passed: boolean }[] = [];
+
+    for (const tc of problem.testCases) {
+      try {
+        const testCode = `${code}\nconsole.log(JSON.stringify(${tc.input}));`;
+        const { runJavaScriptInWorker } = await import("@/lib/code-runner");
+        const result = await runJavaScriptInWorker(testCode);
+        const actual = (result.output || "").trim();
+        const expected = tc.expected.trim();
+        const passed = actual === expected || actual === JSON.stringify(JSON.parse(expected));
+        results.push({ input: tc.input, expected, actual: result.error ? `Error: ${result.error}` : actual, passed: !result.error && passed });
+      } catch {
+        results.push({ input: tc.input, expected: tc.expected, actual: "Execution error", passed: false });
+      }
+    }
+
+    setTestResults(results);
+    setRunningTests(false);
+  }, [runningTests, problem, code, language]);
 
   // Handle AI prompt submission
   async function handleAiSubmit(e: React.FormEvent) {
@@ -659,6 +719,27 @@ export default function PracticeProblemPage() {
             {executing ? "Running..." : "Run"}
             <span className="text-green-300 text-[10px]">Ctrl+Enter</span>
           </button>
+
+          {/* Run Tests Button */}
+          {problem?.testCases && problem.testCases.length > 0 && (
+            <button
+              onClick={handleRunTests}
+              disabled={runningTests}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-500 disabled:opacity-50 transition-colors"
+            >
+              {runningTests ? (
+                <svg className="animate-spin w-3.5 h-3.5" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+              ) : (
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              )}
+              {runningTests ? "Testing..." : "Run Tests"}
+            </button>
+          )}
         </div>
       </div>
 
@@ -687,7 +768,7 @@ export default function PracticeProblemPage() {
                 Constraints
               </h4>
               <pre className="whitespace-pre-wrap font-mono text-xs bg-gray-800 rounded-lg p-3 text-gray-300">
-                {problem.constraints}
+                {problem.constraints || "See the problem description above for constraints."}
               </pre>
             </div>
 
@@ -696,7 +777,7 @@ export default function PracticeProblemPage() {
                 Examples
               </h4>
               <pre className="whitespace-pre-wrap font-mono text-xs bg-gray-800 rounded-lg p-3 text-gray-300">
-                {problem.examples}
+                {problem.examples || "Try solving with sample inputs from the description."}
               </pre>
             </div>
           </div>
@@ -779,6 +860,39 @@ export default function PracticeProblemPage() {
                     </div>
                   ) : (
                     <p className="text-sm text-gray-500">Run your code to see output here.</p>
+                  )}
+
+                  {/* Test Results */}
+                  {testResults.length > 0 && (
+                    <div className="mt-4 border-t border-gray-700 pt-3">
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="text-xs font-semibold text-gray-400">Test Results</span>
+                        <span className={`text-xs font-medium ${
+                          testResults.every(t => t.passed) ? "text-green-400" : "text-yellow-400"
+                        }`}>
+                          {testResults.filter(t => t.passed).length}/{testResults.length} passed
+                        </span>
+                      </div>
+                      <div className="space-y-2">
+                        {testResults.map((tr, i) => (
+                          <div key={i} className={`rounded-lg border p-2.5 text-xs font-mono ${
+                            tr.passed
+                              ? "border-green-800/50 bg-green-950/30"
+                              : "border-red-800/50 bg-red-950/30"
+                          }`}>
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className={tr.passed ? "text-green-400" : "text-red-400"}>
+                                {tr.passed ? "\u2713" : "\u2717"}
+                              </span>
+                              <span className="text-gray-400">Test {i + 1}</span>
+                            </div>
+                            <div className="text-gray-400">Input: <span className="text-gray-300">{tr.input}</span></div>
+                            <div className="text-gray-400">Expected: <span className="text-green-300">{tr.expected}</span></div>
+                            <div className="text-gray-400">Got: <span className={tr.passed ? "text-green-300" : "text-red-300"}>{tr.actual}</span></div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>

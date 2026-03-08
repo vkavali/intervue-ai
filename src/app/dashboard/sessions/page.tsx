@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
+import { SessionTimer } from "./SessionTimer";
 
 const statusColors: Record<string, string> = {
   PENDING: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30",
@@ -152,9 +153,10 @@ export default async function SessionsPage() {
                         Starts {new Date(s.scheduledAt).toLocaleDateString()}
                       </span>
                     ) : s.status === "ACTIVE" && s.startedAt && s.totalDurationMinutes ? (
-                      <span className="text-xs text-green-400 font-mono">
-                        {s.totalDurationMinutes}m total
-                      </span>
+                      <SessionTimer
+                        startedAt={s.startedAt.toISOString()}
+                        totalDurationMinutes={s.totalDurationMinutes}
+                      />
                     ) : s.status === "COMPLETED" && s.startedAt && s.endedAt ? (
                       <span className="text-xs text-blue-400 font-mono">
                         {Math.round((new Date(s.endedAt).getTime() - new Date(s.startedAt).getTime()) / 60000)}m
@@ -196,12 +198,20 @@ export default async function SessionsPage() {
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-2">
                       {s.status === "ACTIVE" && (
-                        <Link
-                          href={`/session/${s.id}/watch`}
-                          className="text-xs font-medium text-green-400 hover:text-green-300 transition-colors"
-                        >
-                          Watch Live
-                        </Link>
+                        (() => {
+                          const isSessionExpired = s.startedAt && s.totalDurationMinutes &&
+                            new Date(s.startedAt).getTime() + s.totalDurationMinutes * 60 * 1000 < Date.now();
+                          return isSessionExpired ? (
+                            <span className="text-xs font-medium text-red-400">Expired</span>
+                          ) : (
+                            <Link
+                              href={`/session/${s.id}/watch`}
+                              className="text-xs font-medium text-green-400 hover:text-green-300 transition-colors"
+                            >
+                              Watch Live
+                            </Link>
+                          );
+                        })()
                       )}
                       <Link
                         href={`/dashboard/sessions/${s.id}`}

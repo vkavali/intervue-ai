@@ -16,6 +16,16 @@ const TRIVIAL_PATTERNS = [
   /celebrity/i,
   /joke/i,
   /riddle/i,
+  /capital\s+of/i,
+  /what\s+(is|was|are)\s+the\s+name/i,
+  /geography/i,
+  /history\s+of/i,
+  /who\s+(is|was|are)/i,
+  /general\s+knowledge/i,
+  /country/i,
+  /president/i,
+  /world\s+war/i,
+  /famous/i,
 ];
 
 interface Question {
@@ -97,19 +107,26 @@ export default function NewInterviewPage() {
   async function handleGenerateInterview() {
     if (!aiInterviewPrompt.trim()) return;
 
-    // Pre-validation: require role OR a prompt >= 20 chars
-    const promptText = aiInterviewPrompt.trim();
-    if (!role.trim() && promptText.length < 20) {
-      setError(
-        "Please provide a role or write a more detailed prompt (at least 20 characters) so AI can generate a relevant interview."
-      );
+    // Require role, interviewType, and industry before AI generation
+    if (!role.trim()) {
+      setError("Please specify a Role before generating with AI.");
       return;
     }
+    if (!interviewType) {
+      setError("Please select an Interview Type before generating with AI.");
+      return;
+    }
+    if (!industry) {
+      setError("Please select an Industry before generating with AI.");
+      return;
+    }
+
+    const promptText = aiInterviewPrompt.trim();
 
     // Check for trivial / irrelevant prompts
     if (TRIVIAL_PATTERNS.some((pattern) => pattern.test(promptText))) {
       setError(
-        "The prompt appears to be unrelated to interviewing. Please describe a real interview scenario."
+        "Please describe job-specific skills and competencies to assess, not general knowledge questions."
       );
       return;
     }
@@ -125,8 +142,10 @@ export default function NewInterviewPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           prompt: aiInterviewPrompt,
-          role: role || undefined,
+          role,
           seniority: seniority || undefined,
+          interviewType,
+          industry,
         }),
       });
 
@@ -347,8 +366,9 @@ export default function NewInterviewPage() {
         <div className="mt-3 flex justify-end">
           <button
             type="button"
-            disabled={aiInterviewLoading || !aiInterviewPrompt.trim()}
+            disabled={aiInterviewLoading || !aiInterviewPrompt.trim() || !role.trim() || !interviewType || !industry}
             onClick={handleGenerateInterview}
+            title={!role.trim() || !interviewType || !industry ? "Fill in Role, Interview Type, and Industry first" : ""}
             className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:from-purple-500 hover:to-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {aiInterviewLoading ? (

@@ -419,7 +419,60 @@ export default function SessionPage() {
     );
   }
 
+  // Check if session time has expired
+  const isExpired =
+    sessionData.startedAt &&
+    sessionData.totalDurationMinutes &&
+    new Date(sessionData.startedAt).getTime() +
+      sessionData.totalDurationMinutes * 60 * 1000 <
+      Date.now();
+
+  if (isCandidate && isExpired && sessionData.status === "ACTIVE") {
+    return (
+      <div className="flex h-screen items-center justify-center bg-gray-950">
+        <div className="text-center max-w-md">
+          <svg
+            className="mx-auto h-16 w-16 text-red-400 mb-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <h2 className="text-xl font-bold text-white mb-2">
+            Session Time Expired
+          </h2>
+          <p className="text-gray-400 mb-6">
+            The allotted time for this interview session has ended. Your work has been saved.
+          </p>
+          <a
+            href="/dashboard"
+            className="rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-500 transition-colors"
+          >
+            Return to Dashboard
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   // Active session - route by role
+  // Check interviewer/admin FIRST to prevent admins from seeing candidate start button
+  if (isInterviewer || isAdmin) {
+    return (
+      <InterviewerSessionView
+        sessionData={sessionData}
+        sessionId={sessionId}
+        userId={currentUser.id}
+      />
+    );
+  }
+
   if (isCandidate) {
     return (
       <CandidateSessionView
@@ -430,7 +483,7 @@ export default function SessionPage() {
     );
   }
 
-  // Interviewer or Admin view
+  // Fallback
   return (
     <InterviewerSessionView
       sessionData={sessionData}
