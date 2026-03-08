@@ -469,6 +469,7 @@ export default function SessionPage() {
         sessionData={sessionData}
         sessionId={sessionId}
         userId={currentUser.id}
+        isActualInterviewer={isInterviewer || (isAdmin && currentUser.id === sessionData.interviewerId)}
       />
     );
   }
@@ -489,6 +490,7 @@ export default function SessionPage() {
       sessionData={sessionData}
       sessionId={sessionId}
       userId={currentUser.id}
+      isActualInterviewer={false}
     />
   );
 }

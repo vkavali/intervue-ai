@@ -74,6 +74,7 @@ interface InterviewerSessionViewProps {
   sessionData: SessionData;
   sessionId: string;
   userId: string;
+  isActualInterviewer?: boolean;
 }
 
 const aiLevelLabels: Record<number, { label: string; color: string }> = {
@@ -102,6 +103,7 @@ export default function InterviewerSessionView({
   sessionData: initialData,
   sessionId,
   userId,
+  isActualInterviewer = true,
 }: InterviewerSessionViewProps) {
   const [sessionData, setSessionData] = useState(initialData);
   const [aiSliderValue, setAiSliderValue] = useState(initialData.aiLevel);
@@ -302,7 +304,7 @@ export default function InterviewerSessionView({
         </div>
 
         <div className="flex items-center gap-3">
-          <VideoCall sessionId={sessionId} userId={userId} />
+          {isActualInterviewer && <VideoCall sessionId={sessionId} userId={userId} />}
           <ScreenCapture sessionId={sessionId} isInterviewer={true} />
 
           {/* Elapsed Timer */}

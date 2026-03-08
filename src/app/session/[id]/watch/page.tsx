@@ -10,6 +10,7 @@ import SessionChat from "@/components/SessionChat";
 interface SessionData {
   id: string;
   status: string;
+  interviewerId: string | null;
   currentQuestionIndex: number;
   code: string | null;
   language: string | null;
@@ -290,8 +291,8 @@ export default function WatchSessionPage() {
         </div>
 
         <div className="flex items-center gap-3">
-          {/* Video Call */}
-          {userId && <VideoCall sessionId={sessionId} userId={userId} />}
+          {/* Video Call — only for the actual interviewer, not admin observers */}
+          {userId && sessionData.interviewerId === userId && <VideoCall sessionId={sessionId} userId={userId} />}
           {/* Screen Capture Button (interviewer view) */}
           <ScreenCapture sessionId={sessionId} isInterviewer={true} />
 
