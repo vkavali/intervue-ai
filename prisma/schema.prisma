@@ -33,6 +33,8 @@ model User {
   interviewerSessions InterviewSession[] @relation("InterviewerSessions")
   aiLevelOverrides    AILevelOverride[]  @relation("OverriddenByUser")
   interviewerNotes    InterviewerNote[]  @relation("InterviewerNotes")
+  candidatePipelines  CandidatePipeline[] @relation("CandidatePipelines")
+  notifications       Notification[]     @relation("UserNotifications")
 }
 
 // ─── Company ────────────────────────────────────────────────────────────────────
@@ -48,6 +50,8 @@ model Company {
   users              User[]
   interviewTemplates InterviewTemplate[]
   interviewSessions  InterviewSession[]
+  candidatePipelines CandidatePipeline[]
+  hiringComparisons  HiringComparison[]
 }
 
 // ─── InterviewTemplate ──────────────────────────────────────────────────────────
@@ -174,4 +178,54 @@ model InterviewerNote {
 
   session     InterviewSession @relation(fields: [sessionId], references: [id])
   interviewer User             @relation("InterviewerNotes", fields: [interviewerId], references: [id])
+}
+
+// ─── CandidatePipeline ────────────────────────────────────────────────────────
+// Tracks a candidate's journey through multiple interview rounds for a specific role
+
+model CandidatePipeline {
+  id          String   @id @default(cuid())
+  companyId   String
+  candidateId String
+  role        String   // The job role they're being considered for
+  seniority   String   // Target seniority level
+  stage       String   @default("SCREENING") // SCREENING | TECHNICAL | SYSTEM_DESIGN | BEHAVIORAL | FINAL | HIRED | REJECTED | ON_HOLD
+  notes       String?  // Internal recruiter/admin notes
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  company   Company @relation(fields: [companyId], references: [id])
+  candidate User    @relation("CandidatePipelines", fields: [candidateId], references: [id])
+
+  @@unique([companyId, candidateId, role])
+}
+
+// ─── HiringComparison ─────────────────────────────────────────────────────────
+// AI-generated comparison report for candidates competing for the same role
+
+model HiringComparison {
+  id          String   @id @default(cuid())
+  companyId   String
+  role        String
+  seniority   String
+  analysis    String   // JSON text - the full AI comparison
+  recommendation String // The recommended candidate and reasoning
+  createdAt   DateTime @default(now())
+
+  company Company @relation(fields: [companyId], references: [id])
+}
+
+// ─── Notification ──────────────────────────────────────────────────────────────
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String   // CANDIDATE_CLEARED | SESSION_COMPLETED | REVIEW_PENDING | CANDIDATE_WAITING | PIPELINE_UPDATE | SYSTEM
+  title     String
+  message   String
+  link      String?  // URL to navigate to when clicked
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation("UserNotifications", fields: [userId], references: [id])
 }

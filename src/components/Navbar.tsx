@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
+import NotificationBell from "./NotificationBell"
 
 const roleBadgeColors: Record<string, string> = {
   COMPANY_ADMIN: "bg-purple-600",
@@ -48,6 +49,11 @@ export default function Navbar() {
                 >
                   {roleBadgeLabels[session.user.role] || session.user.role}
                 </span>
+
+                {(session.user.role === "COMPANY_ADMIN" ||
+                  session.user.role === "INTERVIEWER") && (
+                  <NotificationBell />
+                )}
 
                 <button
                   onClick={() => signOut({ callbackUrl: "/" })}

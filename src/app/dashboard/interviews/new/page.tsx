@@ -49,6 +49,19 @@ export default function NewInterviewPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // AI Generate Interview state
+  const [aiInterviewPrompt, setAiInterviewPrompt] = useState("");
+  const [aiInterviewLoading, setAiInterviewLoading] = useState(false);
+  const [assessmentCriteria, setAssessmentCriteria] = useState("");
+  const [interviewerGuidance, setInterviewerGuidance] = useState("");
+
+  // AI Generate Questions state
+  const [showAiQuestionsModal, setShowAiQuestionsModal] = useState(false);
+  const [aiQCount, setAiQCount] = useState(3);
+  const [aiQTopics, setAiQTopics] = useState("");
+  const [aiQDifficulty, setAiQDifficulty] = useState("MIX");
+  const [aiQuestionsLoading, setAiQuestionsLoading] = useState(false);
+
   function addQuestion() {
     setQuestions((prev) => [...prev, emptyQuestion()]);
   }
@@ -62,6 +75,150 @@ export default function NewInterviewPage() {
     setQuestions((prev) =>
       prev.map((q) => (q.id === id ? { ...q, ...updates } : q))
     );
+  }
+
+  async function handleGenerateInterview() {
+    if (!aiInterviewPrompt.trim()) return;
+
+    setAiInterviewLoading(true);
+    setError("");
+    setAssessmentCriteria("");
+    setInterviewerGuidance("");
+
+    try {
+      const res = await fetch("/api/ai/generate-interview", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: aiInterviewPrompt,
+          role: role || undefined,
+          seniority: seniority || undefined,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Failed to generate interview template");
+        setAiInterviewLoading(false);
+        return;
+      }
+
+      // Auto-fill the entire form
+      const { template, assessmentCriteria: criteria, interviewerGuidance: guidance } = data;
+
+      setTitle(template.title);
+      setRole(template.role);
+      setSeniority(template.seniority);
+      setRoundType(template.roundType);
+      setDefaultAiLevel(template.defaultAiLevel);
+
+      // Convert template questions to our Question format
+      const newQuestions: Question[] = template.questions.map(
+        (q: {
+          title: string;
+          description: string;
+          constraints: string;
+          examples: string;
+          difficulty: string;
+          aiLevel: number;
+          timeLimit: number;
+        }) => ({
+          id: generateId(),
+          title: q.title,
+          description: q.description,
+          constraints: q.constraints,
+          examples: q.examples,
+          difficulty: q.difficulty,
+          aiLevel: q.aiLevel === template.defaultAiLevel ? -1 : q.aiLevel,
+          timeLimit: q.timeLimit,
+        })
+      );
+
+      setQuestions(newQuestions.length > 0 ? newQuestions : [emptyQuestion()]);
+      setAssessmentCriteria(criteria || "");
+      setInterviewerGuidance(guidance || "");
+    } catch {
+      setError("An unexpected error occurred while generating the interview.");
+    } finally {
+      setAiInterviewLoading(false);
+    }
+  }
+
+  async function handleGenerateQuestions() {
+    if (!role || !roundType) {
+      setError(
+        "Please fill in the Role and Round Type fields before generating questions."
+      );
+      return;
+    }
+
+    setAiQuestionsLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/ai/generate-questions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          role,
+          seniority,
+          roundType,
+          count: aiQCount,
+          topics: aiQTopics || undefined,
+          difficulty: aiQDifficulty,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Failed to generate questions");
+        setAiQuestionsLoading(false);
+        return;
+      }
+
+      // Append generated questions to the current list
+      const newQuestions: Question[] = data.questions.map(
+        (q: {
+          title: string;
+          description: string;
+          constraints: string;
+          examples: string;
+          difficulty: string;
+          aiLevel: number;
+          timeLimit: number;
+        }) => ({
+          id: generateId(),
+          title: q.title,
+          description: q.description,
+          constraints: q.constraints,
+          examples: q.examples,
+          difficulty: q.difficulty,
+          aiLevel: q.aiLevel === defaultAiLevel ? -1 : q.aiLevel,
+          timeLimit: q.timeLimit,
+        })
+      );
+
+      // If the only existing question is empty, replace it; otherwise append
+      setQuestions((prev) => {
+        const hasOnlyEmptyQuestion =
+          prev.length === 1 &&
+          !prev[0].title &&
+          !prev[0].description;
+        if (hasOnlyEmptyQuestion) {
+          return newQuestions;
+        }
+        return [...prev, ...newQuestions];
+      });
+
+      setShowAiQuestionsModal(false);
+      setAiQTopics("");
+    } catch {
+      setError("An unexpected error occurred while generating questions.");
+    } finally {
+      setAiQuestionsLoading(false);
+    }
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -122,6 +279,96 @@ export default function NewInterviewPage() {
       {error && (
         <div className="mb-6 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
           {error}
+        </div>
+      )}
+
+      {/* AI Generate Interview Section */}
+      <div className="mb-8 rounded-xl border border-purple-500/30 bg-gradient-to-br from-purple-500/5 to-blue-500/5 p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600">
+            <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold text-white">
+              AI Generate Interview
+            </h2>
+            <p className="text-sm text-gray-400">
+              Describe your ideal interview and let AI build it for you
+            </p>
+          </div>
+        </div>
+
+        <textarea
+          rows={4}
+          value={aiInterviewPrompt}
+          onChange={(e) => setAiInterviewPrompt(e.target.value)}
+          className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-3 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 resize-none"
+          placeholder="e.g., I need a 45-minute React interview for a senior developer. Focus on hooks, performance optimization, and state management. Test problem-solving ability and code quality. Use moderate AI assistance."
+        />
+
+        <div className="mt-3 flex justify-end">
+          <button
+            type="button"
+            disabled={aiInterviewLoading || !aiInterviewPrompt.trim()}
+            onClick={handleGenerateInterview}
+            className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:from-purple-500 hover:to-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {aiInterviewLoading ? (
+              <>
+                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+                Generating Interview...
+              </>
+            ) : (
+              <>
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Generate with AI
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Assessment Criteria & Interviewer Guidance Info Cards */}
+      {(assessmentCriteria || interviewerGuidance) && (
+        <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+          {assessmentCriteria && (
+            <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <svg className="h-5 w-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h3 className="text-sm font-semibold text-emerald-400">
+                  Assessment Criteria
+                </h3>
+              </div>
+              <p className="text-sm text-gray-300 whitespace-pre-line leading-relaxed">
+                {assessmentCriteria}
+              </p>
+            </div>
+          )}
+
+          {interviewerGuidance && (
+            <div className="rounded-xl border border-blue-500/30 bg-blue-500/5 p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <svg className="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h3 className="text-sm font-semibold text-blue-400">
+                  Interviewer Guidance
+                </h3>
+              </div>
+              <p className="text-sm text-gray-300 whitespace-pre-line leading-relaxed">
+                {interviewerGuidance}
+              </p>
+            </div>
+          )}
         </div>
       )}
 
@@ -231,17 +478,137 @@ export default function NewInterviewPage() {
             <h2 className="text-lg font-semibold text-white">
               Questions ({questions.length})
             </h2>
-            <button
-              type="button"
-              onClick={addQuestion}
-              className="inline-flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-700 hover:text-white"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-              Add Question
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setShowAiQuestionsModal(true)}
+                className="inline-flex items-center gap-2 rounded-lg border border-purple-500/30 bg-purple-500/10 px-4 py-2 text-sm font-medium text-purple-400 transition-colors hover:bg-purple-500/20 hover:text-purple-300"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                AI Generate Questions
+              </button>
+              <button
+                type="button"
+                onClick={addQuestion}
+                className="inline-flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-700 hover:text-white"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Add Question
+              </button>
+            </div>
           </div>
+
+          {/* AI Generate Questions Modal */}
+          {showAiQuestionsModal && (
+            <div className="rounded-xl border border-purple-500/30 bg-purple-500/5 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-sm font-semibold text-purple-400">
+                  AI Question Generator
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setShowAiQuestionsModal(false)}
+                  className="text-gray-400 hover:text-gray-300 transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                    Number of Questions
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={10}
+                    value={aiQCount}
+                    onChange={(e) =>
+                      setAiQCount(
+                        Math.min(Math.max(parseInt(e.target.value) || 1, 1), 10)
+                      )
+                    }
+                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                    Difficulty Preference
+                  </label>
+                  <select
+                    value={aiQDifficulty}
+                    onChange={(e) => setAiQDifficulty(e.target.value)}
+                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                  >
+                    <option value="MIX">Mix of difficulties</option>
+                    <option value="EASY">Easy</option>
+                    <option value="MEDIUM">Medium</option>
+                    <option value="HARD">Hard</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                    Specific Topics (optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={aiQTopics}
+                    onChange={(e) => setAiQTopics(e.target.value)}
+                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                    placeholder="e.g., arrays, trees, dynamic programming"
+                  />
+                </div>
+              </div>
+
+              {!role && (
+                <p className="text-xs text-amber-400 mb-3">
+                  Fill in the Role and Round Type fields above first so AI can generate relevant questions.
+                </p>
+              )}
+
+              <div className="flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowAiQuestionsModal(false)}
+                  className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-700"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  disabled={aiQuestionsLoading || !role || !roundType}
+                  onClick={handleGenerateQuestions}
+                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-5 py-2 text-sm font-semibold text-white transition-all hover:from-purple-500 hover:to-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {aiQuestionsLoading ? (
+                    <>
+                      <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                      Generating...
+                    </>
+                  ) : (
+                    <>
+                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                      Generate Questions
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
 
           {questions.map((question, index) => (
             <div

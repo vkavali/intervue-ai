@@ -78,6 +78,9 @@ export default function LiveSessionPage() {
   const [aiMessages, setAiMessages] = useState<
     { role: "user" | "assistant"; content: string; timestamp: string }[]
   >([]);
+  const [runOutput, setRunOutput] = useState<{ output: string; error: string; exitCode: number } | null>(null);
+  const [running, setRunning] = useState(false);
+  const [showOutput, setShowOutput] = useState(false);
   const aiChatRef = useRef<HTMLDivElement>(null);
 
   // Fetch session data
@@ -208,18 +211,42 @@ export default function LiveSessionPage() {
     }
   }, [aiMessages]);
 
+  // Run code
+  const runCode = useCallback(async () => {
+    if (running) return;
+    setRunning(true);
+    setShowOutput(true);
+    setRunOutput(null);
+    try {
+      const res = await fetch("/api/execute", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ language, code }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setRunOutput(data);
+      } else {
+        setRunOutput({ output: "", error: data.error || "Execution failed", exitCode: 1 });
+      }
+    } catch {
+      setRunOutput({ output: "", error: "Failed to connect to execution service", exitCode: 1 });
+    } finally {
+      setRunning(false);
+    }
+  }, [language, code, running]);
+
   // Keyboard shortcut
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.ctrlKey && e.key === "Enter") {
         e.preventDefault();
-        // Placeholder: Run code
-        console.log("Run code triggered");
+        runCode();
       }
     }
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [runCode]);
 
   function formatTime(seconds: number): string {
     const hrs = Math.floor(seconds / 3600);
@@ -325,13 +352,21 @@ export default function LiveSessionPage() {
 
           {/* Run Button */}
           <button
-            onClick={() => console.log("Run code")}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-green-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-500 transition-colors"
+            onClick={runCode}
+            disabled={running}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-green-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-500 disabled:opacity-50 transition-colors"
           >
-            <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M8 5v14l11-7z" />
-            </svg>
-            Run
+            {running ? (
+              <svg className="animate-spin w-3.5 h-3.5" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              </svg>
+            ) : (
+              <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            )}
+            {running ? "Running..." : "Run"}
             <span className="text-green-300 text-[10px]">Ctrl+Enter</span>
           </button>
         </div>
@@ -398,29 +433,67 @@ export default function LiveSessionPage() {
           )}
         </div>
 
-        {/* Center: Code Editor */}
+        {/* Center: Code Editor + Output */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          <Editor
-            height="100%"
-            language={language}
-            value={code}
-            onChange={(value) => setCode(value || "")}
-            theme="vs-dark"
-            options={{
-              fontSize: 14,
-              fontFamily: "var(--font-geist-mono), monospace",
-              minimap: { enabled: false },
-              padding: { top: 16 },
-              scrollBeyondLastLine: false,
-              smoothScrolling: true,
-              cursorBlinking: "smooth",
-              renderLineHighlight: "all",
-              lineNumbers: "on",
-              tabSize: 2,
-              wordWrap: "on",
-              automaticLayout: true,
-            }}
-          />
+          <div className={`flex-1 ${showOutput ? "" : ""}`}>
+            <Editor
+              height={showOutput ? "calc(100% - 200px)" : "100%"}
+              language={language}
+              value={code}
+              onChange={(value) => setCode(value || "")}
+              theme="vs-dark"
+              options={{
+                fontSize: 14,
+                fontFamily: "var(--font-geist-mono), monospace",
+                minimap: { enabled: false },
+                padding: { top: 16 },
+                scrollBeyondLastLine: false,
+                smoothScrolling: true,
+                cursorBlinking: "smooth",
+                renderLineHighlight: "all",
+                lineNumbers: "on",
+                tabSize: 2,
+                wordWrap: "on",
+                automaticLayout: true,
+              }}
+            />
+          </div>
+
+          {/* Output Panel */}
+          {showOutput && (
+            <div className="h-[200px] border-t border-gray-800 bg-gray-900 flex flex-col shrink-0">
+              <div className="flex items-center justify-between px-3 py-1.5 border-b border-gray-800">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-semibold text-gray-400">Output</span>
+                  {runOutput && (
+                    <span className={`text-[10px] px-1.5 py-0.5 rounded ${runOutput.exitCode === 0 ? "bg-green-900/50 text-green-400" : "bg-red-900/50 text-red-400"}`}>
+                      {runOutput.exitCode === 0 ? "Success" : `Exit: ${runOutput.exitCode}`}
+                    </span>
+                  )}
+                </div>
+                <button onClick={() => setShowOutput(false)} className="text-gray-500 hover:text-gray-300 text-xs">
+                  Close
+                </button>
+              </div>
+              <div className="flex-1 overflow-auto p-3">
+                {running ? (
+                  <div className="flex items-center gap-2 text-xs text-gray-400">
+                    <svg className="animate-spin w-3 h-3" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Running code...
+                  </div>
+                ) : runOutput ? (
+                  <pre className="font-mono text-xs whitespace-pre-wrap">
+                    {runOutput.output && <span className="text-gray-300">{runOutput.output}</span>}
+                    {runOutput.error && <span className="text-red-400">{runOutput.error}</span>}
+                    {!runOutput.output && !runOutput.error && <span className="text-gray-500">No output</span>}
+                  </pre>
+                ) : null}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Right Panel: AI Sidebar */}

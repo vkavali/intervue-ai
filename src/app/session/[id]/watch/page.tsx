@@ -45,12 +45,53 @@ interface SessionData {
   }[];
 }
 
+interface ThinkingAnalysis {
+  overallApproach: string;
+  thinkingPatterns: {
+    pattern: string;
+    evidence: string;
+    strength: 'positive' | 'neutral' | 'concerning';
+  }[];
+  problemSolvingStage: string;
+  strengths: string[];
+  concerns: string[];
+  aiUsagePattern: string;
+  suggestedFollowUp: string[];
+  confidenceLevel: 'high' | 'medium' | 'low';
+}
+
 const aiLevelLabels: Record<number, { label: string; color: string }> = {
   0: { label: "L0 No AI", color: "text-red-400" },
   1: { label: "L1 Hint", color: "text-yellow-400" },
   2: { label: "L2 Scaffold", color: "text-blue-400" },
   3: { label: "L3 Guide", color: "text-purple-400" },
   4: { label: "L4 Copilot", color: "text-green-400" },
+};
+
+const strengthColors: Record<string, string> = {
+  positive: "text-green-400 border-green-800 bg-green-950",
+  neutral: "text-yellow-400 border-yellow-800 bg-yellow-950",
+  concerning: "text-red-400 border-red-800 bg-red-950",
+};
+
+const strengthDotColors: Record<string, string> = {
+  positive: "bg-green-400",
+  neutral: "bg-yellow-400",
+  concerning: "bg-red-400",
+};
+
+const confidenceColors: Record<string, string> = {
+  high: "text-green-400 bg-green-950 border-green-800",
+  medium: "text-yellow-400 bg-yellow-950 border-yellow-800",
+  low: "text-red-400 bg-red-950 border-red-800",
+};
+
+const stageBadgeColors: Record<string, string> = {
+  understanding: "text-blue-300 bg-blue-950 border-blue-800",
+  planning: "text-purple-300 bg-purple-950 border-purple-800",
+  implementing: "text-green-300 bg-green-950 border-green-800",
+  debugging: "text-orange-300 bg-orange-950 border-orange-800",
+  optimizing: "text-cyan-300 bg-cyan-950 border-cyan-800",
 };
 
 export default function WatchSessionPage() {
@@ -67,6 +108,9 @@ export default function WatchSessionPage() {
   const [noteContent, setNoteContent] = useState("");
   const [submittingNote, setSubmittingNote] = useState(false);
   const [updatingAiLevel, setUpdatingAiLevel] = useState(false);
+  const [thinkingAnalysis, setThinkingAnalysis] = useState<ThinkingAnalysis | null>(null);
+  const [thinkingLoading, setThinkingLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState<'interactions' | 'thinking'>('interactions');
   const interactionLogRef = useRef<HTMLDivElement>(null);
   const notesRef = useRef<HTMLDivElement>(null);
 
@@ -150,6 +194,22 @@ export default function WatchSessionPage() {
     }
   }
 
+  // Fetch thinking analysis
+  async function fetchThinkingAnalysis() {
+    setThinkingLoading(true);
+    try {
+      const res = await fetch(`/api/sessions/${sessionId}/thinking`, { method: 'POST' });
+      if (res.ok) {
+        const data = await res.json();
+        setThinkingAnalysis(data);
+      }
+    } catch {
+      /* silent */
+    } finally {
+      setThinkingLoading(false);
+    }
+  }
+
   // Handle note submission
   async function handleNoteSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -198,6 +258,10 @@ export default function WatchSessionPage() {
 
   const currentQuestion =
     sessionData.template.questions[sessionData.currentQuestionIndex];
+
+  const stageLower = thinkingAnalysis?.problemSolvingStage?.toLowerCase() || "";
+  const stageBadgeClass =
+    stageBadgeColors[stageLower] || "text-gray-300 bg-gray-900 border-gray-700";
 
   return (
     <div className="flex h-screen flex-col bg-gray-950 overflow-hidden">
@@ -287,68 +351,244 @@ export default function WatchSessionPage() {
           />
         </div>
 
-        {/* Right: AI Log + Notes */}
+        {/* Right: AI Log / Thinking Analysis + Notes */}
         <div className="w-96 shrink-0 flex flex-col overflow-hidden">
-          {/* AI Interaction Log */}
+          {/* Tabbed Top Section */}
           <div className="flex-1 flex flex-col border-b border-gray-800 overflow-hidden">
-            <div className="border-b border-gray-800 bg-gray-900/50 px-4 py-2">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400">
-                AI Interaction Log ({sessionData.aiInteractions.length})
-              </h3>
+            {/* Tab Buttons */}
+            <div className="flex border-b border-gray-800 bg-gray-900/50 shrink-0">
+              <button
+                onClick={() => setActiveTab('interactions')}
+                className={`flex-1 px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-colors ${
+                  activeTab === 'interactions'
+                    ? 'text-purple-400 border-b-2 border-purple-500 bg-gray-900/80'
+                    : 'text-gray-500 hover:text-gray-300'
+                }`}
+              >
+                AI Interactions ({sessionData.aiInteractions.length})
+              </button>
+              <button
+                onClick={() => setActiveTab('thinking')}
+                className={`flex-1 px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-colors ${
+                  activeTab === 'thinking'
+                    ? 'text-purple-400 border-b-2 border-purple-500 bg-gray-900/80'
+                    : 'text-gray-500 hover:text-gray-300'
+                }`}
+              >
+                Thinking Analysis
+              </button>
             </div>
-            <div
-              ref={interactionLogRef}
-              className="flex-1 overflow-y-auto p-3 space-y-3"
-            >
-              {sessionData.aiInteractions.length === 0 ? (
-                <p className="text-xs text-gray-600 text-center py-8">
-                  No AI interactions yet.
-                </p>
-              ) : (
-                sessionData.aiInteractions.map((interaction) => (
-                  <div
-                    key={interaction.id}
-                    className="rounded-lg border border-gray-800 bg-gray-900 p-3"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <span
-                        className={`text-[10px] font-medium ${
-                          aiLevelLabels[interaction.aiLevel]?.color || "text-gray-400"
-                        }`}
-                      >
-                        {aiLevelLabels[interaction.aiLevel]?.label}
-                      </span>
-                      <span className="text-[10px] text-gray-600">
-                        {new Date(interaction.timestamp).toLocaleTimeString()}
-                      </span>
-                    </div>
-                    <div className="space-y-1.5">
-                      <div>
-                        <span className="text-[10px] text-gray-500 block">
-                          Candidate:
+
+            {/* Tab Content */}
+            {activeTab === 'interactions' ? (
+              /* AI Interaction Log (existing, unchanged) */
+              <div
+                ref={interactionLogRef}
+                className="flex-1 overflow-y-auto p-3 space-y-3"
+              >
+                {sessionData.aiInteractions.length === 0 ? (
+                  <p className="text-xs text-gray-600 text-center py-8">
+                    No AI interactions yet.
+                  </p>
+                ) : (
+                  sessionData.aiInteractions.map((interaction) => (
+                    <div
+                      key={interaction.id}
+                      className="rounded-lg border border-gray-800 bg-gray-900 p-3"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span
+                          className={`text-[10px] font-medium ${
+                            aiLevelLabels[interaction.aiLevel]?.color || "text-gray-400"
+                          }`}
+                        >
+                          {aiLevelLabels[interaction.aiLevel]?.label}
                         </span>
-                        <p className="text-xs text-blue-300">
-                          {interaction.prompt}
-                        </p>
-                      </div>
-                      <div>
-                        <span className="text-[10px] text-gray-500 block">
-                          AI:
+                        <span className="text-[10px] text-gray-600">
+                          {new Date(interaction.timestamp).toLocaleTimeString()}
                         </span>
-                        <p className="text-xs text-gray-300 whitespace-pre-wrap">
-                          {interaction.response.length > 300
-                            ? interaction.response.substring(0, 300) + "..."
-                            : interaction.response}
-                        </p>
+                      </div>
+                      <div className="space-y-1.5">
+                        <div>
+                          <span className="text-[10px] text-gray-500 block">
+                            Candidate:
+                          </span>
+                          <p className="text-xs text-blue-300">
+                            {interaction.prompt}
+                          </p>
+                        </div>
+                        <div>
+                          <span className="text-[10px] text-gray-500 block">
+                            AI:
+                          </span>
+                          <p className="text-xs text-gray-300 whitespace-pre-wrap">
+                            {interaction.response.length > 300
+                              ? interaction.response.substring(0, 300) + "..."
+                              : interaction.response}
+                          </p>
+                        </div>
                       </div>
                     </div>
+                  ))
+                )}
+              </div>
+            ) : (
+              /* Thinking Analysis Tab */
+              <div className="flex-1 overflow-y-auto p-3 space-y-3">
+                {/* Analyze Button */}
+                <button
+                  onClick={fetchThinkingAnalysis}
+                  disabled={thinkingLoading}
+                  className="w-full rounded-lg border border-purple-800 bg-purple-950 px-4 py-2 text-xs font-medium text-purple-300 hover:bg-purple-900 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+                >
+                  {thinkingLoading ? (
+                    <>
+                      <svg className="animate-spin h-3 w-3 text-purple-400" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                      Analyzing...
+                    </>
+                  ) : (
+                    <>
+                      <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                      </svg>
+                      Analyze Thinking
+                    </>
+                  )}
+                </button>
+
+                {!thinkingAnalysis && !thinkingLoading && (
+                  <p className="text-xs text-gray-600 text-center py-6">
+                    Click &quot;Analyze Thinking&quot; to generate an AI-powered analysis of the candidate&apos;s problem-solving approach.
+                  </p>
+                )}
+
+                {thinkingAnalysis && (
+                  <div className="space-y-3">
+                    {/* Overall Approach */}
+                    <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
+                      <h4 className="text-[10px] font-semibold uppercase tracking-wider text-purple-400 mb-1.5">
+                        Overall Approach
+                      </h4>
+                      <p className="text-xs text-gray-300 leading-relaxed">
+                        {thinkingAnalysis.overallApproach}
+                      </p>
+                    </div>
+
+                    {/* Problem-Solving Stage + Confidence */}
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 rounded-lg border border-gray-800 bg-gray-900 p-2.5 flex items-center gap-2">
+                        <span className="text-[10px] text-gray-500 shrink-0">Stage:</span>
+                        <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${stageBadgeClass}`}>
+                          {thinkingAnalysis.problemSolvingStage}
+                        </span>
+                      </div>
+                      <div className="rounded-lg border border-gray-800 bg-gray-900 p-2.5 flex items-center gap-2 shrink-0">
+                        <span className="text-[10px] text-gray-500">Confidence:</span>
+                        <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${confidenceColors[thinkingAnalysis.confidenceLevel]}`}>
+                          {thinkingAnalysis.confidenceLevel}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Thinking Patterns */}
+                    {thinkingAnalysis.thinkingPatterns.length > 0 && (
+                      <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
+                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-purple-400 mb-2">
+                          Thinking Patterns
+                        </h4>
+                        <div className="space-y-2">
+                          {thinkingAnalysis.thinkingPatterns.map((tp, i) => (
+                            <div
+                              key={i}
+                              className={`rounded border p-2 ${strengthColors[tp.strength]}`}
+                            >
+                              <div className="flex items-center gap-1.5 mb-1">
+                                <span className={`inline-block h-1.5 w-1.5 rounded-full ${strengthDotColors[tp.strength]}`} />
+                                <span className="text-[10px] font-medium">
+                                  {tp.pattern}
+                                </span>
+                              </div>
+                              <p className="text-[10px] opacity-80 pl-3">
+                                {tp.evidence}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Strengths */}
+                    {thinkingAnalysis.strengths.length > 0 && (
+                      <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
+                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-green-400 mb-2">
+                          Strengths
+                        </h4>
+                        <ul className="space-y-1">
+                          {thinkingAnalysis.strengths.map((s, i) => (
+                            <li key={i} className="flex items-start gap-1.5">
+                              <span className="inline-block h-1.5 w-1.5 rounded-full bg-green-400 mt-1 shrink-0" />
+                              <span className="text-xs text-gray-300">{s}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Concerns */}
+                    {thinkingAnalysis.concerns.length > 0 && (
+                      <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
+                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-red-400 mb-2">
+                          Concerns
+                        </h4>
+                        <ul className="space-y-1">
+                          {thinkingAnalysis.concerns.map((c, i) => (
+                            <li key={i} className="flex items-start gap-1.5">
+                              <span className="inline-block h-1.5 w-1.5 rounded-full bg-red-400 mt-1 shrink-0" />
+                              <span className="text-xs text-gray-300">{c}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* AI Usage Pattern */}
+                    <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
+                      <h4 className="text-[10px] font-semibold uppercase tracking-wider text-purple-400 mb-1.5">
+                        AI Usage Pattern
+                      </h4>
+                      <p className="text-xs text-gray-300 leading-relaxed">
+                        {thinkingAnalysis.aiUsagePattern}
+                      </p>
+                    </div>
+
+                    {/* Suggested Follow-Up Questions */}
+                    {thinkingAnalysis.suggestedFollowUp.length > 0 && (
+                      <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
+                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-purple-400 mb-2">
+                          Suggested Follow-Up Questions
+                        </h4>
+                        <ol className="space-y-1.5">
+                          {thinkingAnalysis.suggestedFollowUp.map((q, i) => (
+                            <li key={i} className="flex items-start gap-2">
+                              <span className="text-[10px] text-purple-500 font-mono font-bold shrink-0 mt-px">
+                                {i + 1}.
+                              </span>
+                              <span className="text-xs text-gray-300">{q}</span>
+                            </li>
+                          ))}
+                        </ol>
+                      </div>
+                    )}
                   </div>
-                ))
-              )}
-            </div>
+                )}
+              </div>
+            )}
           </div>
 
-          {/* Notes Panel */}
+          {/* Notes Panel (unchanged) */}
           <div className="h-64 flex flex-col overflow-hidden">
             <div className="border-b border-gray-800 bg-gray-900/50 px-4 py-2">
               <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400">
