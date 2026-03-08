@@ -5,6 +5,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 interface VideoCallProps {
   sessionId: string;
   userId: string;
+  isInterviewer?: boolean;
 }
 
 const STUN_SERVERS = [
@@ -12,7 +13,7 @@ const STUN_SERVERS = [
   { urls: "stun:stun1.l.google.com:19302" },
 ];
 
-export default function VideoCall({ sessionId, userId }: VideoCallProps) {
+export default function VideoCall({ sessionId, userId, isInterviewer = false }: VideoCallProps) {
   const [isCallActive, setIsCallActive] = useState(false);
   const [isCameraOn, setIsCameraOn] = useState(true);
   const [isMicOn, setIsMicOn] = useState(true);
@@ -279,15 +280,17 @@ export default function VideoCall({ sessionId, userId }: VideoCallProps) {
           </svg>
           Start Call
         </button>
-        <button
-          onClick={() => startCall(true)}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-gray-700 px-3 py-1.5 text-xs font-medium text-white hover:bg-gray-600 transition-colors"
-        >
-          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-          </svg>
-          Audio Only
-        </button>
+        {isInterviewer && (
+          <button
+            onClick={() => startCall(true)}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-gray-700 px-3 py-1.5 text-xs font-medium text-white hover:bg-gray-600 transition-colors"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+            </svg>
+            Audio Only
+          </button>
+        )}
       </div>
     );
   }
@@ -397,31 +400,33 @@ export default function VideoCall({ sessionId, userId }: VideoCallProps) {
           </svg>
         </button>
 
-        <button
-          onClick={() => {
-            if (isAudioOnly) {
-              // Switch to video mode: restart the call with video
-              reconnect();
-              setIsAudioOnly(false);
-            } else {
-              // Switch to audio-only: stop video track and update state
-              if (localStreamRef.current) {
-                localStreamRef.current.getVideoTracks().forEach((t) => t.stop());
+        {isInterviewer && (
+          <button
+            onClick={async () => {
+              if (isAudioOnly) {
+                // Switch to video mode: end call and restart with video
+                endCall();
+                await startCall(false);
+              } else {
+                // Switch to audio-only: stop video track and update state
+                if (localStreamRef.current) {
+                  localStreamRef.current.getVideoTracks().forEach((t) => t.stop());
+                }
+                setIsAudioOnly(true);
+                setIsCameraOn(false);
               }
-              setIsAudioOnly(true);
-              setIsCameraOn(false);
-            }
-          }}
-          className={`rounded p-1.5 transition-colors ${isAudioOnly ? "bg-purple-600 text-white" : "bg-gray-700 text-white hover:bg-gray-600"}`}
-          title={isAudioOnly ? "Switch to video" : "Audio only"}
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isAudioOnly
-              ? "M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-              : "M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
-            } />
-          </svg>
-        </button>
+            }}
+            className={`rounded p-1.5 transition-colors ${isAudioOnly ? "bg-purple-600 text-white" : "bg-gray-700 text-white hover:bg-gray-600"}`}
+            title={isAudioOnly ? "Switch to video" : "Audio only"}
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isAudioOnly
+                ? "M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                : "M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+              } />
+            </svg>
+          </button>
+        )}
 
         <div className="w-px h-5 bg-gray-700" />
 

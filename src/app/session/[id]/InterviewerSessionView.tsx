@@ -304,7 +304,7 @@ export default function InterviewerSessionView({
         </div>
 
         <div className="flex items-center gap-3">
-          {isActualInterviewer && <VideoCall sessionId={sessionId} userId={userId} />}
+          {isActualInterviewer && <VideoCall sessionId={sessionId} userId={userId} isInterviewer={true} />}
           <ScreenCapture sessionId={sessionId} isInterviewer={true} />
 
           {/* Elapsed Timer */}

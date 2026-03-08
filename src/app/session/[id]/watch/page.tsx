@@ -292,7 +292,7 @@ export default function WatchSessionPage() {
 
         <div className="flex items-center gap-3">
           {/* Video Call — only for the actual interviewer, not admin observers */}
-          {userId && sessionData.interviewerId === userId && <VideoCall sessionId={sessionId} userId={userId} />}
+          {userId && sessionData.interviewerId === userId && <VideoCall sessionId={sessionId} userId={userId} isInterviewer={true} />}
           {/* Screen Capture Button (interviewer view) */}
           <ScreenCapture sessionId={sessionId} isInterviewer={true} />
 
