@@ -1,32 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import { useSession } from "next-auth/react"
 import { PLANS, PlanKey } from "@/lib/stripe"
-
-// Map database plan names to our PLANS keys
-const dbPlanToKey: Record<string, PlanKey> = {
-  STARTER: "FREE",
-  GROWTH: "PRO",
-  ENTERPRISE: "ENTERPRISE",
-}
 
 const planOrder: PlanKey[] = ["FREE", "PRO", "ENTERPRISE"]
 
-const planAccentColors: Record<PlanKey, string> = {
-  FREE: "border-gray-700",
-  PRO: "border-purple-500",
-  ENTERPRISE: "border-purple-400",
-}
-
-const planBadgeColors: Record<PlanKey, string> = {
-  FREE: "bg-gray-800 text-gray-300",
-  PRO: "bg-purple-500/10 text-purple-400 border border-purple-500/30",
-  ENTERPRISE: "bg-purple-400/10 text-purple-300 border border-purple-400/30",
-}
-
 export default function BillingPage() {
-  const { data: session } = useSession()
   const [loading, setLoading] = useState<string | null>(null)
   const [portalLoading, setPortalLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)

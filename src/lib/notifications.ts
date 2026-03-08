@@ -20,7 +20,7 @@ export async function notifyCompanyAdmins(params: {
   const admins = await prisma.user.findMany({
     where: { companyId: params.companyId, role: 'COMPANY_ADMIN' },
   })
-  const { companyId, ...notificationData } = params
+  const { companyId: _companyId, ...notificationData } = params
   return Promise.all(
     admins.map((admin) =>
       createNotification({ ...notificationData, userId: admin.id })
