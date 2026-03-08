@@ -536,7 +536,7 @@ export default function Home() {
                           <div className="space-y-0.5 font-mono text-[7px] text-gray-400">
                             <p><span className="text-purple-400">fn</span> solve() &#123;</p>
                             <p className="pl-2"><span className="text-blue-300">let</span> result = <span className="text-green-300">vec!</span>[];</p>
-                            <p className="pl-2 text-gray-600">// optimizing...</p>
+                            <p className="pl-2 text-gray-600">{"// optimizing..."}</p>
                             <p>&#125;<span className="animate-pulse text-white">|</span></p>
                           </div>
                         </div>
@@ -770,11 +770,11 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="rounded-lg bg-gray-950 border border-gray-800 p-3 font-mono text-[10px] text-gray-400">
-                    <p className="text-gray-500">// Given an array of integers nums and an integer</p>
-                    <p className="text-gray-500">// target, return indices of the two numbers</p>
-                    <p className="text-gray-500">// such that they add up to target.</p>
+                    <p className="text-gray-500">{"// Given an array of integers nums and an integer"}</p>
+                    <p className="text-gray-500">{"// target, return indices of the two numbers"}</p>
+                    <p className="text-gray-500">{"// such that they add up to target."}</p>
                     <p className="mt-2"><span className="text-purple-400">function</span> <span className="text-blue-300">twoSum</span>(nums, target) &#123;</p>
-                    <p className="pl-3 text-gray-600">// Your code here<span className="animate-pulse text-white">|</span></p>
+                    <p className="pl-3 text-gray-600">{"// Your code here"}<span className="animate-pulse text-white">|</span></p>
                     <p>&#125;</p>
                   </div>
                   <div className="flex gap-2">
