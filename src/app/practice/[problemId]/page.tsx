@@ -320,44 +320,40 @@ export default function PracticeProblemPage() {
   const hardcodedProblem = PRACTICE_PROBLEMS[problemId];
   const bankProblem = !hardcodedProblem ? PROBLEM_BANK.find((p) => p.id === problemId) : null;
 
-  const [enrichedData, setEnrichedData] = useState<{
-    constraints?: string;
-    examples?: string;
-    starterCode?: Record<string, string>;
-    testCases?: { input: string; expected: string }[];
-  } | null>(null);
-  const [enriching, setEnriching] = useState(false);
-
-  // Enrich bank problem on demand
-  useEffect(() => {
-    if (bankProblem && !enrichedData && !enriching) {
-      setEnriching(true);
-      fetch("/api/practice/enrich", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ bankProblemId: problemId }),
-      })
-        .then((res) => (res.ok ? res.json() : null))
-        .then((data) => {
-          if (data) setEnrichedData(data);
-        })
-        .catch(() => {})
-        .finally(() => setEnriching(false));
-    }
-  }, [bankProblem, problemId, enrichedData, enriching]);
-
-  // Build unified problem object
+  // Build unified problem object - bank problems use description directly, no AI enrichment
   const problem: PracticeProblem | null = useMemo(() => {
-    return hardcodedProblem || (bankProblem ? {
+    if (hardcodedProblem) return hardcodedProblem;
+    if (!bankProblem) return null;
+    const fnName = bankProblem.title
+      .replace(/[^a-zA-Z0-9\s]/g, "")
+      .split(/\s+/)
+      .map((w, i) => i === 0 ? w.toLowerCase() : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+      .join("");
+    const pyName = bankProblem.title
+      .replace(/[^a-zA-Z0-9\s]/g, "")
+      .split(/\s+/)
+      .map((w) => w.toLowerCase())
+      .join("_");
+    const className = bankProblem.title
+      .replace(/[^a-zA-Z0-9\s]/g, "")
+      .split(/\s+/)
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+      .join("");
+    return {
       id: bankProblem.id,
       title: bankProblem.title,
       difficulty: bankProblem.difficulty,
       description: bankProblem.description,
-      constraints: enrichedData?.constraints || "",
-      examples: enrichedData?.examples || "",
-      starterCode: enrichedData?.starterCode || {},
-    } : null);
-  }, [hardcodedProblem, bankProblem, enrichedData]);
+      constraints: bankProblem.constraints || "",
+      examples: bankProblem.examples || "",
+      starterCode: bankProblem.starterCode || {
+        javascript: `/**\n * ${bankProblem.title}\n * ${bankProblem.description.slice(0, 80)}...\n */\nfunction ${fnName}() {\n  // Your solution here\n}\n\n// Test\nconsole.log(${fnName}());\n`,
+        python: `def ${pyName}():\n    """${bankProblem.title}"""\n    # Your solution here\n    pass\n\n# Test\nprint(${pyName}())\n`,
+        typescript: `function ${fnName}(): void {\n  // Your solution here\n}\n\n// Test\nconsole.log(${fnName}());\n`,
+        java: `class ${className} {\n    public static void solve() {\n        // Your solution here\n    }\n\n    public static void main(String[] args) {\n        solve();\n    }\n}\n`,
+      },
+    };
+  }, [hardcodedProblem, bankProblem]);
 
   const [language, setLanguage] = useState("javascript");
   const [code, setCode] = useState("");
@@ -563,22 +559,6 @@ export default function PracticeProblemPage() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleRunCode]);
-
-  // Loading state for bank problem enrichment
-  if (bankProblem && enriching) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-gray-950">
-        <div className="text-center">
-          <svg className="animate-spin h-8 w-8 text-purple-500 mx-auto mb-4" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-          </svg>
-          <p className="text-gray-400">Enriching problem with AI...</p>
-          <p className="text-xs text-gray-600 mt-2">Generating constraints, examples, and starter code</p>
-        </div>
-      </div>
-    );
-  }
 
   // 404 for unknown problem
   if (!problem) {

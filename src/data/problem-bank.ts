@@ -6,6 +6,9 @@ export interface ProblemEntry {
   tags: string[];
   company?: string;
   category: string;
+  constraints?: string;
+  examples?: string;
+  starterCode?: Record<string, string>;
 }
 
 
