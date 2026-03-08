@@ -36,6 +36,13 @@ export default function VideoCall({ sessionId, userId }: VideoCallProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Attach local stream to video element once it renders
+  useEffect(() => {
+    if (isCallActive && localVideoRef.current && localStreamRef.current) {
+      localVideoRef.current.srcObject = localStreamRef.current;
+    }
+  }, [isCallActive]);
+
   const createPeerConnection = useCallback(() => {
     const pc = new RTCPeerConnection({ iceServers: STUN_SERVERS });
 

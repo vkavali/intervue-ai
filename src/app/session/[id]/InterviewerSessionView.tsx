@@ -268,7 +268,6 @@ export default function InterviewerSessionView({
 
   return (
     <div className="flex h-screen flex-col bg-gray-950 overflow-hidden">
-      <VideoCall sessionId={sessionId} userId={userId} />
       {/* Violation Alert Toast */}
       {violationAlert && (
         <div className="fixed top-4 right-4 z-50 animate-in fade-in slide-in-from-right">
@@ -303,6 +302,7 @@ export default function InterviewerSessionView({
         </div>
 
         <div className="flex items-center gap-3">
+          <VideoCall sessionId={sessionId} userId={userId} />
           <ScreenCapture sessionId={sessionId} isInterviewer={true} />
 
           {/* Elapsed Timer */}

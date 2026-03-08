@@ -19,6 +19,7 @@ export default function SessionProtections({ sessionId, isPractice = false }: Se
   const [modalMessage, setModalMessage] = useState("");
   const [modalSeverity, setModalSeverity] = useState<"warning" | "severe" | "critical">("warning");
   const violationCountRef = useRef(0);
+  const blurTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const getWarningLevel = useCallback((count: number): { severity: "warning" | "severe" | "critical"; message: string } => {
     if (count >= 5) {
@@ -103,7 +104,23 @@ export default function SessionProtections({ sessionId, isPractice = false }: Se
     }
 
     function handleBlur() {
-      logViolation("WINDOW_BLUR");
+      // Debounce: camera/mic permission dialogs cause brief blurs — only
+      // log a violation if the window stays unfocused for 2 seconds
+      if (blurTimeoutRef.current) clearTimeout(blurTimeoutRef.current);
+      blurTimeoutRef.current = setTimeout(() => {
+        if (!document.hasFocus()) {
+          logViolation("WINDOW_BLUR");
+        }
+        blurTimeoutRef.current = null;
+      }, 2000);
+    }
+
+    function handleFocus() {
+      // Cancel pending blur violation if user returns quickly
+      if (blurTimeoutRef.current) {
+        clearTimeout(blurTimeoutRef.current);
+        blurTimeoutRef.current = null;
+      }
     }
 
     function handleBeforeUnload(e: BeforeUnloadEvent) {
@@ -119,6 +136,7 @@ export default function SessionProtections({ sessionId, isPractice = false }: Se
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("visibilitychange", handleVisibilityChange);
     window.addEventListener("blur", handleBlur);
+    window.addEventListener("focus", handleFocus);
     window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
@@ -129,7 +147,9 @@ export default function SessionProtections({ sessionId, isPractice = false }: Se
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("blur", handleBlur);
+      window.removeEventListener("focus", handleFocus);
       window.removeEventListener("beforeunload", handleBeforeUnload);
+      if (blurTimeoutRef.current) clearTimeout(blurTimeoutRef.current);
     };
   }, [isPractice, logViolation]);
 

@@ -269,8 +269,6 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
   return (
     <div className="flex h-screen flex-col bg-gray-950 overflow-hidden">
       <SessionProtections sessionId={sessionId} />
-      <VideoCall sessionId={sessionId} userId={userId} />
-
       {/* Time Expired Overlay */}
       {timeExpired && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
@@ -300,6 +298,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
         </div>
 
         <div className="flex items-center gap-4">
+          <VideoCall sessionId={sessionId} userId={userId} />
           <ScreenCapture sessionId={sessionId} isInterviewer={false} />
 
           {/* Question Navigation */}
