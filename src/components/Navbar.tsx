@@ -38,6 +38,26 @@ export default function Navbar() {
 
             {status === "authenticated" && session?.user && (
               <>
+                <Link
+                  href={
+                    session.user.role === "CANDIDATE"
+                      ? "/candidate"
+                      : "/dashboard"
+                  }
+                  className="rounded-md px-3 py-1.5 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-800 hover:text-white"
+                >
+                  Dashboard
+                </Link>
+
+                {session.user.role === "CANDIDATE" && (
+                  <Link
+                    href="/practice"
+                    className="rounded-md px-3 py-1.5 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-800 hover:text-white"
+                  >
+                    Practice
+                  </Link>
+                )}
+
                 <span className="text-sm text-gray-300">
                   {session.user.name || session.user.email}
                 </span>

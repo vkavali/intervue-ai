@@ -92,7 +92,7 @@ function SignUpForm() {
         return;
       }
 
-      router.push("/dashboard");
+      router.push("/auth/redirect");
       router.refresh();
     } catch {
       setError("An unexpected error occurred. Please try again.");

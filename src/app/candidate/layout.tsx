@@ -53,6 +53,11 @@ export default async function CandidateLayout({
     redirect("/auth/signin?callbackUrl=/candidate");
   }
 
+  // Redirect non-candidates to admin dashboard
+  if (session.user.role !== "CANDIDATE") {
+    redirect("/dashboard");
+  }
+
   return (
     <div className="flex min-h-[calc(100vh-4rem)]">
       {/* Sidebar */}

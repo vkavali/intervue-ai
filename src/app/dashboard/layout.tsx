@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 
 const sidebarLinks = [
@@ -81,6 +82,23 @@ export default async function DashboardLayout({
     redirect("/auth/signin?callbackUrl=/dashboard");
   }
 
+  // Redirect candidates to their own dashboard
+  if (session.user.role === "CANDIDATE") {
+    redirect("/candidate");
+  }
+
+  // Fetch company plan for sidebar
+  let companyPlan = "Starter";
+  if (session.user.id) {
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      include: { company: true },
+    });
+    if (user?.company?.plan) {
+      companyPlan = user.company.plan;
+    }
+  }
+
   return (
     <div className="flex min-h-[calc(100vh-4rem)]">
       {/* Sidebar */}
@@ -101,7 +119,7 @@ export default async function DashboardLayout({
         <div className="border-t border-gray-800 p-4">
           <div className="rounded-lg bg-gradient-to-r from-purple-600/10 to-blue-600/10 border border-purple-500/20 p-4">
             <p className="text-xs font-medium text-purple-300">Current Plan</p>
-            <p className="mt-1 text-sm font-semibold text-white">Starter</p>
+            <p className="mt-1 text-sm font-semibold text-white">{companyPlan}</p>
             <Link
               href="/dashboard/billing"
               className="mt-2 block text-xs text-purple-400 hover:text-purple-300"
