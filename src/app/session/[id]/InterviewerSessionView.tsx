@@ -150,7 +150,7 @@ export default function InterviewerSessionView({
   }, [sessionId]);
 
   useEffect(() => {
-    const interval = setInterval(fetchSession, 2000);
+    const interval = setInterval(fetchSession, 1000);
     return () => clearInterval(interval);
   }, [fetchSession]);
 

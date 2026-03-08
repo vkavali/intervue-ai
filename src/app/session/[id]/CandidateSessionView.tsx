@@ -89,6 +89,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
   const [showChat, setShowChat] = useState(false);
   const [timeExpired, setTimeExpired] = useState(false);
   const aiChatRef = useRef<HTMLDivElement>(null);
+  const saveTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Calculate elapsed time from startedAt
   const [elapsedTime, setElapsedTime] = useState(() => {
@@ -131,23 +132,20 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
     return () => clearInterval(interval);
   }, [sessionData.startedAt, totalDurationSeconds]);
 
-  // Save code periodically
-  const saveCode = useCallback(async () => {
-    try {
-      await fetch(`/api/sessions/${sessionId}`, {
+  // Save code on every change, debounced to 500ms
+  useEffect(() => {
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    saveTimerRef.current = setTimeout(() => {
+      fetch(`/api/sessions/${sessionId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code, language }),
-      });
-    } catch {
-      // Silent fail for auto-save
-    }
+      }).catch(() => {});
+    }, 500);
+    return () => {
+      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    };
   }, [sessionId, code, language]);
-
-  useEffect(() => {
-    const interval = setInterval(saveCode, 5000);
-    return () => clearInterval(interval);
-  }, [saveCode]);
 
   // Handle AI prompt submission
   async function handleAiSubmit(e: React.FormEvent) {
