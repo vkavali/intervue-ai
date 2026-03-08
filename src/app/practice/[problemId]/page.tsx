@@ -55,6 +55,8 @@ const PRACTICE_PROBLEMS: Record<string, PracticeProblem> = {
       { input: "twoSum([2, 7, 11, 15], 9)", expected: "[0,1]" },
       { input: "twoSum([3, 2, 4], 6)", expected: "[1,2]" },
       { input: "twoSum([3, 3], 6)", expected: "[0,1]" },
+      { input: "twoSum([-1, -2, -3, -4, -5], -8)", expected: "[2,4]" },
+      { input: "twoSum([0, 4, 3, 0], 0)", expected: "[0,3]" },
     ],
   },
   "reverse-linked-list": {
@@ -83,6 +85,12 @@ const PRACTICE_PROBLEMS: Record<string, PracticeProblem> = {
       rust:
         'fn main() {\n    println!("Implement reverse linked list in Rust");\n    // Linked list problems in Rust require careful ownership handling.\n    // Consider using Option<Box<ListNode>> pattern.\n}\n',
     },
+    testCases: [
+      { input: "toArray(reverseList(fromArray([1,2,3,4,5])))", expected: "[5,4,3,2,1]" },
+      { input: "toArray(reverseList(fromArray([1,2])))", expected: "[2,1]" },
+      { input: "toArray(reverseList(fromArray([])))", expected: "[]" },
+      { input: "toArray(reverseList(fromArray([1])))", expected: "[1]" },
+    ],
   },
   "valid-parentheses": {
     id: "valid-parentheses",
@@ -115,6 +123,8 @@ const PRACTICE_PROBLEMS: Record<string, PracticeProblem> = {
       { input: 'isValid("(]")', expected: "false" },
       { input: 'isValid("([])")', expected: "true" },
       { input: 'isValid("")', expected: "true" },
+      { input: 'isValid("{{[()]}}")', expected: "true" },
+      { input: 'isValid("((")', expected: "false" },
     ],
   },
   "merge-intervals": {
@@ -146,6 +156,9 @@ const PRACTICE_PROBLEMS: Record<string, PracticeProblem> = {
     testCases: [
       { input: "merge([[1,3],[2,6],[8,10],[15,18]])", expected: "[[1,6],[8,10],[15,18]]" },
       { input: "merge([[1,4],[4,5]])", expected: "[[1,5]]" },
+      { input: "merge([[1,4],[2,3]])", expected: "[[1,4]]" },
+      { input: "merge([[1,3]])", expected: "[[1,3]]" },
+      { input: "merge([[1,4],[0,4]])", expected: "[[0,4]]" },
     ],
   },
   "lru-cache": {
@@ -174,6 +187,13 @@ const PRACTICE_PROBLEMS: Record<string, PracticeProblem> = {
       rust:
         'use std::collections::HashMap;\n\nstruct LRUCache {\n    capacity: usize,\n    // Your fields here\n}\n\nimpl LRUCache {\n    fn new(capacity: i32) -> Self {\n        LRUCache {\n            capacity: capacity as usize,\n        }\n    }\n\n    fn get(&mut self, _key: i32) -> i32 {\n        // Your solution here\n        -1\n    }\n\n    fn put(&mut self, _key: i32, _value: i32) {\n        // Your solution here\n    }\n}\n\nfn main() {\n    let mut cache = LRUCache::new(2);\n    cache.put(1, 1);\n    cache.put(2, 2);\n    println!("{}", cache.get(1)); // 1\n    cache.put(3, 3);\n    println!("{}", cache.get(2)); // -1\n}\n',
     },
+    testCases: [
+      { input: "(function() { const c = new LRUCache(2); c.put(1,1); c.put(2,2); return c.get(1); })()", expected: "1" },
+      { input: "(function() { const c = new LRUCache(2); c.put(1,1); c.put(2,2); c.put(3,3); return c.get(2); })()", expected: "-1" },
+      { input: "(function() { const c = new LRUCache(2); c.put(1,1); c.put(2,2); c.get(1); c.put(3,3); return c.get(2); })()", expected: "-1" },
+      { input: "(function() { const c = new LRUCache(2); c.put(1,1); c.put(2,2); c.put(3,3); c.put(4,4); return c.get(3); })()", expected: "3" },
+      { input: "(function() { const c = new LRUCache(2); c.put(1,1); c.put(2,2); c.put(3,3); c.put(4,4); return c.get(4); })()", expected: "4" },
+    ],
   },
   "binary-tree-level-order": {
     id: "binary-tree-level-order",
@@ -201,6 +221,12 @@ const PRACTICE_PROBLEMS: Record<string, PracticeProblem> = {
       rust:
         'use std::collections::VecDeque;\nuse std::rc::Rc;\nuse std::cell::RefCell;\n\n#[derive(Debug)]\nstruct TreeNode {\n    val: i32,\n    left: Option<Rc<RefCell<TreeNode>>>,\n    right: Option<Rc<RefCell<TreeNode>>>,\n}\n\nimpl TreeNode {\n    fn new(val: i32) -> Self {\n        TreeNode { val, left: None, right: None }\n    }\n}\n\nfn level_order(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {\n    // Your solution here\n    vec![]\n}\n\nfn main() {\n    println!("{:?}", level_order(None));\n}\n',
     },
+    testCases: [
+      { input: "levelOrder(new TreeNode(3, new TreeNode(9), new TreeNode(20, new TreeNode(15), new TreeNode(7))))", expected: "[[3],[9,20],[15,7]]" },
+      { input: "levelOrder(new TreeNode(1))", expected: "[[1]]" },
+      { input: "levelOrder(null)", expected: "[]" },
+      { input: "levelOrder(new TreeNode(1, new TreeNode(2, new TreeNode(4), null), new TreeNode(3, null, new TreeNode(5))))", expected: "[[1],[2,3],[4,5]]" },
+    ],
   },
   "rate-limiter": {
     id: "rate-limiter",
@@ -218,6 +244,13 @@ const PRACTICE_PROBLEMS: Record<string, PracticeProblem> = {
       python:
         "class RateLimiter:\n    def __init__(self, max_requests, window_seconds):\n        self.max_requests = max_requests\n        self.window_seconds = window_seconds\n        # Your data structures here\n\n    def allow(self, client_id, timestamp):\n        \"\"\"Return True if request is allowed, False if rate limited.\"\"\"\n        # Your solution here\n        pass\n\n# Test\nlimiter = RateLimiter(3, 10)\nprint(limiter.allow('user1', 1))   # True\nprint(limiter.allow('user1', 2))   # True\nprint(limiter.allow('user1', 3))   # True\nprint(limiter.allow('user1', 4))   # False\nprint(limiter.allow('user2', 4))   # True\nprint(limiter.allow('user1', 12))  # True\n",
     },
+    testCases: [
+      { input: "(function() { const l = new RateLimiter(3, 10); return l.allow('u1', 1); })()", expected: "true" },
+      { input: "(function() { const l = new RateLimiter(3, 10); l.allow('u1', 1); l.allow('u1', 2); l.allow('u1', 3); return l.allow('u1', 4); })()", expected: "false" },
+      { input: "(function() { const l = new RateLimiter(3, 10); l.allow('u1', 1); l.allow('u1', 2); l.allow('u1', 3); return l.allow('u2', 4); })()", expected: "true" },
+      { input: "(function() { const l = new RateLimiter(3, 10); l.allow('u1', 1); l.allow('u1', 2); l.allow('u1', 3); l.allow('u1', 4); return l.allow('u1', 12); })()", expected: "true" },
+      { input: "(function() { const l = new RateLimiter(1, 5); l.allow('a', 1); return l.allow('a', 2); })()", expected: "false" },
+    ],
   },
   "flatten-nested-data": {
     id: "flatten-nested-data",
@@ -235,6 +268,13 @@ const PRACTICE_PROBLEMS: Record<string, PracticeProblem> = {
       python:
         "def flatten(arr):\n    \"\"\"Flatten a deeply nested list into a single list.\"\"\"\n    # Your solution here\n    pass\n\n# Test\nprint(flatten([1, [2, [3, 4], 5], 6]))   # [1, 2, 3, 4, 5, 6]\nprint(flatten([[1, 2], [3, [4, [5]]]]))  # [1, 2, 3, 4, 5]\nprint(flatten([1, [], [2, []], 3]))       # [1, 2, 3]\nprint(flatten([]))                         # []\n",
     },
+    testCases: [
+      { input: "flatten([1, [2, [3, 4], 5], 6])", expected: "[1,2,3,4,5,6]" },
+      { input: "flatten([[1, 2], [3, [4, [5]]]])", expected: "[1,2,3,4,5]" },
+      { input: "flatten([])", expected: "[]" },
+      { input: "flatten([1, [], [2, []], 3])", expected: "[1,2,3]" },
+      { input: "flatten([[[1]]])", expected: "[1]" },
+    ],
   },
   "event-emitter": {
     id: "event-emitter",
@@ -252,6 +292,12 @@ const PRACTICE_PROBLEMS: Record<string, PracticeProblem> = {
       python:
         "class EventEmitter:\n    def __init__(self):\n        # Your data structures here\n        pass\n\n    def on(self, event, callback):\n        \"\"\"Register a listener.\"\"\"\n        # Your solution here\n        pass\n\n    def off(self, event, callback):\n        \"\"\"Remove a specific listener.\"\"\"\n        # Your solution here\n        pass\n\n    def emit(self, event, *args):\n        \"\"\"Trigger all listeners for an event.\"\"\"\n        # Your solution here\n        pass\n\n# Test\nemitter = EventEmitter()\nlog1 = lambda x: print(f'Listener 1: {x}')\nlog2 = lambda x: print(f'Listener 2: {x}')\n\nemitter.on('test', log1)\nemitter.on('test', log2)\nprint('--- Emit with both ---')\nemitter.emit('test', 'hello')\n\nemitter.off('test', log1)\nprint('--- Emit after removing log1 ---')\nemitter.emit('test', 'world')\n",
     },
+    testCases: [
+      { input: "(function() { const e = new EventEmitter(); let r = []; e.on('a', x => r.push(x)); e.emit('a', 1); e.emit('a', 2); return r; })()", expected: "[1,2]" },
+      { input: "(function() { const e = new EventEmitter(); let r = []; const fn = x => r.push(x); e.on('a', fn); e.off('a', fn); e.emit('a', 1); return r; })()", expected: "[]" },
+      { input: "(function() { const e = new EventEmitter(); let r = []; e.on('a', x => r.push('a'+x)); e.on('b', x => r.push('b'+x)); e.emit('a', 1); e.emit('b', 2); return r; })()", expected: "[\"a1\",\"b2\"]" },
+      { input: "(function() { const e = new EventEmitter(); let r = []; e.on('a', x => r.push(x)); e.on('a', x => r.push(x*10)); e.emit('a', 5); return r; })()", expected: "[5,50]" },
+    ],
   },
   "debounce-throttle": {
     id: "debounce-throttle",
@@ -269,6 +315,12 @@ const PRACTICE_PROBLEMS: Record<string, PracticeProblem> = {
       python:
         "import time\nimport threading\n\ndef debounce(fn, delay_seconds):\n    \"\"\"Delay fn until no calls for delay_seconds.\"\"\"\n    # Your solution here\n    # Hint: use threading.Timer\n    pass\n\ndef throttle(fn, interval_seconds):\n    \"\"\"Call fn at most once per interval_seconds.\"\"\"\n    # Your solution here\n    pass\n\n# Simple synchronous test\nprint('Debounce and throttle are timing-based.')\nprint('Implement and test with actual delays.')\nprint('Consider using threading.Timer for debounce.')\n",
     },
+    testCases: [
+      { input: "(function() { return typeof debounce(() => {}, 100); })()", expected: "\"function\"" },
+      { input: "(function() { return typeof throttle(() => {}, 100); })()", expected: "\"function\"" },
+      { input: "(function() { let c = 0; const t = throttle(() => c++, 100); t(); return c; })()", expected: "1" },
+      { input: "(function() { let c = 0; const t = throttle(() => c++, 100); t(); t(); t(); return c; })()", expected: "1" },
+    ],
   },
   "string-compressor": {
     id: "string-compressor",
@@ -286,6 +338,14 @@ const PRACTICE_PROBLEMS: Record<string, PracticeProblem> = {
       python:
         "def compress(s):\n    \"\"\"Compress string using consecutive character counts.\"\"\"\n    # Your solution here\n    pass\n\n# Test\nprint(compress('aabcccccaaa'))  # 'a2b1c5a3'\nprint(compress('abc'))          # 'abc'\nprint(compress('aaa'))          # 'a3'\nprint(compress(''))             # ''\nprint(compress('a'))            # 'a'\nprint(compress('aabb'))         # 'aabb'\n",
     },
+    testCases: [
+      { input: "compress('aabcccccaaa')", expected: "\"a2b1c5a3\"" },
+      { input: "compress('abc')", expected: "\"abc\"" },
+      { input: "compress('')", expected: "\"\"" },
+      { input: "compress('aaa')", expected: "\"a3\"" },
+      { input: "compress('a')", expected: "\"a\"" },
+      { input: "compress('aabb')", expected: "\"aabb\"" },
+    ],
   },
   "task-scheduler": {
     id: "task-scheduler",
@@ -303,6 +363,12 @@ const PRACTICE_PROBLEMS: Record<string, PracticeProblem> = {
       python:
         "def schedule_tasks(tasks, cooldown):\n    \"\"\"Find minimum time units to execute all tasks.\"\"\"\n    # Your solution here\n    pass\n\n# Test\nprint(schedule_tasks(['A','A','A','B','B','B'], 2))  # 8\nprint(schedule_tasks(['A','A','A','B','B','B'], 0))  # 6\nprint(schedule_tasks(['A','A','A','A','B','B'], 1))  # 7\nprint(schedule_tasks(['A'], 2))                       # 1\n",
     },
+    testCases: [
+      { input: "scheduleTasks(['A','A','A','B','B','B'], 2)", expected: "8" },
+      { input: "scheduleTasks(['A','A','A','B','B','B'], 0)", expected: "6" },
+      { input: "scheduleTasks(['A'], 2)", expected: "1" },
+      { input: "scheduleTasks(['A','A','A','A','B','B'], 1)", expected: "7" },
+    ],
   },
 };
 
@@ -391,10 +457,12 @@ export default function PracticeProblemPage() {
     error: string;
     exitCode: number;
   } | null>(null);
-  const [showOutput, setShowOutput] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
-  const [testResults, setTestResults] = useState<{ input: string; expected: string; actual: string; passed: boolean }[]>([]);
+  const [testResults, setTestResults] = useState<{ input: string; expected: string; actual: string; passed: boolean }[] | null>(null);
   const [runningTests, setRunningTests] = useState(false);
+  const [bottomTab, setBottomTab] = useState<"testcases" | "results" | "console">("testcases");
+  const [bottomPanelOpen, setBottomPanelOpen] = useState(true);
+  const [activeTestCaseIndex, setActiveTestCaseIndex] = useState(0);
   const aiChatRef = useRef<HTMLDivElement>(null);
 
   // Initialize from URL params and problem starter code
@@ -463,7 +531,8 @@ export default function PracticeProblemPage() {
   const handleRunCode = useCallback(async () => {
     if (executing) return;
     setExecuting(true);
-    setShowOutput(true);
+    setBottomTab("console");
+    setBottomPanelOpen(true);
     setExecOutput(null);
 
     try {
@@ -525,6 +594,8 @@ export default function PracticeProblemPage() {
   // Run test cases
   const handleRunTests = useCallback(async () => {
     if (runningTests || !problem?.testCases?.length) return;
+    setBottomTab("results");
+    setBottomPanelOpen(true);
     if (language !== "javascript" && language !== "typescript") {
       setTestResults([{
         input: "--",
@@ -532,12 +603,10 @@ export default function PracticeProblemPage() {
         actual: "Test cases only run with JavaScript/TypeScript in the browser.",
         passed: false,
       }]);
-      setShowOutput(true);
       return;
     }
 
     setRunningTests(true);
-    setShowOutput(true);
     const results: { input: string; expected: string; actual: string; passed: boolean }[] = [];
 
     for (const tc of problem.testCases) {
@@ -608,17 +677,28 @@ export default function PracticeProblemPage() {
     }
   }
 
-  // Keyboard shortcut
+  // Keyboard shortcuts
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.ctrlKey && e.key === "Enter") {
+      if (e.ctrlKey && e.shiftKey && e.key === "Enter") {
+        e.preventDefault();
+        handleRunTests();
+      } else if (e.ctrlKey && e.key === "Enter") {
         e.preventDefault();
         handleRunCode();
       }
     }
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleRunCode]);
+  }, [handleRunCode, handleRunTests]);
+
+  const testSummary = testResults ? {
+    passed: testResults.filter(t => t.passed).length,
+    total: testResults.length,
+    allPassed: testResults.every(t => t.passed),
+  } : null;
+
+  const visibleCount = 2;
 
   // 404 for unknown problem
   if (!problem) {
@@ -738,6 +818,7 @@ export default function PracticeProblemPage() {
                 </svg>
               )}
               {runningTests ? "Testing..." : "Run Tests"}
+              <span className="text-blue-300 text-[10px]">Ctrl+Shift+Enter</span>
             </button>
           )}
         </div>
@@ -783,11 +864,11 @@ export default function PracticeProblemPage() {
           </div>
         </div>
 
-        {/* Center: Code Editor + Output */}
+        {/* Center: Code Editor + Bottom Panel */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          <div className={`flex-1 ${showOutput ? "" : ""}`}>
+          <div className="flex-1 min-h-0">
             <Editor
-              height={showOutput ? "60%" : "100%"}
+              height="100%"
               language={language}
               value={code}
               onChange={(value) => setCode(value || "")}
@@ -807,94 +888,225 @@ export default function PracticeProblemPage() {
                 automaticLayout: true,
               }}
             />
+          </div>
 
-            {/* Output Panel */}
-            {showOutput && (
-              <div className="h-[40%] border-t border-gray-800 bg-gray-900 flex flex-col">
-                <div className="flex items-center justify-between px-4 py-2 border-b border-gray-800">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold text-gray-400">Output</span>
-                    {execOutput && (
-                      <span
-                        className={`text-xs font-medium ${
-                          execOutput.exitCode === 0 ? "text-green-400" : "text-red-400"
-                        }`}
-                      >
-                        {execOutput.exitCode === 0 ? "Success" : "Error"}
+          {/* Bottom Panel - 3 tabs */}
+          <div className={`border-t border-gray-800 bg-gray-900 flex flex-col shrink-0 transition-all ${bottomPanelOpen ? "h-[280px]" : "h-[36px]"}`}>
+            {/* Tab bar */}
+            <div className="flex items-center justify-between px-3 py-1 border-b border-gray-800 shrink-0">
+              <div className="flex items-center gap-1">
+                {problem?.testCases && problem.testCases.length > 0 && (
+                  <button
+                    onClick={() => { setBottomTab("testcases"); setBottomPanelOpen(true); }}
+                    className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
+                      bottomTab === "testcases" && bottomPanelOpen
+                        ? "bg-gray-800 text-white"
+                        : "text-gray-500 hover:text-gray-300"
+                    }`}
+                  >
+                    Test Cases
+                  </button>
+                )}
+                {problem?.testCases && problem.testCases.length > 0 && (
+                  <button
+                    onClick={() => { setBottomTab("results"); setBottomPanelOpen(true); }}
+                    className={`px-3 py-1 text-xs font-medium rounded transition-colors flex items-center gap-1.5 ${
+                      bottomTab === "results" && bottomPanelOpen
+                        ? "bg-gray-800 text-white"
+                        : "text-gray-500 hover:text-gray-300"
+                    }`}
+                  >
+                    Test Results
+                    {testSummary && (
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${
+                        testSummary.allPassed
+                          ? "bg-green-500/20 text-green-400"
+                          : "bg-red-500/20 text-red-400"
+                      }`}>
+                        {testSummary.passed}/{testSummary.total}
                       </span>
                     )}
-                  </div>
-                  <button
-                    onClick={() => setShowOutput(false)}
-                    className="text-gray-500 hover:text-gray-300 transition-colors"
-                  >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
                   </button>
-                </div>
-                <div className="flex-1 overflow-y-auto p-4">
-                  {executing ? (
-                    <div className="flex items-center gap-2 text-gray-400">
-                      <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                      </svg>
-                      <span className="text-sm">Executing code...</span>
-                    </div>
-                  ) : execOutput ? (
-                    <div className="space-y-2">
-                      {execOutput.output && (
-                        <pre className="whitespace-pre-wrap font-mono text-sm text-green-300">
-                          {execOutput.output}
-                        </pre>
-                      )}
-                      {execOutput.error && (
-                        <pre className="whitespace-pre-wrap font-mono text-sm text-red-400">
-                          {execOutput.error}
-                        </pre>
-                      )}
-                      {!execOutput.output && !execOutput.error && (
-                        <p className="text-sm text-gray-500">No output.</p>
-                      )}
-                    </div>
-                  ) : (
-                    <p className="text-sm text-gray-500">Run your code to see output here.</p>
-                  )}
+                )}
+                <button
+                  onClick={() => { setBottomTab("console"); setBottomPanelOpen(true); }}
+                  className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
+                    bottomTab === "console" && bottomPanelOpen
+                      ? "bg-gray-800 text-white"
+                      : "text-gray-500 hover:text-gray-300"
+                  }`}
+                >
+                  Console
+                </button>
+              </div>
+              <button
+                onClick={() => setBottomPanelOpen(!bottomPanelOpen)}
+                className="text-gray-500 hover:text-gray-300 text-xs p-1"
+                title={bottomPanelOpen ? "Collapse" : "Expand"}
+              >
+                <svg className={`w-4 h-4 transition-transform ${bottomPanelOpen ? "" : "rotate-180"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+            </div>
 
-                  {/* Test Results */}
-                  {testResults.length > 0 && (
-                    <div className="mt-4 border-t border-gray-700 pt-3">
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="text-xs font-semibold text-gray-400">Test Results</span>
-                        <span className={`text-xs font-medium ${
-                          testResults.every(t => t.passed) ? "text-green-400" : "text-yellow-400"
-                        }`}>
-                          {testResults.filter(t => t.passed).length}/{testResults.length} passed
-                        </span>
-                      </div>
-                      <div className="space-y-2">
-                        {testResults.map((tr, i) => (
-                          <div key={i} className={`rounded-lg border p-2.5 text-xs font-mono ${
-                            tr.passed
-                              ? "border-green-800/50 bg-green-950/30"
-                              : "border-red-800/50 bg-red-950/30"
-                          }`}>
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className={tr.passed ? "text-green-400" : "text-red-400"}>
-                                {tr.passed ? "\u2713" : "\u2717"}
-                              </span>
-                              <span className="text-gray-400">Test {i + 1}</span>
+            {/* Tab content */}
+            {bottomPanelOpen && (
+              <div className="flex-1 overflow-auto">
+                {/* Test Cases Tab */}
+                {bottomTab === "testcases" && problem?.testCases && problem.testCases.length > 0 && (
+                  <div className="p-3">
+                    {/* Case pills */}
+                    <div className="flex items-center gap-1 mb-3 flex-wrap">
+                      {problem.testCases.map((_, i) => {
+                        const isHidden = i >= visibleCount && !testResults;
+                        return (
+                          <button
+                            key={i}
+                            onClick={() => setActiveTestCaseIndex(i)}
+                            className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
+                              i === activeTestCaseIndex
+                                ? "bg-gray-700 text-white"
+                                : isHidden
+                                ? "bg-gray-800/30 text-gray-600"
+                                : "bg-gray-800/50 text-gray-500 hover:text-gray-300"
+                            }`}
+                          >
+                            Case {i + 1}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {/* Selected case detail */}
+                    {problem.testCases[activeTestCaseIndex] && (
+                      activeTestCaseIndex >= visibleCount && !testResults ? (
+                        <div className="flex items-center gap-3 py-8 justify-center text-gray-500">
+                          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                          </svg>
+                          <span className="text-sm">Hidden Test Case {activeTestCaseIndex + 1}</span>
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          <div>
+                            <span className="text-[10px] font-semibold uppercase text-gray-500 block mb-1">Input</span>
+                            <div className="rounded bg-gray-800 px-3 py-2 font-mono text-xs text-gray-300">
+                              {problem.testCases[activeTestCaseIndex].input}
                             </div>
-                            <div className="text-gray-400">Input: <span className="text-gray-300">{tr.input}</span></div>
-                            <div className="text-gray-400">Expected: <span className="text-green-300">{tr.expected}</span></div>
-                            <div className="text-gray-400">Got: <span className={tr.passed ? "text-green-300" : "text-red-300"}>{tr.actual}</span></div>
+                          </div>
+                          <div>
+                            <span className="text-[10px] font-semibold uppercase text-gray-500 block mb-1">Expected Output</span>
+                            <div className="rounded bg-gray-800 px-3 py-2 font-mono text-xs text-gray-300">
+                              {problem.testCases[activeTestCaseIndex].expected}
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    )}
+                  </div>
+                )}
+
+                {/* Test Results Tab */}
+                {bottomTab === "results" && (
+                  <div className="p-3">
+                    {language !== "javascript" && language !== "typescript" ? (
+                      <div className="flex items-center gap-2 text-xs text-gray-500 py-4 justify-center">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Test cases only available for JavaScript/TypeScript
+                      </div>
+                    ) : runningTests ? (
+                      <div className="flex items-center gap-2 text-xs text-gray-400 py-4 justify-center">
+                        <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                        </svg>
+                        Running tests...
+                      </div>
+                    ) : testResults ? (
+                      <div className="space-y-2">
+                        {/* Summary bar */}
+                        {testSummary && (
+                          <div className={`rounded-lg px-3 py-2 text-xs font-medium ${
+                            testSummary.allPassed
+                              ? "bg-green-500/10 border border-green-500/20 text-green-400"
+                              : "bg-red-500/10 border border-red-500/20 text-red-400"
+                          }`}>
+                            {testSummary.allPassed
+                              ? "All Passed"
+                              : `${testSummary.passed}/${testSummary.total} passed`}
+                          </div>
+                        )}
+                        {/* Per-case results */}
+                        {testResults.map((r, i) => (
+                          <div key={i} className={`rounded-lg border p-3 ${
+                            r.passed
+                              ? "border-green-500/20 bg-green-500/5"
+                              : "border-red-500/20 bg-red-500/5"
+                          }`}>
+                            <div className="flex items-center gap-2 mb-2">
+                              {r.passed ? (
+                                <span className="text-green-400 text-xs font-semibold flex items-center gap-1">
+                                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                                  Case {i + 1} Passed
+                                </span>
+                              ) : (
+                                <span className="text-red-400 text-xs font-semibold flex items-center gap-1">
+                                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
+                                  Case {i + 1} Failed
+                                </span>
+                              )}
+                            </div>
+                            <div className="grid grid-cols-3 gap-2 text-xs">
+                              <div>
+                                <span className="text-[10px] font-semibold uppercase text-gray-500 block mb-0.5">Input</span>
+                                <code className="font-mono text-gray-400 text-[11px]">{r.input}</code>
+                              </div>
+                              <div>
+                                <span className="text-[10px] font-semibold uppercase text-gray-500 block mb-0.5">Expected</span>
+                                <code className="font-mono text-gray-300 text-[11px]">{r.expected}</code>
+                              </div>
+                              <div>
+                                <span className="text-[10px] font-semibold uppercase text-gray-500 block mb-0.5">Actual</span>
+                                <code className={`font-mono text-[11px] ${r.passed ? "text-green-400" : "text-red-400"}`}>{r.actual || "(empty)"}</code>
+                              </div>
+                            </div>
                           </div>
                         ))}
                       </div>
-                    </div>
-                  )}
-                </div>
+                    ) : (
+                      <div className="text-xs text-gray-500 py-4 text-center">
+                        Click &quot;Run Tests&quot; to execute test cases
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Console Tab */}
+                {bottomTab === "console" && (
+                  <div className="p-3">
+                    {executing ? (
+                      <div className="flex items-center gap-2 text-xs text-gray-400">
+                        <svg className="animate-spin w-3 h-3" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                        </svg>
+                        Running code...
+                      </div>
+                    ) : execOutput ? (
+                      <pre className="font-mono text-xs whitespace-pre-wrap">
+                        {execOutput.output && <span className="text-gray-300">{execOutput.output}</span>}
+                        {execOutput.error && <span className="text-red-400">{execOutput.error}</span>}
+                        {!execOutput.output && !execOutput.error && <span className="text-gray-500">No output</span>}
+                      </pre>
+                    ) : (
+                      <div className="text-xs text-gray-500 py-4 text-center">
+                        Click &quot;Run Code&quot; to see output
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             )}
           </div>

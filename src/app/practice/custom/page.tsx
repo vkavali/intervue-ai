@@ -71,11 +71,12 @@ function CustomPracticeContent() {
     error: string;
     exitCode: number;
   } | null>(null);
-  const [showOutput, setShowOutput] = useState(false);
-  const [outputTab, setOutputTab] = useState<"output" | "testcases">("testcases");
-  const [testResults, setTestResults] = useState<TestResult[]>([]);
+  const [testResults, setTestResults] = useState<TestResult[] | null>(null);
   const [runningTests, setRunningTests] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [bottomTab, setBottomTab] = useState<"testcases" | "results" | "console">("testcases");
+  const [bottomPanelOpen, setBottomPanelOpen] = useState(true);
+  const [activeTestCaseIndex, setActiveTestCaseIndex] = useState(0);
   const aiChatRef = useRef<HTMLDivElement>(null);
 
   // Parse problem from URL — supports ?id=DB_ID or ?problem=JSON (backward compat)
@@ -152,8 +153,8 @@ function CustomPracticeContent() {
   const handleRunCode = useCallback(async () => {
     if (executing) return;
     setExecuting(true);
-    setShowOutput(true);
-    setOutputTab("output");
+    setBottomTab("console");
+    setBottomPanelOpen(true);
     setExecOutput(null);
 
     try {
@@ -197,6 +198,8 @@ function CustomPracticeContent() {
   // Run test cases
   const handleRunTests = useCallback(async () => {
     if (runningTests || !problem?.testCases?.length) return;
+    setBottomTab("results");
+    setBottomPanelOpen(true);
     if (language !== "javascript" && language !== "typescript") {
       setTestResults([{
         input: "--",
@@ -204,14 +207,10 @@ function CustomPracticeContent() {
         actual: "Test cases only run with JavaScript/TypeScript in the browser.",
         passed: false,
       }]);
-      setShowOutput(true);
-      setOutputTab("testcases");
       return;
     }
 
     setRunningTests(true);
-    setShowOutput(true);
-    setOutputTab("testcases");
     const results: TestResult[] = [];
 
     for (const tc of problem.testCases) {
@@ -264,17 +263,23 @@ function CustomPracticeContent() {
     }
   }
 
-  // Keyboard shortcut
+  // Keyboard shortcuts
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.ctrlKey && e.key === "Enter") { e.preventDefault(); handleRunCode(); }
+      if (e.ctrlKey && e.shiftKey && e.key === "Enter") { e.preventDefault(); handleRunTests(); }
+      else if (e.ctrlKey && e.key === "Enter") { e.preventDefault(); handleRunCode(); }
     }
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleRunCode]);
+  }, [handleRunCode, handleRunTests]);
 
   const hasTestCases = !!(problem?.testCases && problem.testCases.length > 0);
-  const passedCount = testResults.filter((r) => r.passed).length;
+  const visibleCount = 2;
+  const testSummary = testResults ? {
+    passed: testResults.filter(t => t.passed).length,
+    total: testResults.length,
+    allPassed: testResults.every(t => t.passed),
+  } : null;
 
   if (!problem) {
     return (
@@ -375,6 +380,7 @@ function CustomPracticeContent() {
                 </svg>
               )}
               {runningTests ? "Testing..." : "Run Tests"}
+              <span className="text-blue-300 text-[10px]">Ctrl+Shift+Enter</span>
             </button>
           )}
         </div>
@@ -402,11 +408,11 @@ function CustomPracticeContent() {
           </div>
         </div>
 
-        {/* Center: Editor + Output/Test Cases */}
+        {/* Center: Code Editor + Bottom Panel */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="flex-1">
+          <div className="flex-1 min-h-0">
             <Editor
-              height={showOutput ? "60%" : "100%"}
+              height="100%"
               language={language}
               value={code}
               onChange={(value) => setCode(value || "")}
@@ -417,136 +423,223 @@ function CustomPracticeContent() {
                 renderLineHighlight: "all", lineNumbers: "on", tabSize: 2, wordWrap: "on", automaticLayout: true,
               }}
             />
-            {showOutput && (
-              <div className="h-[40%] border-t border-gray-800 bg-gray-900 flex flex-col">
-                <div className="flex items-center justify-between px-4 py-2 border-b border-gray-800">
-                  <div className="flex items-center gap-1">
-                    <button
-                      onClick={() => setOutputTab("output")}
-                      className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
-                        outputTab === "output"
-                          ? "bg-gray-700 text-white"
-                          : "text-gray-400 hover:text-gray-200"
-                      }`}
-                    >
-                      Output
-                      {execOutput && (
-                        <span className={`ml-1.5 text-[10px] ${execOutput.exitCode === 0 ? "text-green-400" : "text-red-400"}`}>
-                          {execOutput.exitCode === 0 ? "OK" : "ERR"}
-                        </span>
-                      )}
-                    </button>
-                    {hasTestCases && (
-                      <button
-                        onClick={() => setOutputTab("testcases")}
-                        className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
-                          outputTab === "testcases"
-                            ? "bg-gray-700 text-white"
-                            : "text-gray-400 hover:text-gray-200"
-                        }`}
-                      >
-                        Test Cases
-                        {testResults.length > 0 && (
-                          <span className={`ml-1.5 text-[10px] ${passedCount === testResults.length ? "text-green-400" : "text-yellow-400"}`}>
-                            {passedCount}/{testResults.length}
-                          </span>
-                        )}
-                      </button>
+          </div>
+
+          {/* Bottom Panel - 3 tabs */}
+          <div className={`border-t border-gray-800 bg-gray-900 flex flex-col shrink-0 transition-all ${bottomPanelOpen ? "h-[280px]" : "h-[36px]"}`}>
+            {/* Tab bar */}
+            <div className="flex items-center justify-between px-3 py-1 border-b border-gray-800 shrink-0">
+              <div className="flex items-center gap-1">
+                {hasTestCases && (
+                  <button
+                    onClick={() => { setBottomTab("testcases"); setBottomPanelOpen(true); }}
+                    className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
+                      bottomTab === "testcases" && bottomPanelOpen
+                        ? "bg-gray-800 text-white"
+                        : "text-gray-500 hover:text-gray-300"
+                    }`}
+                  >
+                    Test Cases
+                  </button>
+                )}
+                {hasTestCases && (
+                  <button
+                    onClick={() => { setBottomTab("results"); setBottomPanelOpen(true); }}
+                    className={`px-3 py-1 text-xs font-medium rounded transition-colors flex items-center gap-1.5 ${
+                      bottomTab === "results" && bottomPanelOpen
+                        ? "bg-gray-800 text-white"
+                        : "text-gray-500 hover:text-gray-300"
+                    }`}
+                  >
+                    Test Results
+                    {testSummary && (
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${
+                        testSummary.allPassed
+                          ? "bg-green-500/20 text-green-400"
+                          : "bg-red-500/20 text-red-400"
+                      }`}>
+                        {testSummary.passed}/{testSummary.total}
+                      </span>
+                    )}
+                  </button>
+                )}
+                <button
+                  onClick={() => { setBottomTab("console"); setBottomPanelOpen(true); }}
+                  className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
+                    bottomTab === "console" && bottomPanelOpen
+                      ? "bg-gray-800 text-white"
+                      : "text-gray-500 hover:text-gray-300"
+                  }`}
+                >
+                  Console
+                </button>
+              </div>
+              <button
+                onClick={() => setBottomPanelOpen(!bottomPanelOpen)}
+                className="text-gray-500 hover:text-gray-300 text-xs p-1"
+                title={bottomPanelOpen ? "Collapse" : "Expand"}
+              >
+                <svg className={`w-4 h-4 transition-transform ${bottomPanelOpen ? "" : "rotate-180"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Tab content */}
+            {bottomPanelOpen && (
+              <div className="flex-1 overflow-auto">
+                {/* Test Cases Tab */}
+                {bottomTab === "testcases" && hasTestCases && problem?.testCases && (
+                  <div className="p-3">
+                    {/* Case pills */}
+                    <div className="flex items-center gap-1 mb-3 flex-wrap">
+                      {problem.testCases.map((_, i) => {
+                        const isHidden = i >= visibleCount && !testResults;
+                        return (
+                          <button
+                            key={i}
+                            onClick={() => setActiveTestCaseIndex(i)}
+                            className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
+                              i === activeTestCaseIndex
+                                ? "bg-gray-700 text-white"
+                                : isHidden
+                                ? "bg-gray-800/30 text-gray-600"
+                                : "bg-gray-800/50 text-gray-500 hover:text-gray-300"
+                            }`}
+                          >
+                            Case {i + 1}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {/* Selected case detail */}
+                    {problem.testCases[activeTestCaseIndex] && (
+                      activeTestCaseIndex >= visibleCount && !testResults ? (
+                        <div className="flex items-center gap-3 py-8 justify-center text-gray-500">
+                          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                          </svg>
+                          <span className="text-sm">Hidden Test Case {activeTestCaseIndex + 1}</span>
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          <div>
+                            <span className="text-[10px] font-semibold uppercase text-gray-500 block mb-1">Input</span>
+                            <div className="rounded bg-gray-800 px-3 py-2 font-mono text-xs text-gray-300">
+                              {problem.testCases[activeTestCaseIndex].input}
+                            </div>
+                          </div>
+                          <div>
+                            <span className="text-[10px] font-semibold uppercase text-gray-500 block mb-1">Expected Output</span>
+                            <div className="rounded bg-gray-800 px-3 py-2 font-mono text-xs text-gray-300">
+                              {problem.testCases[activeTestCaseIndex].expected}
+                            </div>
+                          </div>
+                        </div>
+                      )
                     )}
                   </div>
-                  <button onClick={() => setShowOutput(false)} className="text-gray-500 hover:text-gray-300">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                </div>
-                <div className="flex-1 overflow-y-auto p-4">
-                  {outputTab === "output" ? (
-                    // Output tab content
-                    executing ? (
-                      <div className="flex items-center gap-2 text-gray-400">
+                )}
+
+                {/* Test Results Tab */}
+                {bottomTab === "results" && (
+                  <div className="p-3">
+                    {language !== "javascript" && language !== "typescript" ? (
+                      <div className="flex items-center gap-2 text-xs text-gray-500 py-4 justify-center">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Test cases only available for JavaScript/TypeScript
+                      </div>
+                    ) : runningTests ? (
+                      <div className="flex items-center gap-2 text-xs text-gray-400 py-4 justify-center">
                         <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                         </svg>
-                        <span className="text-sm">Executing code...</span>
+                        Running tests...
+                      </div>
+                    ) : testResults ? (
+                      <div className="space-y-2">
+                        {testSummary && (
+                          <div className={`rounded-lg px-3 py-2 text-xs font-medium ${
+                            testSummary.allPassed
+                              ? "bg-green-500/10 border border-green-500/20 text-green-400"
+                              : "bg-red-500/10 border border-red-500/20 text-red-400"
+                          }`}>
+                            {testSummary.allPassed
+                              ? "All Passed"
+                              : `${testSummary.passed}/${testSummary.total} passed`}
+                          </div>
+                        )}
+                        {testResults.map((r, i) => (
+                          <div key={i} className={`rounded-lg border p-3 ${
+                            r.passed
+                              ? "border-green-500/20 bg-green-500/5"
+                              : "border-red-500/20 bg-red-500/5"
+                          }`}>
+                            <div className="flex items-center gap-2 mb-2">
+                              {r.passed ? (
+                                <span className="text-green-400 text-xs font-semibold flex items-center gap-1">
+                                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                                  Case {i + 1} Passed
+                                </span>
+                              ) : (
+                                <span className="text-red-400 text-xs font-semibold flex items-center gap-1">
+                                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
+                                  Case {i + 1} Failed
+                                </span>
+                              )}
+                            </div>
+                            <div className="grid grid-cols-3 gap-2 text-xs">
+                              <div>
+                                <span className="text-[10px] font-semibold uppercase text-gray-500 block mb-0.5">Input</span>
+                                <code className="font-mono text-gray-400 text-[11px]">{r.input}</code>
+                              </div>
+                              <div>
+                                <span className="text-[10px] font-semibold uppercase text-gray-500 block mb-0.5">Expected</span>
+                                <code className="font-mono text-gray-300 text-[11px]">{r.expected}</code>
+                              </div>
+                              <div>
+                                <span className="text-[10px] font-semibold uppercase text-gray-500 block mb-0.5">Actual</span>
+                                <code className={`font-mono text-[11px] ${r.passed ? "text-green-400" : "text-red-400"}`}>{r.actual || "(empty)"}</code>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-xs text-gray-500 py-4 text-center">
+                        Click &quot;Run Tests&quot; to execute test cases
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Console Tab */}
+                {bottomTab === "console" && (
+                  <div className="p-3">
+                    {executing ? (
+                      <div className="flex items-center gap-2 text-xs text-gray-400">
+                        <svg className="animate-spin w-3 h-3" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                        </svg>
+                        Running code...
                       </div>
                     ) : execOutput ? (
-                      <div className="space-y-2">
-                        {execOutput.output && <pre className="whitespace-pre-wrap font-mono text-sm text-green-300">{execOutput.output}</pre>}
-                        {execOutput.error && <pre className="whitespace-pre-wrap font-mono text-sm text-red-400">{execOutput.error}</pre>}
-                        {!execOutput.output && !execOutput.error && <p className="text-sm text-gray-500">No output.</p>}
-                      </div>
+                      <pre className="font-mono text-xs whitespace-pre-wrap">
+                        {execOutput.output && <span className="text-gray-300">{execOutput.output}</span>}
+                        {execOutput.error && <span className="text-red-400">{execOutput.error}</span>}
+                        {!execOutput.output && !execOutput.error && <span className="text-gray-500">No output</span>}
+                      </pre>
                     ) : (
-                      <p className="text-sm text-gray-500">Run your code to see output.</p>
-                    )
-                  ) : (
-                    // Test Cases tab content
-                    runningTests ? (
-                      <div className="flex items-center gap-2 text-gray-400">
-                        <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                        </svg>
-                        <span className="text-sm">Running test cases...</span>
+                      <div className="text-xs text-gray-500 py-4 text-center">
+                        Click &quot;Run Code&quot; to see output
                       </div>
-                    ) : testResults.length > 0 ? (
-                      // After running: show all results
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 mb-3">
-                          <span className={`text-sm font-semibold ${passedCount === testResults.length ? "text-green-400" : "text-yellow-400"}`}>
-                            {passedCount}/{testResults.length} Passed
-                          </span>
-                          {passedCount === testResults.length && (
-                            <span className="text-xs text-green-400/70">All tests passed!</span>
-                          )}
-                        </div>
-                        {testResults.map((result, idx) => (
-                          <div key={idx} className={`rounded-lg border p-3 ${result.passed ? "border-green-500/30 bg-green-500/5" : "border-red-500/30 bg-red-500/5"}`}>
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className={`text-xs font-bold ${result.passed ? "text-green-400" : "text-red-400"}`}>
-                                {result.passed ? "PASS" : "FAIL"}
-                              </span>
-                              <span className="text-xs text-gray-400">Test {idx + 1}</span>
-                            </div>
-                            <div className="space-y-1 text-xs font-mono">
-                              <div><span className="text-gray-500">Input:    </span><span className="text-gray-300">{result.input}</span></div>
-                              <div><span className="text-gray-500">Expected: </span><span className="text-gray-300">{result.expected}</span></div>
-                              <div><span className="text-gray-500">Actual:   </span><span className={result.passed ? "text-green-300" : "text-red-300"}>{result.actual}</span></div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : problem?.testCases?.length ? (
-                      // Before running: show 1 visible, rest hidden
-                      <div className="space-y-2">
-                        <p className="text-xs text-gray-500 mb-3">Click &quot;Run Tests&quot; to execute all {problem.testCases.length} test cases.</p>
-                        {/* Show first test case fully */}
-                        <div className="rounded-lg border border-gray-700 bg-gray-800/50 p-3">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="text-xs font-medium text-blue-400">Example</span>
-                            <span className="text-xs text-gray-400">Test 1</span>
-                          </div>
-                          <div className="space-y-1 text-xs font-mono">
-                            <div><span className="text-gray-500">Input:    </span><span className="text-gray-300">{problem.testCases[0].input}</span></div>
-                            <div><span className="text-gray-500">Expected: </span><span className="text-gray-300">{problem.testCases[0].expected}</span></div>
-                          </div>
-                        </div>
-                        {/* Show remaining as hidden */}
-                        {problem.testCases.slice(1).map((_, idx) => (
-                          <div key={idx + 1} className="rounded-lg border border-gray-700/50 bg-gray-800/30 px-3 py-2 flex items-center gap-2">
-                            <svg className="w-3.5 h-3.5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                            </svg>
-                            <span className="text-xs text-gray-500">Hidden Test Case {idx + 2}</span>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-sm text-gray-500">No test cases available.</p>
-                    )
-                  )}
-                </div>
+                    )}
+                  </div>
+                )}
               </div>
             )}
           </div>
