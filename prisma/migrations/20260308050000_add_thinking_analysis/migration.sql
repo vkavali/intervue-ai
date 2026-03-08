@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "ThinkingAnalysis" (
+CREATE TABLE IF NOT EXISTS "ThinkingAnalysis" (
     "id" TEXT NOT NULL,
     "sessionId" TEXT NOT NULL,
     "overallApproach" TEXT NOT NULL,
@@ -17,7 +17,12 @@ CREATE TABLE "ThinkingAnalysis" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "ThinkingAnalysis_sessionId_key" ON "ThinkingAnalysis"("sessionId");
+CREATE UNIQUE INDEX IF NOT EXISTS "ThinkingAnalysis_sessionId_key" ON "ThinkingAnalysis"("sessionId");
 
 -- AddForeignKey
-ALTER TABLE "ThinkingAnalysis" ADD CONSTRAINT "ThinkingAnalysis_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "InterviewSession"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'ThinkingAnalysis_sessionId_fkey') THEN
+    ALTER TABLE "ThinkingAnalysis" ADD CONSTRAINT "ThinkingAnalysis_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "InterviewSession"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+  END IF;
+END $$;
