@@ -117,10 +117,22 @@ async function executeJudge0(language: string, code: string): Promise<{ output: 
 function runCommand(cmd: string, cwd?: string): Promise<{ output: string; error: string; exitCode: number }> {
   return new Promise((resolve) => {
     exec(cmd, { timeout: TIMEOUT_MS, maxBuffer: MAX_BUFFER, cwd }, (err, stdout, stderr) => {
+      let errorMsg = stderr || ""
+      if (err && !errorMsg) {
+        // Strip "Command failed: <full command>" prefix that leaks temp paths
+        const msg = err.message || ""
+        const cmdFailedIdx = msg.indexOf("\n")
+        errorMsg = cmdFailedIdx > 0 ? msg.substring(cmdFailedIdx + 1).trim() : ""
+        if (!errorMsg && msg.startsWith("Command failed:")) {
+          errorMsg = "Process exited with a non-zero exit code"
+        } else if (!errorMsg) {
+          errorMsg = msg
+        }
+      }
       resolve({
         output: stdout || "",
-        error: stderr || (err?.message || ""),
-        exitCode: err ? (err.code ?? 1) : 0,
+        error: errorMsg,
+        exitCode: err ? (typeof err.code === "number" ? err.code : 1) : 0,
       })
     })
   })
@@ -163,9 +175,11 @@ async function executeLocal(language: string, code: string): Promise<{ output: s
     }
 
     if (language === "java") {
-      // Extract class name from code or use default
-      const classMatch = code.match(/class\s+(\w+)/)
-      const className = classMatch ? classMatch[1] : "Solution"
+      // Extract public class name first, then any class with main method, then first class
+      const publicClassMatch = code.match(/public\s+class\s+(\w+)/)
+      const mainClassMatch = code.match(/class\s+(\w+)[\s\S]*?public\s+static\s+void\s+main/)
+      const anyClassMatch = code.match(/^(?!.*\/\/).*class\s+(\w+)/m)
+      const className = (publicClassMatch || mainClassMatch || anyClassMatch)?.[1] || "Solution"
       const filePath = join(tmpDir, `${className}.java`)
       await writeFile(filePath, code)
 
