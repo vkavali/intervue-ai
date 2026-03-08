@@ -179,6 +179,108 @@ const PRACTICE_PROBLEMS: Record<string, PracticeProblem> = {
         'use std::collections::VecDeque;\nuse std::rc::Rc;\nuse std::cell::RefCell;\n\n#[derive(Debug)]\nstruct TreeNode {\n    val: i32,\n    left: Option<Rc<RefCell<TreeNode>>>,\n    right: Option<Rc<RefCell<TreeNode>>>,\n}\n\nimpl TreeNode {\n    fn new(val: i32) -> Self {\n        TreeNode { val, left: None, right: None }\n    }\n}\n\nfn level_order(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {\n    // Your solution here\n    vec![]\n}\n\nfn main() {\n    println!("{:?}", level_order(None));\n}\n',
     },
   },
+  "rate-limiter": {
+    id: "rate-limiter",
+    title: "Request Rate Limiter",
+    difficulty: "MEDIUM",
+    description:
+      "Design a rate limiter that allows at most N requests per time window of W seconds for each unique client ID. Implement allow(clientId, timestamp) that returns true if the request should be permitted, false if it exceeds the rate limit. Handle multiple clients independently.",
+    constraints:
+      "1 <= N <= 1000 (max requests per window)\n1 <= W <= 3600 (window in seconds)\nTimestamps are given in ascending order\nClient IDs are strings",
+    examples:
+      "RateLimiter(maxRequests=3, windowSeconds=10)\n\nallow('user1', 1)  => true  (1st request)\nallow('user1', 2)  => true  (2nd request)\nallow('user1', 3)  => true  (3rd request)\nallow('user1', 4)  => false (exceeded limit in window)\nallow('user2', 4)  => true  (different client)\nallow('user1', 12) => true  (window expired, reset)",
+    starterCode: {
+      javascript:
+        "class RateLimiter {\n  constructor(maxRequests, windowSeconds) {\n    this.maxRequests = maxRequests;\n    this.windowSeconds = windowSeconds;\n    // Your data structures here\n  }\n\n  /**\n   * @param {string} clientId\n   * @param {number} timestamp - in seconds\n   * @return {boolean}\n   */\n  allow(clientId, timestamp) {\n    // Your solution here\n  }\n}\n\n// Test\nconst limiter = new RateLimiter(3, 10);\nconsole.log(limiter.allow('user1', 1));   // true\nconsole.log(limiter.allow('user1', 2));   // true\nconsole.log(limiter.allow('user1', 3));   // true\nconsole.log(limiter.allow('user1', 4));   // false\nconsole.log(limiter.allow('user2', 4));   // true\nconsole.log(limiter.allow('user1', 12));  // true\n",
+      python:
+        "class RateLimiter:\n    def __init__(self, max_requests, window_seconds):\n        self.max_requests = max_requests\n        self.window_seconds = window_seconds\n        # Your data structures here\n\n    def allow(self, client_id, timestamp):\n        \"\"\"Return True if request is allowed, False if rate limited.\"\"\"\n        # Your solution here\n        pass\n\n# Test\nlimiter = RateLimiter(3, 10)\nprint(limiter.allow('user1', 1))   # True\nprint(limiter.allow('user1', 2))   # True\nprint(limiter.allow('user1', 3))   # True\nprint(limiter.allow('user1', 4))   # False\nprint(limiter.allow('user2', 4))   # True\nprint(limiter.allow('user1', 12))  # True\n",
+    },
+  },
+  "flatten-nested-data": {
+    id: "flatten-nested-data",
+    title: "Nested Data Flattener",
+    difficulty: "EASY",
+    description:
+      "Given a deeply nested data structure (arrays within arrays, to any depth), produce a single flat array containing all the values in order. For example, [1, [2, [3, 4], 5], 6] becomes [1, 2, 3, 4, 5, 6]. Do not use any built-in flatten methods.",
+    constraints:
+      "Input can be nested to any depth\nValues are integers\nEmpty arrays should be skipped\nDo not use Array.flat() or similar built-ins",
+    examples:
+      "Input: [1, [2, [3, 4], 5], 6]\nOutput: [1, 2, 3, 4, 5, 6]\n\nInput: [[1, 2], [3, [4, [5]]]]\nOutput: [1, 2, 3, 4, 5]\n\nInput: [1, [], [2, []], 3]\nOutput: [1, 2, 3]",
+    starterCode: {
+      javascript:
+        "/**\n * Flatten a deeply nested array without using Array.flat()\n * @param {any[]} arr\n * @return {number[]}\n */\nfunction flatten(arr) {\n  // Your solution here\n}\n\n// Test\nconsole.log(flatten([1, [2, [3, 4], 5], 6]));  // [1, 2, 3, 4, 5, 6]\nconsole.log(flatten([[1, 2], [3, [4, [5]]]]));  // [1, 2, 3, 4, 5]\nconsole.log(flatten([1, [], [2, []], 3]));       // [1, 2, 3]\nconsole.log(flatten([]));                         // []\n",
+      python:
+        "def flatten(arr):\n    \"\"\"Flatten a deeply nested list into a single list.\"\"\"\n    # Your solution here\n    pass\n\n# Test\nprint(flatten([1, [2, [3, 4], 5], 6]))   # [1, 2, 3, 4, 5, 6]\nprint(flatten([[1, 2], [3, [4, [5]]]]))  # [1, 2, 3, 4, 5]\nprint(flatten([1, [], [2, []], 3]))       # [1, 2, 3]\nprint(flatten([]))                         # []\n",
+    },
+  },
+  "event-emitter": {
+    id: "event-emitter",
+    title: "Event System",
+    difficulty: "MEDIUM",
+    description:
+      "Implement a publish-subscribe event system with three methods: on(eventName, callback) to register a listener, off(eventName, callback) to remove a specific listener, and emit(eventName, ...args) to trigger all listeners for that event with the given arguments. Support multiple listeners per event.",
+    constraints:
+      "Event names are strings\nCallbacks are functions\noff() should only remove the specific callback, not all listeners\nemit() should call listeners in the order they were registered\nCalling off() with an unregistered callback should be a no-op",
+    examples:
+      "const emitter = new EventEmitter();\nconst fn = (x) => console.log('got:', x);\nemitter.on('data', fn);\nemitter.emit('data', 42);  // prints 'got: 42'\nemitter.off('data', fn);\nemitter.emit('data', 42);  // nothing printed",
+    starterCode: {
+      javascript:
+        "class EventEmitter {\n  constructor() {\n    // Your data structures here\n  }\n\n  /**\n   * Register a listener for an event\n   * @param {string} event\n   * @param {Function} callback\n   */\n  on(event, callback) {\n    // Your solution here\n  }\n\n  /**\n   * Remove a specific listener\n   * @param {string} event\n   * @param {Function} callback\n   */\n  off(event, callback) {\n    // Your solution here\n  }\n\n  /**\n   * Trigger all listeners for an event\n   * @param {string} event\n   * @param {...any} args\n   */\n  emit(event, ...args) {\n    // Your solution here\n  }\n}\n\n// Test\nconst emitter = new EventEmitter();\nconst log1 = (x) => console.log('Listener 1:', x);\nconst log2 = (x) => console.log('Listener 2:', x);\n\nemitter.on('test', log1);\nemitter.on('test', log2);\nconsole.log('--- Emit with both ---');\nemitter.emit('test', 'hello');\n\nemitter.off('test', log1);\nconsole.log('--- Emit after removing log1 ---');\nemitter.emit('test', 'world');\n",
+      python:
+        "class EventEmitter:\n    def __init__(self):\n        # Your data structures here\n        pass\n\n    def on(self, event, callback):\n        \"\"\"Register a listener.\"\"\"\n        # Your solution here\n        pass\n\n    def off(self, event, callback):\n        \"\"\"Remove a specific listener.\"\"\"\n        # Your solution here\n        pass\n\n    def emit(self, event, *args):\n        \"\"\"Trigger all listeners for an event.\"\"\"\n        # Your solution here\n        pass\n\n# Test\nemitter = EventEmitter()\nlog1 = lambda x: print(f'Listener 1: {x}')\nlog2 = lambda x: print(f'Listener 2: {x}')\n\nemitter.on('test', log1)\nemitter.on('test', log2)\nprint('--- Emit with both ---')\nemitter.emit('test', 'hello')\n\nemitter.off('test', log1)\nprint('--- Emit after removing log1 ---')\nemitter.emit('test', 'world')\n",
+    },
+  },
+  "debounce-throttle": {
+    id: "debounce-throttle",
+    title: "Call Frequency Controller",
+    difficulty: "MEDIUM",
+    description:
+      "Implement two utility functions:\n\n1. debounce(fn, delay) - Returns a wrapper that delays calling fn until no invocations happen for 'delay' ms. If called again before delay expires, the timer resets.\n\n2. throttle(fn, interval) - Returns a wrapper that ensures fn is called at most once per 'interval' ms. Additional calls during the interval are ignored.",
+    constraints:
+      "delay and interval are positive integers in milliseconds\nWrapper functions should pass through all arguments to fn\ndebounce should reset the timer on each call\nthrottle should call fn immediately on first invocation",
+    examples:
+      "// Debounce: typing in search box\nconst search = debounce(query => fetch('/search?q=' + query), 300);\nsearch('h'); search('he'); search('hel');\n// Only 'hel' query fires after 300ms\n\n// Throttle: scroll handler\nconst onScroll = throttle(() => updatePosition(), 100);\n// Called at most once per 100ms during scrolling",
+    starterCode: {
+      javascript:
+        "/**\n * Debounce: delay fn until no calls for `delay` ms\n * @param {Function} fn\n * @param {number} delay\n * @return {Function}\n */\nfunction debounce(fn, delay) {\n  // Your solution here\n}\n\n/**\n * Throttle: call fn at most once per `interval` ms\n * @param {Function} fn\n * @param {number} interval\n * @return {Function}\n */\nfunction throttle(fn, interval) {\n  // Your solution here\n}\n\n// Test debounce\nlet debounceCount = 0;\nconst debouncedFn = debounce((val) => {\n  debounceCount++;\n  console.log(`Debounced call #${debounceCount}: ${val}`);\n}, 100);\n\ndebouncedFn('a');\ndebouncedFn('b');\ndebouncedFn('c');\nsetTimeout(() => {\n  console.log(`Debounce fired ${debounceCount} time(s)`);\n\n  // Test throttle\n  let throttleCount = 0;\n  const throttledFn = throttle((val) => {\n    throttleCount++;\n    console.log(`Throttled call #${throttleCount}: ${val}`);\n  }, 100);\n\n  throttledFn('x');\n  throttledFn('y');\n  throttledFn('z');\n  setTimeout(() => {\n    console.log(`Throttle fired ${throttleCount} time(s)`);\n  }, 200);\n}, 200);\n",
+      python:
+        "import time\nimport threading\n\ndef debounce(fn, delay_seconds):\n    \"\"\"Delay fn until no calls for delay_seconds.\"\"\"\n    # Your solution here\n    # Hint: use threading.Timer\n    pass\n\ndef throttle(fn, interval_seconds):\n    \"\"\"Call fn at most once per interval_seconds.\"\"\"\n    # Your solution here\n    pass\n\n# Simple synchronous test\nprint('Debounce and throttle are timing-based.')\nprint('Implement and test with actual delays.')\nprint('Consider using threading.Timer for debounce.')\n",
+    },
+  },
+  "string-compressor": {
+    id: "string-compressor",
+    title: "Text Compressor",
+    difficulty: "EASY",
+    description:
+      "Implement basic string compression using counts of repeated consecutive characters. For example, 'aabcccccaaa' becomes 'a2b1c5a3'. If the compressed string is not shorter than the original, return the original string. Handle edge cases like empty strings and single characters.",
+    constraints:
+      "Input consists of uppercase and/or lowercase letters only\nReturn original if compressed version isn't shorter\nEmpty string returns empty string\nSingle character returns original character",
+    examples:
+      "Input: 'aabcccccaaa'\nOutput: 'a2b1c5a3'\n\nInput: 'abc'\nOutput: 'abc' (compressed 'a1b1c1' is longer)\n\nInput: 'aaa'\nOutput: 'a3'\n\nInput: ''\nOutput: ''",
+    starterCode: {
+      javascript:
+        "/**\n * Compress a string using character counts\n * @param {string} str\n * @return {string}\n */\nfunction compress(str) {\n  // Your solution here\n}\n\n// Test\nconsole.log(compress('aabcccccaaa'));  // 'a2b1c5a3'\nconsole.log(compress('abc'));          // 'abc'\nconsole.log(compress('aaa'));          // 'a3'\nconsole.log(compress(''));             // ''\nconsole.log(compress('a'));            // 'a'\nconsole.log(compress('aabb'));         // 'aabb' (same length)\n",
+      python:
+        "def compress(s):\n    \"\"\"Compress string using consecutive character counts.\"\"\"\n    # Your solution here\n    pass\n\n# Test\nprint(compress('aabcccccaaa'))  # 'a2b1c5a3'\nprint(compress('abc'))          # 'abc'\nprint(compress('aaa'))          # 'a3'\nprint(compress(''))             # ''\nprint(compress('a'))            # 'a'\nprint(compress('aabb'))         # 'aabb'\n",
+    },
+  },
+  "task-scheduler": {
+    id: "task-scheduler",
+    title: "Task Queue Scheduler",
+    difficulty: "HARD",
+    description:
+      "Design a task scheduler that processes tasks with cooldown constraints. Each task has a type (letter), and the same task type must wait at least N time units before running again. Given a list of tasks and cooldown N, find the minimum time units needed to execute all tasks. Idle slots must be inserted when no eligible task is available.",
+    constraints:
+      "1 <= tasks.length <= 10000\nTasks are uppercase letters A-Z\n0 <= cooldown <= 100\nTasks can be executed in any order\nEach task takes exactly 1 time unit",
+    examples:
+      "Input: tasks = ['A','A','A','B','B','B'], cooldown = 2\nOutput: 8\nExplanation: A -> B -> idle -> A -> B -> idle -> A -> B\n\nInput: tasks = ['A','A','A','B','B','B'], cooldown = 0\nOutput: 6\nExplanation: No cooldown needed, just run all 6 tasks\n\nInput: tasks = ['A','A','A','A','B','B'], cooldown = 1\nOutput: 7\nExplanation: A -> B -> A -> B -> A -> idle -> A",
+    starterCode: {
+      javascript:
+        "/**\n * Find minimum time units to execute all tasks with cooldown\n * @param {string[]} tasks\n * @param {number} cooldown\n * @return {number}\n */\nfunction scheduleTasks(tasks, cooldown) {\n  // Your solution here\n}\n\n// Test\nconsole.log(scheduleTasks(['A','A','A','B','B','B'], 2));  // 8\nconsole.log(scheduleTasks(['A','A','A','B','B','B'], 0));  // 6\nconsole.log(scheduleTasks(['A','A','A','A','B','B'], 1));  // 7\nconsole.log(scheduleTasks(['A'], 2));                       // 1\n",
+      python:
+        "def schedule_tasks(tasks, cooldown):\n    \"\"\"Find minimum time units to execute all tasks.\"\"\"\n    # Your solution here\n    pass\n\n# Test\nprint(schedule_tasks(['A','A','A','B','B','B'], 2))  # 8\nprint(schedule_tasks(['A','A','A','B','B','B'], 0))  # 6\nprint(schedule_tasks(['A','A','A','A','B','B'], 1))  # 7\nprint(schedule_tasks(['A'], 2))                       # 1\n",
+    },
+  },
 };
 
 // ─── Constants ──────────────────────────────────────────────────────────────────
@@ -282,17 +384,31 @@ export default function PracticeProblemPage() {
     setExecOutput(null);
 
     try {
+      // For JavaScript/TypeScript, execute client-side in Web Worker
+      if (language === "javascript" || language === "typescript") {
+        const { runJavaScriptInWorker } = await import("@/lib/code-runner");
+        const result = await runJavaScriptInWorker(code);
+        setExecOutput(result);
+        return;
+      }
+
       const res = await fetch("/api/execute", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ language, code }),
       });
       const data = await res.json();
-      setExecOutput({
-        output: data.output || "",
-        error: data.error || "",
-        exitCode: data.exitCode ?? 1,
-      });
+      if (data.error === "USE_CLIENT_EXECUTION") {
+        const { runJavaScriptInWorker } = await import("@/lib/code-runner");
+        const result = await runJavaScriptInWorker(code);
+        setExecOutput(result);
+      } else {
+        setExecOutput({
+          output: data.output || "",
+          error: data.error || "",
+          exitCode: data.exitCode ?? 1,
+        });
+      }
     } catch {
       setExecOutput({
         output: "",

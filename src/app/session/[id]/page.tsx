@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
 import Editor from "@monaco-editor/react";
+import SessionProtections from "@/components/SessionProtections";
+import ScreenCapture from "@/components/ScreenCapture";
 
 interface Question {
   id: string;
@@ -218,13 +220,25 @@ export default function LiveSessionPage() {
     setShowOutput(true);
     setRunOutput(null);
     try {
+      // For JavaScript/TypeScript, execute client-side in Web Worker first
+      if (language === "javascript" || language === "typescript") {
+        const { runJavaScriptInWorker } = await import("@/lib/code-runner");
+        const result = await runJavaScriptInWorker(code);
+        setRunOutput(result);
+        return;
+      }
+
       const res = await fetch("/api/execute", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ language, code }),
       });
       const data = await res.json();
-      if (res.ok) {
+      if (data.error === "USE_CLIENT_EXECUTION") {
+        const { runJavaScriptInWorker } = await import("@/lib/code-runner");
+        const result = await runJavaScriptInWorker(code);
+        setRunOutput(result);
+      } else if (res.ok) {
         setRunOutput(data);
       } else {
         setRunOutput({ output: "", error: data.error || "Execution failed", exitCode: 1 });
@@ -288,6 +302,8 @@ export default function LiveSessionPage() {
 
   return (
     <div className="flex h-screen flex-col bg-gray-950 overflow-hidden">
+      <SessionProtections sessionId={sessionId} />
+
       {/* Top Bar */}
       <div className="flex items-center justify-between border-b border-gray-800 bg-gray-900 px-4 py-2 shrink-0">
         <div className="flex items-center gap-4">
@@ -301,6 +317,8 @@ export default function LiveSessionPage() {
         </div>
 
         <div className="flex items-center gap-4">
+          {/* Screen Recording Indicator (candidate view) */}
+          <ScreenCapture sessionId={sessionId} isInterviewer={false} />
           {/* Question Navigation */}
           <div className="flex items-center gap-1">
             {questions.map((_, idx) => (

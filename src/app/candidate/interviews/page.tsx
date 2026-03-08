@@ -1,0 +1,131 @@
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import Link from "next/link";
+
+const statusColors: Record<string, { bg: string; text: string; dot: string; label: string }> = {
+  PENDING: { bg: "bg-yellow-500/10", text: "text-yellow-400", dot: "bg-yellow-400", label: "Scheduled" },
+  ACTIVE: { bg: "bg-green-500/10", text: "text-green-400", dot: "bg-green-400", label: "In Progress" },
+  COMPLETED: { bg: "bg-blue-500/10", text: "text-blue-400", dot: "bg-blue-400", label: "Completed" },
+  CANCELLED: { bg: "bg-gray-500/10", text: "text-gray-400", dot: "bg-gray-400", label: "Cancelled" },
+};
+
+export default async function CandidateInterviewsPage() {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    redirect("/auth/signin?callbackUrl=/candidate/interviews");
+  }
+
+  const interviews = await prisma.interviewSession.findMany({
+    where: { candidateId: session.user.id },
+    include: {
+      template: {
+        select: { title: true, role: true, seniority: true, roundType: true },
+      },
+      company: {
+        select: { name: true },
+      },
+      auditReport: {
+        select: { overallScore: true, suggestedDecision: true },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  return (
+    <div>
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-white">My Interviews</h1>
+        <p className="mt-1 text-gray-400">
+          View all your scheduled, active, and completed interviews.
+        </p>
+      </div>
+
+      {interviews.length === 0 ? (
+        <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-12 text-center">
+          <svg className="mx-auto h-12 w-12 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          </svg>
+          <h3 className="mt-4 text-lg font-semibold text-white">No interviews yet</h3>
+          <p className="mt-2 text-sm text-gray-400 max-w-sm mx-auto">
+            You haven&apos;t been invited to any interviews yet. Practice your skills while you wait.
+          </p>
+          <Link
+            href="/practice"
+            className="mt-6 inline-flex items-center gap-2 rounded-lg bg-purple-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-purple-500 transition-colors"
+          >
+            Start Practicing
+          </Link>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {interviews.map((interview) => {
+            const status = statusColors[interview.status] || statusColors.CANCELLED;
+            return (
+              <div
+                key={interview.id}
+                className="rounded-xl border border-gray-800 bg-gray-900/50 p-5 transition-colors hover:border-gray-700"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${status.bg} ${status.text}`}>
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-semibold text-white">
+                        {interview.template.title}
+                      </h3>
+                      <p className="text-xs text-gray-400">
+                        {interview.company.name} &middot; {interview.template.role} &middot; {interview.template.seniority} &middot; {interview.template.roundType}
+                      </p>
+                      {interview.scheduledAt && (
+                        <p className="text-xs text-gray-500 mt-1">
+                          {new Date(interview.scheduledAt).toLocaleDateString("en-US", {
+                            weekday: "short",
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    {interview.auditReport && (
+                      <div className="text-right mr-2">
+                        <p className="text-lg font-bold text-white">
+                          {interview.auditReport.overallScore.toFixed(1)}
+                        </p>
+                        <p className="text-[10px] text-gray-500 uppercase">Score</p>
+                      </div>
+                    )}
+
+                    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${status.bg} ${status.text}`}>
+                      <span className={`h-1.5 w-1.5 rounded-full ${status.dot}`} />
+                      {status.label}
+                    </span>
+
+                    {(interview.status === "ACTIVE" || interview.status === "PENDING") && (
+                      <Link
+                        href={`/session/${interview.id}`}
+                        className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-500 transition-colors"
+                      >
+                        {interview.status === "ACTIVE" ? "Resume" : "Join"}
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}

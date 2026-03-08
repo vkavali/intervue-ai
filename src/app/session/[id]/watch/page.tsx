@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "next/navigation";
 import Editor from "@monaco-editor/react";
+import ScreenCapture from "@/components/ScreenCapture";
 
 interface SessionData {
   id: string;
@@ -282,6 +283,9 @@ export default function WatchSessionPage() {
         </div>
 
         <div className="flex items-center gap-3">
+          {/* Screen Capture Button (interviewer view) */}
+          <ScreenCapture sessionId={sessionId} isInterviewer={true} />
+
           <div className="flex items-center gap-2">
             <span
               className={`relative flex h-2.5 w-2.5 ${
