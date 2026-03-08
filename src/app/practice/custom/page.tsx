@@ -62,8 +62,9 @@ function CustomPracticeContent() {
   const [elapsedTime, setElapsedTime] = useState(0);
   const aiChatRef = useRef<HTMLDivElement>(null);
 
-  // Parse problem from URL
+  // Parse problem from URL — supports ?id=DB_ID or ?problem=JSON (backward compat)
   useEffect(() => {
+    const idParam = searchParams.get("id");
     const problemParam = searchParams.get("problem");
     const levelParam = searchParams.get("aiLevel");
 
@@ -72,11 +73,27 @@ function CustomPracticeContent() {
       if (parsed >= 0 && parsed <= 4) setAiLevel(parsed);
     }
 
-    if (problemParam) {
+    if (idParam) {
+      // Fetch from DB by ID
+      fetch(`/api/practice/saved/${idParam}`)
+        .then((res) => {
+          if (!res.ok) throw new Error("Not found");
+          return res.json();
+        })
+        .then((data) => {
+          const p = data.problem;
+          setProblem(p);
+          if (p.starterCode?.[language]) {
+            setCode(p.starterCode[language]);
+          } else {
+            setCode(`// ${p.title}\n// ${p.description.substring(0, 100)}...\n\n// Start coding here...\n`);
+          }
+        })
+        .catch(() => setProblem(null));
+    } else if (problemParam) {
       try {
         const parsed = JSON.parse(decodeURIComponent(problemParam));
         setProblem(parsed);
-        // Set starter code if available
         if (parsed.starterCode?.[language]) {
           setCode(parsed.starterCode[language]);
         } else {
@@ -86,7 +103,8 @@ function CustomPracticeContent() {
         setProblem(null);
       }
     }
-  }, [searchParams, language]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   // Update code when language changes
   useEffect(() => {

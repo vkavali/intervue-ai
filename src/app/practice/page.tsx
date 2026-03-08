@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { PROBLEM_BANK } from "@/data/problem-bank";
 
@@ -27,6 +27,18 @@ interface GeneratedProblem {
   constraints?: string;
   examples?: string;
   starterCode?: Record<string, string>;
+}
+
+interface SavedProblem extends GeneratedProblem {
+  company?: string | null;
+  role?: string | null;
+  createdAt: string;
+  progress: {
+    status: string;
+    timeSpentSeconds: number;
+    lastSavedAt: string;
+    language: string;
+  } | null;
 }
 
 const difficultyColors: Record<string, { text: string; bg: string; border: string }> = {
@@ -69,6 +81,18 @@ export default function PracticeModePage() {
     setCurrentPage(1);
   };
 
+  // Saved problems from DB
+  const [savedProblems, setSavedProblems] = useState<SavedProblem[]>([]);
+  const [loadingSaved, setLoadingSaved] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/practice/saved")
+      .then((res) => (res.ok ? res.json() : { problems: [] }))
+      .then((data) => setSavedProblems(data.problems || []))
+      .catch(() => {})
+      .finally(() => setLoadingSaved(false));
+  }, []);
+
   // AI Generator state
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
@@ -104,6 +128,11 @@ export default function PracticeModePage() {
         setGenError(data.error || "Failed to generate problems");
       } else if (data.problems) {
         setGeneratedProblems(data.problems);
+        // Refresh saved problems from DB (they were persisted server-side)
+        fetch("/api/practice/saved")
+          .then((r) => (r.ok ? r.json() : { problems: [] }))
+          .then((d) => setSavedProblems(d.problems || []))
+          .catch(() => {});
       }
     } catch {
       setGenError("Failed to connect to AI service. Please try again.");
@@ -112,13 +141,19 @@ export default function PracticeModePage() {
     }
   }
 
-  function renderProblemCard(problem: { id: string; title: string; difficulty: string; description: string; tags: string[]; company?: string }, isGenerated: boolean = false) {
+  function renderProblemCard(problem: { id: string; title: string; difficulty: string; description: string; tags: string[]; company?: string | null }, options: { isGenerated?: boolean; isSaved?: boolean; dbId?: string; progress?: SavedProblem["progress"] } = {}) {
+    const { isGenerated = false, isSaved = false, dbId, progress } = options;
     const diff = difficultyColors[problem.difficulty] || difficultyColors.MEDIUM;
-    // All bank problems route to /practice/{id} which handles enrichment on demand
-    // Generated problems go to custom editor since they aren't in the bank
-    const href = isGenerated
-      ? `/practice/custom?aiLevel=${selectedAiLevel}&problem=${encodeURIComponent(JSON.stringify(problem))}`
-      : `/practice/${problem.id}?aiLevel=${selectedAiLevel}`;
+    // Saved problems link via DB id; freshly-generated (not yet in savedProblems) fall back to JSON URL
+    // Bank problems route to /practice/{id}
+    let href: string;
+    if (isSaved && dbId) {
+      href = `/practice/custom?id=${dbId}&aiLevel=${selectedAiLevel}`;
+    } else if (isGenerated) {
+      href = `/practice/custom?aiLevel=${selectedAiLevel}&problem=${encodeURIComponent(JSON.stringify(problem))}`;
+    } else {
+      href = `/practice/${problem.id}?aiLevel=${selectedAiLevel}`;
+    }
 
     return (
       <div
@@ -137,9 +172,18 @@ export default function PracticeModePage() {
                 {problem.company}
               </span>
             )}
-            {isGenerated && (
+            {(isGenerated || isSaved) && (
               <span className="inline-flex items-center rounded-full bg-purple-500/10 border border-purple-500/30 px-2 py-0.5 text-[10px] text-purple-400">
                 AI Generated
+              </span>
+            )}
+            {progress && (
+              <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] ${
+                progress.status === "COMPLETED"
+                  ? "bg-green-500/10 border border-green-500/30 text-green-400"
+                  : "bg-yellow-500/10 border border-yellow-500/30 text-yellow-400"
+              }`}>
+                {progress.status === "COMPLETED" ? "Completed" : "In Progress"}
               </span>
             )}
           </div>
@@ -293,7 +337,7 @@ export default function PracticeModePage() {
 
             {/* Problem Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {paginatedProblems.map((problem) => renderProblemCard(problem))}
+              {paginatedProblems.map((problem) => renderProblemCard(problem, {}))}
             </div>
 
             {/* Pagination */}
@@ -319,6 +363,29 @@ export default function PracticeModePage() {
         {/* AI Generator Tab */}
         {activeTab === "generate" && (
           <div>
+            {/* Saved Practice Problems */}
+            {loadingSaved ? (
+              <div className="text-center py-8 mb-8">
+                <svg className="animate-spin h-6 w-6 text-purple-500 mx-auto mb-2" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+                <p className="text-sm text-gray-500">Loading saved problems...</p>
+              </div>
+            ) : savedProblems.length > 0 ? (
+              <div className="mb-8">
+                <h3 className="text-lg font-semibold text-white mb-1">Your Practice Problems</h3>
+                <p className="text-sm text-gray-500 mb-4">
+                  Previously generated problems saved to your account.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {savedProblems.map((problem) =>
+                    renderProblemCard(problem, { isSaved: true, dbId: problem.id, progress: problem.progress })
+                  )}
+                </div>
+              </div>
+            ) : null}
+
             {/* Generator Form */}
             <div className="rounded-xl border border-purple-500/20 bg-gradient-to-r from-purple-600/5 via-gray-900/50 to-blue-600/5 p-6 mb-8">
               <div className="flex items-center gap-2 mb-4">
@@ -432,7 +499,7 @@ export default function PracticeModePage() {
                   These problems are AI-generated based on your criteria. Click to start practicing with the code editor.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {generatedProblems.map((problem) => renderProblemCard(problem, true))}
+                  {generatedProblems.map((problem) => renderProblemCard(problem, { isGenerated: true }))}
                 </div>
               </div>
             )}
