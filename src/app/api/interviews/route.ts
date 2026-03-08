@@ -100,6 +100,8 @@ export async function POST(req: NextRequest) {
                 difficulty: string
                 aiLevel?: number
                 timeLimit: number
+                testCases?: string | null
+                starterCode?: string | null
               },
               index: number
             ) => ({
@@ -111,6 +113,8 @@ export async function POST(req: NextRequest) {
               aiLevel: q.aiLevel ?? defaultAiLevel ?? 0,
               timeLimit: q.timeLimit,
               orderIndex: index,
+              testCases: q.testCases ?? null,
+              starterCode: q.starterCode ?? null,
             })
           ),
         },

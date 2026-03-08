@@ -86,6 +86,56 @@ export async function GET(req: NextRequest) {
   }
 }
 
+export async function DELETE(req: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email! },
+    });
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json({ error: "id parameter is required" }, { status: 400 });
+    }
+
+    const slot = await prisma.interviewerAvailability.findUnique({
+      where: { id },
+    });
+
+    if (!slot) {
+      return NextResponse.json({ error: "Slot not found" }, { status: 404 });
+    }
+
+    // Only the owner or a company admin can delete
+    if (slot.interviewerId !== user.id && user.role !== "COMPANY_ADMIN") {
+      return NextResponse.json(
+        { error: "Only the slot owner or an admin can delete this slot" },
+        { status: 403 }
+      );
+    }
+
+    await prisma.interviewerAvailability.delete({ where: { id } });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("DELETE /api/interviewers/availability error:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);

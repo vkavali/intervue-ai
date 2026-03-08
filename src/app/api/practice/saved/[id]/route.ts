@@ -51,6 +51,7 @@ export async function GET(
       examples: problem.examples,
       tags: JSON.parse(problem.tags),
       starterCode: problem.starterCode ? JSON.parse(problem.starterCode) : null,
+      testCases: problem.testCases ? JSON.parse(problem.testCases) : [],
       company: problem.company,
       role: problem.role,
       createdAt: problem.createdAt,

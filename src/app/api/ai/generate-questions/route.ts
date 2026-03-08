@@ -92,7 +92,19 @@ You must respond with ONLY a valid JSON object (no markdown fences, no extra tex
       "examples": "string - 2-3 examples with input, output, and brief explanation. Format each example clearly.",
       "difficulty": "EASY | MEDIUM | HARD",
       "timeLimit": "number - suggested time limit in minutes (5-60)",
-      "aiLevel": "number 0-4 - suggested AI assistance level. 0=no AI, 1=hints only, 2=scaffold, 3=guided explanation, 4=full copilot"
+      "aiLevel": "number 0-4 - suggested AI assistance level. 0=no AI, 1=hints only, 2=scaffold, 3=guided explanation, 4=full copilot",
+      "testCases": [
+        {
+          "input": "string - the function call or input expression, e.g. twoSum([2,7,11,15], 9)",
+          "expected": "string - the expected output as a string, e.g. [0,1]"
+        }
+      ],
+      "starterCode": {
+        "javascript": "string - JavaScript function stub",
+        "python": "string - Python function stub",
+        "typescript": "string - TypeScript function stub",
+        "java": "string - Java method stub"
+      }
     }
   ]
 }
@@ -110,6 +122,9 @@ Guidelines for generating questions:
 - Set aiLevel based on difficulty: harder questions may warrant higher AI levels
 - Time limits should be realistic for the difficulty level
 - Ensure variety in the question set - avoid repetitive patterns
+- For each coding question, generate 3-5 test cases with clear input expressions and expected output strings. Test cases should cover normal cases, edge cases, and boundary conditions.
+- For each coding question, generate starter code stubs (function signature with empty body) for javascript, python, typescript, and java. The function name must match what the test case inputs reference.
+- For non-coding round types (Behavioral, PM, BA), omit testCases and starterCode (set them to null or empty).
 - IMPORTANT: Generate questions ONLY relevant to the specified role and round type. Do NOT generate general knowledge, trivia, geography, history, or off-topic content.
 - If the round type or interview type is non-technical (Behavioral, PM, BA), generate scenario-based questions, NOT coding questions.
 - For DevOps rounds: generate infrastructure, CI/CD, cloud, monitoring, and deployment questions, NOT coding algorithm problems.
@@ -163,6 +178,8 @@ Generate exactly ${questionCount} question${questionCount > 1 ? "s" : ""}.`
       difficulty: string
       timeLimit: number
       aiLevel: number
+      testCases?: Array<{ input: string; expected: string }> | null
+      starterCode?: Record<string, string> | null
     }> }
 
     try {
@@ -198,6 +215,12 @@ Generate exactly ${questionCount} question${questionCount > 1 ? "s" : ""}.`
       aiLevel: typeof q.aiLevel === "number" && q.aiLevel >= 0 && q.aiLevel <= 4
         ? q.aiLevel
         : 0,
+      testCases: Array.isArray(q.testCases) && q.testCases.length > 0
+        ? JSON.stringify(q.testCases)
+        : null,
+      starterCode: q.starterCode && typeof q.starterCode === "object"
+        ? JSON.stringify(q.starterCode)
+        : null,
     }))
 
     return NextResponse.json({ questions })

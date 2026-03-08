@@ -37,6 +37,8 @@ interface Question {
   difficulty: string;
   aiLevel: number;
   timeLimit: number;
+  testCases: string | null;
+  starterCode: string | null;
 }
 
 function generateId() {
@@ -52,6 +54,8 @@ const emptyQuestion = (): Question => ({
   difficulty: "MEDIUM",
   aiLevel: -1, // -1 means inherit from template default
   timeLimit: 30,
+  testCases: null,
+  starterCode: null,
 });
 
 const aiLevelLabels: Record<number, string> = {
@@ -89,6 +93,37 @@ export default function NewInterviewPage() {
   const [aiQDifficulty, setAiQDifficulty] = useState("MIX");
   const [aiQuestionsLoading, setAiQuestionsLoading] = useState(false);
 
+  // Problem Bank state
+  const [showBankPanel, setShowBankPanel] = useState(false);
+  const [bankProblems, setBankProblems] = useState<
+    Array<{
+      id: string;
+      title: string;
+      difficulty: string;
+      description: string;
+      tags: string[];
+      company?: string;
+      category: string;
+      constraints?: string;
+      examples?: string;
+      starterCode?: Record<string, string>;
+      enriched: boolean;
+    }>
+  >([]);
+  const [bankTotal, setBankTotal] = useState(0);
+  const [bankPage, setBankPage] = useState(1);
+  const [bankTotalPages, setBankTotalPages] = useState(1);
+  const [bankSearch, setBankSearch] = useState("");
+  const [bankDifficulty, setBankDifficulty] = useState("");
+  const [bankCategory, setBankCategory] = useState("");
+  const [bankCompany, setBankCompany] = useState("");
+  const [bankCategories, setBankCategories] = useState<string[]>([]);
+  const [bankCompanies, setBankCompanies] = useState<string[]>([]);
+  const [bankLoading, setBankLoading] = useState(false);
+  const [bankSelected, setBankSelected] = useState<Set<string>>(new Set());
+  const [bankAddingLoading, setBankAddingLoading] = useState(false);
+  const [bankSuggestLoading, setBankSuggestLoading] = useState(false);
+
   function addQuestion() {
     setQuestions((prev) => [...prev, emptyQuestion()]);
   }
@@ -102,6 +137,127 @@ export default function NewInterviewPage() {
     setQuestions((prev) =>
       prev.map((q) => (q.id === id ? { ...q, ...updates } : q))
     );
+  }
+
+  async function fetchBankProblems(pageNum = 1) {
+    setBankLoading(true);
+    try {
+      const params = new URLSearchParams({ page: String(pageNum), limit: "20" });
+      if (bankSearch) params.set("search", bankSearch);
+      if (bankDifficulty) params.set("difficulty", bankDifficulty);
+      if (bankCategory) params.set("category", bankCategory);
+      if (bankCompany) params.set("company", bankCompany);
+
+      const res = await fetch(`/api/problems/bank?${params}`);
+      const data = await res.json();
+
+      if (res.ok) {
+        setBankProblems(data.problems);
+        setBankTotal(data.total);
+        setBankPage(data.page);
+        setBankTotalPages(data.totalPages);
+        if (data.filters) {
+          setBankCategories(data.filters.categories || []);
+          setBankCompanies(data.filters.companies || []);
+        }
+      }
+    } catch {
+      // silently fail
+    } finally {
+      setBankLoading(false);
+    }
+  }
+
+  function toggleBankSelection(problemId: string) {
+    setBankSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(problemId)) {
+        next.delete(problemId);
+      } else {
+        next.add(problemId);
+      }
+      return next;
+    });
+  }
+
+  async function handleAutoSuggest() {
+    setBankSuggestLoading(true);
+    try {
+      const params = new URLSearchParams({
+        count: "3",
+        seniority,
+      });
+      if (bankDifficulty) params.set("difficulty", bankDifficulty);
+      if (bankCompany) params.set("company", bankCompany);
+
+      const res = await fetch(`/api/problems/bank/suggest?${params}`);
+      const data = await res.json();
+
+      if (res.ok && data.problems) {
+        setBankSelected(new Set(data.problems.map((p: { id: string }) => p.id)));
+      }
+    } catch {
+      // silently fail
+    } finally {
+      setBankSuggestLoading(false);
+    }
+  }
+
+  async function handleAddSelectedBankProblems() {
+    if (bankSelected.size === 0) return;
+    setBankAddingLoading(true);
+    setError("");
+
+    try {
+      const selectedProblems = bankProblems.filter((p) => bankSelected.has(p.id));
+      const newQuestions: Question[] = [];
+
+      for (const problem of selectedProblems) {
+        // Enrich the problem if needed
+        let enriched = problem;
+        if (!problem.enriched) {
+          try {
+            const res = await fetch("/api/problems/bank/enrich", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ bankProblemId: problem.id }),
+            });
+            if (res.ok) {
+              enriched = await res.json();
+            }
+          } catch {
+            // Use unenriched version
+          }
+        }
+
+        newQuestions.push({
+          id: generateId(),
+          title: enriched.title,
+          description: enriched.description,
+          constraints: enriched.constraints || "",
+          examples: enriched.examples || "",
+          difficulty: enriched.difficulty,
+          aiLevel: -1,
+          timeLimit: enriched.difficulty === "HARD" ? 45 : enriched.difficulty === "MEDIUM" ? 30 : 20,
+          testCases: null,
+          starterCode: enriched.starterCode ? JSON.stringify(enriched.starterCode) : null,
+        });
+      }
+
+      setQuestions((prev) => {
+        const hasOnlyEmptyQuestion =
+          prev.length === 1 && !prev[0].title && !prev[0].description;
+        if (hasOnlyEmptyQuestion) return newQuestions;
+        return [...prev, ...newQuestions];
+      });
+
+      setBankSelected(new Set());
+      setShowBankPanel(false);
+    } catch {
+      setError("Failed to add selected problems.");
+    } finally {
+      setBankAddingLoading(false);
+    }
   }
 
   async function handleGenerateInterview() {
@@ -176,6 +332,8 @@ export default function NewInterviewPage() {
           difficulty: string;
           aiLevel: number;
           timeLimit: number;
+          testCases?: string | null;
+          starterCode?: string | null;
         }) => ({
           id: generateId(),
           title: q.title,
@@ -185,6 +343,8 @@ export default function NewInterviewPage() {
           difficulty: q.difficulty,
           aiLevel: q.aiLevel === template.defaultAiLevel ? -1 : q.aiLevel,
           timeLimit: q.timeLimit,
+          testCases: q.testCases ?? null,
+          starterCode: q.starterCode ?? null,
         })
       );
 
@@ -241,6 +401,8 @@ export default function NewInterviewPage() {
           difficulty: string;
           aiLevel: number;
           timeLimit: number;
+          testCases?: string | null;
+          starterCode?: string | null;
         }) => ({
           id: generateId(),
           title: q.title,
@@ -250,6 +412,8 @@ export default function NewInterviewPage() {
           difficulty: q.difficulty,
           aiLevel: q.aiLevel === defaultAiLevel ? -1 : q.aiLevel,
           timeLimit: q.timeLimit,
+          testCases: q.testCases ?? null,
+          starterCode: q.starterCode ?? null,
         })
       );
 
@@ -296,6 +460,8 @@ export default function NewInterviewPage() {
           difficulty: q.difficulty,
           aiLevel: q.aiLevel === -1 ? undefined : q.aiLevel,
           timeLimit: q.timeLimit,
+          testCases: q.testCases || undefined,
+          starterCode: q.starterCode || undefined,
         })),
       };
 
@@ -587,6 +753,19 @@ export default function NewInterviewPage() {
             <div className="flex items-center gap-3">
               <button
                 type="button"
+                onClick={() => {
+                  setShowBankPanel((v) => !v);
+                  if (!showBankPanel) fetchBankProblems(1);
+                }}
+                className="inline-flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-400 transition-colors hover:bg-emerald-500/20 hover:text-emerald-300"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+                Browse Problem Bank
+              </button>
+              <button
+                type="button"
                 onClick={() => setShowAiQuestionsModal(true)}
                 className="inline-flex items-center gap-2 rounded-lg border border-purple-500/30 bg-purple-500/10 px-4 py-2 text-sm font-medium text-purple-400 transition-colors hover:bg-purple-500/20 hover:text-purple-300"
               >
@@ -710,6 +889,232 @@ export default function NewInterviewPage() {
                       </svg>
                       Generate Questions
                     </>
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Problem Bank Panel */}
+          {showBankPanel && (
+            <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-sm font-semibold text-emerald-400">
+                  Problem Bank ({bankTotal} problems)
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setShowBankPanel(false)}
+                  className="text-gray-400 hover:text-gray-300 transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Search & Filters */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
+                <div>
+                  <input
+                    type="text"
+                    value={bankSearch}
+                    onChange={(e) => setBankSearch(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        fetchBankProblems(1);
+                      }
+                    }}
+                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    placeholder="Search problems..."
+                  />
+                </div>
+                <div>
+                  <select
+                    value={bankDifficulty}
+                    onChange={(e) => setBankDifficulty(e.target.value)}
+                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  >
+                    <option value="">All Difficulties</option>
+                    <option value="EASY">Easy</option>
+                    <option value="MEDIUM">Medium</option>
+                    <option value="HARD">Hard</option>
+                  </select>
+                </div>
+                <div>
+                  <select
+                    value={bankCategory}
+                    onChange={(e) => setBankCategory(e.target.value)}
+                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  >
+                    <option value="">All Categories</option>
+                    {bankCategories.map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <select
+                    value={bankCompany}
+                    onChange={(e) => setBankCompany(e.target.value)}
+                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  >
+                    <option value="">All Companies</option>
+                    {bankCompanies.map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 mb-4">
+                <button
+                  type="button"
+                  onClick={() => fetchBankProblems(1)}
+                  disabled={bankLoading}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-500 disabled:opacity-50"
+                >
+                  {bankLoading ? "Searching..." : "Search"}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleAutoSuggest}
+                  disabled={bankSuggestLoading}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-medium text-emerald-400 hover:bg-emerald-500/20 disabled:opacity-50"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  {bankSuggestLoading ? "Suggesting..." : `Auto-Select for ${seniority}`}
+                </button>
+                {bankSelected.size > 0 && (
+                  <span className="text-xs text-emerald-400">
+                    {bankSelected.size} selected
+                  </span>
+                )}
+              </div>
+
+              {/* Problem List */}
+              <div className="max-h-80 overflow-y-auto space-y-2 mb-4">
+                {bankProblems.map((problem) => (
+                  <label
+                    key={problem.id}
+                    className={`flex items-start gap-3 rounded-lg border p-3 cursor-pointer transition-colors ${
+                      bankSelected.has(problem.id)
+                        ? "border-emerald-500/50 bg-emerald-500/10"
+                        : "border-gray-700 bg-gray-800 hover:border-gray-600"
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={bankSelected.has(problem.id)}
+                      onChange={() => toggleBankSelection(problem.id)}
+                      className="mt-1 rounded border-gray-600 text-emerald-500 focus:ring-emerald-500 bg-gray-700"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm font-medium text-white truncate">
+                          {problem.title}
+                        </span>
+                        <span
+                          className={`inline-flex shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium ${
+                            problem.difficulty === "EASY"
+                              ? "bg-green-500/10 text-green-400"
+                              : problem.difficulty === "MEDIUM"
+                                ? "bg-yellow-500/10 text-yellow-400"
+                                : "bg-red-500/10 text-red-400"
+                          }`}
+                        >
+                          {problem.difficulty}
+                        </span>
+                        {problem.company && (
+                          <span className="text-[10px] text-gray-500 shrink-0">
+                            {problem.company}
+                          </span>
+                        )}
+                        {problem.enriched && (
+                          <span className="text-[10px] text-emerald-500 shrink-0">enriched</span>
+                        )}
+                      </div>
+                      <p className="text-xs text-gray-400 line-clamp-1">
+                        {problem.description}
+                      </p>
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {problem.tags.slice(0, 4).map((tag) => (
+                          <span
+                            key={tag}
+                            className="rounded bg-gray-700 px-1.5 py-0.5 text-[10px] text-gray-400"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </label>
+                ))}
+                {bankProblems.length === 0 && !bankLoading && (
+                  <p className="text-sm text-gray-500 text-center py-6">
+                    No problems found. Try adjusting your filters.
+                  </p>
+                )}
+                {bankLoading && (
+                  <p className="text-sm text-gray-500 text-center py-6">
+                    Loading problems...
+                  </p>
+                )}
+              </div>
+
+              {/* Pagination */}
+              {bankTotalPages > 1 && (
+                <div className="flex items-center justify-center gap-2 mb-4">
+                  <button
+                    type="button"
+                    disabled={bankPage <= 1}
+                    onClick={() => fetchBankProblems(bankPage - 1)}
+                    className="rounded border border-gray-700 bg-gray-800 px-3 py-1 text-xs text-gray-300 hover:bg-gray-700 disabled:opacity-50"
+                  >
+                    Prev
+                  </button>
+                  <span className="text-xs text-gray-400">
+                    Page {bankPage} of {bankTotalPages}
+                  </span>
+                  <button
+                    type="button"
+                    disabled={bankPage >= bankTotalPages}
+                    onClick={() => fetchBankProblems(bankPage + 1)}
+                    className="rounded border border-gray-700 bg-gray-800 px-3 py-1 text-xs text-gray-300 hover:bg-gray-700 disabled:opacity-50"
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
+
+              {/* Add Selected Button */}
+              <div className="flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowBankPanel(false)}
+                  className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-700"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  disabled={bankSelected.size === 0 || bankAddingLoading}
+                  onClick={handleAddSelectedBankProblems}
+                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-2 text-sm font-semibold text-white transition-all hover:from-emerald-500 hover:to-teal-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {bankAddingLoading ? (
+                    <>
+                      <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                      Enriching & Adding...
+                    </>
+                  ) : (
+                    `Add ${bankSelected.size} Selected`
                   )}
                 </button>
               </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import Editor from "@monaco-editor/react";
 import SessionProtections from "@/components/SessionProtections";
 import ScreenCapture from "@/components/ScreenCapture";
@@ -17,6 +17,20 @@ interface Question {
   aiLevel: number;
   timeLimit: number;
   orderIndex: number;
+  testCases: string | null;
+  starterCode: string | null;
+}
+
+interface TestCase {
+  input: string;
+  expected: string;
+}
+
+interface TestResult {
+  input: string;
+  expected: string;
+  actual: string;
+  passed: boolean;
 }
 
 interface SessionData {
@@ -68,16 +82,67 @@ const aiLevelLabels: Record<number, { label: string; color: string }> = {
   4: { label: "L4 Copilot", color: "text-green-400" },
 };
 
-const difficultyColors: Record<string, string> = {
-  EASY: "text-green-400",
-  MEDIUM: "text-yellow-400",
-  HARD: "text-red-400",
+const difficultyBadge: Record<string, { bg: string; text: string }> = {
+  EASY: { bg: "bg-green-500/15 border-green-500/30", text: "text-green-400" },
+  MEDIUM: { bg: "bg-yellow-500/15 border-yellow-500/30", text: "text-yellow-400" },
+  HARD: { bg: "bg-red-500/15 border-red-500/30", text: "text-red-400" },
 };
 
+function getStarterCode(question: Question, lang: string): string {
+  if (!question.starterCode) return "";
+  try {
+    const parsed = JSON.parse(question.starterCode);
+    return parsed[lang] || "";
+  } catch {
+    return "";
+  }
+}
+
+function parseTestCases(question: Question): TestCase[] {
+  if (!question.testCases) return [];
+  try {
+    const parsed = JSON.parse(question.testCases);
+    if (Array.isArray(parsed)) return parsed;
+    return [];
+  } catch {
+    return [];
+  }
+}
+
 export default function CandidateSessionView({ sessionData, sessionId, userId }: CandidateSessionViewProps) {
-  const [code, setCode] = useState(sessionData.code || "// Start coding here...\n");
-  const [language, setLanguage] = useState(sessionData.language || "javascript");
+  const questions = sessionData.template.questions;
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(sessionData.currentQuestionIndex || 0);
+  const currentQuestion = questions[currentQuestionIndex];
+
+  // Per-question code storage: { [questionIndex-lang]: code }
+  const [codeMap, setCodeMap] = useState<Record<string, string>>(() => {
+    const map: Record<string, string> = {};
+    // Initialize with session code for current question if available
+    if (sessionData.code) {
+      const lang = sessionData.language || "javascript";
+      map[`${sessionData.currentQuestionIndex || 0}-${lang}`] = sessionData.code;
+    }
+    return map;
+  });
+  const [language, setLanguage] = useState(sessionData.language || "javascript");
+
+  // Derive current code from codeMap or starter code
+  const code = useMemo(() => {
+    const key = `${currentQuestionIndex}-${language}`;
+    if (codeMap[key] !== undefined) return codeMap[key];
+    // Fall back to starter code for this language
+    if (currentQuestion) {
+      const starter = getStarterCode(currentQuestion, language);
+      if (starter) return starter;
+    }
+    return "// Start coding here...\n";
+  }, [codeMap, currentQuestionIndex, language, currentQuestion]);
+
+  const setCode = useCallback((newCode: string) => {
+    const key = `${currentQuestionIndex}-${language}`;
+    setCodeMap(prev => ({ ...prev, [key]: newCode }));
+  }, [currentQuestionIndex, language]);
+
   const [aiPrompt, setAiPrompt] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
   const [aiMessages, setAiMessages] = useState<
@@ -85,11 +150,22 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
   >([]);
   const [runOutput, setRunOutput] = useState<{ output: string; error: string; exitCode: number } | null>(null);
   const [running, setRunning] = useState(false);
-  const [showOutput, setShowOutput] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [timeExpired, setTimeExpired] = useState(false);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+
+  // Bottom panel state
+  const [bottomTab, setBottomTab] = useState<"testcases" | "results" | "console">("testcases");
+  const [bottomPanelOpen, setBottomPanelOpen] = useState(true);
+  const [activeTestCaseIndex, setActiveTestCaseIndex] = useState(0);
+  const [testResults, setTestResults] = useState<TestResult[] | null>(null);
+  const [runningTests, setRunningTests] = useState(false);
+
   const aiChatRef = useRef<HTMLDivElement>(null);
   const saveTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Parse test cases for current question
+  const testCases = useMemo(() => parseTestCases(currentQuestion), [currentQuestion]);
 
   // Calculate elapsed time from startedAt
   const [elapsedTime, setElapsedTime] = useState(() => {
@@ -120,8 +196,6 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
       if (sessionData.startedAt) {
         const elapsed = Math.floor((Date.now() - new Date(sessionData.startedAt).getTime()) / 1000);
         setElapsedTime(elapsed);
-
-        // Check time expiry
         if (totalDurationSeconds > 0 && elapsed >= totalDurationSeconds) {
           setTimeExpired(true);
         }
@@ -194,11 +268,12 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
     }
   }, [aiMessages]);
 
-  // Run code
+  // Run code (Console output only)
   const runCode = useCallback(async () => {
-    if (running || timeExpired) return;
+    if (running || runningTests || timeExpired) return;
     setRunning(true);
-    setShowOutput(true);
+    setBottomPanelOpen(true);
+    setBottomTab("console");
     setRunOutput(null);
     try {
       if (language === "javascript" || language === "typescript") {
@@ -227,19 +302,91 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
     } finally {
       setRunning(false);
     }
-  }, [language, code, running, timeExpired]);
+  }, [language, code, running, runningTests, timeExpired]);
 
-  // Keyboard shortcut
+  // Run tests against test cases (JS/TS only via Web Worker)
+  const runTests = useCallback(async () => {
+    if (running || runningTests || timeExpired) return;
+    if (testCases.length === 0) return;
+
+    if (language !== "javascript" && language !== "typescript") {
+      setBottomPanelOpen(true);
+      setBottomTab("results");
+      setTestResults([]);
+      return;
+    }
+
+    setRunningTests(true);
+    setBottomPanelOpen(true);
+    setBottomTab("results");
+    setTestResults(null);
+
+    const { runJavaScriptInWorker } = await import("@/lib/code-runner");
+    const results: TestResult[] = [];
+
+    for (const tc of testCases) {
+      const testCode = `${code}\nconsole.log(JSON.stringify(${tc.input}));`;
+      try {
+        const result = await runJavaScriptInWorker(testCode);
+        const actual = result.output.trim();
+        // Normalize for comparison: parse JSON if possible
+        let passed = false;
+        try {
+          const actualParsed = JSON.stringify(JSON.parse(actual));
+          const expectedParsed = JSON.stringify(JSON.parse(tc.expected));
+          passed = actualParsed === expectedParsed;
+        } catch {
+          passed = actual === tc.expected.trim();
+        }
+        results.push({
+          input: tc.input,
+          expected: tc.expected,
+          actual: result.error ? `Error: ${result.error}` : actual,
+          passed: result.error ? false : passed,
+        });
+      } catch {
+        results.push({
+          input: tc.input,
+          expected: tc.expected,
+          actual: "Execution error",
+          passed: false,
+        });
+      }
+    }
+
+    setTestResults(results);
+    setRunningTests(false);
+  }, [language, code, running, runningTests, timeExpired, testCases]);
+
+  // Reset code to starter code
+  const handleResetCode = useCallback(() => {
+    if (!currentQuestion) return;
+    const starter = getStarterCode(currentQuestion, language);
+    setCode(starter || "// Start coding here...\n");
+    setShowResetConfirm(false);
+  }, [currentQuestion, language, setCode]);
+
+  // Keyboard shortcuts
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.ctrlKey && e.key === "Enter") {
+      if (e.ctrlKey && e.shiftKey && e.key === "Enter") {
+        e.preventDefault();
+        runTests();
+      } else if (e.ctrlKey && e.key === "Enter") {
         e.preventDefault();
         runCode();
       }
     }
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [runCode]);
+  }, [runCode, runTests]);
+
+  // Reset test results when switching questions
+  useEffect(() => {
+    setTestResults(null);
+    setRunOutput(null);
+    setActiveTestCaseIndex(0);
+  }, [currentQuestionIndex]);
 
   function formatTime(seconds: number): string {
     const hrs = Math.floor(seconds / 3600);
@@ -251,8 +398,6 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   }
 
-  const questions = sessionData.template.questions;
-  const currentQuestion = questions[currentQuestionIndex];
   const currentAiLevel = currentQuestion?.aiLevel ?? sessionData.aiLevel;
   const isNonCoding = ["BEHAVIORAL", "BUSINESS_ANALYST", "PROJECT_MANAGEMENT"].includes(
     sessionData.template.interviewType || ""
@@ -262,11 +407,98 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
 
   // Determine remaining time
   const remainingSeconds = totalDurationSeconds > 0 ? Math.max(0, totalDurationSeconds - elapsedTime) : null;
-  const isLowTime = remainingSeconds !== null && remainingSeconds < 300; // less than 5 minutes
+  const isLowTime = remainingSeconds !== null && remainingSeconds < 300;
+
+  // Parse constraints into bullet items
+  const constraintItems = useMemo(() => {
+    if (!currentQuestion?.constraints) return [];
+    return currentQuestion.constraints
+      .split("\n")
+      .map(c => c.trim())
+      .filter(c => c.length > 0);
+  }, [currentQuestion]);
+
+  // Parse examples into structured blocks
+  const parsedExamples = useMemo(() => {
+    if (!currentQuestion?.examples) return [];
+    const raw = currentQuestion.examples;
+    // Split on "Example N:" or numbered patterns
+    const blocks = raw.split(/(?=Example\s*\d|Input\s*:)/i).filter(b => b.trim());
+    const examples: { input?: string; output?: string; explanation?: string }[] = [];
+
+    // Try to parse structured examples
+    let current: { input?: string; output?: string; explanation?: string } = {};
+    for (const line of raw.split("\n")) {
+      const trimmed = line.trim();
+      if (/^(Example\s*\d)/i.test(trimmed)) {
+        if (current.input || current.output) {
+          examples.push(current);
+          current = {};
+        }
+      } else if (/^Input\s*:/i.test(trimmed)) {
+        if (current.input) {
+          examples.push(current);
+          current = {};
+        }
+        current.input = trimmed.replace(/^Input\s*:\s*/i, "");
+      } else if (/^Output\s*:/i.test(trimmed)) {
+        current.output = trimmed.replace(/^Output\s*:\s*/i, "");
+      } else if (/^Explanation\s*:/i.test(trimmed)) {
+        current.explanation = trimmed.replace(/^Explanation\s*:\s*/i, "");
+      } else if (current.explanation !== undefined) {
+        current.explanation += " " + trimmed;
+      } else if (current.output !== undefined && !current.explanation) {
+        // continuation of output
+      } else if (current.input !== undefined && current.output === undefined) {
+        current.input += " " + trimmed;
+      }
+    }
+    if (current.input || current.output) examples.push(current);
+
+    // If structured parsing found nothing, return the blocks as-is
+    if (examples.length === 0 && blocks.length > 0) {
+      return blocks.map(b => ({ input: b.trim(), output: undefined, explanation: undefined }));
+    }
+    return examples;
+  }, [currentQuestion]);
+
+  // Test results summary
+  const testSummary = useMemo(() => {
+    if (!testResults) return null;
+    const passed = testResults.filter(r => r.passed).length;
+    return { passed, total: testResults.length, allPassed: passed === testResults.length };
+  }, [testResults]);
 
   return (
     <div className="flex h-screen flex-col bg-gray-950 overflow-hidden">
       <SessionProtections sessionId={sessionId} />
+
+      {/* Reset Code Confirmation Modal */}
+      {showResetConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="rounded-xl border border-gray-700 bg-gray-900 p-6 text-center max-w-sm">
+            <h3 className="text-lg font-semibold text-white mb-2">Reset Code?</h3>
+            <p className="text-sm text-gray-400 mb-5">
+              This will replace your current code with the starter template. This cannot be undone.
+            </p>
+            <div className="flex justify-center gap-3">
+              <button
+                onClick={() => setShowResetConfirm(false)}
+                className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleResetCode}
+                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-500 transition-colors"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Time Expired Overlay */}
       {timeExpired && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
@@ -295,7 +527,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
           <span className="text-sm text-gray-300">{sessionData.template.title}</span>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <VideoCall sessionId={sessionId} userId={userId} />
           <ScreenCapture sessionId={sessionId} isInterviewer={false} />
 
@@ -368,12 +600,27 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
             </svg>
           </button>
 
-          {/* Run Button */}
+          {/* Reset Code Button */}
+          {!isNonCoding && (
+            <button
+              onClick={() => setShowResetConfirm(true)}
+              disabled={timeExpired}
+              className="inline-flex items-center gap-1 rounded-lg border border-gray-700 bg-gray-800 px-2.5 py-1.5 text-xs text-gray-400 hover:text-white hover:bg-gray-700 disabled:opacity-50 transition-colors"
+              title="Reset to starter code"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Reset
+            </button>
+          )}
+
+          {/* Run Code Button */}
           {!isNonCoding && (
             <button
               onClick={runCode}
-              disabled={running || timeExpired}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-green-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-500 disabled:opacity-50 transition-colors"
+              disabled={running || runningTests || timeExpired}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-gray-700 px-3 py-1.5 text-xs font-medium text-gray-200 hover:bg-gray-600 disabled:opacity-50 transition-colors"
             >
               {running ? (
                 <svg className="animate-spin w-3.5 h-3.5" viewBox="0 0 24 24">
@@ -385,8 +632,30 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
                   <path d="M8 5v14l11-7z" />
                 </svg>
               )}
-              {running ? "Running..." : "Run"}
-              <span className="text-green-300 text-[10px]">Ctrl+Enter</span>
+              {running ? "Running..." : "Run Code"}
+              <span className="text-gray-400 text-[10px]">Ctrl+Enter</span>
+            </button>
+          )}
+
+          {/* Run Tests Button */}
+          {!isNonCoding && testCases.length > 0 && (
+            <button
+              onClick={runTests}
+              disabled={running || runningTests || timeExpired}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-green-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-500 disabled:opacity-50 transition-colors"
+            >
+              {runningTests ? (
+                <svg className="animate-spin w-3.5 h-3.5" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+              ) : (
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              )}
+              {runningTests ? "Testing..." : "Run Tests"}
+              <span className="text-green-300 text-[10px]">Ctrl+Shift+Enter</span>
             </button>
           )}
         </div>
@@ -402,7 +671,10 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
                 <span className="text-xs font-medium text-gray-500">
                   Q{currentQuestionIndex + 1}/{questions.length}
                 </span>
-                <span className={`text-xs font-medium ${difficultyColors[currentQuestion.difficulty] || "text-gray-400"}`}>
+                {/* Difficulty pill badge */}
+                <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold ${
+                  difficultyBadge[currentQuestion.difficulty]?.bg || ""
+                } ${difficultyBadge[currentQuestion.difficulty]?.text || "text-gray-400"}`}>
                   {currentQuestion.difficulty}
                 </span>
                 <span className="text-xs text-gray-500">{currentQuestion.timeLimit} min</span>
@@ -414,20 +686,59 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
                 <div>
                   <p className="whitespace-pre-wrap leading-relaxed">{currentQuestion.description}</p>
                 </div>
-                {currentQuestion.constraints && (
+
+                {/* Structured Examples */}
+                {parsedExamples.length > 0 && (
                   <div>
-                    <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Constraints</h4>
-                    <pre className="whitespace-pre-wrap font-mono text-xs bg-gray-800 rounded-lg p-3 text-gray-300">
-                      {currentQuestion.constraints}
-                    </pre>
+                    <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Examples</h4>
+                    <div className="space-y-3">
+                      {parsedExamples.map((ex, i) => (
+                        <div key={i} className="rounded-lg bg-gray-800/70 border border-gray-700/50 p-3 space-y-1.5">
+                          {ex.input && (
+                            <div>
+                              <span className="text-[10px] font-semibold uppercase text-gray-500">Input: </span>
+                              <code className="text-xs text-blue-300 font-mono">{ex.input}</code>
+                            </div>
+                          )}
+                          {ex.output && (
+                            <div>
+                              <span className="text-[10px] font-semibold uppercase text-gray-500">Output: </span>
+                              <code className="text-xs text-green-300 font-mono">{ex.output}</code>
+                            </div>
+                          )}
+                          {ex.explanation && (
+                            <div>
+                              <span className="text-[10px] font-semibold uppercase text-gray-500">Explanation: </span>
+                              <span className="text-xs text-gray-400">{ex.explanation}</span>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
-                {currentQuestion.examples && (
+                {/* Fallback: raw examples if parsing produced nothing */}
+                {parsedExamples.length === 0 && currentQuestion.examples && (
                   <div>
                     <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Examples</h4>
                     <pre className="whitespace-pre-wrap font-mono text-xs bg-gray-800 rounded-lg p-3 text-gray-300">
                       {currentQuestion.examples}
                     </pre>
+                  </div>
+                )}
+
+                {/* Constraints as bullet list */}
+                {constraintItems.length > 0 && (
+                  <div>
+                    <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Constraints</h4>
+                    <ul className="space-y-1">
+                      {constraintItems.map((item, i) => (
+                        <li key={i} className="flex items-start gap-2 text-xs text-gray-300">
+                          <span className="text-gray-600 mt-0.5 shrink-0">&bull;</span>
+                          <code className="font-mono text-gray-300 bg-gray-800/50 px-1 rounded">{item}</code>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 )}
               </div>
@@ -437,10 +748,9 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
           )}
         </div>
 
-        {/* Center: Code Editor / Text Area + Output */}
+        {/* Center: Code Editor / Text Area + Bottom Panel */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {isNonCoding ? (
-            /* Non-coding: Rich text area for behavioral/PM/BA */
             <div className="flex-1 p-4">
               <textarea
                 value={code}
@@ -452,9 +762,10 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
             </div>
           ) : (
             <>
-              <div className="flex-1">
+              {/* Editor */}
+              <div className="flex-1 min-h-0">
                 <Editor
-                  height={showOutput ? "calc(100% - 200px)" : "100%"}
+                  height="100%"
                   language={isSql ? "sql" : language}
                   value={code}
                   onChange={(value) => !timeExpired && setCode(value || "")}
@@ -477,39 +788,212 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
                 />
               </div>
 
-              {/* Output Panel */}
-              {showOutput && (
-                <div className="h-[200px] border-t border-gray-800 bg-gray-900 flex flex-col shrink-0">
-                  <div className="flex items-center justify-between px-3 py-1.5 border-b border-gray-800">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold text-gray-400">Output</span>
-                      {runOutput && (
-                        <span className={`text-[10px] px-1.5 py-0.5 rounded ${runOutput.exitCode === 0 ? "bg-green-900/50 text-green-400" : "bg-red-900/50 text-red-400"}`}>
-                          {runOutput.exitCode === 0 ? "Success" : `Exit: ${runOutput.exitCode}`}
-                        </span>
-                      )}
-                    </div>
-                    <button onClick={() => setShowOutput(false)} className="text-gray-500 hover:text-gray-300 text-xs">Close</button>
+              {/* Bottom Panel - 3 tabs */}
+              <div className={`border-t border-gray-800 bg-gray-900 flex flex-col shrink-0 transition-all ${bottomPanelOpen ? "h-[280px]" : "h-[36px]"}`}>
+                {/* Tab bar */}
+                <div className="flex items-center justify-between px-3 py-1 border-b border-gray-800 shrink-0">
+                  <div className="flex items-center gap-1">
+                    {testCases.length > 0 && (
+                      <button
+                        onClick={() => { setBottomTab("testcases"); setBottomPanelOpen(true); }}
+                        className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
+                          bottomTab === "testcases" && bottomPanelOpen
+                            ? "bg-gray-800 text-white"
+                            : "text-gray-500 hover:text-gray-300"
+                        }`}
+                      >
+                        Test Cases
+                      </button>
+                    )}
+                    {testCases.length > 0 && (
+                      <button
+                        onClick={() => { setBottomTab("results"); setBottomPanelOpen(true); }}
+                        className={`px-3 py-1 text-xs font-medium rounded transition-colors flex items-center gap-1.5 ${
+                          bottomTab === "results" && bottomPanelOpen
+                            ? "bg-gray-800 text-white"
+                            : "text-gray-500 hover:text-gray-300"
+                        }`}
+                      >
+                        Test Results
+                        {testSummary && (
+                          <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${
+                            testSummary.allPassed
+                              ? "bg-green-500/20 text-green-400"
+                              : "bg-red-500/20 text-red-400"
+                          }`}>
+                            {testSummary.passed}/{testSummary.total}
+                          </span>
+                        )}
+                      </button>
+                    )}
+                    <button
+                      onClick={() => { setBottomTab("console"); setBottomPanelOpen(true); }}
+                      className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
+                        bottomTab === "console" && bottomPanelOpen
+                          ? "bg-gray-800 text-white"
+                          : "text-gray-500 hover:text-gray-300"
+                      }`}
+                    >
+                      Console
+                    </button>
                   </div>
-                  <div className="flex-1 overflow-auto p-3">
-                    {running ? (
-                      <div className="flex items-center gap-2 text-xs text-gray-400">
-                        <svg className="animate-spin w-3 h-3" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                        </svg>
-                        Running code...
-                      </div>
-                    ) : runOutput ? (
-                      <pre className="font-mono text-xs whitespace-pre-wrap">
-                        {runOutput.output && <span className="text-gray-300">{runOutput.output}</span>}
-                        {runOutput.error && <span className="text-red-400">{runOutput.error}</span>}
-                        {!runOutput.output && !runOutput.error && <span className="text-gray-500">No output</span>}
-                      </pre>
-                    ) : null}
-                  </div>
+                  <button
+                    onClick={() => setBottomPanelOpen(!bottomPanelOpen)}
+                    className="text-gray-500 hover:text-gray-300 text-xs p-1"
+                    title={bottomPanelOpen ? "Collapse" : "Expand"}
+                  >
+                    <svg className={`w-4 h-4 transition-transform ${bottomPanelOpen ? "" : "rotate-180"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
                 </div>
-              )}
+
+                {/* Tab content */}
+                {bottomPanelOpen && (
+                  <div className="flex-1 overflow-auto">
+                    {/* Test Cases Tab */}
+                    {bottomTab === "testcases" && testCases.length > 0 && (
+                      <div className="p-3">
+                        {/* Case pills */}
+                        <div className="flex items-center gap-1 mb-3">
+                          {testCases.map((_, i) => (
+                            <button
+                              key={i}
+                              onClick={() => setActiveTestCaseIndex(i)}
+                              className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
+                                i === activeTestCaseIndex
+                                  ? "bg-gray-700 text-white"
+                                  : "bg-gray-800/50 text-gray-500 hover:text-gray-300"
+                              }`}
+                            >
+                              Case {i + 1}
+                            </button>
+                          ))}
+                        </div>
+                        {/* Selected case detail */}
+                        {testCases[activeTestCaseIndex] && (
+                          <div className="space-y-2">
+                            <div>
+                              <span className="text-[10px] font-semibold uppercase text-gray-500 block mb-1">Input</span>
+                              <div className="rounded bg-gray-800 px-3 py-2 font-mono text-xs text-gray-300">
+                                {testCases[activeTestCaseIndex].input}
+                              </div>
+                            </div>
+                            <div>
+                              <span className="text-[10px] font-semibold uppercase text-gray-500 block mb-1">Expected Output</span>
+                              <div className="rounded bg-gray-800 px-3 py-2 font-mono text-xs text-gray-300">
+                                {testCases[activeTestCaseIndex].expected}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Test Results Tab */}
+                    {bottomTab === "results" && (
+                      <div className="p-3">
+                        {language !== "javascript" && language !== "typescript" ? (
+                          <div className="flex items-center gap-2 text-xs text-gray-500 py-4 justify-center">
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Test cases only available for JavaScript/TypeScript
+                          </div>
+                        ) : runningTests ? (
+                          <div className="flex items-center gap-2 text-xs text-gray-400 py-4 justify-center">
+                            <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                            </svg>
+                            Running tests...
+                          </div>
+                        ) : testResults ? (
+                          <div className="space-y-2">
+                            {/* Summary bar */}
+                            {testSummary && (
+                              <div className={`rounded-lg px-3 py-2 text-xs font-medium ${
+                                testSummary.allPassed
+                                  ? "bg-green-500/10 border border-green-500/20 text-green-400"
+                                  : "bg-red-500/10 border border-red-500/20 text-red-400"
+                              }`}>
+                                {testSummary.allPassed
+                                  ? "All Passed"
+                                  : `${testSummary.passed}/${testSummary.total} passed`}
+                              </div>
+                            )}
+                            {/* Per-case results */}
+                            {testResults.map((r, i) => (
+                              <div key={i} className={`rounded-lg border p-3 ${
+                                r.passed
+                                  ? "border-green-500/20 bg-green-500/5"
+                                  : "border-red-500/20 bg-red-500/5"
+                              }`}>
+                                <div className="flex items-center gap-2 mb-2">
+                                  {r.passed ? (
+                                    <span className="text-green-400 text-xs font-semibold flex items-center gap-1">
+                                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                                      Case {i + 1} Passed
+                                    </span>
+                                  ) : (
+                                    <span className="text-red-400 text-xs font-semibold flex items-center gap-1">
+                                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
+                                      Case {i + 1} Failed
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="grid grid-cols-3 gap-2 text-xs">
+                                  <div>
+                                    <span className="text-[10px] font-semibold uppercase text-gray-500 block mb-0.5">Input</span>
+                                    <code className="font-mono text-gray-400 text-[11px]">{r.input}</code>
+                                  </div>
+                                  <div>
+                                    <span className="text-[10px] font-semibold uppercase text-gray-500 block mb-0.5">Expected</span>
+                                    <code className="font-mono text-gray-300 text-[11px]">{r.expected}</code>
+                                  </div>
+                                  <div>
+                                    <span className="text-[10px] font-semibold uppercase text-gray-500 block mb-0.5">Actual</span>
+                                    <code className={`font-mono text-[11px] ${r.passed ? "text-green-400" : "text-red-400"}`}>{r.actual || "(empty)"}</code>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="text-xs text-gray-500 py-4 text-center">
+                            Click &quot;Run Tests&quot; to execute test cases
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Console Tab */}
+                    {bottomTab === "console" && (
+                      <div className="p-3">
+                        {running ? (
+                          <div className="flex items-center gap-2 text-xs text-gray-400">
+                            <svg className="animate-spin w-3 h-3" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                            </svg>
+                            Running code...
+                          </div>
+                        ) : runOutput ? (
+                          <pre className="font-mono text-xs whitespace-pre-wrap">
+                            {runOutput.output && <span className="text-gray-300">{runOutput.output}</span>}
+                            {runOutput.error && <span className="text-red-400">{runOutput.error}</span>}
+                            {!runOutput.output && !runOutput.error && <span className="text-gray-500">No output</span>}
+                          </pre>
+                        ) : (
+                          <div className="text-xs text-gray-500 py-4 text-center">
+                            Click &quot;Run Code&quot; to see output
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             </>
           )}
         </div>

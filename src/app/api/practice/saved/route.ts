@@ -43,6 +43,7 @@ export async function GET() {
       examples: p.examples,
       tags: JSON.parse(p.tags),
       starterCode: p.starterCode ? JSON.parse(p.starterCode) : null,
+      testCases: p.testCases ? JSON.parse(p.testCases) : [],
       company: p.company,
       role: p.role,
       createdAt: p.createdAt,

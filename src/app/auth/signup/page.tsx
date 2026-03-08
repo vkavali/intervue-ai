@@ -124,7 +124,11 @@ function SignUpForm() {
           <div className="mb-8 text-center">
             <h1 className="text-2xl font-bold text-white">Create Your Account</h1>
             <p className="mt-2 text-sm text-gray-400">
-              Join Intervue.AI and transform your hiring process
+              {role === "CANDIDATE"
+                ? "Join Intervue.AI and ace your next coding interview"
+                : role === "INTERVIEWER"
+                  ? "Join Intervue.AI and conduct smarter interviews"
+                  : "Join Intervue.AI and transform your hiring process"}
             </p>
           </div>
 

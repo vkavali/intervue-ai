@@ -41,6 +41,8 @@ interface SessionData {
       aiLevel: number;
       timeLimit: number;
       orderIndex: number;
+      testCases: string | null;
+      starterCode: string | null;
     }[];
   };
   candidate: { id: string; name: string; email: string };

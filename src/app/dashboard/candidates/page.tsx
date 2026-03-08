@@ -271,7 +271,7 @@ export default async function CandidatePipelinePage() {
                 </div>
 
                 {/* Candidates Table */}
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto overflow-y-visible" style={{ overflow: "visible" }}>
                   <table className="w-full">
                     <thead>
                       <tr className="border-b border-gray-800/50 bg-gray-950/30">

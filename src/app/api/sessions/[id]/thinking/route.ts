@@ -101,16 +101,38 @@ export async function GET(
       return NextResponse.json(NOT_ENOUGH_DATA_RESPONSE)
     }
 
-    // Check cache
+    // Check in-memory cache first
     const cached = analysisCache.get(params.id)
     if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
       return NextResponse.json(cached.analysis)
     }
 
+    // Check DB for persisted analysis
+    const dbAnalysis = await prisma.thinkingAnalysis.findUnique({
+      where: { sessionId: params.id },
+    })
+
+    if (dbAnalysis) {
+      const analysis: ThinkingAnalysis = {
+        overallApproach: dbAnalysis.overallApproach,
+        thinkingPatterns: JSON.parse(dbAnalysis.thinkingPatterns),
+        problemSolvingStage: dbAnalysis.problemSolvingStage,
+        strengths: JSON.parse(dbAnalysis.strengths),
+        concerns: JSON.parse(dbAnalysis.concerns),
+        aiUsagePattern: dbAnalysis.aiUsagePattern,
+        suggestedFollowUp: JSON.parse(dbAnalysis.suggestedFollowUp),
+        confidenceLevel: dbAnalysis.confidenceLevel as ThinkingAnalysis['confidenceLevel'],
+      }
+      // Populate in-memory cache
+      analysisCache.set(params.id, { analysis, timestamp: Date.now() })
+      return NextResponse.json(analysis)
+    }
+
     // Generate fresh analysis
     const analysis = await generateThinkingAnalysis(interviewSession)
 
-    // Cache the result
+    // Persist to DB + update in-memory cache
+    await persistThinkingAnalysis(params.id, analysis)
     analysisCache.set(params.id, { analysis, timestamp: Date.now() })
 
     return NextResponse.json(analysis)
@@ -185,10 +207,11 @@ export async function POST(
       return NextResponse.json(NOT_ENOUGH_DATA_RESPONSE)
     }
 
-    // Generate fresh analysis
+    // Generate fresh analysis (bypasses cache)
     const analysis = await generateThinkingAnalysis(interviewSession)
 
-    // Update cache
+    // Persist to DB + update in-memory cache
+    await persistThinkingAnalysis(params.id, analysis)
     analysisCache.set(params.id, { analysis, timestamp: Date.now() })
 
     return NextResponse.json(analysis)
@@ -352,4 +375,34 @@ Respond with ONLY the JSON object, no markdown fences.`
   analysis.suggestedFollowUp = analysis.suggestedFollowUp || []
 
   return analysis
+}
+
+async function persistThinkingAnalysis(
+  sessionId: string,
+  analysis: ThinkingAnalysis
+): Promise<void> {
+  await prisma.thinkingAnalysis.upsert({
+    where: { sessionId },
+    update: {
+      overallApproach: analysis.overallApproach,
+      thinkingPatterns: JSON.stringify(analysis.thinkingPatterns),
+      problemSolvingStage: analysis.problemSolvingStage,
+      strengths: JSON.stringify(analysis.strengths),
+      concerns: JSON.stringify(analysis.concerns),
+      aiUsagePattern: analysis.aiUsagePattern,
+      suggestedFollowUp: JSON.stringify(analysis.suggestedFollowUp),
+      confidenceLevel: analysis.confidenceLevel,
+    },
+    create: {
+      sessionId,
+      overallApproach: analysis.overallApproach,
+      thinkingPatterns: JSON.stringify(analysis.thinkingPatterns),
+      problemSolvingStage: analysis.problemSolvingStage,
+      strengths: JSON.stringify(analysis.strengths),
+      concerns: JSON.stringify(analysis.concerns),
+      aiUsagePattern: analysis.aiUsagePattern,
+      suggestedFollowUp: JSON.stringify(analysis.suggestedFollowUp),
+      confidenceLevel: analysis.confidenceLevel,
+    },
+  })
 }

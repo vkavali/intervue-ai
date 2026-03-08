@@ -95,7 +95,19 @@ You must respond with ONLY a valid JSON object (no markdown fences, no extra tex
         "difficulty": "EASY | MEDIUM | HARD",
         "aiLevel": "number 0-4 - AI level for this specific question",
         "timeLimit": "number - time limit in minutes",
-        "orderIndex": "number - 0-based question order"
+        "orderIndex": "number - 0-based question order",
+        "testCases": [
+          {
+            "input": "string - the function call or input expression, e.g. twoSum([2,7,11,15], 9)",
+            "expected": "string - the expected output as a string, e.g. [0,1]"
+          }
+        ],
+        "starterCode": {
+          "javascript": "string - JavaScript function stub",
+          "python": "string - Python function stub",
+          "typescript": "string - TypeScript function stub",
+          "java": "string - Java method stub"
+        }
       }
     ]
   },
@@ -117,6 +129,9 @@ Guidelines:
 - Provide actionable assessment criteria and interviewer guidance
 - Ensure the total time of all questions is reasonable (typically 30-90 minutes)
 - Questions should progress in difficulty and build on related concepts
+- For each coding question, generate 3-5 test cases with clear input expressions and expected output strings. Test cases should cover normal cases, edge cases, and boundary conditions.
+- For each coding question, generate starter code stubs (function signature with empty body) for javascript, python, typescript, and java. The function name must match what the test case inputs reference.
+- For non-coding interview types (BEHAVIORAL, PROJECT_MANAGEMENT, BUSINESS_ANALYST), omit testCases and starterCode (set them to null or empty).
 - IMPORTANT: Generate questions ONLY relevant to the specified role, interview type, and industry. Do NOT generate general knowledge, trivia, geography, history, or off-topic content.
 - If the interviewType is BEHAVIORAL, PROJECT_MANAGEMENT, or BUSINESS_ANALYST, generate scenario-based and situational questions, NOT coding/algorithm questions.
 - For DEVOPS interviews: generate infrastructure, CI/CD, cloud, monitoring, and deployment questions, NOT coding algorithm problems.
@@ -177,6 +192,8 @@ ${industry ? `Additional context - Industry: ${industry}` : ""}`
           aiLevel: number
           timeLimit: number
           orderIndex: number
+          testCases?: Array<{ input: string; expected: string }> | null
+          starterCode?: Record<string, string> | null
         }>
       }
       assessmentCriteria: string
@@ -235,6 +252,12 @@ ${industry ? `Additional context - Industry: ${industry}` : ""}`
             ? q.timeLimit
             : 30,
         orderIndex: typeof q.orderIndex === "number" ? q.orderIndex : index,
+        testCases: Array.isArray(q.testCases) && q.testCases.length > 0
+          ? JSON.stringify(q.testCases)
+          : null,
+        starterCode: q.starterCode && typeof q.starterCode === "object"
+          ? JSON.stringify(q.starterCode)
+          : null,
       })),
     }
 

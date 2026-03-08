@@ -29,6 +29,11 @@ const difficultyColors: Record<string, string> = {
   HARD: "text-red-400",
 };
 
+interface TestCase {
+  input: string;
+  expected: string;
+}
+
 interface CustomProblem {
   id: string;
   title: string;
@@ -38,6 +43,14 @@ interface CustomProblem {
   examples?: string;
   tags?: string[];
   starterCode?: Record<string, string>;
+  testCases?: TestCase[];
+}
+
+interface TestResult {
+  input: string;
+  expected: string;
+  actual: string;
+  passed: boolean;
 }
 
 function CustomPracticeContent() {
@@ -59,6 +72,9 @@ function CustomPracticeContent() {
     exitCode: number;
   } | null>(null);
   const [showOutput, setShowOutput] = useState(false);
+  const [outputTab, setOutputTab] = useState<"output" | "testcases">("testcases");
+  const [testResults, setTestResults] = useState<TestResult[]>([]);
+  const [runningTests, setRunningTests] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
   const aiChatRef = useRef<HTMLDivElement>(null);
 
@@ -137,6 +153,7 @@ function CustomPracticeContent() {
     if (executing) return;
     setExecuting(true);
     setShowOutput(true);
+    setOutputTab("output");
     setExecOutput(null);
 
     try {
@@ -176,6 +193,44 @@ function CustomPracticeContent() {
       setExecuting(false);
     }
   }, [language, code, executing]);
+
+  // Run test cases
+  const handleRunTests = useCallback(async () => {
+    if (runningTests || !problem?.testCases?.length) return;
+    if (language !== "javascript" && language !== "typescript") {
+      setTestResults([{
+        input: "--",
+        expected: "--",
+        actual: "Test cases only run with JavaScript/TypeScript in the browser.",
+        passed: false,
+      }]);
+      setShowOutput(true);
+      setOutputTab("testcases");
+      return;
+    }
+
+    setRunningTests(true);
+    setShowOutput(true);
+    setOutputTab("testcases");
+    const results: TestResult[] = [];
+
+    for (const tc of problem.testCases) {
+      try {
+        const testCode = `${code}\nconsole.log(JSON.stringify(${tc.input}));`;
+        const { runJavaScriptInWorker } = await import("@/lib/code-runner");
+        const result = await runJavaScriptInWorker(testCode);
+        const actual = (result.output || "").trim();
+        const expected = tc.expected.trim();
+        const passed = actual === expected || actual === JSON.stringify(JSON.parse(expected));
+        results.push({ input: tc.input, expected, actual: result.error ? `Error: ${result.error}` : actual, passed: !result.error && passed });
+      } catch {
+        results.push({ input: tc.input, expected: tc.expected, actual: "Execution error", passed: false });
+      }
+    }
+
+    setTestResults(results);
+    setRunningTests(false);
+  }, [runningTests, problem, code, language]);
 
   // AI chat
   async function handleAiSubmit(e: React.FormEvent) {
@@ -217,6 +272,9 @@ function CustomPracticeContent() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleRunCode]);
+
+  const hasTestCases = !!(problem?.testCases && problem.testCases.length > 0);
+  const passedCount = testResults.filter((r) => r.passed).length;
 
   if (!problem) {
     return (
@@ -299,6 +357,26 @@ function CustomPracticeContent() {
             {executing ? "Running..." : "Run"}
             <span className="text-green-300 text-[10px]">Ctrl+Enter</span>
           </button>
+
+          {hasTestCases && (
+            <button
+              onClick={handleRunTests}
+              disabled={runningTests}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-500 disabled:opacity-50 transition-colors"
+            >
+              {runningTests ? (
+                <svg className="animate-spin w-3.5 h-3.5" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+              ) : (
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg>
+              )}
+              {runningTests ? "Testing..." : "Run Tests"}
+            </button>
+          )}
         </div>
       </div>
 
@@ -324,7 +402,7 @@ function CustomPracticeContent() {
           </div>
         </div>
 
-        {/* Center: Editor + Output */}
+        {/* Center: Editor + Output/Test Cases */}
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex-1">
             <Editor
@@ -342,12 +420,38 @@ function CustomPracticeContent() {
             {showOutput && (
               <div className="h-[40%] border-t border-gray-800 bg-gray-900 flex flex-col">
                 <div className="flex items-center justify-between px-4 py-2 border-b border-gray-800">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold text-gray-400">Output</span>
-                    {execOutput && (
-                      <span className={`text-xs font-medium ${execOutput.exitCode === 0 ? "text-green-400" : "text-red-400"}`}>
-                        {execOutput.exitCode === 0 ? "Success" : "Error"}
-                      </span>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => setOutputTab("output")}
+                      className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
+                        outputTab === "output"
+                          ? "bg-gray-700 text-white"
+                          : "text-gray-400 hover:text-gray-200"
+                      }`}
+                    >
+                      Output
+                      {execOutput && (
+                        <span className={`ml-1.5 text-[10px] ${execOutput.exitCode === 0 ? "text-green-400" : "text-red-400"}`}>
+                          {execOutput.exitCode === 0 ? "OK" : "ERR"}
+                        </span>
+                      )}
+                    </button>
+                    {hasTestCases && (
+                      <button
+                        onClick={() => setOutputTab("testcases")}
+                        className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
+                          outputTab === "testcases"
+                            ? "bg-gray-700 text-white"
+                            : "text-gray-400 hover:text-gray-200"
+                        }`}
+                      >
+                        Test Cases
+                        {testResults.length > 0 && (
+                          <span className={`ml-1.5 text-[10px] ${passedCount === testResults.length ? "text-green-400" : "text-yellow-400"}`}>
+                            {passedCount}/{testResults.length}
+                          </span>
+                        )}
+                      </button>
                     )}
                   </div>
                   <button onClick={() => setShowOutput(false)} className="text-gray-500 hover:text-gray-300">
@@ -357,21 +461,91 @@ function CustomPracticeContent() {
                   </button>
                 </div>
                 <div className="flex-1 overflow-y-auto p-4">
-                  {executing ? (
-                    <div className="flex items-center gap-2 text-gray-400">
-                      <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                      </svg>
-                      <span className="text-sm">Executing code...</span>
-                    </div>
-                  ) : execOutput ? (
-                    <div className="space-y-2">
-                      {execOutput.output && <pre className="whitespace-pre-wrap font-mono text-sm text-green-300">{execOutput.output}</pre>}
-                      {execOutput.error && <pre className="whitespace-pre-wrap font-mono text-sm text-red-400">{execOutput.error}</pre>}
-                      {!execOutput.output && !execOutput.error && <p className="text-sm text-gray-500">No output.</p>}
-                    </div>
-                  ) : null}
+                  {outputTab === "output" ? (
+                    // Output tab content
+                    executing ? (
+                      <div className="flex items-center gap-2 text-gray-400">
+                        <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                        </svg>
+                        <span className="text-sm">Executing code...</span>
+                      </div>
+                    ) : execOutput ? (
+                      <div className="space-y-2">
+                        {execOutput.output && <pre className="whitespace-pre-wrap font-mono text-sm text-green-300">{execOutput.output}</pre>}
+                        {execOutput.error && <pre className="whitespace-pre-wrap font-mono text-sm text-red-400">{execOutput.error}</pre>}
+                        {!execOutput.output && !execOutput.error && <p className="text-sm text-gray-500">No output.</p>}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-gray-500">Run your code to see output.</p>
+                    )
+                  ) : (
+                    // Test Cases tab content
+                    runningTests ? (
+                      <div className="flex items-center gap-2 text-gray-400">
+                        <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                        </svg>
+                        <span className="text-sm">Running test cases...</span>
+                      </div>
+                    ) : testResults.length > 0 ? (
+                      // After running: show all results
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 mb-3">
+                          <span className={`text-sm font-semibold ${passedCount === testResults.length ? "text-green-400" : "text-yellow-400"}`}>
+                            {passedCount}/{testResults.length} Passed
+                          </span>
+                          {passedCount === testResults.length && (
+                            <span className="text-xs text-green-400/70">All tests passed!</span>
+                          )}
+                        </div>
+                        {testResults.map((result, idx) => (
+                          <div key={idx} className={`rounded-lg border p-3 ${result.passed ? "border-green-500/30 bg-green-500/5" : "border-red-500/30 bg-red-500/5"}`}>
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className={`text-xs font-bold ${result.passed ? "text-green-400" : "text-red-400"}`}>
+                                {result.passed ? "PASS" : "FAIL"}
+                              </span>
+                              <span className="text-xs text-gray-400">Test {idx + 1}</span>
+                            </div>
+                            <div className="space-y-1 text-xs font-mono">
+                              <div><span className="text-gray-500">Input:    </span><span className="text-gray-300">{result.input}</span></div>
+                              <div><span className="text-gray-500">Expected: </span><span className="text-gray-300">{result.expected}</span></div>
+                              <div><span className="text-gray-500">Actual:   </span><span className={result.passed ? "text-green-300" : "text-red-300"}>{result.actual}</span></div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : problem?.testCases?.length ? (
+                      // Before running: show 1 visible, rest hidden
+                      <div className="space-y-2">
+                        <p className="text-xs text-gray-500 mb-3">Click &quot;Run Tests&quot; to execute all {problem.testCases.length} test cases.</p>
+                        {/* Show first test case fully */}
+                        <div className="rounded-lg border border-gray-700 bg-gray-800/50 p-3">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-xs font-medium text-blue-400">Example</span>
+                            <span className="text-xs text-gray-400">Test 1</span>
+                          </div>
+                          <div className="space-y-1 text-xs font-mono">
+                            <div><span className="text-gray-500">Input:    </span><span className="text-gray-300">{problem.testCases[0].input}</span></div>
+                            <div><span className="text-gray-500">Expected: </span><span className="text-gray-300">{problem.testCases[0].expected}</span></div>
+                          </div>
+                        </div>
+                        {/* Show remaining as hidden */}
+                        {problem.testCases.slice(1).map((_, idx) => (
+                          <div key={idx + 1} className="rounded-lg border border-gray-700/50 bg-gray-800/30 px-3 py-2 flex items-center gap-2">
+                            <svg className="w-3.5 h-3.5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                            <span className="text-xs text-gray-500">Hidden Test Case {idx + 2}</span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-gray-500">No test cases available.</p>
+                    )
+                  )}
                 </div>
               </div>
             )}

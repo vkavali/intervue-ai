@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ReassignInterviewerForm } from "./ReassignInterviewerForm";
+import { GenerateThinkingButton } from "./GenerateThinkingButton";
 
 const statusColors: Record<string, string> = {
   PENDING: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30",
@@ -64,6 +65,7 @@ export default async function SessionDetailPage({
         },
       },
       auditReport: true,
+      thinkingAnalysis: true,
       aiInteractions: { orderBy: { timestamp: "asc" } },
       aiLevelOverrides: {
         orderBy: { timestamp: "asc" },
@@ -342,6 +344,181 @@ export default async function SessionDetailPage({
             </p>
           </div>
         </div>
+      )}
+
+      {/* Thinking Analysis */}
+      {s.thinkingAnalysis ? (
+        <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-semibold text-white">
+              Thinking Analysis
+            </h2>
+            <div className="flex items-center gap-3">
+              <span
+                className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${
+                  s.thinkingAnalysis.confidenceLevel === "high"
+                    ? "bg-green-500/10 text-green-400 border-green-500/30"
+                    : s.thinkingAnalysis.confidenceLevel === "medium"
+                      ? "bg-yellow-500/10 text-yellow-400 border-yellow-500/30"
+                      : "bg-gray-500/10 text-gray-400 border-gray-500/30"
+                }`}
+              >
+                {s.thinkingAnalysis.confidenceLevel} confidence
+              </span>
+              <GenerateThinkingButton sessionId={s.id} label="Regenerate" />
+            </div>
+          </div>
+
+          {/* Overall Approach */}
+          <div className="rounded-lg border border-gray-700 bg-gray-800 p-4 mb-4">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
+              Overall Approach
+            </h4>
+            <p className="text-sm text-gray-300">
+              {s.thinkingAnalysis.overallApproach}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            {/* Problem Solving Stage */}
+            <div className="rounded-lg border border-gray-700 bg-gray-800 p-4">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
+                Problem Solving Stage
+              </h4>
+              <p className="text-sm font-medium text-purple-400 capitalize">
+                {s.thinkingAnalysis.problemSolvingStage}
+              </p>
+            </div>
+
+            {/* AI Usage Pattern */}
+            <div className="rounded-lg border border-gray-700 bg-gray-800 p-4">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
+                AI Usage Pattern
+              </h4>
+              <p className="text-sm text-gray-300">
+                {s.thinkingAnalysis.aiUsagePattern}
+              </p>
+            </div>
+          </div>
+
+          {/* Thinking Patterns */}
+          {(() => {
+            const patterns = JSON.parse(s.thinkingAnalysis.thinkingPatterns) as {
+              pattern: string;
+              evidence: string;
+              strength: string;
+            }[];
+            return patterns.length > 0 ? (
+              <div className="mb-4">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">
+                  Thinking Patterns
+                </h4>
+                <div className="space-y-2">
+                  {patterns.map((p, i) => (
+                    <div
+                      key={i}
+                      className="rounded-lg border border-gray-700 bg-gray-800 p-3"
+                    >
+                      <div className="flex items-center gap-2 mb-1">
+                        <span
+                          className={`inline-flex h-2 w-2 rounded-full ${
+                            p.strength === "positive"
+                              ? "bg-green-400"
+                              : p.strength === "concerning"
+                                ? "bg-red-400"
+                                : "bg-gray-400"
+                          }`}
+                        />
+                        <span className="text-sm font-medium text-white">
+                          {p.pattern}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-400 pl-4">{p.evidence}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null;
+          })()}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            {/* Strengths */}
+            {(() => {
+              const strengths = JSON.parse(s.thinkingAnalysis.strengths) as string[];
+              return strengths.length > 0 ? (
+                <div className="rounded-lg border border-green-500/20 bg-green-500/5 p-4">
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-green-400 mb-2">
+                    Strengths
+                  </h4>
+                  <ul className="space-y-1">
+                    {strengths.map((s, i) => (
+                      <li key={i} className="text-sm text-gray-300 flex items-start gap-2">
+                        <span className="text-green-400 mt-0.5">+</span>
+                        {s}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null;
+            })()}
+
+            {/* Concerns */}
+            {(() => {
+              const concerns = JSON.parse(s.thinkingAnalysis.concerns) as string[];
+              return concerns.length > 0 ? (
+                <div className="rounded-lg border border-red-500/20 bg-red-500/5 p-4">
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-red-400 mb-2">
+                    Concerns
+                  </h4>
+                  <ul className="space-y-1">
+                    {concerns.map((c, i) => (
+                      <li key={i} className="text-sm text-gray-300 flex items-start gap-2">
+                        <span className="text-red-400 mt-0.5">!</span>
+                        {c}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null;
+            })()}
+          </div>
+
+          {/* Suggested Follow-Up */}
+          {(() => {
+            const followUps = JSON.parse(s.thinkingAnalysis.suggestedFollowUp) as string[];
+            return followUps.length > 0 ? (
+              <div className="rounded-lg border border-blue-500/20 bg-blue-500/5 p-4">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-blue-400 mb-2">
+                  Suggested Follow-Up Questions
+                </h4>
+                <ul className="space-y-1">
+                  {followUps.map((q, i) => (
+                    <li key={i} className="text-sm text-gray-300 flex items-start gap-2">
+                      <span className="text-blue-400 mt-0.5">{i + 1}.</span>
+                      {q}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null;
+          })()}
+        </div>
+      ) : (
+        (s.status === "COMPLETED" || s.status === "ACTIVE") && s.aiInteractions.length > 0 && (
+          <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 mb-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-semibold text-white">
+                  Thinking Analysis
+                </h2>
+                <p className="text-sm text-gray-400 mt-1">
+                  No thinking analysis generated yet for this session.
+                </p>
+              </div>
+              <GenerateThinkingButton sessionId={s.id} label="Generate Analysis" />
+            </div>
+          </div>
+        )
       )}
 
       {/* Session Timeline / Logs */}

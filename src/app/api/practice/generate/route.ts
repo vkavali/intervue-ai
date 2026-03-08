@@ -89,7 +89,20 @@ IMPORTANT RULES:
 - Each problem should feel like a real interview question for that company/role.
 - Focus on practical scenarios the candidate might face on the job.
 - Ensure the problem is solvable and test cases match expected output.
-- EVERY problem MUST include: constraints, examples, starter code (JS + Python + Java), and test cases with concrete input/output.
+- EVERY problem MUST include: constraints, examples, starter code (JS + Python + Java), and exactly 15 test cases with concrete input/output.
+
+STARTER CODE RULES:
+- Starter code must contain ONLY the function signature and a placeholder comment (e.g. "// Your solution here").
+- Do NOT include any console.log, print, System.out.println, or any test calls in the starter code.
+- Do NOT include any example usage or test harness in the starter code.
+- The starter code should be CLEAN: just the function definition, nothing else.
+
+TEST CASE RULES:
+- Provide exactly 15 test cases per problem.
+- Each test case "input" must be a valid JavaScript function call expression (e.g. "twoSum([2,7,11,15], 9)").
+- Each test case "expected" must be the JSON-stringified expected result (e.g. "[0,1]").
+- Include edge cases, boundary conditions, and typical cases.
+- The first test case should be a simple, illustrative example.
 
 Return a JSON array with this exact structure (no markdown, just pure JSON):
 [
@@ -102,12 +115,12 @@ Return a JSON array with this exact structure (no markdown, just pure JSON):
     "examples": "Input/Output examples with explanations (REQUIRED - include at least 2 examples)",
     "tags": ["Array", "Hash Table"],
     "starterCode": {
-      "javascript": "// Starter code with function signature and test cases using console.log",
-      "python": "# Starter code with function signature and test cases using print",
-      "java": "// Java starter code with class, main method, and test cases"
+      "javascript": "function fnName(params) {\n  // Your solution here\n}",
+      "python": "def fn_name(params):\n    # Your solution here\n    pass",
+      "java": "class Solution {\n    public static ReturnType fnName(params) {\n        // Your solution here\n    }\n}"
     },
     "testCases": [
-      { "input": "concrete input value", "expected": "expected output value" }
+      { "input": "fnName([2,7,11,15], 9)", "expected": "[0,1]" }
     ]
   }
 ]
@@ -118,12 +131,12 @@ Make the problems practical and relevant. For example:
 - For data roles: Data transformation, aggregation, analysis
 - For system design roles: Rate limiter, URL shortener logic, LRU cache
 
-Include 3-5 test cases per problem with concrete input and expected output. The test cases MUST be correct and verifiable.
+Include exactly 15 test cases per problem. The test cases MUST be correct and verifiable.
 Include at least JavaScript, Python, and Java starter code for each problem.`;
 
     const response = await anthropic.messages.create({
       model: "claude-sonnet-4-20250514",
-      max_tokens: 4096,
+      max_tokens: 8192,
       messages: [{ role: "user", content: prompt }],
     });
 
@@ -161,6 +174,9 @@ Include at least JavaScript, Python, and Java starter code for each problem.`;
               tags: JSON.stringify(problem.tags || []),
               starterCode: problem.starterCode
                 ? JSON.stringify(problem.starterCode)
+                : null,
+              testCases: problem.testCases
+                ? JSON.stringify(problem.testCases)
                 : null,
               company: company || null,
               role: role || null,

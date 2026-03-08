@@ -61,6 +61,7 @@ model Company {
   interviewSessions  InterviewSession[]
   candidatePipelines CandidatePipeline[]
   hiringComparisons  HiringComparison[]
+  openPositions      OpenPosition[]
 }
 
 // ─── InterviewTemplate ──────────────────────────────────────────────────────────
@@ -96,6 +97,8 @@ model Question {
   aiLevel     Int     @default(0) // 0-4
   timeLimit   Int     // minutes
   orderIndex  Int
+  testCases   String? // JSON: [{ input: "fnName(args)", expected: "result" }]
+  starterCode String? // JSON: { javascript: "...", python: "...", ... }
 
   template InterviewTemplate @relation(fields: [templateId], references: [id])
 }
@@ -126,6 +129,7 @@ model InterviewSession {
   aiInteractions   AIInteraction[]
   aiLevelOverrides AILevelOverride[]
   auditReport      AuditReport?
+  thinkingAnalysis ThinkingAnalysis?
   interviewerNotes InterviewerNote[]
   violations       Violation[]
   chatMessages     ChatMessage[]
@@ -259,6 +263,7 @@ model PracticeProblem {
   examples    String?
   tags        String   // JSON array as text
   starterCode String?  // JSON object as text { javascript: "...", python: "..." }
+  testCases   String?  // JSON: [{ input: "fnName(args)", expected: "result" }]
   company     String?  // Company context if generated for specific company
   role        String?  // Role context if generated for specific role
   createdAt   DateTime @default(now())
@@ -359,4 +364,44 @@ model EnrichedBankProblem {
   starterCode   String?  // JSON: { javascript: "...", python: "...", java: "..." }
   testCases     String?  // JSON: [{ input: "...", expected: "..." }]
   createdAt     DateTime @default(now())
+}
+
+// ─── OpenPosition ─────────────────────────────────────────────────────────
+// Tracks active hiring needs / job requisitions
+
+model OpenPosition {
+  id          String   @id @default(cuid())
+  companyId   String
+  title       String
+  role        String
+  seniority   String   // JUNIOR | MID | SENIOR | STAFF | PRINCIPAL
+  department  String?
+  location    String?
+  description String?
+  headcount   Int      @default(1)
+  status      String   @default("OPEN") // OPEN | PAUSED | CLOSED | FILLED
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  company Company @relation(fields: [companyId], references: [id])
+}
+
+// ─── ThinkingAnalysis ─────────────────────────────────────────────────────
+// Persisted AI thinking analysis for interview sessions
+
+model ThinkingAnalysis {
+  id                  String   @id @default(cuid())
+  sessionId           String   @unique
+  overallApproach     String
+  thinkingPatterns    String   // JSON: ThinkingPattern[]
+  problemSolvingStage String
+  strengths           String   // JSON: string[]
+  concerns            String   // JSON: string[]
+  aiUsagePattern      String
+  suggestedFollowUp   String   // JSON: string[]
+  confidenceLevel     String   // high | medium | low
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  session InterviewSession @relation(fields: [sessionId], references: [id])
 }
