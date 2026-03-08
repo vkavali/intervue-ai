@@ -205,7 +205,7 @@ export default async function SessionsPage() {
                             <span className="text-xs font-medium text-red-400">Expired</span>
                           ) : (
                             <Link
-                              href={`/session/${s.id}/watch`}
+                              href={`/session/${s.id}`}
                               className="text-xs font-medium text-green-400 hover:text-green-300 transition-colors"
                             >
                               Watch Live

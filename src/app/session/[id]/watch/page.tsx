@@ -4,6 +4,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "next/navigation";
 import Editor from "@monaco-editor/react";
 import ScreenCapture from "@/components/ScreenCapture";
+import VideoCall from "@/components/VideoCall";
+import SessionChat from "@/components/SessionChat";
 
 interface SessionData {
   id: string;
@@ -100,6 +102,7 @@ export default function WatchSessionPage() {
   const sessionId = params.id as string;
 
   const [sessionData, setSessionData] = useState<SessionData | null>(null);
+  const [userId, setUserId] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [aiSliderValue, setAiSliderValue] = useState(0);
@@ -111,7 +114,7 @@ export default function WatchSessionPage() {
   const [updatingAiLevel, setUpdatingAiLevel] = useState(false);
   const [thinkingAnalysis, setThinkingAnalysis] = useState<ThinkingAnalysis | null>(null);
   const [thinkingLoading, setThinkingLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<'interactions' | 'thinking'>('interactions');
+  const [activeTab, setActiveTab] = useState<'interactions' | 'thinking' | 'chat'>('interactions');
   const interactionLogRef = useRef<HTMLDivElement>(null);
   const notesRef = useRef<HTMLDivElement>(null);
 
@@ -143,6 +146,10 @@ export default function WatchSessionPage() {
   // Initial fetch
   useEffect(() => {
     fetchSession();
+    // Fetch current user for VideoCall
+    fetch("/api/auth/me").then(r => r.ok ? r.json() : null).then(u => {
+      if (u?.id) setUserId(u.id);
+    }).catch(() => {});
   }, [fetchSession]);
 
   // Poll every 2 seconds
@@ -283,6 +290,8 @@ export default function WatchSessionPage() {
         </div>
 
         <div className="flex items-center gap-3">
+          {/* Video Call */}
+          {userId && <VideoCall sessionId={sessionId} userId={userId} />}
           {/* Screen Capture Button (interviewer view) */}
           <ScreenCapture sessionId={sessionId} isInterviewer={true} />
 
@@ -381,11 +390,29 @@ export default function WatchSessionPage() {
               >
                 Thinking Analysis
               </button>
+              <button
+                onClick={() => setActiveTab('chat')}
+                className={`flex-1 px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-colors ${
+                  activeTab === 'chat'
+                    ? 'text-purple-400 border-b-2 border-purple-500 bg-gray-900/80'
+                    : 'text-gray-500 hover:text-gray-300'
+                }`}
+              >
+                Chat
+              </button>
             </div>
 
             {/* Tab Content */}
-            {activeTab === 'interactions' ? (
-              /* AI Interaction Log (existing, unchanged) */
+            {activeTab === 'chat' ? (
+              <div className="flex-1 overflow-hidden">
+                {userId ? (
+                  <SessionChat sessionId={sessionId} userId={userId} />
+                ) : (
+                  <p className="text-xs text-gray-600 text-center py-8">Loading chat...</p>
+                )}
+              </div>
+            ) : activeTab === 'interactions' ? (
+              /* AI Interaction Log */
               <div
                 ref={interactionLogRef}
                 className="flex-1 overflow-y-auto p-3 space-y-3"
