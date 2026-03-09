@@ -9,30 +9,45 @@ const PLAN_LIMITS: Record<string, {
   aiGenerations: number; // AI question generation per day
   practiceAi: number;    // Practice mode AI calls per day
   enrichment: number;    // AI enrichment of bank problems per day
+  editorial: number;     // AI editorial generation per day
+  coaching: number;      // AI post-submit coaching per day
+  qualityScore: number;  // AI quality scoring per day
 }> = {
   STARTER: {
     aiCalls: 10,
     aiGenerations: 5,
     practiceAi: 15,
     enrichment: 20,
+    editorial: 10,
+    coaching: 10,
+    qualityScore: 10,
   },
   GROWTH: {
     aiCalls: 50,
     aiGenerations: 20,
     practiceAi: 50,
     enrichment: 50,
+    editorial: 30,
+    coaching: 30,
+    qualityScore: 20,
   },
   ENTERPRISE: {
     aiCalls: -1, // unlimited
     aiGenerations: -1,
     practiceAi: -1,
     enrichment: -1,
+    editorial: -1,
+    coaching: -1,
+    qualityScore: -1,
   },
   PAY_PER_INTERVIEW: {
     aiCalls: 100,
     aiGenerations: 30,
     practiceAi: 100,
     enrichment: 30,
+    editorial: 30,
+    coaching: 30,
+    qualityScore: 20,
   },
 };
 
@@ -42,6 +57,9 @@ const FREE_LIMITS = {
   aiGenerations: 3,
   practiceAi: 10,
   enrichment: 15,
+  editorial: 5,
+  coaching: 5,
+  qualityScore: 3,
 };
 
 // Global IP rate limits (per minute)
@@ -108,7 +126,7 @@ function getOrCreateEntry(
   return existing;
 }
 
-export type RateLimitAction = "aiCalls" | "aiGenerations" | "practiceAi" | "enrichment";
+export type RateLimitAction = "aiCalls" | "aiGenerations" | "practiceAi" | "enrichment" | "editorial" | "coaching" | "qualityScore";
 
 /**
  * Check and increment rate limit for a user based on their plan.
@@ -188,11 +206,14 @@ export function getUserUsageStats(
     aiGenerations: { used: 0, limit: limits.aiGenerations },
     practiceAi: { used: 0, limit: limits.practiceAi },
     enrichment: { used: 0, limit: limits.enrichment },
+    editorial: { used: 0, limit: limits.editorial },
+    coaching: { used: 0, limit: limits.coaching },
+    qualityScore: { used: 0, limit: limits.qualityScore },
   };
 
   const actions = userDailyUsage.get(userId);
   if (actions) {
-    for (const action of ["aiCalls", "aiGenerations", "practiceAi", "enrichment"] as RateLimitAction[]) {
+    for (const action of ["aiCalls", "aiGenerations", "practiceAi", "enrichment", "editorial", "coaching", "qualityScore"] as RateLimitAction[]) {
       const entry = actions.get(action);
       if (entry && now - entry.windowStart < DAY_MS) {
         stats[action].used = entry.count;

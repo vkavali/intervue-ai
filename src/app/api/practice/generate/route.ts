@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { company, role, jobDescription, difficulty, count } = body;
+    const { company, role, jobDescription, difficulty, count, drillPattern, drillDifficulty } = body;
 
     // Validate prompt content
     const validation = validateGenerationPrompt({
@@ -69,16 +69,24 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!role) {
+    // Drill mode doesn't require role
+    if (!role && !drillPattern) {
       return NextResponse.json(
-        { error: "Role is required" },
+        { error: "Role is required (or use drillPattern for pattern drills)" },
         { status: 400 }
       );
     }
 
     const numProblems = Math.min(count || 3, 5);
+    const isDrill = !!drillPattern;
 
-    const prompt = `Generate ${numProblems} original coding interview practice problems${company ? ` that ${company} might ask` : ""} for a ${role} position.
+    const prompt = isDrill
+      ? `Generate ${numProblems} original coding practice problems that ALL focus exclusively on the "${drillPattern}" pattern/technique.
+
+Target Difficulty: ${drillDifficulty || difficulty || "MEDIUM"}
+
+IMPORTANT: Every problem MUST use the ${drillPattern} pattern as the core solving technique. Vary the problem context and scenarios but keep the underlying pattern the same.`
+      : `Generate ${numProblems} original coding interview practice problems${company ? ` that ${company} might ask` : ""} for a ${role} position.
 
 ${jobDescription ? `Job Description Context:\n${jobDescription}\n` : ""}
 ${difficulty ? `Target Difficulty: ${difficulty}` : "Mix of difficulties (EASY, MEDIUM, HARD)"}
@@ -157,6 +165,15 @@ Include at least JavaScript, Python, and Java starter code for each problem.`;
         { error: "Failed to parse AI response", raw: text },
         { status: 500 }
       );
+    }
+
+    // Prefix drill problem IDs
+    if (isDrill) {
+      for (const problem of problems) {
+        if (problem.id && !problem.id.startsWith("drill-")) {
+          problem.id = `drill-${problem.id}`;
+        }
+      }
     }
 
     // Persist generated problems if user is logged in

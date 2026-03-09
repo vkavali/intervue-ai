@@ -40,6 +40,7 @@ model User {
   notifications       Notification[]     @relation("UserNotifications")
   practiceProblems    PracticeProblem[]  @relation("UserPracticeProblems")
   practiceProgress    PracticeProgress[] @relation("UserPracticeProgress")
+  weaknessProfile     WeaknessProfile?   @relation("UserWeaknessProfile")
   violations          Violation[]        @relation("UserViolations")
   chatMessages        ChatMessage[]      @relation("UserChatMessages")
   sessionLogs         SessionLog[]       @relation("UserSessionLogs")
@@ -384,6 +385,56 @@ model OpenPosition {
   updatedAt   DateTime @updatedAt
 
   company Company @relation(fields: [companyId], references: [id])
+}
+
+// ─── ProblemHints ──────────────────────────────────────────────────────────
+// Cached structured hints for bank problems (3-level progressive)
+
+model ProblemHints {
+  id            String   @id @default(cuid())
+  bankProblemId String   @unique
+  hints         String   // JSON: { pattern, dataStructure, approach }
+  createdAt     DateTime @default(now())
+}
+
+// ─── ProblemEditorial ─────────────────────────────────────────────────────
+// AI-generated editorial with multiple solution approaches
+
+model ProblemEditorial {
+  id              String   @id @default(cuid())
+  bankProblemId   String   @unique
+  intuition       String
+  bruteForce      String
+  optimized       String
+  complexity      String
+  codeWalkthrough String
+  createdAt       DateTime @default(now())
+}
+
+// ─── ProblemQualityScore ──────────────────────────────────────────────────
+// AI-evaluated quality metrics for bank problems
+
+model ProblemQualityScore {
+  id                 String   @id @default(cuid())
+  bankProblemId      String   @unique
+  overallScore       Int
+  clarity            Int
+  usefulness         Int
+  ambiguity          Int
+  exampleQuality     Int
+  difficultyAccuracy Int
+  createdAt          DateTime @default(now())
+}
+
+// ─── WeaknessProfile ──────────────────────────────────────────────────────
+// User weakness analysis based on practice history
+
+model WeaknessProfile {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  profile   String   // JSON: WeaknessProfileData
+  updatedAt DateTime @updatedAt
+  user      User     @relation("UserWeaknessProfile", fields: [userId], references: [id])
 }
 
 // ─── ThinkingAnalysis ─────────────────────────────────────────────────────

@@ -11,6 +11,7 @@ export interface ProblemEntry {
   starterCode?: Record<string, string>;
   testCases?: { input: string; expected: string }[];
   pattern?: string;
+  hints?: string[];
 }
 
 

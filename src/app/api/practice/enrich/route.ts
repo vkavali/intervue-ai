@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { PROBLEM_BANK } from '@/data/problem-bank'
 import { checkUserRateLimit } from '@/lib/rate-limiter'
+import { resolveProblem } from '@/lib/problem-resolver'
 import Anthropic from '@anthropic-ai/sdk'
 
 // POST /api/practice/enrich - AI-enrich a bank problem (available to all authenticated users)
@@ -47,8 +47,8 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // Find the problem in the bank
-    const problem = PROBLEM_BANK.find((p) => p.id === bankProblemId)
+    // Find the problem across all banks (curated, bank, generated)
+    const problem = resolveProblem(bankProblemId)
     if (!problem) {
       return NextResponse.json(
         { error: 'Problem not found in bank' },

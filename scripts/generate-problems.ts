@@ -107,6 +107,7 @@ interface GenProblem {
   examples: string;
   starterCode: Record<string, string>;
   testCases: { input: string; expected: string }[];
+  hints: string[];
 }
 
 // ─── Core Problem Templates ─────────────────────────────────────────────────────
@@ -865,6 +866,7 @@ function generateProblems(): GenProblem[] {
       examples: variant.examplesTemplate(domain),
       starterCode: buildStarterCode(variant),
       testCases: variant.testCases,
+      hints: variant.hints,
     });
   }
 
@@ -919,6 +921,7 @@ function generateProblems(): GenProblem[] {
       examples: variant.examplesTemplate(domain),
       starterCode: buildStarterCode(variant),
       testCases: variant.testCases,
+      hints: variant.hints,
     });
   }
 
@@ -981,6 +984,7 @@ export const GENERATED_PROBLEMS: ProblemEntry[] = ${JSON.stringify(
       examples: p.examples,
       starterCode: p.starterCode,
       testCases: p.testCases,
+      hints: p.hints,
     })),
     null,
     2
