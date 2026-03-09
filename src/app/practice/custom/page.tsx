@@ -6,14 +6,16 @@ import Editor, { type OnMount } from "@monaco-editor/react";
 import Link from "next/link";
 
 const languages = [
-  { value: "javascript", label: "JavaScript", runnable: true },
-  { value: "typescript", label: "TypeScript", runnable: true },
-  { value: "python", label: "Python", runnable: true },
-  { value: "java", label: "Java", runnable: false },
-  { value: "cpp", label: "C++", runnable: false },
-  { value: "go", label: "Go", runnable: false },
-  { value: "rust", label: "Rust", runnable: false },
+  { value: "javascript", label: "JavaScript" },
+  { value: "typescript", label: "TypeScript" },
+  { value: "python", label: "Python" },
+  { value: "java", label: "Java" },
+  { value: "cpp", label: "C++" },
+  { value: "go", label: "Go" },
+  { value: "rust", label: "Rust" },
 ];
+
+const TEST_CASE_LANGS = ["javascript", "typescript", "python", "java"];
 
 const aiLevelLabels: Record<number, { label: string; color: string }> = {
   0: { label: "L0 No AI", color: "text-red-400" },
@@ -89,6 +91,7 @@ function CustomPracticeContent() {
   const [bottomTab, setBottomTab] = useState<"testcases" | "results" | "console">("testcases");
   const [bottomPanelOpen, setBottomPanelOpen] = useState(true);
   const [activeTestCaseIndex, setActiveTestCaseIndex] = useState(0);
+  const [capabilities, setCapabilities] = useState<Record<string, { run: boolean; testCases: boolean; backend: string | null }>>({});
   const aiChatRef = useRef<HTMLDivElement>(null);
 
   // ── New editor state ────────────────────────────────────────────────────────
@@ -168,6 +171,26 @@ function CustomPracticeContent() {
     return () => clearInterval(interval);
   }, []);
 
+  // Fetch server capabilities on mount
+  useEffect(() => {
+    fetch("/api/capabilities")
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => {
+        if (data?.languages) setCapabilities(data.languages);
+      })
+      .catch(() => {});
+  }, []);
+
+  const canRun = useCallback((lang: string) => {
+    if (capabilities[lang]) return capabilities[lang].run;
+    return ["javascript", "typescript", "python", "java"].includes(lang);
+  }, [capabilities]);
+
+  const canTestCases = useCallback((lang: string) => {
+    if (capabilities[lang]) return capabilities[lang].testCases;
+    return TEST_CASE_LANGS.includes(lang);
+  }, [capabilities]);
+
   // Scroll AI chat
   useEffect(() => {
     if (aiChatRef.current) {
@@ -242,7 +265,7 @@ function CustomPracticeContent() {
     return [...builtIn, ...customTestCases.map(tc => ({ ...tc, custom: true }))];
   }, [problem?.testCases, customTestCases]);
 
-  // Run code
+  // Run code — server-first, browser fallback for JS/TS
   const handleRunCode = useCallback(async () => {
     if (executing) return;
     setExecuting(true);
@@ -252,24 +275,6 @@ function CustomPracticeContent() {
     const startTime = performance.now();
 
     try {
-      if (language === "javascript" || language === "typescript") {
-        const { runJavaScriptInWorker } = await import("@/lib/code-runner");
-        const result = await runJavaScriptInWorker(code);
-        const runtime = Math.round(performance.now() - startTime);
-        setExecOutput({ ...result, runtime });
-        return;
-      }
-
-      const langInfo = languages.find(l => l.value === language);
-      if (!langInfo?.runnable) {
-        setExecOutput({
-          output: "",
-          error: `${langInfo?.label || language} execution is not available in practice mode.\n\nOnly JavaScript and TypeScript can run in the browser.`,
-          exitCode: 1,
-        });
-        return;
-      }
-
       const res = await fetch("/api/execute", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -277,65 +282,92 @@ function CustomPracticeContent() {
       });
       const data = await res.json();
       const runtime = Math.round(performance.now() - startTime);
-      if (data.error === "USE_CLIENT_EXECUTION") {
+
+      if (data.error === "USE_CLIENT_EXECUTION" && (language === "javascript" || language === "typescript")) {
         const { runJavaScriptInWorker } = await import("@/lib/code-runner");
         const result = await runJavaScriptInWorker(code);
         setExecOutput({ ...result, runtime });
-      } else if (data.error && data.error.includes("No code execution service")) {
+        return;
+      }
+
+      if (data.error && data.error.includes("No code execution service")) {
+        const langLabel = languages.find(l => l.value === language)?.label || language;
         setExecOutput({
           output: "",
-          error: `${language.charAt(0).toUpperCase() + language.slice(1)} execution requires a server-side runtime.\n\nSwitch to JavaScript/TypeScript to run code in the browser.`,
+          error: `${langLabel} execution requires a server-side runtime (not configured).\n\nJavaScript and TypeScript can run in the browser.\nFor other languages, configure Piston or Judge0, or install the runtime locally.`,
           exitCode: 1,
         });
-      } else {
-        setExecOutput({
-          output: data.output || "",
-          error: data.error || "",
-          exitCode: data.exitCode ?? 1,
-          runtime,
-        });
+        return;
       }
+
+      setExecOutput({ output: data.output || "", error: data.error || "", exitCode: data.exitCode ?? 1, runtime });
     } catch {
+      if (language === "javascript" || language === "typescript") {
+        try {
+          const { runJavaScriptInWorker } = await import("@/lib/code-runner");
+          const result = await runJavaScriptInWorker(code);
+          const runtime = Math.round(performance.now() - startTime);
+          setExecOutput({ ...result, runtime });
+          return;
+        } catch { /* fall through */ }
+      }
       setExecOutput({ output: "", error: "Failed to connect to execution service.", exitCode: 1 });
     } finally {
       setExecuting(false);
     }
   }, [language, code, executing]);
 
-  // Run test cases
+  // Run test cases — server-first, browser fallback for JS/TS
   const runTestsInternal = useCallback(async (cases: TestCase[]): Promise<TestResult[]> => {
-    if (language !== "javascript" && language !== "typescript") {
+    if (!canTestCases(language)) {
+      const langLabel = languages.find(l => l.value === language)?.label || language;
       return [{
         input: "--",
         expected: "--",
-        actual: "Test cases only run with JavaScript/TypeScript in the browser.",
+        actual: `Test cases for ${langLabel} are not yet supported.\nTest cases are available for JavaScript, TypeScript, Python, and Java.`,
         passed: false,
       }];
     }
 
-    const results: TestResult[] = [];
-    for (const tc of cases) {
-      try {
-        const testCode = `${code}\nconsole.log(JSON.stringify(${tc.input}));`;
-        const { runJavaScriptInWorker } = await import("@/lib/code-runner");
-        const start = performance.now();
-        const result = await runJavaScriptInWorker(testCode);
-        const runtime = Math.round(performance.now() - start);
-        const actual = (result.output || "").trim();
-        const expected = tc.expected.trim();
-        let passed = false;
+    // Try server-side test runner first
+    try {
+      const res = await fetch("/api/execute/run-tests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ language, code, testCases: cases.map(tc => ({ input: tc.input, expected: tc.expected })) }),
+      });
+      const data = await res.json();
+      if (res.ok && data.results) return data.results;
+    } catch { /* fall through to browser fallback */ }
+
+    // Browser fallback: JS/TS only
+    if (language === "javascript" || language === "typescript") {
+      const results: TestResult[] = [];
+      for (const tc of cases) {
         try {
-          passed = actual === expected || actual === JSON.stringify(JSON.parse(expected));
+          const testCode = `${code}\nconsole.log(JSON.stringify(${tc.input}));`;
+          const { runJavaScriptInWorker } = await import("@/lib/code-runner");
+          const start = performance.now();
+          const result = await runJavaScriptInWorker(testCode);
+          const runtime = Math.round(performance.now() - start);
+          const actual = (result.output || "").trim();
+          const expected = tc.expected.trim();
+          let passed = false;
+          try {
+            passed = actual === expected || actual === JSON.stringify(JSON.parse(expected));
+          } catch {
+            passed = actual === expected;
+          }
+          results.push({ input: tc.input, expected, actual: result.error ? `Error: ${result.error}` : actual, passed: !result.error && passed, runtime });
         } catch {
-          passed = actual === expected;
+          results.push({ input: tc.input, expected: tc.expected, actual: "Execution error", passed: false });
         }
-        results.push({ input: tc.input, expected, actual: result.error ? `Error: ${result.error}` : actual, passed: !result.error && passed, runtime });
-      } catch {
-        results.push({ input: tc.input, expected: tc.expected, actual: "Execution error", passed: false });
       }
+      return results;
     }
-    return results;
-  }, [code, language]);
+
+    return [{ input: "--", expected: "--", actual: "Server-side execution is unavailable.", passed: false }];
+  }, [code, language, canTestCases]);
 
   const handleRunTests = useCallback(async () => {
     if (runningTests || allTestCases.length === 0) return;
@@ -480,7 +512,7 @@ function CustomPracticeContent() {
           >
             {languages.map((lang) => (
               <option key={lang.value} value={lang.value}>
-                {lang.label}{!lang.runnable ? " (editor only)" : ""}
+                {lang.label}{canRun(lang.value) ? (canTestCases(lang.value) ? "" : " (run only)") : " (editor only)"}
               </option>
             ))}
           </select>
@@ -567,7 +599,8 @@ function CustomPracticeContent() {
           {/* Submit */}
           <button
             onClick={handleSubmit}
-            disabled={submitting || !hasTestCases}
+            disabled={submitting || !hasTestCases || !canTestCases(language)}
+            title={!canTestCases(language) ? "Test cases available for JS, TS, Python, Java" : ""}
             className={`inline-flex items-center gap-1.5 rounded-lg px-4 py-1.5 text-xs font-bold text-white transition-colors disabled:opacity-50 ${
               submitResult === "accepted" ? "bg-green-600" : submitResult === "wrong" ? "bg-red-600" : "bg-green-600 hover:bg-green-500"
             }`}
@@ -763,9 +796,12 @@ function CustomPracticeContent() {
                 {/* Test Results Tab */}
                 {bottomTab === "results" && (
                   <div className="p-3">
-                    {language !== "javascript" && language !== "typescript" ? (
-                      <div className="flex items-center gap-2 text-xs text-gray-500 py-4 justify-center">
-                        Test cases only available for JavaScript/TypeScript
+                    {!canTestCases(language) ? (
+                      <div className="flex flex-col items-center gap-2 text-xs text-gray-500 py-4">
+                        <span>Test cases available for JavaScript, TypeScript, Python, Java</span>
+                        {canRun(language) && (
+                          <span className="text-[10px] text-gray-600">Use &quot;Run&quot; to execute your code without test case judging</span>
+                        )}
                       </div>
                     ) : runningTests || submitting ? (
                       <div className="flex items-center gap-2 text-xs text-gray-400 py-4 justify-center">

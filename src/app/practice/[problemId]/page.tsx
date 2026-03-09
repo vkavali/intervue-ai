@@ -4,8 +4,9 @@ import { useState, useEffect, useRef, useCallback, useMemo, Suspense } from "rea
 import { useParams, useSearchParams } from "next/navigation";
 import Editor, { type OnMount } from "@monaco-editor/react";
 import Link from "next/link";
-import { PROBLEM_BANK } from "@/data/problem-bank";
+import { PROBLEM_BANK, type ProblemEntry } from "@/data/problem-bank";
 import { CURATED_PROBLEMS } from "@/data/curated-75";
+import { GENERATED_PROBLEMS } from "@/data/generated-bank";
 
 // ─── Practice problem data ──────────────────────────────────────────────────────
 
@@ -37,14 +38,17 @@ for (const p of CURATED_PROBLEMS) {
 // ─── Constants ──────────────────────────────────────────────────────────────────
 
 const languages = [
-  { value: "javascript", label: "JavaScript", runnable: true },
-  { value: "typescript", label: "TypeScript", runnable: true },
-  { value: "python", label: "Python", runnable: true },
-  { value: "java", label: "Java", runnable: false },
-  { value: "cpp", label: "C++", runnable: false },
-  { value: "go", label: "Go", runnable: false },
-  { value: "rust", label: "Rust", runnable: false },
+  { value: "javascript", label: "JavaScript" },
+  { value: "typescript", label: "TypeScript" },
+  { value: "python", label: "Python" },
+  { value: "java", label: "Java" },
+  { value: "cpp", label: "C++" },
+  { value: "go", label: "Go" },
+  { value: "rust", label: "Rust" },
 ];
+
+// Languages that support test case judging (server-side)
+const TEST_CASE_LANGS = ["javascript", "typescript", "python", "java"];
 
 const aiLevelLabels: Record<number, { label: string; color: string }> = {
   0: { label: "L0 No AI", color: "text-red-400" },
@@ -87,7 +91,18 @@ function PracticeProblemContent() {
   const problemId = params.problemId as string;
 
   const curatedProblem = PRACTICE_PROBLEMS[problemId];
-  const bankProblem = !curatedProblem ? PROBLEM_BANK.find((p) => p.id === problemId) : null;
+  const bankProblem: ProblemEntry | undefined = !curatedProblem
+    ? PROBLEM_BANK.find((p) => p.id === problemId) || GENERATED_PROBLEMS.find((p) => p.id === problemId)
+    : undefined;
+
+  // Check if the problem already has full data (skip AI enrichment)
+  const isAlreadyComplete = !!(
+    bankProblem?.starterCode &&
+    bankProblem?.testCases &&
+    bankProblem.testCases.length > 0 &&
+    bankProblem?.constraints &&
+    bankProblem?.examples
+  );
 
   // Enrichment state for non-curated bank problems
   const [enrichedData, setEnrichedData] = useState<{
@@ -99,9 +114,9 @@ function PracticeProblemContent() {
   const [enriching, setEnriching] = useState(false);
   const enrichAttempted = useRef(false);
 
-  // Auto-fetch enrichment for non-curated bank problems
+  // Auto-fetch enrichment ONLY for incomplete non-curated bank problems
   useEffect(() => {
-    if (curatedProblem || !bankProblem || enrichAttempted.current) return;
+    if (curatedProblem || !bankProblem || isAlreadyComplete || enrichAttempted.current) return;
     enrichAttempted.current = true;
     setEnriching(true);
     fetch("/api/practice/enrich", {
@@ -122,7 +137,7 @@ function PracticeProblemContent() {
       })
       .catch(() => {})
       .finally(() => setEnriching(false));
-  }, [curatedProblem, bankProblem]);
+  }, [curatedProblem, bankProblem, isAlreadyComplete]);
 
   // Build unified problem object: curated → enriched bank → plain bank fallback
   const problem: PracticeProblem | null = useMemo(() => {
@@ -185,6 +200,7 @@ function PracticeProblemContent() {
   const [bottomTab, setBottomTab] = useState<"testcases" | "results" | "console">("testcases");
   const [bottomPanelOpen, setBottomPanelOpen] = useState(true);
   const [activeTestCaseIndex, setActiveTestCaseIndex] = useState(0);
+  const [capabilities, setCapabilities] = useState<Record<string, { run: boolean; testCases: boolean; backend: string | null }>>({});
   const aiChatRef = useRef<HTMLDivElement>(null);
 
   // ── New editor state ────────────────────────────────────────────────────────
@@ -196,7 +212,7 @@ function PracticeProblemContent() {
   const [cursorInfo, setCursorInfo] = useState({ line: 1, column: 1, selected: 0 });
   const [leftPanelWidth, setLeftPanelWidth] = useState(340);
   const [bottomPanelHeight, setBottomPanelHeight] = useState(280);
-  const [problemTab, setProblemTab] = useState<"description" | "hints">("description");
+  const [problemTab, setProblemTab] = useState<"description" | "hints" | "editorial">("description");
   const [customTestCases, setCustomTestCases] = useState<TestCase[]>([]);
   const [addingCustomTC, setAddingCustomTC] = useState(false);
   const [customInput, setCustomInput] = useState("");
@@ -206,6 +222,29 @@ function PracticeProblemContent() {
   const [hints, setHints] = useState<string[]>([]);
   const [loadingHints, setLoadingHints] = useState(false);
   const [hintsRevealed, setHintsRevealed] = useState(0);
+
+  // Editorial state
+  const [editorial, setEditorial] = useState<{
+    intuition: string;
+    bruteForce: string;
+    optimized: string;
+    complexity: string;
+    codeWalkthrough: string;
+  } | null>(null);
+  const [loadingEditorial, setLoadingEditorial] = useState(false);
+  const [editorialError, setEditorialError] = useState("");
+
+  // Coaching state
+  const [coaching, setCoaching] = useState<{
+    overallAssessment: string;
+    score: number;
+    whatWentWell: string[];
+    whatToImprove: string[];
+    complexityAnalysis: { yourTime: string; yourSpace: string; optimalTime: string; optimalSpace: string };
+    patternRecognition: string;
+    followUpQuestions: string[];
+  } | null>(null);
+  const [loadingCoaching, setLoadingCoaching] = useState(false);
 
   // ── Refs ─────────────────────────────────────────────────────────────────────
   const editorRef = useRef<Parameters<OnMount>[0] | null>(null);
@@ -234,6 +273,16 @@ function PracticeProblemContent() {
       setElapsedTime((prev) => prev + 1);
     }, 1000);
     return () => clearInterval(interval);
+  }, []);
+
+  // Fetch server capabilities on mount
+  useEffect(() => {
+    fetch("/api/capabilities")
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => {
+        if (data?.languages) setCapabilities(data.languages);
+      })
+      .catch(() => {});
   }, []);
 
   // Auto-save progress every 30 seconds
@@ -338,6 +387,18 @@ function PracticeProblemContent() {
     return [...builtIn, ...customTestCases.map(tc => ({ ...tc, custom: true }))];
   }, [problem?.testCases, customTestCases]);
 
+  // ── Helpers: capability checks ──────────────────────────────────────────────
+  const canRun = useCallback((lang: string) => {
+    if (capabilities[lang]) return capabilities[lang].run;
+    // Fallback: JS/TS always runnable (browser worker), Python/Java try server
+    return ["javascript", "typescript", "python", "java"].includes(lang);
+  }, [capabilities]);
+
+  const canTestCases = useCallback((lang: string) => {
+    if (capabilities[lang]) return capabilities[lang].testCases;
+    return TEST_CASE_LANGS.includes(lang);
+  }, [capabilities]);
+
   // ── Run code ────────────────────────────────────────────────────────────────
   const handleRunCode = useCallback(async () => {
     if (executing) return;
@@ -348,24 +409,7 @@ function PracticeProblemContent() {
     const startTime = performance.now();
 
     try {
-      if (language === "javascript" || language === "typescript") {
-        const { runJavaScriptInWorker } = await import("@/lib/code-runner");
-        const result = await runJavaScriptInWorker(code);
-        const runtime = Math.round(performance.now() - startTime);
-        setExecOutput({ ...result, runtime });
-        return;
-      }
-
-      const langInfo = languages.find(l => l.value === language);
-      if (!langInfo?.runnable) {
-        setExecOutput({
-          output: "",
-          error: `${langInfo?.label || language} code execution is not available in practice mode.\n\nOnly JavaScript and TypeScript can run in the browser.\nSelect JavaScript or TypeScript to execute your code, or use the AI assistant to review your ${langInfo?.label || language} solution.`,
-          exitCode: 1,
-        });
-        return;
-      }
-
+      // Try server-first for ALL languages
       const res = await fetch("/api/execute", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -373,25 +417,43 @@ function PracticeProblemContent() {
       });
       const data = await res.json();
       const runtime = Math.round(performance.now() - startTime);
-      if (data.error === "USE_CLIENT_EXECUTION") {
+
+      // Server says use client-side → JS/TS browser worker fallback
+      if (data.error === "USE_CLIENT_EXECUTION" && (language === "javascript" || language === "typescript")) {
         const { runJavaScriptInWorker } = await import("@/lib/code-runner");
         const result = await runJavaScriptInWorker(code);
         setExecOutput({ ...result, runtime });
-      } else if (data.error && data.error.includes("No code execution service")) {
+        return;
+      }
+
+      // No backend available
+      if (data.error && data.error.includes("No code execution service")) {
+        const langLabel = languages.find(l => l.value === language)?.label || language;
         setExecOutput({
           output: "",
-          error: `${language.charAt(0).toUpperCase() + language.slice(1)} execution requires a server-side runtime.\n\nIn practice mode, JavaScript and TypeScript run directly in your browser.\nFor other languages, switch to JavaScript/TypeScript or use the AI assistant to verify your logic.`,
+          error: `${langLabel} execution requires a server-side runtime (not configured).\n\nJavaScript and TypeScript can run in the browser.\nFor other languages, configure Piston or Judge0, or install the runtime locally.`,
           exitCode: 1,
         });
-      } else {
-        setExecOutput({
-          output: data.output || "",
-          error: data.error || "",
-          exitCode: data.exitCode ?? 1,
-          runtime,
-        });
+        return;
       }
+
+      setExecOutput({
+        output: data.output || "",
+        error: data.error || "",
+        exitCode: data.exitCode ?? 1,
+        runtime,
+      });
     } catch {
+      // Server unreachable — fallback to browser worker for JS/TS
+      if (language === "javascript" || language === "typescript") {
+        try {
+          const { runJavaScriptInWorker } = await import("@/lib/code-runner");
+          const result = await runJavaScriptInWorker(code);
+          const runtime = Math.round(performance.now() - startTime);
+          setExecOutput({ ...result, runtime });
+          return;
+        } catch { /* fall through */ }
+      }
       setExecOutput({
         output: "",
         error: "Failed to connect to execution service.",
@@ -404,40 +466,67 @@ function PracticeProblemContent() {
 
   // ── Run test cases ──────────────────────────────────────────────────────────
   const runTestsInternal = useCallback(async (cases: TestCase[]): Promise<{ input: string; expected: string; actual: string; passed: boolean; runtime?: number }[]> => {
-    if (language !== "javascript" && language !== "typescript") {
+    // Check if language supports test cases
+    if (!canTestCases(language)) {
+      const langLabel = languages.find(l => l.value === language)?.label || language;
       return [{
         input: "--",
         expected: "--",
-        actual: "Test cases only run with JavaScript/TypeScript in the browser.",
+        actual: `Test cases for ${langLabel} are not yet supported.\nTest cases are available for JavaScript, TypeScript, Python, and Java.`,
         passed: false,
       }];
     }
 
-    const results: { input: string; expected: string; actual: string; passed: boolean; runtime?: number }[] = [];
+    // Try server-side test runner first
+    try {
+      const res = await fetch("/api/execute/run-tests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ language, code, testCases: cases.map(tc => ({ input: tc.input, expected: tc.expected })) }),
+      });
+      const data = await res.json();
 
-    for (const tc of cases) {
-      try {
-        const testCode = `${code}\nconsole.log(JSON.stringify(${tc.input}));`;
-        const { runJavaScriptInWorker } = await import("@/lib/code-runner");
-        const start = performance.now();
-        const result = await runJavaScriptInWorker(testCode);
-        const runtime = Math.round(performance.now() - start);
-        const actual = (result.output || "").trim();
-        const expected = tc.expected.trim();
-        let passed = false;
-        try {
-          passed = actual === expected || actual === JSON.stringify(JSON.parse(expected));
-        } catch {
-          passed = actual === expected;
-        }
-        results.push({ input: tc.input, expected, actual: result.error ? `Error: ${result.error}` : actual, passed: !result.error && passed, runtime });
-      } catch {
-        results.push({ input: tc.input, expected: tc.expected, actual: "Execution error", passed: false });
+      if (res.ok && data.results) {
+        return data.results;
       }
+      // Server returned an error — fall through to browser fallback for JS/TS
+    } catch {
+      // Server unreachable — fall through to browser fallback for JS/TS
     }
 
-    return results;
-  }, [code, language]);
+    // Browser fallback: JS/TS only
+    if (language === "javascript" || language === "typescript") {
+      const results: { input: string; expected: string; actual: string; passed: boolean; runtime?: number }[] = [];
+      for (const tc of cases) {
+        try {
+          const testCode = `${code}\nconsole.log(JSON.stringify(${tc.input}));`;
+          const { runJavaScriptInWorker } = await import("@/lib/code-runner");
+          const start = performance.now();
+          const result = await runJavaScriptInWorker(testCode);
+          const runtime = Math.round(performance.now() - start);
+          const actual = (result.output || "").trim();
+          const expected = tc.expected.trim();
+          let passed = false;
+          try {
+            passed = actual === expected || actual === JSON.stringify(JSON.parse(expected));
+          } catch {
+            passed = actual === expected;
+          }
+          results.push({ input: tc.input, expected, actual: result.error ? `Error: ${result.error}` : actual, passed: !result.error && passed, runtime });
+        } catch {
+          results.push({ input: tc.input, expected: tc.expected, actual: "Execution error", passed: false });
+        }
+      }
+      return results;
+    }
+
+    return [{
+      input: "--",
+      expected: "--",
+      actual: "Server-side execution is unavailable. Please try again later.",
+      passed: false,
+    }];
+  }, [code, language, canTestCases]);
 
   const handleRunTests = useCallback(async () => {
     if (runningTests || allTestCases.length === 0) return;
@@ -487,36 +576,86 @@ function PracticeProblemContent() {
     }
   }, [problem, language]);
 
-  // ── Fetch hints ─────────────────────────────────────────────────────────────
+  // ── Fetch hints (structured API) ─────────────────────────────────────────────
   const fetchHints = useCallback(async () => {
     if (loadingHints || hints.length > 0 || !problem) return;
+
+    // Use static hints from bankProblem if available (no API call needed)
+    if (bankProblem?.hints && bankProblem.hints.length >= 3) {
+      setHints(bankProblem.hints.slice(0, 3));
+      return;
+    }
+
     setLoadingHints(true);
     try {
-      const res = await fetch("/api/sessions/practice-ai", {
+      const res = await fetch("/api/practice/hints", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          prompt: `Give me exactly 3 progressive hints for solving this problem. Start vague and get more specific. Format as a JSON array of 3 strings. Example: ["Think about what data structure...", "Consider using a hash map to...", "The key insight is to iterate once and..."]`,
-          code: "",
-          questionContext: `${problem.title}\n\n${problem.description}\n\nConstraints:\n${problem.constraints}`,
-          aiLevel: 2,
-        }),
+        body: JSON.stringify({ bankProblemId: problemId }),
       });
       const data = await res.json();
-      try {
-        const parsed = JSON.parse(data.response);
-        if (Array.isArray(parsed)) {
-          setHints(parsed.map(String));
-          return;
-        }
-      } catch { /* fallback below */ }
-      setHints([data.response || "No hints available."]);
+      if (data.hints) {
+        const h = data.hints;
+        setHints([h.pattern, h.dataStructure, h.approach]);
+      } else {
+        setHints(["No hints available."]);
+      }
     } catch {
       setHints(["Failed to load hints. Try again later."]);
     } finally {
       setLoadingHints(false);
     }
-  }, [loadingHints, hints.length, problem]);
+  }, [loadingHints, hints.length, problem, problemId, bankProblem]);
+
+  // ── Fetch editorial ────────────────────────────────────────────────────────
+  const fetchEditorial = useCallback(async () => {
+    if (loadingEditorial || editorial || !problem) return;
+    setLoadingEditorial(true);
+    setEditorialError("");
+    try {
+      const res = await fetch("/api/practice/editorial", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bankProblemId: problemId }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setEditorialError(data.error || "Failed to load editorial");
+      } else {
+        setEditorial(data.editorial);
+      }
+    } catch {
+      setEditorialError("Failed to load editorial. Try again later.");
+    } finally {
+      setLoadingEditorial(false);
+    }
+  }, [loadingEditorial, editorial, problem, problemId]);
+
+  // ── Fetch coaching ─────────────────────────────────────────────────────────
+  const fetchCoaching = useCallback(async () => {
+    if (loadingCoaching || !problem) return;
+    setLoadingCoaching(true);
+    try {
+      const res = await fetch("/api/practice/coach", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          bankProblemId: problemId,
+          code,
+          language,
+          timeSpentSeconds: elapsedTime,
+          testsPassed: testResults?.filter(t => t.passed).length || 0,
+          testsTotal: testResults?.length || 0,
+        }),
+      });
+      const data = await res.json();
+      if (data.feedback) setCoaching(data.feedback);
+    } catch {
+      // silently fail
+    } finally {
+      setLoadingCoaching(false);
+    }
+  }, [loadingCoaching, problem, problemId, code, language, elapsedTime, testResults]);
 
   // ── Handle AI prompt ────────────────────────────────────────────────────────
   async function handleAiSubmit(e: React.FormEvent) {
@@ -673,7 +812,7 @@ function PracticeProblemContent() {
           >
             {languages.map((lang) => (
               <option key={lang.value} value={lang.value}>
-                {lang.label}{!lang.runnable ? " (editor only)" : ""}
+                {lang.label}{canRun(lang.value) ? (canTestCases(lang.value) ? "" : " (run only)") : " (editor only)"}
               </option>
             ))}
           </select>
@@ -791,7 +930,8 @@ function PracticeProblemContent() {
           {/* Submit Button */}
           <button
             onClick={handleSubmit}
-            disabled={submitting || allTestCases.length === 0}
+            disabled={submitting || allTestCases.length === 0 || !canTestCases(language)}
+            title={!canTestCases(language) ? "Test cases available for JS, TS, Python, Java" : ""}
             className={`inline-flex items-center gap-1.5 rounded-lg px-4 py-1.5 text-xs font-bold text-white transition-colors disabled:opacity-50 ${
               submitResult === "accepted"
                 ? "bg-green-600 hover:bg-green-500"
@@ -839,6 +979,14 @@ function PracticeProblemContent() {
               }`}
             >
               Hints
+            </button>
+            <button
+              onClick={() => { setProblemTab("editorial"); if (!editorial && !editorialError) fetchEditorial(); }}
+              className={`px-3 py-1.5 text-xs font-medium rounded-t transition-colors ${
+                problemTab === "editorial" ? "bg-gray-800 text-white border-b-2 border-green-500" : "text-gray-500 hover:text-gray-300"
+              }`}
+            >
+              Editorial
             </button>
           </div>
 
@@ -945,41 +1093,97 @@ function PracticeProblemContent() {
                   </div>
                 ) : hints.length > 0 ? (
                   <div className="space-y-2">
-                    {hints.map((hint, i) => (
-                      <div key={i}>
-                        {i < hintsRevealed ? (
-                          <div className="rounded-lg border border-yellow-500/20 bg-yellow-500/5 p-3">
-                            <div className="flex items-center gap-1.5 mb-1">
-                              <span className="text-[10px] font-bold text-yellow-500">HINT {i + 1}</span>
+                    {hints.map((hint, i) => {
+                      const hintLabels = ["Pattern", "Data Structure", "Approach"];
+                      return (
+                        <div key={i}>
+                          {i < hintsRevealed ? (
+                            <div className="rounded-lg border border-yellow-500/20 bg-yellow-500/5 p-3">
+                              <div className="flex items-center gap-1.5 mb-1">
+                                <span className="text-[10px] font-bold text-yellow-500">{hintLabels[i] || `HINT ${i + 1}`}</span>
+                              </div>
+                              <p className="text-sm text-gray-300">{hint}</p>
                             </div>
-                            <p className="text-sm text-gray-300">{hint}</p>
-                          </div>
-                        ) : i === hintsRevealed ? (
-                          <button
-                            onClick={() => setHintsRevealed(prev => prev + 1)}
-                            className="w-full rounded-lg border border-gray-700 bg-gray-800 p-3 text-xs text-gray-400 hover:text-yellow-400 hover:border-yellow-500/30 transition-colors flex items-center gap-2"
-                          >
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                            Reveal Hint {i + 1}
-                          </button>
-                        ) : (
-                          <div className="rounded-lg border border-gray-800 bg-gray-900 p-3 text-xs text-gray-600 flex items-center gap-2">
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                            </svg>
-                            Hint {i + 1} - Reveal previous hint first
-                          </div>
-                        )}
-                      </div>
-                    ))}
+                          ) : i === hintsRevealed ? (
+                            <button
+                              onClick={() => setHintsRevealed(prev => prev + 1)}
+                              className="w-full rounded-lg border border-gray-700 bg-gray-800 p-3 text-xs text-gray-400 hover:text-yellow-400 hover:border-yellow-500/30 transition-colors flex items-center gap-2"
+                            >
+                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                              </svg>
+                              Reveal {hintLabels[i] || `Hint ${i + 1}`}
+                            </button>
+                          ) : (
+                            <div className="rounded-lg border border-gray-800 bg-gray-900 p-3 text-xs text-gray-600 flex items-center gap-2">
+                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                              </svg>
+                              {hintLabels[i] || `Hint ${i + 1}`} - Reveal previous hint first
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 ) : (
                   <button onClick={fetchHints} className="text-xs text-purple-400 hover:text-purple-300 underline">
                     Load hints
                   </button>
+                )}
+              </div>
+            )}
+
+            {problemTab === "editorial" && (
+              <div className="space-y-4">
+                <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+                  <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                  Editorial
+                </h3>
+
+                {loadingEditorial ? (
+                  <div className="flex items-center gap-2 text-xs text-green-400 py-4">
+                    <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Generating editorial...
+                  </div>
+                ) : editorialError ? (
+                  <div className="rounded-lg border border-yellow-500/20 bg-yellow-500/5 p-4">
+                    <p className="text-sm text-yellow-400">{editorialError}</p>
+                    <button
+                      onClick={() => { setEditorialError(""); fetchEditorial(); }}
+                      className="mt-2 text-xs text-purple-400 hover:text-purple-300 underline"
+                    >
+                      Try again
+                    </button>
+                  </div>
+                ) : editorial ? (
+                  <div className="space-y-3">
+                    {[
+                      { title: "Intuition", content: editorial.intuition, color: "border-green-500/20 bg-green-500/5" },
+                      { title: "Brute Force", content: editorial.bruteForce, color: "border-orange-500/20 bg-orange-500/5" },
+                      { title: "Optimized Solution", content: editorial.optimized, color: "border-blue-500/20 bg-blue-500/5" },
+                      { title: "Complexity", content: editorial.complexity, color: "border-purple-500/20 bg-purple-500/5" },
+                      { title: "Code Walkthrough", content: editorial.codeWalkthrough, color: "border-cyan-500/20 bg-cyan-500/5" },
+                    ].map((section) => (
+                      <div key={section.title} className={`rounded-lg border ${section.color} p-3`}>
+                        <h4 className="text-xs font-bold uppercase text-gray-400 mb-1.5">{section.title}</h4>
+                        <p className="text-sm text-gray-300 whitespace-pre-wrap leading-relaxed">{section.content}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-6">
+                    <svg className="mx-auto h-8 w-8 text-gray-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    <p className="text-xs text-gray-500">Submit a solution or spend 20+ minutes to unlock the editorial.</p>
+                  </div>
                 )}
               </div>
             )}
@@ -1225,12 +1429,17 @@ function PracticeProblemContent() {
                 {/* Test Results Tab */}
                 {bottomTab === "results" && (
                   <div className="p-3">
-                    {language !== "javascript" && language !== "typescript" ? (
-                      <div className="flex items-center gap-2 text-xs text-gray-500 py-4 justify-center">
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Test cases only available for JavaScript/TypeScript
+                    {!canTestCases(language) ? (
+                      <div className="flex flex-col items-center gap-2 text-xs text-gray-500 py-4">
+                        <div className="flex items-center gap-2">
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          Test cases available for JavaScript, TypeScript, Python, Java
+                        </div>
+                        {canRun(language) && (
+                          <span className="text-[10px] text-gray-600">Use &quot;Run&quot; to execute your code without test case judging</span>
+                        )}
                       </div>
                     ) : runningTests || submitting ? (
                       <div className="flex items-center gap-2 text-xs text-gray-400 py-4 justify-center">
@@ -1304,6 +1513,89 @@ function PracticeProblemContent() {
                     ) : (
                       <div className="text-xs text-gray-500 py-4 text-center">
                         Click &quot;Run Tests&quot; or &quot;Submit&quot; to execute test cases
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Coaching section in results tab */}
+                {bottomTab === "results" && testResults && (
+                  <div className="px-3 pb-3">
+                    {!coaching && !loadingCoaching && (
+                      <button
+                        onClick={fetchCoaching}
+                        className="w-full mt-2 rounded-lg border border-purple-500/30 bg-purple-500/10 px-4 py-2.5 text-sm font-medium text-purple-400 hover:bg-purple-500/20 transition-colors flex items-center justify-center gap-2"
+                      >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                        Get AI Coaching
+                      </button>
+                    )}
+                    {loadingCoaching && (
+                      <div className="flex items-center justify-center gap-2 text-xs text-purple-400 py-3">
+                        <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                        </svg>
+                        Analyzing your solution...
+                      </div>
+                    )}
+                    {coaching && (
+                      <div className="mt-3 space-y-3">
+                        <div className="rounded-lg border border-purple-500/20 bg-purple-500/5 p-3">
+                          <div className="flex items-center justify-between mb-2">
+                            <h4 className="text-xs font-bold uppercase text-purple-400">AI Coach</h4>
+                            <span className={`text-sm font-bold ${coaching.score >= 80 ? "text-green-400" : coaching.score >= 60 ? "text-yellow-400" : "text-red-400"}`}>
+                              {coaching.score}/100
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-300">{coaching.overallAssessment}</p>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-2">
+                          <div className="rounded-lg border border-green-500/20 bg-green-500/5 p-2.5">
+                            <h5 className="text-[10px] font-bold uppercase text-green-500 mb-1">What went well</h5>
+                            <ul className="space-y-1">
+                              {coaching.whatWentWell.map((item, i) => (
+                                <li key={i} className="text-xs text-gray-300 flex items-start gap-1">
+                                  <span className="text-green-400 mt-0.5 shrink-0">+</span> {item}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div className="rounded-lg border border-orange-500/20 bg-orange-500/5 p-2.5">
+                            <h5 className="text-[10px] font-bold uppercase text-orange-500 mb-1">To improve</h5>
+                            <ul className="space-y-1">
+                              {coaching.whatToImprove.map((item, i) => (
+                                <li key={i} className="text-xs text-gray-300 flex items-start gap-1">
+                                  <span className="text-orange-400 mt-0.5 shrink-0">-</span> {item}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+
+                        <div className="rounded-lg border border-gray-700 bg-gray-800/50 p-2.5">
+                          <h5 className="text-[10px] font-bold uppercase text-gray-500 mb-1.5">Complexity</h5>
+                          <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
+                            <div className="text-gray-400">Your Time: <span className="text-gray-300">{coaching.complexityAnalysis.yourTime}</span></div>
+                            <div className="text-gray-400">Optimal: <span className="text-green-400">{coaching.complexityAnalysis.optimalTime}</span></div>
+                            <div className="text-gray-400">Your Space: <span className="text-gray-300">{coaching.complexityAnalysis.yourSpace}</span></div>
+                            <div className="text-gray-400">Optimal: <span className="text-green-400">{coaching.complexityAnalysis.optimalSpace}</span></div>
+                          </div>
+                        </div>
+
+                        {coaching.followUpQuestions.length > 0 && (
+                          <div className="rounded-lg border border-blue-500/20 bg-blue-500/5 p-2.5">
+                            <h5 className="text-[10px] font-bold uppercase text-blue-500 mb-1">Follow-up Questions</h5>
+                            <ul className="space-y-1">
+                              {coaching.followUpQuestions.map((q, i) => (
+                                <li key={i} className="text-xs text-gray-300">{i + 1}. {q}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
