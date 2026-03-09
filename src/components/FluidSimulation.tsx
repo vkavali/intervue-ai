@@ -360,11 +360,11 @@ export default function FluidSimulation() {
     const simSize = getResolution(SIM_RES);
     const dyeSize = getResolution(DYE_RES);
 
-    let velocity = createDoubleFBO(gl, simSize.w, simSize.h, formatRGBA, formatRGBA, halfFloatType, filterType);
-    let dye = createDoubleFBO(gl, dyeSize.w, dyeSize.h, formatRGBA, formatRGBA, halfFloatType, filterType);
+    const velocity = createDoubleFBO(gl, simSize.w, simSize.h, formatRGBA, formatRGBA, halfFloatType, filterType);
+    const dye = createDoubleFBO(gl, dyeSize.w, dyeSize.h, formatRGBA, formatRGBA, halfFloatType, filterType);
     const curl = createFBO(gl, simSize.w, simSize.h, formatRGBA, formatRGBA, halfFloatType, gl.NEAREST);
     const divergence = createFBO(gl, simSize.w, simSize.h, formatRGBA, formatRGBA, halfFloatType, gl.NEAREST);
-    let pressure = createDoubleFBO(gl, simSize.w, simSize.h, formatRGBA, formatRGBA, halfFloatType, gl.NEAREST);
+    const pressure = createDoubleFBO(gl, simSize.w, simSize.h, formatRGBA, formatRGBA, halfFloatType, gl.NEAREST);
 
     function blit(target: FBO | null) {
       if (target) {
