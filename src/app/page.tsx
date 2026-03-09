@@ -7,7 +7,6 @@ import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/Scroll
 
 // Dynamic imports for 3D components (SSR disabled)
 const ParticleField = dynamic(() => import("@/components/3d/ParticleField"), { ssr: false });
-const FloatingCode = dynamic(() => import("@/components/3d/FloatingCode"), { ssr: false });
 const AIBrain = dynamic(() => import("@/components/3d/AIBrain"), { ssr: false });
 const Globe = dynamic(() => import("@/components/3d/Globe"), { ssr: false });
 const GeometricShapes = dynamic(() => import("@/components/3d/GeometricShapes"), { ssr: false });
@@ -509,11 +508,149 @@ export default function Home() {
               </div>
             </ScrollReveal>
 
-            {/* Right: 3D Floating Code Mockup */}
-            <ScrollReveal delay={0.3} direction="right" className="hidden lg:block h-[500px]">
-              <Suspense fallback={<Scene3DFallback />}>
-                <FloatingCode />
-              </Suspense>
+            {/* Right: 3D Floating Mockup */}
+            <ScrollReveal delay={0.3} direction="right" className="relative hidden lg:block">
+              <div style={{ perspective: "1200px" }}>
+                {/* Main dashboard mockup - rotated in 3D */}
+                <div
+                  className="relative rounded-2xl border border-gray-700/50 bg-gray-900/90 backdrop-blur-xl shadow-2xl shadow-purple-900/20 overflow-hidden"
+                  style={{ transform: "rotateY(-8deg) rotateX(4deg) rotateZ(1deg)" }}
+                >
+                  {/* Browser chrome */}
+                  <div className="flex items-center gap-2 border-b border-gray-800 bg-gray-950/80 px-4 py-3">
+                    <div className="flex gap-1.5">
+                      <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                      <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+                      <div className="w-3 h-3 rounded-full bg-green-500/80" />
+                    </div>
+                    <div className="flex-1 flex justify-center">
+                      <div className="rounded-lg bg-gray-800/80 px-4 py-1 text-xs text-gray-500 font-mono">
+                        intervue.ai/session/live
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Mock interview UI */}
+                  <div className="p-4 grid grid-cols-5 gap-3" style={{ minHeight: "320px" }}>
+                    {/* Code editor area */}
+                    <div className="col-span-3 rounded-lg border border-gray-800 bg-gray-950 p-3">
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="rounded bg-blue-500/20 px-2 py-0.5 text-[10px] font-mono text-blue-400">JavaScript</div>
+                        <div className="rounded bg-yellow-500/20 px-2 py-0.5 text-[10px] font-mono text-yellow-400">Medium</div>
+                      </div>
+                      <div className="space-y-1.5 font-mono text-[11px]">
+                        <p><span className="text-purple-400">function</span> <span className="text-blue-300">twoSum</span><span className="text-gray-500">(</span><span className="text-orange-300">nums</span><span className="text-gray-500">,</span> <span className="text-orange-300">target</span><span className="text-gray-500">)</span> <span className="text-gray-500">&#123;</span></p>
+                        <p className="pl-4"><span className="text-purple-400">const</span> <span className="text-blue-300">map</span> <span className="text-gray-500">=</span> <span className="text-purple-400">new</span> <span className="text-yellow-300">Map</span><span className="text-gray-500">();</span></p>
+                        <p className="pl-4"><span className="text-purple-400">for</span> <span className="text-gray-500">(</span><span className="text-purple-400">let</span> <span className="text-blue-300">i</span> <span className="text-gray-500">=</span> <span className="text-green-300">0</span><span className="text-gray-500">;</span> <span className="text-blue-300">i</span> <span className="text-gray-500">&lt;</span> <span className="text-orange-300">nums</span><span className="text-gray-500">.</span><span className="text-blue-300">length</span><span className="text-gray-500">;</span> <span className="text-blue-300">i</span><span className="text-gray-500">++)</span> <span className="text-gray-500">&#123;</span></p>
+                        <p className="pl-8"><span className="text-purple-400">const</span> <span className="text-blue-300">comp</span> <span className="text-gray-500">=</span> <span className="text-orange-300">target</span> <span className="text-gray-500">-</span> <span className="text-orange-300">nums</span><span className="text-gray-500">[</span><span className="text-blue-300">i</span><span className="text-gray-500">];</span></p>
+                        <p className="pl-8"><span className="text-purple-400">if</span> <span className="text-gray-500">(</span><span className="text-blue-300">map</span><span className="text-gray-500">.</span><span className="text-yellow-300">has</span><span className="text-gray-500">(</span><span className="text-blue-300">comp</span><span className="text-gray-500">))</span></p>
+                        <p className="pl-12"><span className="text-purple-400">return</span> <span className="text-gray-500">[</span><span className="text-blue-300">map</span><span className="text-gray-500">.</span><span className="text-yellow-300">get</span><span className="text-gray-500">(</span><span className="text-blue-300">comp</span><span className="text-gray-500">),</span> <span className="text-blue-300">i</span><span className="text-gray-500">];</span></p>
+                        <p className="pl-8"><span className="text-blue-300">map</span><span className="text-gray-500">.</span><span className="text-yellow-300">set</span><span className="text-gray-500">(</span><span className="text-orange-300">nums</span><span className="text-gray-500">[</span><span className="text-blue-300">i</span><span className="text-gray-500">],</span> <span className="text-blue-300">i</span><span className="text-gray-500">);</span></p>
+                        <p className="pl-4"><span className="text-gray-500">&#125;</span></p>
+                        <p><span className="text-gray-500">&#125;</span><span className="animate-pulse text-white">|</span></p>
+                      </div>
+                    </div>
+
+                    {/* Side panel */}
+                    <div className="col-span-2 space-y-3">
+                      {/* AI Chat */}
+                      <div className="rounded-lg border border-gray-800 bg-gray-950 p-3">
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
+                            <span className="text-[8px] font-bold text-white">AI</span>
+                          </div>
+                          <span className="text-[10px] font-medium text-gray-400">AI Assist (L2)</span>
+                        </div>
+                        <div className="rounded-lg bg-purple-500/10 border border-purple-500/20 p-2">
+                          <p className="text-[10px] text-purple-300 leading-relaxed">
+                            Consider using a HashMap to achieve O(n) time complexity. Think about what complement you need for each element...
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Video call mini */}
+                      <div className="rounded-lg border border-gray-800 bg-gray-950 p-2">
+                        <div className="grid grid-cols-2 gap-1.5">
+                          <div className="aspect-video rounded bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                            <div className="w-8 h-8 rounded-full bg-purple-500/30 flex items-center justify-center text-[10px] text-purple-300 font-semibold">JD</div>
+                          </div>
+                          <div className="aspect-video rounded bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                            <div className="w-8 h-8 rounded-full bg-blue-500/30 flex items-center justify-center text-[10px] text-blue-300 font-semibold">MK</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Score preview */}
+                      <div className="rounded-lg border border-gray-800 bg-gray-950 p-3">
+                        <p className="text-[10px] font-medium text-gray-400 mb-2">Live Assessment</p>
+                        <div className="space-y-1.5">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[9px] text-gray-500">Problem Comprehension</span>
+                            <div className="w-16 h-1.5 rounded-full bg-gray-800 overflow-hidden">
+                              <div className="w-[85%] h-full rounded-full bg-green-500" />
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-[9px] text-gray-500">Code Quality</span>
+                            <div className="w-16 h-1.5 rounded-full bg-gray-800 overflow-hidden">
+                              <div className="w-[72%] h-full rounded-full bg-blue-500" />
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-[9px] text-gray-500">AI Usage</span>
+                            <div className="w-16 h-1.5 rounded-full bg-gray-800 overflow-hidden">
+                              <div className="w-[60%] h-full rounded-full bg-purple-500" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Floating card: Audit result */}
+                <div
+                  className="absolute -bottom-8 -left-12 w-56 rounded-xl border border-green-500/30 bg-gray-900/95 backdrop-blur-xl p-4 shadow-2xl shadow-green-900/20"
+                  style={{ transform: "rotateY(8deg) rotateX(-2deg) translateZ(40px)" }}
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
+                      <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-white">Audit Complete</p>
+                      <p className="text-[10px] text-gray-400">Score: 87/100</p>
+                    </div>
+                  </div>
+                  <div className="rounded-lg bg-green-500/10 border border-green-500/20 px-3 py-1.5">
+                    <p className="text-[10px] text-green-400 font-medium">Recommendation: HIRE</p>
+                  </div>
+                </div>
+
+                {/* Floating card: AI Level indicator */}
+                <div
+                  className="absolute -top-4 -right-8 w-44 rounded-xl border border-purple-500/30 bg-gray-900/95 backdrop-blur-xl p-3 shadow-2xl shadow-purple-900/20"
+                  style={{ transform: "rotateY(-12deg) rotateX(6deg) translateZ(60px)" }}
+                >
+                  <p className="text-[10px] font-medium text-gray-400 mb-2">AI Level Control</p>
+                  <div className="flex gap-1">
+                    {["L0", "L1", "L2", "L3", "L4"].map((l, i) => (
+                      <div
+                        key={l}
+                        className={`flex-1 rounded py-1 text-center text-[9px] font-bold ${
+                          i === 2
+                            ? "bg-blue-500 text-white"
+                            : "bg-gray-800 text-gray-500"
+                        }`}
+                      >
+                        {l}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </ScrollReveal>
           </div>
         </div>
