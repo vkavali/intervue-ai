@@ -99,13 +99,14 @@ export function wrapTestCode(language: string, userCode: string, testInput: stri
       const mainRegex = /public\s+static\s+void\s+main\s*\([^)]*\)\s*\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}/;
       userCode = userCode.replace(mainRegex, '');
 
-      // Wrap: add a main method that calls the function and prints result
-      // We need to serialize the result — use Arrays.toString for arrays, String.valueOf for primitives
-      const resultExpr = `result`;
+      // Wrap: add a main method that instantiates the class and calls the function
+      // Use Object type to avoid Java's strict instanceof compile-time checks with var
       const printCode = `
     public static void main(String[] args) {
-        var result = ${adapted};
-        if (result instanceof int[]) {
+        Object result = new ${className}().${adapted};
+        if (result == null) {
+            System.out.println("null");
+        } else if (result instanceof int[]) {
             System.out.println(java.util.Arrays.toString((int[]) result));
         } else if (result instanceof String[]) {
             System.out.println(java.util.Arrays.toString((String[]) result));
@@ -114,7 +115,7 @@ export function wrapTestCode(language: string, userCode: string, testInput: stri
         } else if (result instanceof boolean[]) {
             System.out.println(java.util.Arrays.toString((boolean[]) result));
         } else if (result instanceof Object[]) {
-            System.out.println(java.util.Arrays.deepToString((Object[]) ${resultExpr}));
+            System.out.println(java.util.Arrays.deepToString((Object[]) result));
         } else {
             System.out.println(String.valueOf(result));
         }
