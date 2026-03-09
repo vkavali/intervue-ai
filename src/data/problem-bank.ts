@@ -9,6 +9,8 @@ export interface ProblemEntry {
   constraints?: string;
   examples?: string;
   starterCode?: Record<string, string>;
+  testCases?: { input: string; expected: string }[];
+  pattern?: string;
 }
 
 
@@ -1101,4 +1103,34 @@ const GENERAL2: ProblemEntry[] = [
   { id: "gen-510", title: "Cryptarithmetic Puzzle Solver", difficulty: "HARD", description: "Solve a cryptarithmetic puzzle where each letter represents a unique digit. Given an equation like SEND + MORE = MONEY, find the digit mapping using backtracking.", tags: ["Backtracking", "Constraint", "Math"], category: "Backtracking" },
 ];
 
-export const PROBLEM_BANK: ProblemEntry[] = [...GOOGLE, ...GOOGLE2, ...AMAZON, ...META, ...APPLE, ...NETFLIX, ...GENERAL1, ...GENERAL2];
+function derivePattern(p: ProblemEntry): string {
+  const tagStr = p.tags.join(" ");
+  if (tagStr.includes("Trie")) return "Trie";
+  if (tagStr.includes("Union Find")) return "UnionFind";
+  if (tagStr.includes("Heap")) return "Heap";
+  if (tagStr.includes("Binary Search")) return "BinarySearch";
+  if (tagStr.includes("Two Pointers")) return "TwoPointers";
+  if (tagStr.includes("Bit Manipulation")) return "BitManipulation";
+
+  const catMap: Record<string, string> = {
+    SlidingWindow: "SlidingWindow",
+    DynamicProgramming: "DynamicProgramming",
+    Graph: "Graph",
+    Trees: "Trees",
+    StackQueue: "Stack",
+    LinkedLists: "LinkedList",
+    Backtracking: "Backtracking",
+    Greedy: "Greedy",
+    Strings: "Strings",
+    Arrays: "Arrays",
+    Sorting: "Arrays",
+    Design: "Design",
+    Math: "Math",
+    Recursion: "Backtracking",
+  };
+  return catMap[p.category] || p.category;
+}
+
+const RAW_BANK: ProblemEntry[] = [...GOOGLE, ...GOOGLE2, ...AMAZON, ...META, ...APPLE, ...NETFLIX, ...GENERAL1, ...GENERAL2];
+
+export const PROBLEM_BANK: ProblemEntry[] = RAW_BANK.map(p => ({ ...p, pattern: derivePattern(p) }));

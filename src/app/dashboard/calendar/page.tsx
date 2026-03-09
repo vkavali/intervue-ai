@@ -35,8 +35,10 @@ function getFirstDayOfMonth(year: number, month: number) {
   return new Date(year, month - 1, 1).getDay();
 }
 
-function formatTime(dateStr: string) {
+function formatTime(dateStr: string | null | undefined) {
+  if (!dateStr) return "TBD";
   const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return "TBD";
   return d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true });
 }
 
@@ -101,7 +103,9 @@ export default function CalendarPage() {
   const availByDay: Record<number, AvailabilitySlot[]> = {};
 
   for (const s of sessions) {
+    if (!s.scheduledAt) continue;
     const d = new Date(s.scheduledAt);
+    if (isNaN(d.getTime())) continue;
     const day = d.getDate();
     if (!sessionsByDay[day]) sessionsByDay[day] = [];
     sessionsByDay[day].push(s);

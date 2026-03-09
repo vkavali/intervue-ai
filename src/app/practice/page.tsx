@@ -2,13 +2,22 @@
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { PROBLEM_BANK } from "@/data/problem-bank";
+import { CURATED_PATTERNS, CURATED_PROBLEMS } from "@/data/curated-75";
 
 const ITEMS_PER_PAGE = 24;
 
 const COMPANY_FILTERS = ["All", "Google", "Amazon", "Meta", "Apple", "Netflix", "General"];
 const DIFFICULTY_FILTERS = ["All", "EASY", "MEDIUM", "HARD"];
 const CATEGORY_FILTERS = ["All", "Arrays", "Strings", "LinkedLists", "Trees", "Graph", "DynamicProgramming", "Sorting", "StackQueue", "Design", "Math", "Greedy", "Backtracking", "SlidingWindow", "Recursion"];
+
+const PATTERN_FILTERS = ["All", ...CURATED_PATTERNS.map(p => p.id)];
+const PATTERN_LABELS: Record<string, string> = {};
+for (const p of CURATED_PATTERNS) { PATTERN_LABELS[p.id] = p.name; }
+
+// Build set of curated problem IDs for badge display
+const CURATED_IDS = new Set(CURATED_PROBLEMS.map(p => p.id));
 
 const AI_LEVEL_OPTIONS = [
   { value: 0, label: "L0 No AI", description: "Solve independently", color: "text-red-400", border: "border-red-500/30", bg: "bg-red-500/10" },
@@ -48,19 +57,56 @@ const difficultyColors: Record<string, { text: string; bg: string; border: strin
 };
 
 export default function PracticeModePage() {
+  const searchParamsHook = useSearchParams();
   const [selectedAiLevel, setSelectedAiLevel] = useState(2);
-  const [activeTab, setActiveTab] = useState<"problems" | "generate">("problems");
+  const [activeTab, setActiveTab] = useState<"problems" | "generate" | "studyplans">("problems");
 
   // Filter state
   const [searchQuery, setSearchQuery] = useState("");
   const [companyFilter, setCompanyFilter] = useState("All");
   const [difficultyFilter, setDifficultyFilter] = useState("All");
   const [categoryFilter, setCategoryFilter] = useState("All");
+  const [patternFilter, setPatternFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Progress tracking
+  const [progressMap, setProgressMap] = useState<Record<string, string>>({});
+
+  // Initialize pattern filter from URL
+  useEffect(() => {
+    const pattern = searchParamsHook.get("pattern");
+    if (pattern) {
+      setPatternFilter(pattern);
+      setActiveTab("problems");
+    }
+  }, [searchParamsHook]);
+
+  // Fetch practice progress
+  useEffect(() => {
+    fetch("/api/practice/progress")
+      .then((res) => (res.ok ? res.json() : { progress: [] }))
+      .then((data) => {
+        const map: Record<string, string> = {};
+        if (Array.isArray(data.progress)) {
+          for (const p of data.progress) {
+            map[p.bankProblemId] = p.status;
+          }
+        }
+        setProgressMap(map);
+      })
+      .catch(() => {});
+  }, []);
+
+  // Merge curated + bank (curated first, deduplicated)
+  const allProblems = useMemo(() => {
+    const bankIds = new Set(CURATED_PROBLEMS.map(p => p.id));
+    const rest = PROBLEM_BANK.filter(p => !bankIds.has(p.id));
+    return [...CURATED_PROBLEMS, ...rest];
+  }, []);
 
   // Filtered problems
   const filteredProblems = useMemo(() => {
-    return PROBLEM_BANK.filter((p) => {
+    return allProblems.filter((p) => {
       if (searchQuery && !p.title.toLowerCase().includes(searchQuery.toLowerCase()) && !p.description.toLowerCase().includes(searchQuery.toLowerCase()) && !p.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()))) return false;
       if (companyFilter !== "All") {
         if (companyFilter === "General") { if (p.company) return false; }
@@ -68,9 +114,10 @@ export default function PracticeModePage() {
       }
       if (difficultyFilter !== "All" && p.difficulty !== difficultyFilter) return false;
       if (categoryFilter !== "All" && p.category !== categoryFilter) return false;
+      if (patternFilter !== "All" && p.pattern !== patternFilter) return false;
       return true;
     });
-  }, [searchQuery, companyFilter, difficultyFilter, categoryFilter]);
+  }, [searchQuery, companyFilter, difficultyFilter, categoryFilter, patternFilter, allProblems]);
 
   const totalPages = Math.ceil(filteredProblems.length / ITEMS_PER_PAGE);
   const paginatedProblems = filteredProblems.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
@@ -141,11 +188,11 @@ export default function PracticeModePage() {
     }
   }
 
-  function renderProblemCard(problem: { id: string; title: string; difficulty: string; description: string; tags: string[]; company?: string | null }, options: { isGenerated?: boolean; isSaved?: boolean; dbId?: string; progress?: SavedProblem["progress"] } = {}) {
+  function renderProblemCard(problem: { id: string; title: string; difficulty: string; description: string; tags: string[]; company?: string | null; pattern?: string; testCases?: { input: string; expected: string }[] }, options: { isGenerated?: boolean; isSaved?: boolean; dbId?: string; progress?: SavedProblem["progress"] } = {}) {
     const { isGenerated = false, isSaved = false, dbId, progress } = options;
     const diff = difficultyColors[problem.difficulty] || difficultyColors.MEDIUM;
-    // Saved problems link via DB id; freshly-generated (not yet in savedProblems) fall back to JSON URL
-    // Bank problems route to /practice/{id}
+    const isCurated = CURATED_IDS.has(problem.id);
+    const progressStatus = progress?.status || progressMap[problem.id];
     let href: string;
     if (isSaved && dbId) {
       href = `/practice/custom?id=${dbId}&aiLevel=${selectedAiLevel}`;
@@ -166,7 +213,17 @@ export default function PracticeModePage() {
           >
             {problem.difficulty}
           </span>
-          <div className="flex gap-1">
+          <div className="flex gap-1 flex-wrap justify-end">
+            {isCurated && (
+              <span className="inline-flex items-center rounded-full bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 text-[10px] text-emerald-400">
+                Curated
+              </span>
+            )}
+            {problem.testCases && problem.testCases.length > 0 && (
+              <span className="inline-flex items-center rounded-full bg-cyan-500/10 border border-cyan-500/30 px-2 py-0.5 text-[10px] text-cyan-400">
+                {problem.testCases.length} tests
+              </span>
+            )}
             {problem.company && (
               <span className="inline-flex items-center rounded-full bg-blue-500/10 border border-blue-500/30 px-2 py-0.5 text-[10px] text-blue-400">
                 {problem.company}
@@ -177,13 +234,13 @@ export default function PracticeModePage() {
                 AI Generated
               </span>
             )}
-            {progress && (
+            {progressStatus && (
               <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] ${
-                progress.status === "COMPLETED"
+                progressStatus === "COMPLETED"
                   ? "bg-green-500/10 border border-green-500/30 text-green-400"
                   : "bg-yellow-500/10 border border-yellow-500/30 text-yellow-400"
               }`}>
-                {progress.status === "COMPLETED" ? "Completed" : "In Progress"}
+                {progressStatus === "COMPLETED" ? "Solved" : "In Progress"}
               </span>
             )}
           </div>
@@ -193,12 +250,17 @@ export default function PracticeModePage() {
           {problem.title}
         </h3>
 
-        <p className="text-sm text-gray-400 mb-4 line-clamp-2">
+        <p className="text-sm text-gray-400 mb-3 line-clamp-2">
           {problem.description}
         </p>
 
-        <div className="flex flex-wrap gap-1.5 mb-5">
-          {problem.tags.slice(0, 3).map((tag) => (
+        <div className="flex flex-wrap gap-1.5 mb-4">
+          {problem.pattern && (
+            <span className="rounded bg-purple-900/30 border border-purple-500/20 px-2 py-0.5 text-[10px] text-purple-300">
+              {PATTERN_LABELS[problem.pattern] || problem.pattern}
+            </span>
+          )}
+          {problem.tags.slice(0, 2).map((tag) => (
             <span
               key={tag}
               className="rounded bg-gray-800 px-2 py-0.5 text-xs text-gray-400"
@@ -215,7 +277,7 @@ export default function PracticeModePage() {
           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
             <path d="M8 5v14l11-7z" />
           </svg>
-          Start Practice
+          {progressStatus === "COMPLETED" ? "Review" : progressStatus === "IN_PROGRESS" ? "Continue" : "Start Practice"}
         </Link>
       </div>
     );
@@ -283,6 +345,19 @@ export default function PracticeModePage() {
         {/* Tab Navigation */}
         <div className="flex gap-1 mb-8 border-b border-gray-800">
           <button
+            onClick={() => setActiveTab("studyplans")}
+            className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${
+              activeTab === "studyplans"
+                ? "border-purple-500 text-purple-400"
+                : "border-transparent text-gray-500 hover:text-gray-300"
+            }`}
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+            </svg>
+            Study Plans
+          </button>
+          <button
             onClick={() => setActiveTab("problems")}
             className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
               activeTab === "problems"
@@ -290,7 +365,7 @@ export default function PracticeModePage() {
                 : "border-transparent text-gray-500 hover:text-gray-300"
             }`}
           >
-            Practice Problems ({PROBLEM_BANK.length})
+            Practice Problems ({allProblems.length})
           </button>
           <button
             onClick={() => setActiveTab("generate")}
@@ -306,6 +381,73 @@ export default function PracticeModePage() {
             AI Practice Generator
           </button>
         </div>
+
+        {/* Study Plans Tab */}
+        {activeTab === "studyplans" && (
+          <div>
+            <div className="mb-6">
+              <h2 className="text-xl font-bold text-white mb-2">Study Plans</h2>
+              <p className="text-sm text-gray-400">
+                Master essential coding patterns with curated problem sets. Each pattern builds skills needed for technical interviews.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {CURATED_PATTERNS.map((pattern) => {
+                const easy = pattern.problems.filter(p => p.difficulty === "EASY").length;
+                const medium = pattern.problems.filter(p => p.difficulty === "MEDIUM").length;
+                const hard = pattern.problems.filter(p => p.difficulty === "HARD").length;
+                const solved = pattern.problems.filter(p => progressMap[p.id] === "COMPLETED").length;
+                const progress = pattern.problems.length > 0 ? Math.round((solved / pattern.problems.length) * 100) : 0;
+                return (
+                  <div
+                    key={pattern.id}
+                    className="rounded-xl border border-gray-800 bg-gray-900/50 p-5 hover:border-purple-500/30 hover:bg-gray-900 transition-all"
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <h3 className="text-base font-semibold text-white">{pattern.name}</h3>
+                      <span className="text-xs text-gray-500">{pattern.problems.length} problems</span>
+                    </div>
+                    <p className="text-sm text-gray-400 mb-4 line-clamp-2">{pattern.description}</p>
+
+                    {/* Difficulty breakdown */}
+                    <div className="flex gap-2 mb-3">
+                      {easy > 0 && (
+                        <span className="text-[10px] text-green-400 bg-green-500/10 border border-green-500/20 rounded-full px-2 py-0.5">{easy} Easy</span>
+                      )}
+                      {medium > 0 && (
+                        <span className="text-[10px] text-yellow-400 bg-yellow-500/10 border border-yellow-500/20 rounded-full px-2 py-0.5">{medium} Med</span>
+                      )}
+                      {hard > 0 && (
+                        <span className="text-[10px] text-red-400 bg-red-500/10 border border-red-500/20 rounded-full px-2 py-0.5">{hard} Hard</span>
+                      )}
+                    </div>
+
+                    {/* Progress bar */}
+                    <div className="mb-4">
+                      <div className="flex justify-between text-[10px] text-gray-500 mb-1">
+                        <span>{solved}/{pattern.problems.length} solved</span>
+                        <span>{progress}%</span>
+                      </div>
+                      <div className="h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-purple-500 rounded-full transition-all"
+                          style={{ width: `${progress}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => { setPatternFilter(pattern.id); setActiveTab("problems"); setCurrentPage(1); }}
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-purple-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-purple-500"
+                    >
+                      {progress > 0 ? "Continue Pattern" : "Start Pattern"}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Problems Tab */}
         {activeTab === "problems" && (
@@ -328,6 +470,9 @@ export default function PracticeModePage() {
                 </select>
                 <select value={categoryFilter} onChange={(e) => updateFilter(setCategoryFilter, e.target.value)} className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white focus:border-purple-500 focus:outline-none">
                   {CATEGORY_FILTERS.map(c => <option key={c} value={c}>{c === "All" ? "All Categories" : c}</option>)}
+                </select>
+                <select value={patternFilter} onChange={(e) => updateFilter(setPatternFilter, e.target.value)} className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white focus:border-purple-500 focus:outline-none">
+                  {PATTERN_FILTERS.map(p => <option key={p} value={p}>{p === "All" ? "All Patterns" : PATTERN_LABELS[p] || p}</option>)}
                 </select>
                 <span className="flex items-center text-xs text-gray-500 ml-auto">
                   {filteredProblems.length} problems found

@@ -8,26 +8,31 @@ const PLAN_LIMITS: Record<string, {
   aiCalls: number;       // AI assist calls per day
   aiGenerations: number; // AI question generation per day
   practiceAi: number;    // Practice mode AI calls per day
+  enrichment: number;    // AI enrichment of bank problems per day
 }> = {
   STARTER: {
     aiCalls: 10,
     aiGenerations: 5,
     practiceAi: 15,
+    enrichment: 20,
   },
   GROWTH: {
     aiCalls: 50,
     aiGenerations: 20,
     practiceAi: 50,
+    enrichment: 50,
   },
   ENTERPRISE: {
     aiCalls: -1, // unlimited
     aiGenerations: -1,
     practiceAi: -1,
+    enrichment: -1,
   },
   PAY_PER_INTERVIEW: {
     aiCalls: 100,
     aiGenerations: 30,
     practiceAi: 100,
+    enrichment: 30,
   },
 };
 
@@ -36,6 +41,7 @@ const FREE_LIMITS = {
   aiCalls: 5,
   aiGenerations: 3,
   practiceAi: 10,
+  enrichment: 15,
 };
 
 // Global IP rate limits (per minute)
@@ -102,7 +108,7 @@ function getOrCreateEntry(
   return existing;
 }
 
-export type RateLimitAction = "aiCalls" | "aiGenerations" | "practiceAi";
+export type RateLimitAction = "aiCalls" | "aiGenerations" | "practiceAi" | "enrichment";
 
 /**
  * Check and increment rate limit for a user based on their plan.
@@ -181,11 +187,12 @@ export function getUserUsageStats(
     aiCalls: { used: 0, limit: limits.aiCalls },
     aiGenerations: { used: 0, limit: limits.aiGenerations },
     practiceAi: { used: 0, limit: limits.practiceAi },
+    enrichment: { used: 0, limit: limits.enrichment },
   };
 
   const actions = userDailyUsage.get(userId);
   if (actions) {
-    for (const action of ["aiCalls", "aiGenerations", "practiceAi"] as RateLimitAction[]) {
+    for (const action of ["aiCalls", "aiGenerations", "practiceAi", "enrichment"] as RateLimitAction[]) {
       const entry = actions.get(action);
       if (entry && now - entry.windowStart < DAY_MS) {
         stats[action].used = entry.count;
