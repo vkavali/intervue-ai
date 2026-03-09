@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { PROBLEM_BANK } from "@/data/problem-bank";
@@ -57,6 +57,14 @@ const difficultyColors: Record<string, { text: string; bg: string; border: strin
 };
 
 export default function PracticeModePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center"><div className="text-gray-400">Loading...</div></div>}>
+      <PracticeModeContent />
+    </Suspense>
+  );
+}
+
+function PracticeModeContent() {
   const searchParamsHook = useSearchParams();
   const [selectedAiLevel, setSelectedAiLevel] = useState(2);
   const [activeTab, setActiveTab] = useState<"problems" | "generate" | "studyplans">("problems");
