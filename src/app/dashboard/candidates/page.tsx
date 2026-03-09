@@ -218,7 +218,7 @@ export default async function CandidatePipelinePage() {
             return (
               <div
                 key={groupKey}
-                className="rounded-xl border border-gray-800 bg-gray-900"
+                className="overflow-hidden rounded-xl border border-gray-800 bg-gray-900"
               >
                 {/* Role Header */}
                 <div className="flex items-center justify-between border-b border-gray-800 px-6 py-4">
@@ -271,7 +271,7 @@ export default async function CandidatePipelinePage() {
                 </div>
 
                 {/* Candidates Table */}
-                <div className="overflow-x-auto" style={{ overflowY: "visible" }}>
+                <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
                       <tr className="border-b border-gray-800/50 bg-gray-950/30">
