@@ -35,6 +35,45 @@ for (const p of CURATED_PROBLEMS) {
   PRACTICE_PROBLEMS[p.id] = p;
 }
 
+// ─── Starter code generator ─────────────────────────────────────────────────────
+
+function generateStarterCode(title: string, lang: string): string {
+  const fnName = title
+    .replace(/[^a-zA-Z0-9\s]/g, "")
+    .split(/\s+/)
+    .map((w, i) => (i === 0 ? w.toLowerCase() : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
+    .join("");
+  const pyName = title
+    .replace(/[^a-zA-Z0-9\s]/g, "")
+    .split(/\s+/)
+    .map((w) => w.toLowerCase())
+    .join("_");
+  const className = title
+    .replace(/[^a-zA-Z0-9\s]/g, "")
+    .split(/\s+/)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+    .join("");
+
+  switch (lang) {
+    case "javascript":
+      return `/**\n * ${title}\n */\nfunction ${fnName}() {\n  // Your solution here\n}\n\n// Test\nconsole.log(${fnName}());\n`;
+    case "typescript":
+      return `function ${fnName}(): void {\n  // Your solution here\n}\n\n// Test\nconsole.log(${fnName}());\n`;
+    case "python":
+      return `def ${pyName}():\n    """${title}"""\n    # Your solution here\n    pass\n\n# Test\nprint(${pyName}())\n`;
+    case "java":
+      return `class ${className} {\n    public static void solve() {\n        // Your solution here\n    }\n\n    public static void main(String[] args) {\n        solve();\n    }\n}\n`;
+    case "cpp":
+      return `#include <iostream>\n#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    // ${title}\n    void solve() {\n        // Your solution here\n    }\n};\n\nint main() {\n    Solution sol;\n    sol.solve();\n    return 0;\n}\n`;
+    case "go":
+      return `package main\n\nimport "fmt"\n\n// ${title}\nfunc ${fnName}() {\n\t// Your solution here\n}\n\nfunc main() {\n\t${fnName}()\n\tfmt.Println("done")\n}\n`;
+    case "rust":
+      return `// ${title}\nfn ${pyName}() {\n    // Your solution here\n}\n\nfn main() {\n    ${pyName}();\n    println!("done");\n}\n`;
+    default:
+      return `// ${title}\n// Your solution here\n`;
+  }
+}
+
 // ─── Constants ──────────────────────────────────────────────────────────────────
 
 const languages = [
@@ -263,7 +302,7 @@ function PracticeProblemContent() {
 
   useEffect(() => {
     if (problem) {
-      setCode(problem.starterCode[language] || "// Start coding here...\n");
+      setCode(problem.starterCode[language] || generateStarterCode(problem.title, language));
     }
   }, [problem, language]);
 
@@ -572,7 +611,7 @@ function PracticeProblemContent() {
   // ── Reset code ──────────────────────────────────────────────────────────────
   const handleResetCode = useCallback(() => {
     if (problem) {
-      setCode(problem.starterCode[language] || "// Start coding here...\n");
+      setCode(problem.starterCode[language] || generateStarterCode(problem.title, language));
     }
   }, [problem, language]);
 
