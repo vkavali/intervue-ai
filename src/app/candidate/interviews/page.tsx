@@ -63,27 +63,31 @@ export default async function CandidateInterviewsPage() {
         <div className="space-y-4">
           {interviews.map((interview) => {
             const status = statusColors[interview.status] || statusColors.CANCELLED;
+            const isPastDue = interview.status === "PENDING" && interview.scheduledAt && new Date(interview.scheduledAt) <= new Date();
             return (
               <div
                 key={interview.id}
-                className="rounded-xl border border-gray-800 bg-gray-900/50 p-5 transition-colors hover:border-gray-700"
+                className={`rounded-xl border bg-gray-900/50 p-5 transition-colors ${
+                  isPastDue ? "border-gray-700/50 opacity-75" : "border-gray-800 hover:border-gray-700"
+                }`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${status.bg} ${status.text}`}>
+                    <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${isPastDue ? "bg-gray-500/10 text-gray-500" : `${status.bg} ${status.text}`}`}>
                       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                       </svg>
                     </div>
                     <div>
-                      <h3 className="text-sm font-semibold text-white">
+                      <h3 className={`text-sm font-semibold ${isPastDue ? "text-gray-300" : "text-white"}`}>
                         {interview.template.title}
                       </h3>
                       <p className="text-xs text-gray-400">
                         {interview.company.name} &middot; {interview.template.role} &middot; {interview.template.seniority} &middot; {interview.template.roundType}
                       </p>
                       {interview.scheduledAt && (
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className={`text-xs mt-1 ${isPastDue ? "text-red-400/70" : "text-gray-500"}`}>
+                          {isPastDue ? "Expired: " : ""}
                           {new Date(interview.scheduledAt).toLocaleDateString("en-US", {
                             weekday: "short",
                             month: "short",
@@ -106,18 +110,38 @@ export default async function CandidateInterviewsPage() {
                       </div>
                     )}
 
-                    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${status.bg} ${status.text}`}>
-                      <span className={`h-1.5 w-1.5 rounded-full ${status.dot}`} />
-                      {status.label}
+                    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${
+                      isPastDue ? "bg-gray-500/10 text-gray-400" : `${status.bg} ${status.text}`
+                    }`}>
+                      <span className={`h-1.5 w-1.5 rounded-full ${isPastDue ? "bg-gray-400" : status.dot}`} />
+                      {isPastDue ? "Expired" : status.label}
                     </span>
 
-                    {(interview.status === "ACTIVE" || interview.status === "PENDING") && (
+                    {interview.status === "ACTIVE" && (
                       <Link
                         href={`/session/${interview.id}`}
                         className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-500 transition-colors"
                       >
-                        {interview.status === "ACTIVE" ? "Resume" : "Join"}
+                        Resume
                       </Link>
+                    )}
+
+                    {interview.status === "PENDING" && !isPastDue && (
+                      <Link
+                        href={`/session/${interview.id}`}
+                        className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-500 transition-colors"
+                      >
+                        Join
+                      </Link>
+                    )}
+
+                    {isPastDue && (
+                      <a
+                        href={`mailto:?subject=Interview Reschedule Request - ${interview.template.title}&body=Hi, I would like to request a reschedule for my interview: ${interview.template.title} (${interview.template.role}).`}
+                        className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-xs font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
+                      >
+                        Contact Recruiter
+                      </a>
                     )}
                   </div>
                 </div>

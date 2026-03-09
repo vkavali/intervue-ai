@@ -70,6 +70,14 @@ console.log(twoSum([3, 3], 6));           // [0, 1]`,
 print(two_sum([2, 7, 11, 15], 9))  # [0, 1]
 print(two_sum([3, 2, 4], 6))        # [1, 2]
 print(two_sum([3, 3], 6))            # [0, 1]`,
+          java: `import java.util.*;
+
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        // Your code here
+        return null;
+    }
+}`,
         },
         testCases: [
           { input: "twoSum([2,7,11,15], 9)", expected: "[0,1]" },
@@ -125,6 +133,14 @@ console.log(containsDuplicate([1, 1, 1, 3, 3, 4, 3, 2, 4, 2])); // true`,
 print(contains_duplicate([1, 2, 3, 1]))              # True
 print(contains_duplicate([1, 2, 3, 4]))              # False
 print(contains_duplicate([1, 1, 1, 3, 3, 4, 3, 2, 4, 2]))  # True`,
+          java: `import java.util.*;
+
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        // Your code here
+        return false;
+    }
+}`,
         },
         testCases: [
           { input: "containsDuplicate([1,2,3,1])", expected: "true" },
@@ -179,6 +195,12 @@ console.log(isAnagram("rat", "car"));         // false`,
 # Test cases
 print(is_anagram("anagram", "nagaram"))  # True
 print(is_anagram("rat", "car"))          # False`,
+          java: `class Solution {
+    public boolean isAnagram(String s, String t) {
+        // Your code here
+        return false;
+    }
+}`,
         },
         testCases: [
           { input: 'isAnagram("anagram","nagaram")', expected: "true" },
@@ -236,6 +258,14 @@ console.log(groupAnagrams(["a"]));`,
 print(group_anagrams(["eat","tea","tan","ate","nat","bat"]))
 print(group_anagrams([""]))
 print(group_anagrams(["a"]))`,
+          java: `import java.util.*;
+
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        // Your code here
+        return new ArrayList<>();
+    }
+}`,
         },
         testCases: [
           { input: 'groupAnagrams(["eat","tea","tan","ate","nat","bat"])', expected: '[["bat"],["nat","tan"],["ate","eat","tea"]]' },
@@ -289,6 +319,14 @@ console.log(topKFrequent([1], 1));                   // [1]`,
 # Test cases
 print(top_k_frequent([1, 1, 1, 2, 2, 3], 2))  # [1, 2]
 print(top_k_frequent([1], 1))                    # [1]`,
+          java: `import java.util.*;
+
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        // Your code here
+        return new int[0];
+    }
+}`,
         },
         testCases: [
           { input: "topKFrequent([1,1,1,2,2,3], 2)", expected: "[1,2]" },
@@ -341,6 +379,14 @@ console.log(productExceptSelf([-1, 1, 0, -3, 3])); // [0, 0, 9, 0, 0]`,
 # Test cases
 print(product_except_self([1, 2, 3, 4]))       # [24, 12, 8, 6]
 print(product_except_self([-1, 1, 0, -3, 3]))  # [0, 0, 9, 0, 0]`,
+          java: `import java.util.*;
+
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        // Your code here
+        return new int[0];
+    }
+}`,
         },
         testCases: [
           { input: "productExceptSelf([1,2,3,4])", expected: "[24,12,8,6]" },
@@ -406,6 +452,12 @@ console.log(isPalindrome(" "));                                // true`,
 print(is_palindrome("A man, a plan, a canal: Panama"))  # True
 print(is_palindrome("race a car"))                       # False
 print(is_palindrome(" "))                                 # True`,
+          java: `class Solution {
+    public boolean isPalindrome(String s) {
+        // Your code here
+        return false;
+    }
+}`,
         },
         testCases: [
           { input: 'isPalindrome("A man, a plan, a canal: Panama")', expected: "true" },
@@ -463,6 +515,12 @@ console.log(twoSumII([-1, 0], -1));         // [1, 2]`,
 print(two_sum_ii([2, 7, 11, 15], 9))  # [1, 2]
 print(two_sum_ii([2, 3, 4], 6))        # [1, 3]
 print(two_sum_ii([-1, 0], -1))          # [1, 2]`,
+          java: `class Solution {
+    public int[] twoSumII(int[] numbers, int target) {
+        // Your code here
+        return new int[0];
+    }
+}`,
         },
         testCases: [
           { input: "twoSumII([2,7,11,15], 9)", expected: "[1,2]" },
@@ -518,6 +576,14 @@ console.log(threeSum([0, 0, 0]));               // [[0,0,0]]`,
 print(three_sum([-1, 0, 1, 2, -1, -4]))  # [[-1,-1,2],[-1,0,1]]
 print(three_sum([0, 1, 1]))                # []
 print(three_sum([0, 0, 0]))                # [[0,0,0]]`,
+          java: `import java.util.*;
+
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        // Your code here
+        return new ArrayList<>();
+    }
+}`,
         },
         testCases: [
           { input: "threeSum([-1,0,1,2,-1,-4])", expected: "[[-1,-1,2],[-1,0,1]]" },
@@ -570,6 +636,12 @@ console.log(maxArea([1, 1]));                         // 1`,
 # Test cases
 print(max_area([1, 8, 6, 2, 5, 4, 8, 3, 7]))  # 49
 print(max_area([1, 1]))                          # 1`,
+          java: `class Solution {
+    public int maxArea(int[] height) {
+        // Your code here
+        return 0;
+    }
+}`,
         },
         testCases: [
           { input: "maxArea([1,8,6,2,5,4,8,3,7])", expected: "49" },
@@ -622,6 +694,12 @@ console.log(trap([4, 2, 0, 3, 2, 5]));                      // 9`,
 # Test cases
 print(trap([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]))  # 6
 print(trap([4, 2, 0, 3, 2, 5]))                       # 9`,
+          java: `class Solution {
+    public int trap(int[] height) {
+        // Your code here
+        return 0;
+    }
+}`,
         },
         testCases: [
           { input: "trap([0,1,0,2,1,0,1,3,2,1,2,1])", expected: "6" },
@@ -685,6 +763,12 @@ console.log(maxProfit([7, 6, 4, 3, 1]));     // 0`,
 # Test cases
 print(max_profit([7, 1, 5, 3, 6, 4]))  # 5
 print(max_profit([7, 6, 4, 3, 1]))      # 0`,
+          java: `class Solution {
+    public int maxProfit(int[] prices) {
+        // Your code here
+        return 0;
+    }
+}`,
         },
         testCases: [
           { input: "maxProfit([7,1,5,3,6,4])", expected: "5" },
@@ -741,6 +825,14 @@ console.log(lengthOfLongestSubstring("pwwkew"));    // 3`,
 print(length_of_longest_substring("abcabcbb"))  # 3
 print(length_of_longest_substring("bbbbb"))      # 1
 print(length_of_longest_substring("pwwkew"))     # 3`,
+          java: `import java.util.*;
+
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        // Your code here
+        return 0;
+    }
+}`,
         },
         testCases: [
           { input: 'lengthOfLongestSubstring("abcabcbb")', expected: "3" },
@@ -795,6 +887,14 @@ console.log(characterReplacement("AABABBA", 1)); // 4`,
 # Test cases
 print(character_replacement("ABAB", 2))     # 4
 print(character_replacement("AABABBA", 1))  # 4`,
+          java: `import java.util.*;
+
+class Solution {
+    public int characterReplacement(String s, int k) {
+        // Your code here
+        return 0;
+    }
+}`,
         },
         testCases: [
           { input: 'characterReplacement("ABAB", 2)', expected: "4" },
@@ -848,6 +948,12 @@ console.log(checkInclusion("ab", "eidboaoo")); // false`,
 # Test cases
 print(check_inclusion("ab", "eidbaooo"))  # True
 print(check_inclusion("ab", "eidboaoo"))  # False`,
+          java: `class Solution {
+    public boolean checkInclusion(String s1, String s2) {
+        // Your code here
+        return false;
+    }
+}`,
         },
         testCases: [
           { input: 'checkInclusion("ab","eidbaooo")', expected: "true" },
@@ -904,6 +1010,14 @@ console.log(minWindow("a", "aa"));                // ""`,
 print(min_window("ADOBECODEBANC", "ABC"))  # "BANC"
 print(min_window("a", "a"))                 # "a"
 print(min_window("a", "aa"))                # ""`,
+          java: `import java.util.*;
+
+class Solution {
+    public String minWindow(String s, String t) {
+        // Your code here
+        return "";
+    }
+}`,
         },
         testCases: [
           { input: 'minWindow("ADOBECODEBANC","ABC")', expected: '"BANC"' },
@@ -969,6 +1083,14 @@ console.log(isValid("(]"));     // false`,
 print(is_valid("()"))      # True
 print(is_valid("()[]{}"))  # True
 print(is_valid("(]"))      # False`,
+          java: `import java.util.*;
+
+class Solution {
+    public boolean isValid(String s) {
+        // Your code here
+        return false;
+    }
+}`,
         },
         testCases: [
           { input: 'isValid("()")', expected: "true" },
@@ -1088,6 +1210,31 @@ print(ms.get_min())  # -3
 ms.pop()
 print(ms.top())      # 0
 print(ms.get_min())  # -2`,
+          java: `import java.util.*;
+
+class MinStack {
+    public MinStack() {
+        // Initialize
+    }
+
+    public void push(int val) {
+        // Your code here
+    }
+
+    public void pop() {
+        // Your code here
+    }
+
+    public int top() {
+        // Your code here
+        return 0;
+    }
+
+    public int getMin() {
+        // Your code here
+        return 0;
+    }
+}`,
         },
         testCases: [
           { input: "(() => { const s = new MinStack(); s.push(-2); s.push(0); s.push(-3); return s.getMin(); })()", expected: "-3" },
@@ -1143,6 +1290,14 @@ console.log(evalRPN(["10","6","9","3","+","-11","*","/","*","17","+","5","+"]));
 print(eval_rpn(["2","1","+","3","*"]))                                        # 9
 print(eval_rpn(["4","13","5","/","+"]))                                       # 6
 print(eval_rpn(["10","6","9","3","+","-11","*","/","*","17","+","5","+"]))   # 22`,
+          java: `import java.util.*;
+
+class Solution {
+    public int evalRPN(String[] tokens) {
+        // Your code here
+        return 0;
+    }
+}`,
         },
         testCases: [
           { input: 'evalRPN(["2","1","+","3","*"])', expected: "9" },
@@ -1199,6 +1354,14 @@ console.log(dailyTemperatures([30,60,90]));                   // [1,1,0]`,
 print(daily_temperatures([73,74,75,71,69,72,76,73]))  # [1,1,4,2,1,1,0,0]
 print(daily_temperatures([30,40,50,60]))                # [1,1,1,0]
 print(daily_temperatures([30,60,90]))                    # [1,1,0]`,
+          java: `import java.util.*;
+
+class Solution {
+    public int[] dailyTemperatures(int[] temperatures) {
+        // Your code here
+        return new int[0];
+    }
+}`,
         },
         testCases: [
           { input: "dailyTemperatures([73,74,75,71,69,72,76,73])", expected: "[1,1,4,2,1,1,0,0]" },
@@ -1255,6 +1418,14 @@ console.log(decodeString("2[abc]3[cd]ef")); // "abcabccdcdcdef"`,
 print(decode_string("3[a]2[bc]"))     # "aaabcbc"
 print(decode_string("3[a2[c]]"))      # "accaccacc"
 print(decode_string("2[abc]3[cd]ef")) # "abcabccdcdcdef"`,
+          java: `import java.util.*;
+
+class Solution {
+    public String decodeString(String s) {
+        // Your code here
+        return "";
+    }
+}`,
         },
         testCases: [
           { input: 'decodeString("3[a]2[bc]")', expected: '"aaabcbc"' },
@@ -1318,6 +1489,12 @@ console.log(binarySearch([-1,0,3,5,9,12], 2));  // -1`,
 # Test cases
 print(binary_search([-1,0,3,5,9,12], 9))   # 4
 print(binary_search([-1,0,3,5,9,12], 2))   # -1`,
+          java: `class Solution {
+    public int binarySearch(int[] nums, int target) {
+        // Your code here
+        return -1;
+    }
+}`,
         },
         testCases: [
           { input: "binarySearch([-1,0,3,5,9,12], 9)", expected: "4" },
@@ -1372,6 +1549,12 @@ console.log(searchMatrix([[1,3,5,7],[10,11,16,20],[23,30,34,60]], 13)); // false
 # Test cases
 print(search_matrix([[1,3,5,7],[10,11,16,20],[23,30,34,60]], 3))   # True
 print(search_matrix([[1,3,5,7],[10,11,16,20],[23,30,34,60]], 13))  # False`,
+          java: `class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        // Your code here
+        return false;
+    }
+}`,
         },
         testCases: [
           { input: "searchMatrix([[1,3,5,7],[10,11,16,20],[23,30,34,60]], 3)", expected: "true" },
@@ -1428,6 +1611,12 @@ console.log(minEatingSpeed([30, 11, 23, 4, 20], 6)); // 23`,
 print(min_eating_speed([3, 6, 7, 11], 8))        # 4
 print(min_eating_speed([30, 11, 23, 4, 20], 5))  # 30
 print(min_eating_speed([30, 11, 23, 4, 20], 6))  # 23`,
+          java: `class Solution {
+    public int minEatingSpeed(int[] piles, int h) {
+        // Your code here
+        return 0;
+    }
+}`,
         },
         testCases: [
           { input: "minEatingSpeed([3,6,7,11], 8)", expected: "4" },
@@ -1483,6 +1672,12 @@ console.log(findMin([11, 13, 15, 17]));       // 11`,
 print(find_min([3, 4, 5, 1, 2]))        # 1
 print(find_min([4, 5, 6, 7, 0, 1, 2]))  # 0
 print(find_min([11, 13, 15, 17]))        # 11`,
+          java: `class Solution {
+    public int findMin(int[] nums) {
+        // Your code here
+        return 0;
+    }
+}`,
         },
         testCases: [
           { input: "findMin([3,4,5,1,2])", expected: "1" },
@@ -1540,6 +1735,12 @@ console.log(searchRotated([1], 0));               // -1`,
 print(search_rotated([4,5,6,7,0,1,2], 0))  # 4
 print(search_rotated([4,5,6,7,0,1,2], 3))  # -1
 print(search_rotated([1], 0))                # -1`,
+          java: `class Solution {
+    public int searchRotated(int[] nums, int target) {
+        // Your code here
+        return -1;
+    }
+}`,
         },
         testCases: [
           { input: "searchRotated([4,5,6,7,0,1,2], 0)", expected: "4" },
@@ -1575,6 +1776,18 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "class ListNode {\n  constructor(val = 0, next = null) { this.val = val; this.next = next; }\n}\nfunction fromArray(a) { let h = null; for (let i = a.length-1; i >= 0; i--) h = new ListNode(a[i], h); return h; }\nfunction toArray(h) { const r = []; while (h) { r.push(h.val); h = h.next; } return r; }\n\nfunction reverseList(head) {\n  // Your solution here\n}\n\nconsole.log(toArray(reverseList(fromArray([1,2,3,4,5]))));\n",
           typescript: "class ListNode { val: number; next: ListNode | null; constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; } }\nfunction fromArray(a: number[]): ListNode | null { let h: ListNode | null = null; for (let i = a.length-1; i >= 0; i--) h = new ListNode(a[i], h); return h; }\nfunction toArray(h: ListNode | null): number[] { const r: number[] = []; while (h) { r.push(h.val); h = h.next; } return r; }\n\nfunction reverseList(head: ListNode | null): ListNode | null {\n  // Your solution here\n  return null;\n}\n\nconsole.log(toArray(reverseList(fromArray([1,2,3,4,5]))));\n",
           python: "class ListNode:\n    def __init__(self, val=0, next=None): self.val = val; self.next = next\ndef from_array(a):\n    h = None\n    for v in reversed(a): h = ListNode(v, h)\n    return h\ndef to_array(h):\n    r = []\n    while h: r.append(h.val); h = h.next\n    return r\n\ndef reverse_list(head):\n    # Your solution here\n    pass\n\nprint(to_array(reverse_list(from_array([1,2,3,4,5]))))\n",
+          java: `class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int val) { this.val = val; }
+}
+
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        // Your code here
+        return null;
+    }
+}`,
         },
         testCases: [
           { input: "toArray(reverseList(fromArray([1,2,3,4,5])))", expected: "[5,4,3,2,1]" },
@@ -1599,6 +1812,18 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "class ListNode {\n  constructor(val = 0, next = null) { this.val = val; this.next = next; }\n}\nfunction fromArray(a) { let h = null; for (let i = a.length-1; i >= 0; i--) h = new ListNode(a[i], h); return h; }\nfunction toArray(h) { const r = []; while (h) { r.push(h.val); h = h.next; } return r; }\n\nfunction mergeTwoLists(list1, list2) {\n  // Your solution here\n}\n\nconsole.log(toArray(mergeTwoLists(fromArray([1,2,4]), fromArray([1,3,4]))));\n",
           typescript: "class ListNode { val: number; next: ListNode | null; constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; } }\nfunction fromArray(a: number[]): ListNode | null { let h: ListNode | null = null; for (let i = a.length-1; i >= 0; i--) h = new ListNode(a[i], h); return h; }\nfunction toArray(h: ListNode | null): number[] { const r: number[] = []; while (h) { r.push(h.val); h = h.next; } return r; }\n\nfunction mergeTwoLists(list1: ListNode | null, list2: ListNode | null): ListNode | null {\n  return null;\n}\n\nconsole.log(toArray(mergeTwoLists(fromArray([1,2,4]), fromArray([1,3,4]))));\n",
           python: "class ListNode:\n    def __init__(self, val=0, next=None): self.val = val; self.next = next\ndef from_array(a):\n    h = None\n    for v in reversed(a): h = ListNode(v, h)\n    return h\ndef to_array(h):\n    r = []\n    while h: r.append(h.val); h = h.next\n    return r\n\ndef merge_two_lists(list1, list2):\n    pass\n\nprint(to_array(merge_two_lists(from_array([1,2,4]), from_array([1,3,4]))))\n",
+          java: `class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int val) { this.val = val; }
+}
+
+class Solution {
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        // Your code here
+        return null;
+    }
+}`,
         },
         testCases: [
           { input: "toArray(mergeTwoLists(fromArray([1,2,4]), fromArray([1,3,4])))", expected: "[1,1,2,3,4,4]" },
@@ -1623,6 +1848,18 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "class ListNode {\n  constructor(val = 0, next = null) { this.val = val; this.next = next; }\n}\n\nfunction hasCycle(head) {\n  // Your solution here\n}\n\n// Test: no cycle\nconst n1 = new ListNode(1, new ListNode(2, new ListNode(3)));\nconsole.log(hasCycle(n1)); // false\n// Test: cycle\nconst c1 = new ListNode(3); const c2 = new ListNode(2); const c3 = new ListNode(0); const c4 = new ListNode(-4);\nc1.next = c2; c2.next = c3; c3.next = c4; c4.next = c2;\nconsole.log(hasCycle(c1)); // true\n",
           typescript: "class ListNode { val: number; next: ListNode | null; constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; } }\n\nfunction hasCycle(head: ListNode | null): boolean {\n  return false;\n}\n\nconsole.log(hasCycle(new ListNode(1, new ListNode(2))));\n",
           python: "class ListNode:\n    def __init__(self, val=0, next=None): self.val = val; self.next = next\n\ndef has_cycle(head):\n    pass\n\nn = ListNode(1, ListNode(2, ListNode(3)))\nprint(has_cycle(n))  # False\n",
+          java: `class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int val) { this.val = val; }
+}
+
+class Solution {
+    public boolean hasCycle(ListNode head) {
+        // Your code here
+        return false;
+    }
+}`,
         },
         testCases: [
           { input: "(function() { const n = new ListNode(1, new ListNode(2, new ListNode(3))); return hasCycle(n); })()", expected: "false" },
@@ -1647,6 +1884,18 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "class ListNode {\n  constructor(val = 0, next = null) { this.val = val; this.next = next; }\n}\nfunction fromArray(a) { let h = null; for (let i = a.length-1; i >= 0; i--) h = new ListNode(a[i], h); return h; }\nfunction toArray(h) { const r = []; while (h) { r.push(h.val); h = h.next; } return r; }\n\nfunction removeNthFromEnd(head, n) {\n  // Your solution here\n}\n\nconsole.log(toArray(removeNthFromEnd(fromArray([1,2,3,4,5]), 2)));\n",
           typescript: "class ListNode { val: number; next: ListNode | null; constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; } }\nfunction fromArray(a: number[]): ListNode | null { let h: ListNode | null = null; for (let i = a.length-1; i >= 0; i--) h = new ListNode(a[i], h); return h; }\nfunction toArray(h: ListNode | null): number[] { const r: number[] = []; while (h) { r.push(h.val); h = h.next; } return r; }\n\nfunction removeNthFromEnd(head: ListNode | null, n: number): ListNode | null {\n  return null;\n}\n\nconsole.log(toArray(removeNthFromEnd(fromArray([1,2,3,4,5]), 2)));\n",
           python: "class ListNode:\n    def __init__(self, val=0, next=None): self.val = val; self.next = next\ndef from_array(a):\n    h = None\n    for v in reversed(a): h = ListNode(v, h)\n    return h\ndef to_array(h):\n    r = []\n    while h: r.append(h.val); h = h.next\n    return r\n\ndef remove_nth_from_end(head, n):\n    pass\n\nprint(to_array(remove_nth_from_end(from_array([1,2,3,4,5]), 2)))\n",
+          java: `class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int val) { this.val = val; }
+}
+
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        // Your code here
+        return null;
+    }
+}`,
         },
         testCases: [
           { input: "toArray(removeNthFromEnd(fromArray([1,2,3,4,5]), 2))", expected: "[1,2,3,5]" },
@@ -1671,6 +1920,22 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "class LRUCache {\n  constructor(capacity) {\n    this.capacity = capacity;\n    // Your solution here\n  }\n  get(key) {\n    // Your solution here\n  }\n  put(key, value) {\n    // Your solution here\n  }\n}\n\nconst c = new LRUCache(2);\nc.put(1,1); c.put(2,2);\nconsole.log(c.get(1)); // 1\nc.put(3,3);\nconsole.log(c.get(2)); // -1\n",
           typescript: "class LRUCache {\n  private capacity: number;\n  constructor(capacity: number) { this.capacity = capacity; }\n  get(key: number): number { return -1; }\n  put(key: number, value: number): void {}\n}\n\nconst c = new LRUCache(2);\nc.put(1,1); c.put(2,2);\nconsole.log(c.get(1));\n",
           python: "class LRUCache:\n    def __init__(self, capacity: int):\n        self.capacity = capacity\n    def get(self, key: int) -> int:\n        return -1\n    def put(self, key: int, value: int) -> None:\n        pass\n\nc = LRUCache(2)\nc.put(1,1); c.put(2,2)\nprint(c.get(1))  # 1\n",
+          java: `import java.util.*;
+
+class LRUCache {
+    public LRUCache(int capacity) {
+        // Initialize
+    }
+
+    public int get(int key) {
+        // Your code here
+        return -1;
+    }
+
+    public void put(int key, int value) {
+        // Your code here
+    }
+}`,
         },
         testCases: [
           { input: "(function() { const c = new LRUCache(2); c.put(1,1); c.put(2,2); return c.get(1); })()", expected: "1" },
@@ -1704,6 +1969,18 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "class TreeNode {\n  constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; }\n}\n\nfunction invertTree(root) {\n  // Your solution here\n}\n\nconst root = new TreeNode(4, new TreeNode(2, new TreeNode(1), new TreeNode(3)), new TreeNode(7, new TreeNode(6), new TreeNode(9)));\nconst result = invertTree(root);\nconsole.log(result?.val, result?.left?.val, result?.right?.val);\n",
           typescript: "class TreeNode { val: number; left: TreeNode | null; right: TreeNode | null; constructor(val = 0, left: TreeNode | null = null, right: TreeNode | null = null) { this.val = val; this.left = left; this.right = right; } }\n\nfunction invertTree(root: TreeNode | null): TreeNode | null {\n  return null;\n}\n",
           python: "class TreeNode:\n    def __init__(self, val=0, left=None, right=None): self.val = val; self.left = left; self.right = right\n\ndef invert_tree(root):\n    pass\n",
+          java: `class TreeNode {
+    int val;
+    TreeNode left, right;
+    TreeNode(int val) { this.val = val; }
+}
+
+class Solution {
+    public TreeNode invertTree(TreeNode root) {
+        // Your code here
+        return null;
+    }
+}`,
         },
         testCases: [
           { input: "(function() { const r = invertTree(new TreeNode(4, new TreeNode(2), new TreeNode(7))); return [r.val, r.left.val, r.right.val]; })()", expected: "[4,7,2]" },
@@ -1727,6 +2004,18 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "class TreeNode {\n  constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; }\n}\n\nfunction maxDepth(root) {\n  // Your solution here\n}\n\nconsole.log(maxDepth(new TreeNode(3, new TreeNode(9), new TreeNode(20, new TreeNode(15), new TreeNode(7)))));\n",
           typescript: "class TreeNode { val: number; left: TreeNode | null; right: TreeNode | null; constructor(val = 0, left: TreeNode | null = null, right: TreeNode | null = null) { this.val = val; this.left = left; this.right = right; } }\n\nfunction maxDepth(root: TreeNode | null): number {\n  return 0;\n}\n",
           python: "class TreeNode:\n    def __init__(self, val=0, left=None, right=None): self.val = val; self.left = left; self.right = right\n\ndef max_depth(root):\n    pass\n",
+          java: `class TreeNode {
+    int val;
+    TreeNode left, right;
+    TreeNode(int val) { this.val = val; }
+}
+
+class Solution {
+    public int maxDepth(TreeNode root) {
+        // Your code here
+        return 0;
+    }
+}`,
         },
         testCases: [
           { input: "maxDepth(new TreeNode(3, new TreeNode(9), new TreeNode(20, new TreeNode(15), new TreeNode(7))))", expected: "3" },
@@ -1751,6 +2040,18 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "class TreeNode {\n  constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; }\n}\n\nfunction isValidBST(root) {\n  // Your solution here\n}\n\nconsole.log(isValidBST(new TreeNode(2, new TreeNode(1), new TreeNode(3)))); // true\nconsole.log(isValidBST(new TreeNode(5, new TreeNode(1), new TreeNode(4, new TreeNode(3), new TreeNode(6))))); // false\n",
           typescript: "class TreeNode { val: number; left: TreeNode | null; right: TreeNode | null; constructor(val = 0, left: TreeNode | null = null, right: TreeNode | null = null) { this.val = val; this.left = left; this.right = right; } }\n\nfunction isValidBST(root: TreeNode | null): boolean {\n  return false;\n}\n",
           python: "class TreeNode:\n    def __init__(self, val=0, left=None, right=None): self.val = val; self.left = left; self.right = right\n\ndef is_valid_bst(root):\n    pass\n",
+          java: `class TreeNode {
+    int val;
+    TreeNode left, right;
+    TreeNode(int val) { this.val = val; }
+}
+
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        // Your code here
+        return false;
+    }
+}`,
         },
         testCases: [
           { input: "isValidBST(new TreeNode(2, new TreeNode(1), new TreeNode(3)))", expected: "true" },
@@ -1775,6 +2076,20 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "class TreeNode {\n  constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; }\n}\n\nfunction kthSmallest(root, k) {\n  // Your solution here\n}\n\nconsole.log(kthSmallest(new TreeNode(3, new TreeNode(1, null, new TreeNode(2)), new TreeNode(4)), 1));\n",
           typescript: "class TreeNode { val: number; left: TreeNode | null; right: TreeNode | null; constructor(val = 0, left: TreeNode | null = null, right: TreeNode | null = null) { this.val = val; this.left = left; this.right = right; } }\n\nfunction kthSmallest(root: TreeNode | null, k: number): number {\n  return 0;\n}\n",
           python: "class TreeNode:\n    def __init__(self, val=0, left=None, right=None): self.val = val; self.left = left; self.right = right\n\ndef kth_smallest(root, k):\n    pass\n",
+          java: `import java.util.*;
+
+class TreeNode {
+    int val;
+    TreeNode left, right;
+    TreeNode(int val) { this.val = val; }
+}
+
+class Solution {
+    public int kthSmallest(TreeNode root, int k) {
+        // Your code here
+        return 0;
+    }
+}`,
         },
         testCases: [
           { input: "kthSmallest(new TreeNode(3, new TreeNode(1, null, new TreeNode(2)), new TreeNode(4)), 1)", expected: "1" },
@@ -1799,6 +2114,20 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "class TreeNode {\n  constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; }\n}\n\nfunction levelOrder(root) {\n  // Your solution here\n}\n\nconsole.log(levelOrder(new TreeNode(3, new TreeNode(9), new TreeNode(20, new TreeNode(15), new TreeNode(7)))));\n",
           typescript: "class TreeNode { val: number; left: TreeNode | null; right: TreeNode | null; constructor(val = 0, left: TreeNode | null = null, right: TreeNode | null = null) { this.val = val; this.left = left; this.right = right; } }\n\nfunction levelOrder(root: TreeNode | null): number[][] {\n  return [];\n}\n",
           python: "class TreeNode:\n    def __init__(self, val=0, left=None, right=None): self.val = val; self.left = left; self.right = right\n\ndef level_order(root):\n    pass\n",
+          java: `import java.util.*;
+
+class TreeNode {
+    int val;
+    TreeNode left, right;
+    TreeNode(int val) { this.val = val; }
+}
+
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        // Your code here
+        return new ArrayList<>();
+    }
+}`,
         },
         testCases: [
           { input: "JSON.stringify(levelOrder(new TreeNode(3, new TreeNode(9), new TreeNode(20, new TreeNode(15), new TreeNode(7)))))", expected: "\"[[3],[9,20],[15,7]]\"" },
@@ -1822,6 +2151,18 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "class TreeNode {\n  constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; }\n}\n\nfunction lowestCommonAncestor(root, p, q) {\n  // Your solution here\n}\n\nconst root = new TreeNode(6, new TreeNode(2, new TreeNode(0), new TreeNode(4, new TreeNode(3), new TreeNode(5))), new TreeNode(8, new TreeNode(7), new TreeNode(9)));\nconsole.log(lowestCommonAncestor(root, root.left, root.right)?.val); // 6\n",
           typescript: "class TreeNode { val: number; left: TreeNode | null; right: TreeNode | null; constructor(val = 0, left: TreeNode | null = null, right: TreeNode | null = null) { this.val = val; this.left = left; this.right = right; } }\n\nfunction lowestCommonAncestor(root: TreeNode | null, p: TreeNode, q: TreeNode): TreeNode | null {\n  return null;\n}\n",
           python: "class TreeNode:\n    def __init__(self, val=0, left=None, right=None): self.val = val; self.left = left; self.right = right\n\ndef lowest_common_ancestor(root, p, q):\n    pass\n",
+          java: `class TreeNode {
+    int val;
+    TreeNode left, right;
+    TreeNode(int val) { this.val = val; }
+}
+
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        // Your code here
+        return null;
+    }
+}`,
         },
         testCases: [
           { input: "(function() { const r = new TreeNode(6, new TreeNode(2, new TreeNode(0), new TreeNode(4)), new TreeNode(8)); return lowestCommonAncestor(r, r.left, r.right).val; })()", expected: "6" },
@@ -1853,6 +2194,14 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "function findKthLargest(nums, k) {\n  // Your solution here\n}\n\nconsole.log(findKthLargest([3,2,1,5,6,4], 2)); // 5\nconsole.log(findKthLargest([3,2,3,1,2,4,5,5,6], 4)); // 4\n",
           typescript: "function findKthLargest(nums: number[], k: number): number {\n  return 0;\n}\n\nconsole.log(findKthLargest([3,2,1,5,6,4], 2));\n",
           python: "def find_kth_largest(nums, k):\n    pass\n\nprint(find_kth_largest([3,2,1,5,6,4], 2))  # 5\n",
+          java: `import java.util.*;
+
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        // Your code here
+        return 0;
+    }
+}`,
         },
         testCases: [
           { input: "findKthLargest([3,2,1,5,6,4], 2)", expected: "5" },
@@ -1877,6 +2226,14 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "function kClosest(points, k) {\n  // Your solution here\n}\n\nconsole.log(kClosest([[1,3],[-2,2]], 1));\n",
           typescript: "function kClosest(points: number[][], k: number): number[][] {\n  return [];\n}\n",
           python: "def k_closest(points, k):\n    pass\n\nprint(k_closest([[1,3],[-2,2]], 1))\n",
+          java: `import java.util.*;
+
+class Solution {
+    public int[][] kClosest(int[][] points, int k) {
+        // Your code here
+        return new int[0][0];
+    }
+}`,
         },
         testCases: [
           { input: "JSON.stringify(kClosest([[1,3],[-2,2]], 1))", expected: "\"[[-2,2]]\"" },
@@ -1900,6 +2257,14 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "function leastInterval(tasks, n) {\n  // Your solution here\n}\n\nconsole.log(leastInterval(['A','A','A','B','B','B'], 2)); // 8\n",
           typescript: "function leastInterval(tasks: string[], n: number): number {\n  return 0;\n}\n",
           python: "def least_interval(tasks, n):\n    pass\n\nprint(least_interval(['A','A','A','B','B','B'], 2))  # 8\n",
+          java: `import java.util.*;
+
+class Solution {
+    public int leastInterval(char[] tasks, int n) {
+        // Your code here
+        return 0;
+    }
+}`,
         },
         testCases: [
           { input: "leastInterval(['A','A','A','B','B','B'], 2)", expected: "8" },
@@ -1924,6 +2289,20 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "class ListNode {\n  constructor(val = 0, next = null) { this.val = val; this.next = next; }\n}\nfunction fromArray(a) { let h = null; for (let i = a.length-1; i >= 0; i--) h = new ListNode(a[i], h); return h; }\nfunction toArray(h) { const r = []; while (h) { r.push(h.val); h = h.next; } return r; }\n\nfunction mergeKLists(lists) {\n  // Your solution here\n}\n\nconsole.log(toArray(mergeKLists([fromArray([1,4,5]), fromArray([1,3,4]), fromArray([2,6])])));\n",
           typescript: "class ListNode { val: number; next: ListNode | null; constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; } }\nfunction fromArray(a: number[]): ListNode | null { let h: ListNode | null = null; for (let i = a.length-1; i >= 0; i--) h = new ListNode(a[i], h); return h; }\nfunction toArray(h: ListNode | null): number[] { const r: number[] = []; while (h) { r.push(h.val); h = h.next; } return r; }\n\nfunction mergeKLists(lists: (ListNode | null)[]): ListNode | null {\n  return null;\n}\n",
           python: "class ListNode:\n    def __init__(self, val=0, next=None): self.val = val; self.next = next\n\ndef merge_k_lists(lists):\n    pass\n",
+          java: `import java.util.*;
+
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int val) { this.val = val; }
+}
+
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        // Your code here
+        return null;
+    }
+}`,
         },
         testCases: [
           { input: "toArray(mergeKLists([fromArray([1,4,5]), fromArray([1,3,4]), fromArray([2,6])]))", expected: "[1,1,2,3,4,4,5,6]" },
@@ -1952,6 +2331,14 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "function subsets(nums) {\n  // Your solution here\n}\n\nconsole.log(subsets([1,2,3]));\n",
           typescript: "function subsets(nums: number[]): number[][] {\n  return [];\n}\n",
           python: "def subsets(nums):\n    pass\n\nprint(subsets([1,2,3]))\n",
+          java: `import java.util.*;
+
+class Solution {
+    public List<List<Integer>> subsets(int[] nums) {
+        // Your code here
+        return new ArrayList<>();
+    }
+}`,
         },
         testCases: [
           { input: "subsets([1,2,3]).length", expected: "8" },
@@ -1971,6 +2358,14 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "function permute(nums) {\n  // Your solution here\n}\n\nconsole.log(permute([1,2,3]));\n",
           typescript: "function permute(nums: number[]): number[][] {\n  return [];\n}\n",
           python: "def permute(nums):\n    pass\n\nprint(permute([1,2,3]))\n",
+          java: `import java.util.*;
+
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        // Your code here
+        return new ArrayList<>();
+    }
+}`,
         },
         testCases: [
           { input: "permute([1,2,3]).length", expected: "6" },
@@ -1989,6 +2384,14 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "function combinationSum(candidates, target) {\n  // Your solution here\n}\n\nconsole.log(combinationSum([2,3,6,7], 7));\n",
           typescript: "function combinationSum(candidates: number[], target: number): number[][] {\n  return [];\n}\n",
           python: "def combination_sum(candidates, target):\n    pass\n\nprint(combination_sum([2,3,6,7], 7))\n",
+          java: `import java.util.*;
+
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        // Your code here
+        return new ArrayList<>();
+    }
+}`,
         },
         testCases: [
           { input: "combinationSum([2,3,6,7], 7).length", expected: "2" },
@@ -2008,6 +2411,12 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "function exist(board, word) {\n  // Your solution here\n}\n\nconsole.log(exist([['A','B','C','E'],['S','F','C','S'],['A','D','E','E']], 'ABCCED'));\n",
           typescript: "function exist(board: string[][], word: string): boolean {\n  return false;\n}\n",
           python: "def exist(board, word):\n    pass\n\nprint(exist([['A','B','C','E'],['S','F','C','S'],['A','D','E','E']], 'ABCCED'))\n",
+          java: `class Solution {
+    public boolean exist(char[][] board, String word) {
+        // Your code here
+        return false;
+    }
+}`,
         },
         testCases: [
           { input: "exist([['A','B','C','E'],['S','F','C','S'],['A','D','E','E']], 'ABCCED')", expected: "true" },
@@ -2027,6 +2436,14 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "function solveNQueens(n) {\n  // Your solution here\n}\n\nconsole.log(solveNQueens(4).length); // 2\n",
           typescript: "function solveNQueens(n: number): string[][] {\n  return [];\n}\n",
           python: "def solve_n_queens(n):\n    pass\n\nprint(len(solve_n_queens(4)))  # 2\n",
+          java: `import java.util.*;
+
+class Solution {
+    public List<List<String>> solveNQueens(int n) {
+        // Your code here
+        return new ArrayList<>();
+    }
+}`,
         },
         testCases: [
           { input: "solveNQueens(4).length", expected: "2" },
@@ -2055,6 +2472,12 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "function numIslands(grid) {\n  // Your solution here\n}\n\nconsole.log(numIslands([['1','1','0'],['0','1','0'],['0','0','1']])); // 2\n",
           typescript: "function numIslands(grid: string[][]): number {\n  return 0;\n}\n",
           python: "def num_islands(grid):\n    pass\n\nprint(num_islands([['1','1','0'],['0','1','0'],['0','0','1']]))  # 2\n",
+          java: `class Solution {
+    public int numIslands(char[][] grid) {
+        // Your code here
+        return 0;
+    }
+}`,
         },
         testCases: [
           { input: "numIslands([['1','1','1','1','0'],['1','1','0','1','0'],['1','1','0','0','0'],['0','0','0','0','0']])", expected: "1" },
@@ -2074,6 +2497,14 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "function canFinish(numCourses, prerequisites) {\n  // Your solution here\n}\n\nconsole.log(canFinish(2, [[1,0]])); // true\nconsole.log(canFinish(2, [[1,0],[0,1]])); // false\n",
           typescript: "function canFinish(numCourses: number, prerequisites: number[][]): boolean {\n  return false;\n}\n",
           python: "def can_finish(num_courses, prerequisites):\n    pass\n",
+          java: `import java.util.*;
+
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        // Your code here
+        return false;
+    }
+}`,
         },
         testCases: [
           { input: "canFinish(2, [[1,0]])", expected: "true" },
@@ -2093,6 +2524,14 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "function orangesRotting(grid) {\n  // Your solution here\n}\n\nconsole.log(orangesRotting([[2,1,1],[1,1,0],[0,1,1]])); // 4\n",
           typescript: "function orangesRotting(grid: number[][]): number {\n  return 0;\n}\n",
           python: "def oranges_rotting(grid):\n    pass\n\nprint(oranges_rotting([[2,1,1],[1,1,0],[0,1,1]]))  # 4\n",
+          java: `import java.util.*;
+
+class Solution {
+    public int orangesRotting(int[][] grid) {
+        // Your code here
+        return 0;
+    }
+}`,
         },
         testCases: [
           { input: "orangesRotting([[2,1,1],[1,1,0],[0,1,1]])", expected: "4" },
@@ -2112,6 +2551,20 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "class GraphNode {\n  constructor(val = 0, neighbors = []) { this.val = val; this.neighbors = neighbors; }\n}\n\nfunction cloneGraph(node) {\n  // Your solution here\n}\n\n// Build test graph: 1-2-3-4-1\nconst n1 = new GraphNode(1), n2 = new GraphNode(2), n3 = new GraphNode(3), n4 = new GraphNode(4);\nn1.neighbors = [n2, n4]; n2.neighbors = [n1, n3]; n3.neighbors = [n2, n4]; n4.neighbors = [n1, n3];\nconst clone = cloneGraph(n1);\nconsole.log(clone?.val, clone !== n1);\n",
           typescript: "class GraphNode { val: number; neighbors: GraphNode[]; constructor(val = 0, neighbors: GraphNode[] = []) { this.val = val; this.neighbors = neighbors; } }\n\nfunction cloneGraph(node: GraphNode | null): GraphNode | null {\n  return null;\n}\n",
           python: "class GraphNode:\n    def __init__(self, val=0, neighbors=None): self.val = val; self.neighbors = neighbors or []\n\ndef clone_graph(node):\n    pass\n",
+          java: `import java.util.*;
+
+class Node {
+    public int val;
+    public List<Node> neighbors;
+    public Node(int val) { this.val = val; this.neighbors = new ArrayList<>(); }
+}
+
+class Solution {
+    public Node cloneGraph(Node node) {
+        // Your code here
+        return null;
+    }
+}`,
         },
         testCases: [
           { input: "(function() { const n1 = new GraphNode(1); const c = cloneGraph(n1); return c !== n1 && c.val === 1; })()", expected: "true" },
@@ -2129,6 +2582,14 @@ print(search_rotated([1], 0))                # -1`,
           javascript: "function pacificAtlantic(heights) {\n  // Your solution here\n}\n\nconsole.log(pacificAtlantic([[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]));\n",
           typescript: "function pacificAtlantic(heights: number[][]): number[][] {\n  return [];\n}\n",
           python: "def pacific_atlantic(heights):\n    pass\n",
+          java: `import java.util.*;
+
+class Solution {
+    public List<List<Integer>> pacificAtlantic(int[][] heights) {
+        // Your code here
+        return new ArrayList<>();
+    }
+}`,
         },
         testCases: [
           { input: "pacificAtlantic([[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]).length", expected: "7" },
@@ -2152,7 +2613,12 @@ print(search_rotated([1], 0))                # -1`,
         tags: ["DP", "Math"], category: "DynamicProgramming", pattern: "DynamicProgramming", patternOrder: 1,
         constraints: "1 <= n <= 45",
         examples: "Input: n = 2\nOutput: 2 (1+1 or 2)\n\nInput: n = 3\nOutput: 3 (1+1+1, 1+2, 2+1)",
-        starterCode: { javascript: "function climbStairs(n) {\n  // Your solution here\n}\n\nconsole.log(climbStairs(2)); // 2\nconsole.log(climbStairs(3)); // 3\n", typescript: "function climbStairs(n: number): number {\n  return 0;\n}\n", python: "def climb_stairs(n):\n    pass\n\nprint(climb_stairs(2))  # 2\n" },
+        starterCode: { javascript: "function climbStairs(n) {\n  // Your solution here\n}\n\nconsole.log(climbStairs(2)); // 2\nconsole.log(climbStairs(3)); // 3\n", typescript: "function climbStairs(n: number): number {\n  return 0;\n}\n", python: "def climb_stairs(n):\n    pass\n\nprint(climb_stairs(2))  # 2\n", java: `class Solution {
+    public int climbStairs(int n) {
+        // Your code here
+        return 0;
+    }
+}` },
         testCases: [
           { input: "climbStairs(2)", expected: "2" }, { input: "climbStairs(3)", expected: "3" },
           { input: "climbStairs(1)", expected: "1" }, { input: "climbStairs(4)", expected: "5" },
@@ -2165,7 +2631,14 @@ print(search_rotated([1], 0))                # -1`,
         tags: ["DP", "BFS"], category: "DynamicProgramming", pattern: "DynamicProgramming", patternOrder: 2,
         constraints: "1 <= coins.length <= 12\n1 <= coins[i] <= 2^31 - 1\n0 <= amount <= 10^4",
         examples: "Input: coins = [1,5,10], amount = 11\nOutput: 2 (5+5+1... wait, 10+1=2 coins)\n\nInput: coins = [2], amount = 3\nOutput: -1",
-        starterCode: { javascript: "function coinChange(coins, amount) {\n  // Your solution here\n}\n\nconsole.log(coinChange([1,5,10], 11)); // 2\n", typescript: "function coinChange(coins: number[], amount: number): number {\n  return 0;\n}\n", python: "def coin_change(coins, amount):\n    pass\n" },
+        starterCode: { javascript: "function coinChange(coins, amount) {\n  // Your solution here\n}\n\nconsole.log(coinChange([1,5,10], 11)); // 2\n", typescript: "function coinChange(coins: number[], amount: number): number {\n  return 0;\n}\n", python: "def coin_change(coins, amount):\n    pass\n", java: `import java.util.*;
+
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        // Your code here
+        return -1;
+    }
+}` },
         testCases: [
           { input: "coinChange([1,5,10], 11)", expected: "2" }, { input: "coinChange([2], 3)", expected: "-1" },
           { input: "coinChange([1], 0)", expected: "0" }, { input: "coinChange([1,2,5], 11)", expected: "3" },
@@ -2178,7 +2651,12 @@ print(search_rotated([1], 0))                # -1`,
         tags: ["DP", "Array"], category: "DynamicProgramming", pattern: "DynamicProgramming", patternOrder: 3,
         constraints: "1 <= nums.length <= 100\n0 <= nums[i] <= 400",
         examples: "Input: nums = [1,2,3,1]\nOutput: 4 (rob house 1 and 3)\n\nInput: nums = [2,7,9,3,1]\nOutput: 12 (rob house 1, 3, 5)",
-        starterCode: { javascript: "function rob(nums) {\n  // Your solution here\n}\n\nconsole.log(rob([1,2,3,1])); // 4\n", typescript: "function rob(nums: number[]): number {\n  return 0;\n}\n", python: "def rob(nums):\n    pass\n" },
+        starterCode: { javascript: "function rob(nums) {\n  // Your solution here\n}\n\nconsole.log(rob([1,2,3,1])); // 4\n", typescript: "function rob(nums: number[]): number {\n  return 0;\n}\n", python: "def rob(nums):\n    pass\n", java: `class Solution {
+    public int rob(int[] nums) {
+        // Your code here
+        return 0;
+    }
+}` },
         testCases: [
           { input: "rob([1,2,3,1])", expected: "4" }, { input: "rob([2,7,9,3,1])", expected: "12" },
           { input: "rob([0])", expected: "0" }, { input: "rob([2,1,1,2])", expected: "4" },
@@ -2191,7 +2669,14 @@ print(search_rotated([1], 0))                # -1`,
         tags: ["DP", "Binary Search"], category: "DynamicProgramming", pattern: "DynamicProgramming", patternOrder: 4,
         constraints: "1 <= nums.length <= 2500\n-10^4 <= nums[i] <= 10^4",
         examples: "Input: nums = [10,9,2,5,3,7,101,18]\nOutput: 4 ([2,3,7,101])",
-        starterCode: { javascript: "function lengthOfLIS(nums) {\n  // Your solution here\n}\n\nconsole.log(lengthOfLIS([10,9,2,5,3,7,101,18])); // 4\n", typescript: "function lengthOfLIS(nums: number[]): number {\n  return 0;\n}\n", python: "def length_of_lis(nums):\n    pass\n" },
+        starterCode: { javascript: "function lengthOfLIS(nums) {\n  // Your solution here\n}\n\nconsole.log(lengthOfLIS([10,9,2,5,3,7,101,18])); // 4\n", typescript: "function lengthOfLIS(nums: number[]): number {\n  return 0;\n}\n", python: "def length_of_lis(nums):\n    pass\n", java: `import java.util.*;
+
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        // Your code here
+        return 0;
+    }
+}` },
         testCases: [
           { input: "lengthOfLIS([10,9,2,5,3,7,101,18])", expected: "4" },
           { input: "lengthOfLIS([0,1,0,3,2,3])", expected: "4" },
@@ -2206,7 +2691,14 @@ print(search_rotated([1], 0))                # -1`,
         tags: ["DP", "String", "Hash Table"], category: "DynamicProgramming", pattern: "DynamicProgramming", patternOrder: 5,
         constraints: "1 <= s.length <= 300\n1 <= wordDict.length <= 1000\n1 <= wordDict[i].length <= 20",
         examples: "Input: s = 'leetcode', wordDict = ['leet','code']\nOutput: true\n\nInput: s = 'catsandog', wordDict = ['cats','dog','sand','and','cat']\nOutput: false",
-        starterCode: { javascript: "function wordBreak(s, wordDict) {\n  // Your solution here\n}\n\nconsole.log(wordBreak('leetcode', ['leet','code'])); // true\n", typescript: "function wordBreak(s: string, wordDict: string[]): boolean {\n  return false;\n}\n", python: "def word_break(s, word_dict):\n    pass\n" },
+        starterCode: { javascript: "function wordBreak(s, wordDict) {\n  // Your solution here\n}\n\nconsole.log(wordBreak('leetcode', ['leet','code'])); // true\n", typescript: "function wordBreak(s: string, wordDict: string[]): boolean {\n  return false;\n}\n", python: "def word_break(s, word_dict):\n    pass\n", java: `import java.util.*;
+
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        // Your code here
+        return false;
+    }
+}` },
         testCases: [
           { input: "wordBreak('leetcode', ['leet','code'])", expected: "true" },
           { input: "wordBreak('applepenapple', ['apple','pen'])", expected: "true" },
@@ -2221,7 +2713,12 @@ print(search_rotated([1], 0))                # -1`,
         tags: ["DP", "Math"], category: "DynamicProgramming", pattern: "DynamicProgramming", patternOrder: 6,
         constraints: "1 <= m, n <= 100",
         examples: "Input: m = 3, n = 7\nOutput: 28\n\nInput: m = 3, n = 2\nOutput: 3",
-        starterCode: { javascript: "function uniquePaths(m, n) {\n  // Your solution here\n}\n\nconsole.log(uniquePaths(3, 7)); // 28\n", typescript: "function uniquePaths(m: number, n: number): number {\n  return 0;\n}\n", python: "def unique_paths(m, n):\n    pass\n" },
+        starterCode: { javascript: "function uniquePaths(m, n) {\n  // Your solution here\n}\n\nconsole.log(uniquePaths(3, 7)); // 28\n", typescript: "function uniquePaths(m: number, n: number): number {\n  return 0;\n}\n", python: "def unique_paths(m, n):\n    pass\n", java: `class Solution {
+    public int uniquePaths(int m, int n) {
+        // Your code here
+        return 0;
+    }
+}` },
         testCases: [
           { input: "uniquePaths(3, 7)", expected: "28" }, { input: "uniquePaths(3, 2)", expected: "3" },
           { input: "uniquePaths(1, 1)", expected: "1" }, { input: "uniquePaths(3, 3)", expected: "6" },
@@ -2234,7 +2731,12 @@ print(search_rotated([1], 0))                # -1`,
         tags: ["DP", "String"], category: "DynamicProgramming", pattern: "DynamicProgramming", patternOrder: 7,
         constraints: "1 <= text1.length, text2.length <= 1000",
         examples: "Input: text1 = 'abcde', text2 = 'ace'\nOutput: 3 ('ace')\n\nInput: text1 = 'abc', text2 = 'def'\nOutput: 0",
-        starterCode: { javascript: "function longestCommonSubsequence(text1, text2) {\n  // Your solution here\n}\n\nconsole.log(longestCommonSubsequence('abcde', 'ace')); // 3\n", typescript: "function longestCommonSubsequence(text1: string, text2: string): number {\n  return 0;\n}\n", python: "def longest_common_subsequence(text1, text2):\n    pass\n" },
+        starterCode: { javascript: "function longestCommonSubsequence(text1, text2) {\n  // Your solution here\n}\n\nconsole.log(longestCommonSubsequence('abcde', 'ace')); // 3\n", typescript: "function longestCommonSubsequence(text1: string, text2: string): number {\n  return 0;\n}\n", python: "def longest_common_subsequence(text1, text2):\n    pass\n", java: `class Solution {
+    public int longestCommonSubsequence(String text1, String text2) {
+        // Your code here
+        return 0;
+    }
+}` },
         testCases: [
           { input: "longestCommonSubsequence('abcde', 'ace')", expected: "3" },
           { input: "longestCommonSubsequence('abc', 'abc')", expected: "3" },
@@ -2248,7 +2750,12 @@ print(search_rotated([1], 0))                # -1`,
         tags: ["DP", "String"], category: "DynamicProgramming", pattern: "DynamicProgramming", patternOrder: 8,
         constraints: "0 <= word1.length, word2.length <= 500",
         examples: "Input: word1 = 'horse', word2 = 'ros'\nOutput: 3\n\nInput: word1 = 'intention', word2 = 'execution'\nOutput: 5",
-        starterCode: { javascript: "function minDistance(word1, word2) {\n  // Your solution here\n}\n\nconsole.log(minDistance('horse', 'ros')); // 3\n", typescript: "function minDistance(word1: string, word2: string): number {\n  return 0;\n}\n", python: "def min_distance(word1, word2):\n    pass\n" },
+        starterCode: { javascript: "function minDistance(word1, word2) {\n  // Your solution here\n}\n\nconsole.log(minDistance('horse', 'ros')); // 3\n", typescript: "function minDistance(word1: string, word2: string): number {\n  return 0;\n}\n", python: "def min_distance(word1, word2):\n    pass\n", java: `class Solution {
+    public int minDistance(String word1, String word2) {
+        // Your code here
+        return 0;
+    }
+}` },
         testCases: [
           { input: "minDistance('horse', 'ros')", expected: "3" },
           { input: "minDistance('intention', 'execution')", expected: "5" },
@@ -2272,7 +2779,14 @@ print(search_rotated([1], 0))                # -1`,
         tags: ["Intervals", "Sorting"], category: "Greedy", pattern: "Greedy", patternOrder: 1,
         constraints: "1 <= intervals.length <= 10^4\nintervals[i].length == 2\n0 <= starti <= endi <= 10^4",
         examples: "Input: intervals = [[1,3],[2,6],[8,10],[15,18]]\nOutput: [[1,6],[8,10],[15,18]]",
-        starterCode: { javascript: "function merge(intervals) {\n  // Your solution here\n}\n\nconsole.log(merge([[1,3],[2,6],[8,10],[15,18]]));\n", typescript: "function merge(intervals: number[][]): number[][] {\n  return [];\n}\n", python: "def merge(intervals):\n    pass\n" },
+        starterCode: { javascript: "function merge(intervals) {\n  // Your solution here\n}\n\nconsole.log(merge([[1,3],[2,6],[8,10],[15,18]]));\n", typescript: "function merge(intervals: number[][]): number[][] {\n  return [];\n}\n", python: "def merge(intervals):\n    pass\n", java: `import java.util.*;
+
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        // Your code here
+        return new int[0][0];
+    }
+}` },
         testCases: [
           { input: "JSON.stringify(merge([[1,3],[2,6],[8,10],[15,18]]))", expected: "\"[[1,6],[8,10],[15,18]]\"" },
           { input: "JSON.stringify(merge([[1,4],[4,5]]))", expected: "\"[[1,5]]\"" },
@@ -2287,7 +2801,12 @@ print(search_rotated([1], 0))                # -1`,
         tags: ["Greedy", "DP", "Array"], category: "Greedy", pattern: "Greedy", patternOrder: 2,
         constraints: "1 <= nums.length <= 10^4\n0 <= nums[i] <= 10^5",
         examples: "Input: nums = [2,3,1,1,4]\nOutput: true\n\nInput: nums = [3,2,1,0,4]\nOutput: false",
-        starterCode: { javascript: "function canJump(nums) {\n  // Your solution here\n}\n\nconsole.log(canJump([2,3,1,1,4])); // true\n", typescript: "function canJump(nums: number[]): boolean {\n  return false;\n}\n", python: "def can_jump(nums):\n    pass\n" },
+        starterCode: { javascript: "function canJump(nums) {\n  // Your solution here\n}\n\nconsole.log(canJump([2,3,1,1,4])); // true\n", typescript: "function canJump(nums: number[]): boolean {\n  return false;\n}\n", python: "def can_jump(nums):\n    pass\n", java: `class Solution {
+    public boolean canJump(int[] nums) {
+        // Your code here
+        return false;
+    }
+}` },
         testCases: [
           { input: "canJump([2,3,1,1,4])", expected: "true" }, { input: "canJump([3,2,1,0,4])", expected: "false" },
           { input: "canJump([0])", expected: "true" }, { input: "canJump([2,0,0])", expected: "true" },
@@ -2300,7 +2819,14 @@ print(search_rotated([1], 0))                # -1`,
         tags: ["Greedy", "Intervals", "Sorting"], category: "Greedy", pattern: "Greedy", patternOrder: 3,
         constraints: "1 <= intervals.length <= 10^5\nintervals[i].length == 2",
         examples: "Input: intervals = [[1,2],[2,3],[3,4],[1,3]]\nOutput: 1\n\nInput: intervals = [[1,2],[1,2],[1,2]]\nOutput: 2",
-        starterCode: { javascript: "function eraseOverlapIntervals(intervals) {\n  // Your solution here\n}\n\nconsole.log(eraseOverlapIntervals([[1,2],[2,3],[3,4],[1,3]]));\n", typescript: "function eraseOverlapIntervals(intervals: number[][]): number {\n  return 0;\n}\n", python: "def erase_overlap_intervals(intervals):\n    pass\n" },
+        starterCode: { javascript: "function eraseOverlapIntervals(intervals) {\n  // Your solution here\n}\n\nconsole.log(eraseOverlapIntervals([[1,2],[2,3],[3,4],[1,3]]));\n", typescript: "function eraseOverlapIntervals(intervals: number[][]): number {\n  return 0;\n}\n", python: "def erase_overlap_intervals(intervals):\n    pass\n", java: `import java.util.*;
+
+class Solution {
+    public int eraseOverlapIntervals(int[][] intervals) {
+        // Your code here
+        return 0;
+    }
+}` },
         testCases: [
           { input: "eraseOverlapIntervals([[1,2],[2,3],[3,4],[1,3]])", expected: "1" },
           { input: "eraseOverlapIntervals([[1,2],[1,2],[1,2]])", expected: "2" },
@@ -2313,7 +2839,14 @@ print(search_rotated([1], 0))                # -1`,
         tags: ["Heap", "Intervals", "Sorting"], category: "Greedy", pattern: "Greedy", patternOrder: 4,
         constraints: "1 <= intervals.length <= 10^4\n0 <= starti < endi <= 10^6",
         examples: "Input: intervals = [[0,30],[5,10],[15,20]]\nOutput: 2\n\nInput: intervals = [[7,10],[2,4]]\nOutput: 1",
-        starterCode: { javascript: "function minMeetingRooms(intervals) {\n  // Your solution here\n}\n\nconsole.log(minMeetingRooms([[0,30],[5,10],[15,20]])); // 2\n", typescript: "function minMeetingRooms(intervals: number[][]): number {\n  return 0;\n}\n", python: "def min_meeting_rooms(intervals):\n    pass\n" },
+        starterCode: { javascript: "function minMeetingRooms(intervals) {\n  // Your solution here\n}\n\nconsole.log(minMeetingRooms([[0,30],[5,10],[15,20]])); // 2\n", typescript: "function minMeetingRooms(intervals: number[][]): number {\n  return 0;\n}\n", python: "def min_meeting_rooms(intervals):\n    pass\n", java: `import java.util.*;
+
+class Solution {
+    public int minMeetingRooms(int[][] intervals) {
+        // Your code here
+        return 0;
+    }
+}` },
         testCases: [
           { input: "minMeetingRooms([[0,30],[5,10],[15,20]])", expected: "2" },
           { input: "minMeetingRooms([[7,10],[2,4]])", expected: "1" },
@@ -2327,7 +2860,14 @@ print(search_rotated([1], 0))                # -1`,
         tags: ["Greedy", "String", "Hash Table"], category: "Greedy", pattern: "Greedy", patternOrder: 5,
         constraints: "1 <= s.length <= 500\ns consists of lowercase English letters",
         examples: "Input: s = 'ababcbacadefegdehijhklij'\nOutput: [9,7,8]",
-        starterCode: { javascript: "function partitionLabels(s) {\n  // Your solution here\n}\n\nconsole.log(partitionLabels('ababcbacadefegdehijhklij')); // [9,7,8]\n", typescript: "function partitionLabels(s: string): number[] {\n  return [];\n}\n", python: "def partition_labels(s):\n    pass\n" },
+        starterCode: { javascript: "function partitionLabels(s) {\n  // Your solution here\n}\n\nconsole.log(partitionLabels('ababcbacadefegdehijhklij')); // [9,7,8]\n", typescript: "function partitionLabels(s: string): number[] {\n  return [];\n}\n", python: "def partition_labels(s):\n    pass\n", java: `import java.util.*;
+
+class Solution {
+    public List<Integer> partitionLabels(String s) {
+        // Your code here
+        return new ArrayList<>();
+    }
+}` },
         testCases: [
           { input: "JSON.stringify(partitionLabels('ababcbacadefegdehijhklij'))", expected: "\"[9,7,8]\"" },
           { input: "JSON.stringify(partitionLabels('eccbbbbdec'))", expected: "\"[10]\"" },
@@ -2349,7 +2889,25 @@ print(search_rotated([1], 0))                # -1`,
         tags: ["Trie", "Design", "String"], category: "Design", pattern: "Trie", patternOrder: 1,
         constraints: "1 <= word.length, prefix.length <= 2000\nword and prefix consist of lowercase English letters.",
         examples: "Trie trie = new Trie();\ntrie.insert('apple');\ntrie.search('apple');   // true\ntrie.search('app');     // false\ntrie.startsWith('app'); // true",
-        starterCode: { javascript: "class Trie {\n  constructor() {\n    // Your solution here\n  }\n  insert(word) {}\n  search(word) {}\n  startsWith(prefix) {}\n}\n\nconst t = new Trie();\nt.insert('apple');\nconsole.log(t.search('apple')); // true\nconsole.log(t.search('app')); // false\nconsole.log(t.startsWith('app')); // true\n", typescript: "class Trie {\n  constructor() {}\n  insert(word: string): void {}\n  search(word: string): boolean { return false; }\n  startsWith(prefix: string): boolean { return false; }\n}\n", python: "class Trie:\n    def __init__(self): pass\n    def insert(self, word): pass\n    def search(self, word): pass\n    def starts_with(self, prefix): pass\n" },
+        starterCode: { javascript: "class Trie {\n  constructor() {\n    // Your solution here\n  }\n  insert(word) {}\n  search(word) {}\n  startsWith(prefix) {}\n}\n\nconst t = new Trie();\nt.insert('apple');\nconsole.log(t.search('apple')); // true\nconsole.log(t.search('app')); // false\nconsole.log(t.startsWith('app')); // true\n", typescript: "class Trie {\n  constructor() {}\n  insert(word: string): void {}\n  search(word: string): boolean { return false; }\n  startsWith(prefix: string): boolean { return false; }\n}\n", python: "class Trie:\n    def __init__(self): pass\n    def insert(self, word): pass\n    def search(self, word): pass\n    def starts_with(self, prefix): pass\n", java: `class Trie {
+    public Trie() {
+        // Initialize
+    }
+
+    public void insert(String word) {
+        // Your code here
+    }
+
+    public boolean search(String word) {
+        // Your code here
+        return false;
+    }
+
+    public boolean startsWith(String prefix) {
+        // Your code here
+        return false;
+    }
+}` },
         testCases: [
           { input: "(function() { const t = new Trie(); t.insert('apple'); return t.search('apple'); })()", expected: "true" },
           { input: "(function() { const t = new Trie(); t.insert('apple'); return t.search('app'); })()", expected: "false" },
@@ -2363,7 +2921,20 @@ print(search_rotated([1], 0))                # -1`,
         tags: ["Trie", "DFS", "Design"], category: "Design", pattern: "Trie", patternOrder: 2,
         constraints: "1 <= word.length <= 25\nword consists of lowercase English letters.\nSearch word may contain '.' wildcards.",
         examples: "WordDictionary wd = new WordDictionary();\nwd.addWord('bad');\nwd.search('.ad'); // true\nwd.search('b..'); // true\nwd.search('b.'); // false",
-        starterCode: { javascript: "class WordDictionary {\n  constructor() {\n    // Your solution here\n  }\n  addWord(word) {}\n  search(word) {}\n}\n\nconst wd = new WordDictionary();\nwd.addWord('bad');\nconsole.log(wd.search('.ad')); // true\nconsole.log(wd.search('b..')); // true\n", typescript: "class WordDictionary {\n  constructor() {}\n  addWord(word: string): void {}\n  search(word: string): boolean { return false; }\n}\n", python: "class WordDictionary:\n    def __init__(self): pass\n    def add_word(self, word): pass\n    def search(self, word): pass\n" },
+        starterCode: { javascript: "class WordDictionary {\n  constructor() {\n    // Your solution here\n  }\n  addWord(word) {}\n  search(word) {}\n}\n\nconst wd = new WordDictionary();\nwd.addWord('bad');\nconsole.log(wd.search('.ad')); // true\nconsole.log(wd.search('b..')); // true\n", typescript: "class WordDictionary {\n  constructor() {}\n  addWord(word: string): void {}\n  search(word: string): boolean { return false; }\n}\n", python: "class WordDictionary:\n    def __init__(self): pass\n    def add_word(self, word): pass\n    def search(self, word): pass\n", java: `class WordDictionary {
+    public WordDictionary() {
+        // Initialize
+    }
+
+    public void addWord(String word) {
+        // Your code here
+    }
+
+    public boolean search(String word) {
+        // Your code here
+        return false;
+    }
+}` },
         testCases: [
           { input: "(function() { const w = new WordDictionary(); w.addWord('bad'); return w.search('.ad'); })()", expected: "true" },
           { input: "(function() { const w = new WordDictionary(); w.addWord('bad'); return w.search('b..'); })()", expected: "true" },
@@ -2377,7 +2948,14 @@ print(search_rotated([1], 0))                # -1`,
         tags: ["Trie", "Backtracking", "Matrix"], category: "Backtracking", pattern: "Trie", patternOrder: 3,
         constraints: "m == board.length\nn == board[i].length\n1 <= m, n <= 12\n1 <= words.length <= 3 * 10^4",
         examples: "Input: board = [['o','a','a','n'],['e','t','a','e'],['i','h','k','r'],['i','f','l','v']], words = ['oath','pea','eat','rain']\nOutput: ['eat','oath']",
-        starterCode: { javascript: "function findWords(board, words) {\n  // Your solution here\n}\n\nconsole.log(findWords([['o','a','a','n'],['e','t','a','e'],['i','h','k','r'],['i','f','l','v']], ['oath','pea','eat','rain']));\n", typescript: "function findWords(board: string[][], words: string[]): string[] {\n  return [];\n}\n", python: "def find_words(board, words):\n    pass\n" },
+        starterCode: { javascript: "function findWords(board, words) {\n  // Your solution here\n}\n\nconsole.log(findWords([['o','a','a','n'],['e','t','a','e'],['i','h','k','r'],['i','f','l','v']], ['oath','pea','eat','rain']));\n", typescript: "function findWords(board: string[][], words: string[]): string[] {\n  return [];\n}\n", python: "def find_words(board, words):\n    pass\n", java: `import java.util.*;
+
+class Solution {
+    public List<String> findWords(char[][] board, String[] words) {
+        // Your code here
+        return new ArrayList<>();
+    }
+}` },
         testCases: [
           { input: "findWords([['o','a','a','n'],['e','t','a','e'],['i','h','k','r'],['i','f','l','v']], ['oath','pea','eat','rain']).sort().join(',')", expected: "\"eat,oath\"" },
           { input: "findWords([['a','b'],['c','d']], ['abcb']).length", expected: "0" },
@@ -2399,7 +2977,12 @@ print(search_rotated([1], 0))                # -1`,
         tags: ["Bit Manipulation", "Array"], category: "Math", pattern: "BitManipulation", patternOrder: 1,
         constraints: "1 <= nums.length <= 3 * 10^4\n-3 * 10^4 <= nums[i] <= 3 * 10^4\nEach element appears twice except one.",
         examples: "Input: nums = [2,2,1]\nOutput: 1\n\nInput: nums = [4,1,2,1,2]\nOutput: 4",
-        starterCode: { javascript: "function singleNumber(nums) {\n  // Your solution here\n}\n\nconsole.log(singleNumber([2,2,1])); // 1\n", typescript: "function singleNumber(nums: number[]): number {\n  return 0;\n}\n", python: "def single_number(nums):\n    pass\n" },
+        starterCode: { javascript: "function singleNumber(nums) {\n  // Your solution here\n}\n\nconsole.log(singleNumber([2,2,1])); // 1\n", typescript: "function singleNumber(nums: number[]): number {\n  return 0;\n}\n", python: "def single_number(nums):\n    pass\n", java: `class Solution {
+    public int singleNumber(int[] nums) {
+        // Your code here
+        return 0;
+    }
+}` },
         testCases: [
           { input: "singleNumber([2,2,1])", expected: "1" }, { input: "singleNumber([4,1,2,1,2])", expected: "4" },
           { input: "singleNumber([1])", expected: "1" }, { input: "singleNumber([0,1,0])", expected: "1" },
@@ -2411,7 +2994,12 @@ print(search_rotated([1], 0))                # -1`,
         tags: ["Bit Manipulation", "DP"], category: "Math", pattern: "BitManipulation", patternOrder: 2,
         constraints: "0 <= n <= 10^5",
         examples: "Input: n = 2\nOutput: [0,1,1]\n\nInput: n = 5\nOutput: [0,1,1,2,1,2]",
-        starterCode: { javascript: "function countBits(n) {\n  // Your solution here\n}\n\nconsole.log(countBits(5)); // [0,1,1,2,1,2]\n", typescript: "function countBits(n: number): number[] {\n  return [];\n}\n", python: "def count_bits(n):\n    pass\n" },
+        starterCode: { javascript: "function countBits(n) {\n  // Your solution here\n}\n\nconsole.log(countBits(5)); // [0,1,1,2,1,2]\n", typescript: "function countBits(n: number): number[] {\n  return [];\n}\n", python: "def count_bits(n):\n    pass\n", java: `class Solution {
+    public int[] countBits(int n) {
+        // Your code here
+        return new int[0];
+    }
+}` },
         testCases: [
           { input: "JSON.stringify(countBits(2))", expected: "\"[0,1,1]\"" },
           { input: "JSON.stringify(countBits(5))", expected: "\"[0,1,1,2,1,2]\"" },
@@ -2425,7 +3013,12 @@ print(search_rotated([1], 0))                # -1`,
         tags: ["Bit Manipulation"], category: "Math", pattern: "BitManipulation", patternOrder: 3,
         constraints: "Input is a 32-bit unsigned integer.",
         examples: "Input: n = 43261596 (00000010100101000001111010011100)\nOutput: 964176192 (00111001011110000010100101000000)",
-        starterCode: { javascript: "function reverseBits(n) {\n  // Your solution here\n}\n\nconsole.log(reverseBits(43261596)); // 964176192\n", typescript: "function reverseBits(n: number): number {\n  return 0;\n}\n", python: "def reverse_bits(n):\n    pass\n" },
+        starterCode: { javascript: "function reverseBits(n) {\n  // Your solution here\n}\n\nconsole.log(reverseBits(43261596)); // 964176192\n", typescript: "function reverseBits(n: number): number {\n  return 0;\n}\n", python: "def reverse_bits(n):\n    pass\n", java: `class Solution {
+    public int reverseBits(int n) {
+        // Your code here
+        return 0;
+    }
+}` },
         testCases: [
           { input: "reverseBits(43261596)", expected: "964176192" },
           { input: "reverseBits(0)", expected: "0" },
@@ -2447,7 +3040,14 @@ print(search_rotated([1], 0))                # -1`,
         tags: ["Intervals", "Array"], category: "Arrays", pattern: "Math", patternOrder: 1,
         constraints: "0 <= intervals.length <= 10^4\nnewInterval.length == 2\n0 <= start <= end <= 10^5",
         examples: "Input: intervals = [[1,3],[6,9]], newInterval = [2,5]\nOutput: [[1,5],[6,9]]\n\nInput: intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]\nOutput: [[1,2],[3,10],[12,16]]",
-        starterCode: { javascript: "function insert(intervals, newInterval) {\n  // Your solution here\n}\n\nconsole.log(insert([[1,3],[6,9]], [2,5]));\n", typescript: "function insert(intervals: number[][], newInterval: number[]): number[][] {\n  return [];\n}\n", python: "def insert(intervals, new_interval):\n    pass\n" },
+        starterCode: { javascript: "function insert(intervals, newInterval) {\n  // Your solution here\n}\n\nconsole.log(insert([[1,3],[6,9]], [2,5]));\n", typescript: "function insert(intervals: number[][], newInterval: number[]): number[][] {\n  return [];\n}\n", python: "def insert(intervals, new_interval):\n    pass\n", java: `import java.util.*;
+
+class Solution {
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        // Your code here
+        return new int[0][0];
+    }
+}` },
         testCases: [
           { input: "JSON.stringify(insert([[1,3],[6,9]], [2,5]))", expected: "\"[[1,5],[6,9]]\"" },
           { input: "JSON.stringify(insert([[1,2],[3,5],[6,7],[8,10],[12,16]], [4,8]))", expected: "\"[[1,2],[3,10],[12,16]]\"" },
@@ -2461,7 +3061,12 @@ print(search_rotated([1], 0))                # -1`,
         tags: ["Math", "Recursion"], category: "Math", pattern: "Math", patternOrder: 2,
         constraints: "-100.0 < x < 100.0\n-2^31 <= n <= 2^31 - 1\nx is not zero when n < 0",
         examples: "Input: x = 2.0, n = 10\nOutput: 1024.0\n\nInput: x = 2.1, n = 3\nOutput: 9.261\n\nInput: x = 2.0, n = -2\nOutput: 0.25",
-        starterCode: { javascript: "function myPow(x, n) {\n  // Your solution here\n}\n\nconsole.log(myPow(2.0, 10)); // 1024\nconsole.log(myPow(2.0, -2)); // 0.25\n", typescript: "function myPow(x: number, n: number): number {\n  return 0;\n}\n", python: "def my_pow(x, n):\n    pass\n" },
+        starterCode: { javascript: "function myPow(x, n) {\n  // Your solution here\n}\n\nconsole.log(myPow(2.0, 10)); // 1024\nconsole.log(myPow(2.0, -2)); // 0.25\n", typescript: "function myPow(x: number, n: number): number {\n  return 0;\n}\n", python: "def my_pow(x, n):\n    pass\n", java: `class Solution {
+    public double myPow(double x, int n) {
+        // Your code here
+        return 0.0;
+    }
+}` },
         testCases: [
           { input: "myPow(2.0, 10)", expected: "1024" },
           { input: "myPow(2.0, -2)", expected: "0.25" },

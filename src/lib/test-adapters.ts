@@ -95,13 +95,9 @@ export function wrapTestCode(language: string, userCode: string, testInput: stri
       const classMatch = userCode.match(/public\s+class\s+(\w+)/);
       const className = classMatch ? classMatch[1] : "Solution";
 
-      // Check if user code already has a main method
-      const hasMain = /public\s+static\s+void\s+main/.test(userCode);
-      if (hasMain) {
-        // If user already has main, we can't easily inject test code
-        // Just return code as-is — user manages their own output
-        return userCode;
-      }
+      // Remove existing main method so we can inject our test-calling main
+      const mainRegex = /public\s+static\s+void\s+main\s*\([^)]*\)\s*\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}/;
+      userCode = userCode.replace(mainRegex, '');
 
       // Wrap: add a main method that calls the function and prints result
       // We need to serialize the result — use Arrays.toString for arrays, String.valueOf for primitives

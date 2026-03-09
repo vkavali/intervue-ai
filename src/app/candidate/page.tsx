@@ -46,9 +46,16 @@ export default async function CandidateDashboard() {
     orderBy: { createdAt: "desc" },
   });
 
-  const pendingSessions = sessions.filter((s) => s.status === "PENDING");
+  const now = new Date();
   const activeSessions = sessions.filter((s) => s.status === "ACTIVE");
   const completedSessions = sessions.filter((s) => s.status === "COMPLETED");
+  // Split PENDING into upcoming (future/unscheduled) and past-due (expired)
+  const upcomingSessions = sessions.filter(
+    (s) => s.status === "PENDING" && (!s.scheduledAt || new Date(s.scheduledAt) > now)
+  );
+  const pastDueSessions = sessions.filter(
+    (s) => s.status === "PENDING" && s.scheduledAt && new Date(s.scheduledAt) <= now
+  );
 
   return (
     <div>
@@ -66,7 +73,7 @@ export default async function CandidateDashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-5">
           <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Upcoming</p>
-          <p className="mt-2 text-3xl font-bold text-yellow-400">{pendingSessions.length}</p>
+          <p className="mt-2 text-3xl font-bold text-yellow-400">{upcomingSessions.length}</p>
           <p className="mt-1 text-xs text-gray-500">Scheduled interviews</p>
         </div>
         <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-5">
@@ -168,11 +175,11 @@ export default async function CandidateDashboard() {
       )}
 
       {/* Upcoming Interviews */}
-      {pendingSessions.length > 0 && (
+      {upcomingSessions.length > 0 && (
         <div className="mb-8">
           <h2 className="text-lg font-semibold text-white mb-4">Upcoming Interviews</h2>
           <div className="space-y-3">
-            {pendingSessions.map((s) => {
+            {upcomingSessions.map((s) => {
               const statusStyle = statusColors[s.status];
               return (
                 <div
@@ -203,13 +210,75 @@ export default async function CandidateDashboard() {
                       )}
                     </div>
                   </div>
-                  <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${statusStyle.bg} ${statusStyle.text}`}>
-                    <span className={`h-1.5 w-1.5 rounded-full ${statusStyle.dot}`} />
-                    Scheduled
-                  </span>
+                  <div className="flex items-center gap-3">
+                    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${statusStyle.bg} ${statusStyle.text}`}>
+                      <span className={`h-1.5 w-1.5 rounded-full ${statusStyle.dot}`} />
+                      Scheduled
+                    </span>
+                    <Link
+                      href={`/session/${s.id}`}
+                      className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-500 transition-colors"
+                    >
+                      Join
+                    </Link>
+                  </div>
                 </div>
               );
             })}
+          </div>
+        </div>
+      )}
+
+      {/* Previous / Missed Interviews */}
+      {pastDueSessions.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <svg className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Previous Interviews
+          </h2>
+          <div className="space-y-3">
+            {pastDueSessions.map((s) => (
+              <div
+                key={s.id}
+                className="flex items-center justify-between rounded-xl border border-gray-700/50 bg-gray-900/30 p-5 opacity-75"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-500/10 text-gray-500">
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-300">{s.template.title}</h3>
+                    <p className="text-xs text-gray-500">
+                      {s.company.name} &middot; {s.template.role} &middot; {s.template.seniority}
+                    </p>
+                    <p className="text-xs text-red-400/70 mt-1">
+                      Expired: {new Date(s.scheduledAt!).toLocaleDateString("en-US", {
+                        weekday: "short",
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium bg-gray-500/10 text-gray-400">
+                    Expired
+                  </span>
+                  <a
+                    href={`mailto:?subject=Interview Reschedule Request - ${s.template.title}&body=Hi, I would like to request a reschedule for my interview: ${s.template.title} (${s.template.role}).`}
+                    className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-xs font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
+                  >
+                    Contact Recruiter
+                  </a>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}

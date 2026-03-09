@@ -62,7 +62,7 @@ function generateStarterCode(title: string, lang: string): string {
     case "python":
       return `def ${pyName}():\n    """${title}"""\n    # Your solution here\n    pass\n\n# Test\nprint(${pyName}())\n`;
     case "java":
-      return `class ${className} {\n    public static void solve() {\n        // Your solution here\n    }\n\n    public static void main(String[] args) {\n        solve();\n    }\n}\n`;
+      return `import java.util.*;\n\nclass ${className} {\n    public static void solve() {\n        // Your solution here\n    }\n}\n`;
     case "cpp":
       return `#include <iostream>\n#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    // ${title}\n    void solve() {\n        // Your solution here\n    }\n};\n\nint main() {\n    Solution sol;\n    sol.solve();\n    return 0;\n}\n`;
     case "go":
@@ -201,7 +201,7 @@ function PracticeProblemContent() {
       javascript: `/**\n * ${bankProblem.title}\n * ${bankProblem.description.slice(0, 80)}...\n */\nfunction ${fnName}() {\n  // Your solution here\n}\n\n// Test\nconsole.log(${fnName}());\n`,
       python: `def ${pyName}():\n    """${bankProblem.title}"""\n    # Your solution here\n    pass\n\n# Test\nprint(${pyName}())\n`,
       typescript: `function ${fnName}(): void {\n  // Your solution here\n}\n\n// Test\nconsole.log(${fnName}());\n`,
-      java: `class ${className} {\n    public static void solve() {\n        // Your solution here\n    }\n\n    public static void main(String[] args) {\n        solve();\n    }\n}\n`,
+      java: `import java.util.*;\n\nclass ${className} {\n    public static void solve() {\n        // Your solution here\n    }\n}\n`,
     };
     return {
       id: bankProblem.id,
@@ -964,6 +964,27 @@ function PracticeProblemContent() {
               </svg>
             )}
             {executing ? "Running..." : "Run"}
+          </button>
+
+          {/* Run Tests Button */}
+          <button
+            onClick={handleRunTests}
+            disabled={runningTests || allTestCases.length === 0 || !canTestCases(language)}
+            title={!canTestCases(language) ? "Test cases available for JS, TS, Python, Java" : "Run all test cases (Ctrl+Shift+Enter)"}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-500 disabled:opacity-50 transition-colors"
+          >
+            {runningTests ? (
+              <svg className="animate-spin w-3.5 h-3.5" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              </svg>
+            ) : (
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+              </svg>
+            )}
+            {runningTests ? "Testing..." : "Run Tests"}
+            <span className="text-blue-300 text-[10px] hidden sm:inline">Ctrl+Shift+Enter</span>
           </button>
 
           {/* Submit Button */}

@@ -310,9 +310,27 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
     if (testCases.length === 0) return;
 
     if (language !== "javascript" && language !== "typescript") {
+      // Server-side execution for Java/Python
+      setRunningTests(true);
       setBottomPanelOpen(true);
       setBottomTab("results");
-      setTestResults([]);
+      setTestResults(null);
+      try {
+        const res = await fetch("/api/execute/run-tests", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ language, code, testCases }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setTestResults(data.results);
+        } else {
+          setTestResults([]);
+        }
+      } catch {
+        setTestResults([]);
+      }
+      setRunningTests(false);
       return;
     }
 

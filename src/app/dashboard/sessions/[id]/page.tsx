@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ReassignInterviewerForm } from "./ReassignInterviewerForm";
+import { RescheduleForm } from "./RescheduleForm";
 import { GenerateThinkingButton } from "./GenerateThinkingButton";
 
 const statusColors: Record<string, string> = {
@@ -204,6 +205,19 @@ export default async function SessionDetailPage({
           interviewers={companyInterviewers}
         />
       </div>
+
+      {/* Reschedule (PENDING sessions only) */}
+      {s.status === "PENDING" && (
+        <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 mb-8">
+          <h2 className="text-lg font-semibold text-white mb-4">
+            Schedule / Reschedule
+          </h2>
+          <RescheduleForm
+            sessionId={s.id}
+            currentScheduledAt={s.scheduledAt?.toISOString() ?? null}
+          />
+        </div>
+      )}
 
       {/* Violation Summary */}
       <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 mb-8">
