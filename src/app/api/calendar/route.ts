@@ -30,14 +30,25 @@ export async function GET(req: NextRequest) {
     const startOfMonth = new Date(year, month - 1, 1);
     const endOfMonth = new Date(year, month, 0, 23, 59, 59, 999);
 
-    // Fetch sessions scheduled in this month for the company
+    // Fetch sessions for this month (scheduled in range OR unscheduled)
     const sessions = await prisma.interviewSession.findMany({
       where: {
         companyId: user.companyId,
-        scheduledAt: {
-          gte: startOfMonth,
-          lte: endOfMonth,
-        },
+        OR: [
+          {
+            scheduledAt: {
+              gte: startOfMonth,
+              lte: endOfMonth,
+            },
+          },
+          {
+            scheduledAt: null,
+            createdAt: {
+              gte: startOfMonth,
+              lte: endOfMonth,
+            },
+          },
+        ],
       },
       include: {
         candidate: { select: { id: true, name: true, email: true } },

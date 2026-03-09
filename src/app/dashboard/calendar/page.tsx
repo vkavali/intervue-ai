@@ -5,7 +5,7 @@ import Link from "next/link";
 
 interface CalendarSession {
   id: string;
-  scheduledAt: string;
+  scheduledAt: string | null;
   status: string;
   candidate: { id: string; name: string; email: string };
   interviewer: { id: string; name: string; email: string } | null;
@@ -117,6 +117,9 @@ export default function CalendarPage() {
     if (!availByDay[day]) availByDay[day] = [];
     availByDay[day].push(a);
   }
+
+  // Unscheduled sessions
+  const unscheduledSessions = sessions.filter(s => !s.scheduledAt);
 
   // Stats
   const todayDate = today.getDate();
@@ -323,6 +326,36 @@ export default function CalendarPage() {
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-gray-300">{formatTime(s.scheduledAt)}</p>
+                  {s.interviewer && (
+                    <p className="text-xs text-gray-500">w/ {s.interviewer.name}</p>
+                  )}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Unscheduled Sessions */}
+      {unscheduledSessions.length > 0 && (
+        <div className="mt-6 rounded-xl border border-yellow-500/20 bg-yellow-500/5 p-6">
+          <h3 className="mb-4 text-lg font-semibold text-yellow-400">Unscheduled Interviews ({unscheduledSessions.length})</h3>
+          <div className="space-y-3">
+            {unscheduledSessions.map((s) => (
+              <Link
+                key={s.id}
+                href={`/dashboard/sessions/${s.id}`}
+                className="flex items-center justify-between rounded-lg border border-gray-800 p-4 transition-colors hover:border-gray-700 hover:bg-gray-800/50"
+              >
+                <div className="flex items-center gap-4">
+                  <div className={`h-3 w-3 rounded-full ${statusColor[s.status] || "bg-gray-500"}`} />
+                  <div>
+                    <p className="text-sm font-medium text-white">{s.candidate.name}</p>
+                    <p className="text-xs text-gray-400">{s.template.title} &middot; {s.template.role} ({s.template.seniority})</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm text-yellow-400">Not scheduled</p>
                   {s.interviewer && (
                     <p className="text-xs text-gray-500">w/ {s.interviewer.name}</p>
                   )}
