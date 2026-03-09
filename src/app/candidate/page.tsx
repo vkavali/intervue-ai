@@ -47,14 +47,28 @@ export default async function CandidateDashboard() {
   });
 
   const now = new Date();
-  const activeSessions = sessions.filter((s) => s.status === "ACTIVE");
   const completedSessions = sessions.filter((s) => s.status === "COMPLETED");
+
+  // Check if an ACTIVE session's time has expired
+  const isSessionExpired = (s: typeof sessions[number]) => {
+    if (s.startedAt && s.totalDurationMinutes) {
+      const expiresAt = new Date(s.startedAt).getTime() + s.totalDurationMinutes * 60 * 1000;
+      return Date.now() > expiresAt;
+    }
+    // If scheduled in the past and no startedAt, also treat as expired
+    if (s.scheduledAt && new Date(s.scheduledAt) <= now && !s.startedAt) return true;
+    return false;
+  };
+
+  const activeSessions = sessions.filter((s) => s.status === "ACTIVE" && !isSessionExpired(s));
   // Split PENDING into upcoming (future/unscheduled) and past-due (expired)
   const upcomingSessions = sessions.filter(
     (s) => s.status === "PENDING" && (!s.scheduledAt || new Date(s.scheduledAt) > now)
   );
   const pastDueSessions = sessions.filter(
-    (s) => s.status === "PENDING" && s.scheduledAt && new Date(s.scheduledAt) <= now
+    (s) =>
+      (s.status === "PENDING" && s.scheduledAt && new Date(s.scheduledAt) <= now) ||
+      (s.status === "ACTIVE" && isSessionExpired(s))
   );
 
   return (

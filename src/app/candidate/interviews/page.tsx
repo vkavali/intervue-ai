@@ -63,7 +63,13 @@ export default async function CandidateInterviewsPage() {
         <div className="space-y-4">
           {interviews.map((interview) => {
             const status = statusColors[interview.status] || statusColors.CANCELLED;
-            const isPastDue = interview.status === "PENDING" && interview.scheduledAt && new Date(interview.scheduledAt) <= new Date();
+            const now = new Date();
+            const isTimeExpired = interview.status === "ACTIVE" && interview.startedAt && interview.totalDurationMinutes
+              ? Date.now() > new Date(interview.startedAt).getTime() + interview.totalDurationMinutes * 60 * 1000
+              : false;
+            const isPastDue =
+              (interview.status === "PENDING" && interview.scheduledAt && new Date(interview.scheduledAt) <= now) ||
+              isTimeExpired;
             return (
               <div
                 key={interview.id}
@@ -117,7 +123,7 @@ export default async function CandidateInterviewsPage() {
                       {isPastDue ? "Expired" : status.label}
                     </span>
 
-                    {interview.status === "ACTIVE" && (
+                    {interview.status === "ACTIVE" && !isPastDue && (
                       <Link
                         href={`/session/${interview.id}`}
                         className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-500 transition-colors"
