@@ -1,4 +1,17 @@
+"use client";
+
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ScrollReveal";
+
+// Dynamic imports for 3D components (SSR disabled)
+const ParticleField = dynamic(() => import("@/components/3d/ParticleField"), { ssr: false });
+const FloatingCode = dynamic(() => import("@/components/3d/FloatingCode"), { ssr: false });
+const AIBrain = dynamic(() => import("@/components/3d/AIBrain"), { ssr: false });
+const Globe = dynamic(() => import("@/components/3d/Globe"), { ssr: false });
+const GeometricShapes = dynamic(() => import("@/components/3d/GeometricShapes"), { ssr: false });
+const PracticeViz = dynamic(() => import("@/components/3d/PracticeViz"), { ssr: false });
 
 const aiLevels = [
   {
@@ -101,7 +114,7 @@ const platformFeatures = [
   },
   {
     title: "Practice Mode",
-    description: "AI-generated practice problems with custom difficulty, test cases, and starter code. Candidates prepare with the same tools they will use in real interviews.",
+    description: "1,010+ curated problems with AI enrichment, test cases, and starter code. Master 15 study patterns with structured learning paths.",
     icon: (
       <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.26 10.147a60.438 60.438 0 00-.491 6.347A48.62 48.62 0 0112 20.904a48.62 48.62 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.636 50.636 0 00-2.658-.813A59.906 59.906 0 0112 3.493a59.903 59.903 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
@@ -136,6 +149,30 @@ const platformFeatures = [
     border: "border-red-500/20",
     iconColor: "text-red-400",
   },
+  {
+    title: "Browser Code Execution",
+    description: "Run code directly in the browser with Judge0 engine. Support for 10+ languages with real-time test case validation.",
+    icon: (
+      <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z" />
+      </svg>
+    ),
+    gradient: "from-emerald-500/20 to-green-500/10",
+    border: "border-emerald-500/20",
+    iconColor: "text-emerald-400",
+  },
+  {
+    title: "Pattern-Based Learning",
+    description: "15 curated study patterns with 73 essential problems. Master Arrays, Trees, Graphs, DP and more with structured learning paths.",
+    icon: (
+      <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+      </svg>
+    ),
+    gradient: "from-violet-500/20 to-purple-500/10",
+    border: "border-violet-500/20",
+    iconColor: "text-violet-400",
+  },
 ];
 
 const comparisonFeatures = [
@@ -149,6 +186,8 @@ const comparisonFeatures = [
   { feature: "AI Interaction Logging", intervue: true, hackerrank: false, coderpad: false, karat: false, leetcode: false },
   { feature: "Hire/No-Hire AI", intervue: true, hackerrank: false, coderpad: false, karat: true, leetcode: false },
   { feature: "Anti-Cheat System", intervue: true, hackerrank: true, coderpad: false, karat: false, leetcode: false },
+  { feature: "Browser Code Execution", intervue: true, hackerrank: true, coderpad: true, karat: false, leetcode: true },
+  { feature: "Pattern-Based Study Plans", intervue: true, hackerrank: false, coderpad: false, karat: false, leetcode: false },
 ];
 
 const pricingPlans = [
@@ -178,6 +217,7 @@ const pricingPlans = [
       "Priority support",
       "Custom question library",
       "Calendar & scheduling",
+      "1,010+ practice problems",
     ],
     cta: "Start Free Trial",
     highlighted: true,
@@ -216,22 +256,179 @@ const pricingPlans = [
   },
 ];
 
+function Scene3DFallback() {
+  return (
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+    </div>
+  );
+}
+
+const flowCards = [
+  {
+    step: "01",
+    title: "Create Position & Template",
+    desc: "Define your open role, configure interview questions, set AI levels per question, and customize difficulty.",
+    color: "from-purple-600 to-purple-800",
+    borderColor: "border-purple-500/30",
+    mockup: (
+      <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5 space-y-1.5">
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] text-white font-medium">Senior Frontend Engineer</span>
+          <span className="text-[8px] bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded">OPEN</span>
+        </div>
+        <div className="h-1 rounded-full bg-gray-800 overflow-hidden"><div className="w-2/3 h-full bg-purple-500 rounded-full" /></div>
+        <div className="flex gap-1">
+          <span className="text-[8px] bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded">React</span>
+          <span className="text-[8px] bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded">TypeScript</span>
+          <span className="text-[8px] bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded">3 rounds</span>
+        </div>
+      </div>
+    ),
+  },
+  {
+    step: "02",
+    title: "Schedule & Invite",
+    desc: "Use the calendar to find available interviewer slots, schedule sessions, and send candidates their unique interview links.",
+    color: "from-blue-600 to-blue-800",
+    borderColor: "border-blue-500/30",
+    mockup: (
+      <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5">
+        <div className="grid grid-cols-7 gap-0.5 mb-1">
+          {["S","M","T","W","T","F","S"].map((d,i) => (
+            <div key={i} className="text-center text-[7px] text-gray-500 font-medium">{d}</div>
+          ))}
+        </div>
+        <div className="grid grid-cols-7 gap-0.5">
+          {Array.from({length: 14}, (_, i) => (
+            <div key={i} className={`text-center text-[8px] py-0.5 rounded ${
+              i === 5 ? "bg-purple-500 text-white font-bold" :
+              i === 8 ? "bg-blue-500/30 text-blue-300" :
+              "text-gray-500"
+            }`}>{i + 10}</div>
+          ))}
+        </div>
+      </div>
+    ),
+  },
+  {
+    step: "03",
+    title: "Live Interview",
+    desc: "Candidate codes in real-time with controlled AI. Interviewer watches, adjusts AI levels on the fly, and communicates via video + chat.",
+    color: "from-cyan-600 to-cyan-800",
+    borderColor: "border-cyan-500/30",
+    mockup: (
+      <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5">
+        <div className="flex gap-1.5">
+          <div className="flex-1 rounded bg-gray-900 p-1.5">
+            <div className="space-y-0.5 font-mono text-[7px] text-gray-400">
+              <p><span className="text-purple-400">fn</span> solve() &#123;</p>
+              <p className="pl-2"><span className="text-blue-300">let</span> result = <span className="text-green-300">vec!</span>[];</p>
+              <p className="pl-2 text-gray-600">{"// optimizing..."}</p>
+              <p>&#125;<span className="animate-pulse text-white">|</span></p>
+            </div>
+          </div>
+          <div className="w-12 space-y-1">
+            <div className="aspect-square rounded bg-purple-500/20 flex items-center justify-center text-[7px] text-purple-300">AI</div>
+            <div className="aspect-square rounded bg-green-500/20 flex items-center justify-center text-[7px] text-green-300">HD</div>
+          </div>
+        </div>
+      </div>
+    ),
+  },
+  {
+    step: "04",
+    title: "AI Audits Everything",
+    desc: "Every keystroke, AI interaction, and behavior is logged. The audit engine generates structured scorecards automatically.",
+    color: "from-green-600 to-green-800",
+    borderColor: "border-green-500/30",
+    mockup: (
+      <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5 space-y-1">
+        {[
+          { label: "Problem Solving", pct: "88%", w: "w-[88%]", c: "bg-green-500" },
+          { label: "Code Quality", pct: "76%", w: "w-[76%]", c: "bg-blue-500" },
+          { label: "Communication", pct: "92%", w: "w-[92%]", c: "bg-purple-500" },
+        ].map((s) => (
+          <div key={s.label} className="flex items-center gap-2">
+            <span className="text-[8px] text-gray-400 w-20 truncate">{s.label}</span>
+            <div className="flex-1 h-1.5 rounded-full bg-gray-800"><div className={`h-full rounded-full ${s.c} ${s.w}`} /></div>
+            <span className="text-[8px] text-white font-medium w-6 text-right">{s.pct}</span>
+          </div>
+        ))}
+      </div>
+    ),
+  },
+  {
+    step: "05",
+    title: "Pipeline & Compare",
+    desc: "Move candidates through pipeline stages. Generate AI comparisons between candidates competing for the same role.",
+    color: "from-amber-600 to-amber-800",
+    borderColor: "border-amber-500/30",
+    mockup: (
+      <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5">
+        <div className="space-y-1">
+          {[
+            { name: "Alex K.", stage: "TECHNICAL", score: "87", sc: "text-green-400" },
+            { name: "Sara M.", stage: "BEHAVIORAL", score: "82", sc: "text-blue-400" },
+            { name: "Jay P.", stage: "SCREENING", score: "--", sc: "text-gray-500" },
+          ].map((c) => (
+            <div key={c.name} className="flex items-center justify-between">
+              <span className="text-[9px] text-white">{c.name}</span>
+              <span className="text-[7px] bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded">{c.stage}</span>
+              <span className={`text-[9px] font-bold ${c.sc}`}>{c.score}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    ),
+  },
+  {
+    step: "06",
+    title: "Hire with Confidence",
+    desc: "Make data-backed decisions with AI recommendations, detailed scorecards, risk flags, and candidate comparisons.",
+    color: "from-rose-600 to-rose-800",
+    borderColor: "border-rose-500/30",
+    mockup: (
+      <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5 text-center">
+        <div className="inline-flex items-center gap-1.5 rounded-full bg-green-500/20 border border-green-500/30 px-3 py-1">
+          <svg className="w-3 h-3 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+          <span className="text-[10px] font-bold text-green-400">RECOMMEND: HIRE</span>
+        </div>
+        <p className="mt-1.5 text-[8px] text-gray-500">Confidence: 94% | Score: 87/100</p>
+      </div>
+    ),
+  },
+];
+
+const faangCompanies = [
+  { name: "Google", color: "text-blue-400", bg: "bg-blue-500/10 border-blue-500/20" },
+  { name: "Amazon", color: "text-amber-400", bg: "bg-amber-500/10 border-amber-500/20" },
+  { name: "Meta", color: "text-blue-300", bg: "bg-blue-400/10 border-blue-400/20" },
+  { name: "Apple", color: "text-gray-300", bg: "bg-gray-500/10 border-gray-500/20" },
+  { name: "Netflix", color: "text-red-400", bg: "bg-red-500/10 border-red-500/20" },
+];
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-gray-950 overflow-hidden">
-      {/* ===== HERO SECTION with 3D floating mockups ===== */}
+      {/* ===== 1. HERO SECTION with 3D Particles + FloatingCode ===== */}
       <section className="relative min-h-[100vh] flex items-center">
-        {/* Animated gradient background */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-gray-950 to-blue-900/30" />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-b from-purple-600/15 to-transparent rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-0 left-1/4 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-3xl" />
-          <div className="absolute top-1/3 right-0 w-[400px] h-[400px] bg-cyan-600/8 rounded-full blur-3xl" />
+        {/* 3D Particle Background */}
+        <Suspense fallback={null}>
+          <ParticleField />
+        </Suspense>
+
+        {/* Gradient overlays */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-blue-900/20" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-b from-purple-600/10 to-transparent rounded-full blur-3xl" />
         </div>
 
         {/* Grid overlay */}
         <div
-          className="absolute inset-0 opacity-[0.03]"
+          className="absolute inset-0 opacity-[0.02] pointer-events-none"
           style={{
             backgroundImage: "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)",
             backgroundSize: "60px 60px",
@@ -241,7 +438,7 @@ export default function Home() {
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-32 w-full">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left: Copy */}
-            <div>
+            <ScrollReveal>
               <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-4 py-1.5 text-sm text-purple-300 mb-8 backdrop-blur-sm">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75" />
@@ -286,165 +483,38 @@ export default function Home() {
                 </Link>
               </div>
 
-              {/* Trust bar */}
-              <div className="mt-12 flex items-center gap-8 text-sm text-gray-500">
+              {/* Trust bar with stats */}
+              <div className="mt-12 flex flex-wrap items-center gap-6 text-sm text-gray-500">
+                <div className="flex items-center gap-2">
+                  <span className="text-purple-400 font-bold text-lg">1,010+</span>
+                  <span>Problems</span>
+                </div>
+                <div className="w-px h-4 bg-gray-700" />
+                <div className="flex items-center gap-2">
+                  <span className="text-blue-400 font-bold text-lg">73</span>
+                  <span>Curated</span>
+                </div>
+                <div className="w-px h-4 bg-gray-700" />
+                <div className="flex items-center gap-2">
+                  <span className="text-cyan-400 font-bold text-lg">15</span>
+                  <span>Patterns</span>
+                </div>
+                <div className="w-px h-4 bg-gray-700" />
                 <div className="flex items-center gap-2">
                   <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   No credit card required
                 </div>
-                <div className="flex items-center gap-2">
-                  <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  5 free interviews
-                </div>
               </div>
-            </div>
+            </ScrollReveal>
 
-            {/* Right: 3D Floating Mockup */}
-            <div className="relative hidden lg:block" style={{ perspective: "1200px" }}>
-              {/* Main dashboard mockup - rotated in 3D */}
-              <div
-                className="relative rounded-2xl border border-gray-700/50 bg-gray-900/90 backdrop-blur-xl shadow-2xl shadow-purple-900/20 overflow-hidden"
-                style={{ transform: "rotateY(-8deg) rotateX(4deg) rotateZ(1deg)" }}
-              >
-                {/* Browser chrome */}
-                <div className="flex items-center gap-2 border-b border-gray-800 bg-gray-950/80 px-4 py-3">
-                  <div className="flex gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                    <div className="w-3 h-3 rounded-full bg-green-500/80" />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <div className="rounded-lg bg-gray-800/80 px-4 py-1 text-xs text-gray-500 font-mono">
-                      intervue.ai/session/live
-                    </div>
-                  </div>
-                </div>
-
-                {/* Mock interview UI */}
-                <div className="p-4 grid grid-cols-5 gap-3" style={{ minHeight: "320px" }}>
-                  {/* Code editor area */}
-                  <div className="col-span-3 rounded-lg border border-gray-800 bg-gray-950 p-3">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="rounded bg-blue-500/20 px-2 py-0.5 text-[10px] font-mono text-blue-400">JavaScript</div>
-                      <div className="rounded bg-yellow-500/20 px-2 py-0.5 text-[10px] font-mono text-yellow-400">Medium</div>
-                    </div>
-                    <div className="space-y-1.5 font-mono text-[11px]">
-                      <p><span className="text-purple-400">function</span> <span className="text-blue-300">twoSum</span><span className="text-gray-500">(</span><span className="text-orange-300">nums</span><span className="text-gray-500">,</span> <span className="text-orange-300">target</span><span className="text-gray-500">)</span> <span className="text-gray-500">&#123;</span></p>
-                      <p className="pl-4"><span className="text-purple-400">const</span> <span className="text-blue-300">map</span> <span className="text-gray-500">=</span> <span className="text-purple-400">new</span> <span className="text-yellow-300">Map</span><span className="text-gray-500">();</span></p>
-                      <p className="pl-4"><span className="text-purple-400">for</span> <span className="text-gray-500">(</span><span className="text-purple-400">let</span> <span className="text-blue-300">i</span> <span className="text-gray-500">=</span> <span className="text-green-300">0</span><span className="text-gray-500">;</span> <span className="text-blue-300">i</span> <span className="text-gray-500">&lt;</span> <span className="text-orange-300">nums</span><span className="text-gray-500">.</span><span className="text-blue-300">length</span><span className="text-gray-500">;</span> <span className="text-blue-300">i</span><span className="text-gray-500">++)</span> <span className="text-gray-500">&#123;</span></p>
-                      <p className="pl-8"><span className="text-purple-400">const</span> <span className="text-blue-300">comp</span> <span className="text-gray-500">=</span> <span className="text-orange-300">target</span> <span className="text-gray-500">-</span> <span className="text-orange-300">nums</span><span className="text-gray-500">[</span><span className="text-blue-300">i</span><span className="text-gray-500">];</span></p>
-                      <p className="pl-8"><span className="text-purple-400">if</span> <span className="text-gray-500">(</span><span className="text-blue-300">map</span><span className="text-gray-500">.</span><span className="text-yellow-300">has</span><span className="text-gray-500">(</span><span className="text-blue-300">comp</span><span className="text-gray-500">))</span></p>
-                      <p className="pl-12"><span className="text-purple-400">return</span> <span className="text-gray-500">[</span><span className="text-blue-300">map</span><span className="text-gray-500">.</span><span className="text-yellow-300">get</span><span className="text-gray-500">(</span><span className="text-blue-300">comp</span><span className="text-gray-500">),</span> <span className="text-blue-300">i</span><span className="text-gray-500">];</span></p>
-                      <p className="pl-8"><span className="text-blue-300">map</span><span className="text-gray-500">.</span><span className="text-yellow-300">set</span><span className="text-gray-500">(</span><span className="text-orange-300">nums</span><span className="text-gray-500">[</span><span className="text-blue-300">i</span><span className="text-gray-500">],</span> <span className="text-blue-300">i</span><span className="text-gray-500">);</span></p>
-                      <p className="pl-4"><span className="text-gray-500">&#125;</span></p>
-                      <p><span className="text-gray-500">&#125;</span><span className="animate-pulse text-white">|</span></p>
-                    </div>
-                  </div>
-
-                  {/* Side panel */}
-                  <div className="col-span-2 space-y-3">
-                    {/* AI Chat */}
-                    <div className="rounded-lg border border-gray-800 bg-gray-950 p-3">
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className="w-5 h-5 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
-                          <span className="text-[8px] font-bold text-white">AI</span>
-                        </div>
-                        <span className="text-[10px] font-medium text-gray-400">AI Assist (L2)</span>
-                      </div>
-                      <div className="rounded-lg bg-purple-500/10 border border-purple-500/20 p-2">
-                        <p className="text-[10px] text-purple-300 leading-relaxed">
-                          Consider using a HashMap to achieve O(n) time complexity. Think about what complement you need for each element...
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Video call mini */}
-                    <div className="rounded-lg border border-gray-800 bg-gray-950 p-2">
-                      <div className="grid grid-cols-2 gap-1.5">
-                        <div className="aspect-video rounded bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                          <div className="w-8 h-8 rounded-full bg-purple-500/30 flex items-center justify-center text-[10px] text-purple-300 font-semibold">JD</div>
-                        </div>
-                        <div className="aspect-video rounded bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                          <div className="w-8 h-8 rounded-full bg-blue-500/30 flex items-center justify-center text-[10px] text-blue-300 font-semibold">MK</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Score preview */}
-                    <div className="rounded-lg border border-gray-800 bg-gray-950 p-3">
-                      <p className="text-[10px] font-medium text-gray-400 mb-2">Live Assessment</p>
-                      <div className="space-y-1.5">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[9px] text-gray-500">Problem Comprehension</span>
-                          <div className="w-16 h-1.5 rounded-full bg-gray-800 overflow-hidden">
-                            <div className="w-[85%] h-full rounded-full bg-green-500" />
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[9px] text-gray-500">Code Quality</span>
-                          <div className="w-16 h-1.5 rounded-full bg-gray-800 overflow-hidden">
-                            <div className="w-[72%] h-full rounded-full bg-blue-500" />
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[9px] text-gray-500">AI Usage</span>
-                          <div className="w-16 h-1.5 rounded-full bg-gray-800 overflow-hidden">
-                            <div className="w-[60%] h-full rounded-full bg-purple-500" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Floating card: Audit result (3D positioned) */}
-              <div
-                className="absolute -bottom-8 -left-12 w-56 rounded-xl border border-green-500/30 bg-gray-900/95 backdrop-blur-xl p-4 shadow-2xl shadow-green-900/20"
-                style={{ transform: "rotateY(8deg) rotateX(-2deg) translateZ(40px)" }}
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
-                    <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-white">Audit Complete</p>
-                    <p className="text-[10px] text-gray-400">Score: 87/100</p>
-                  </div>
-                </div>
-                <div className="rounded-lg bg-green-500/10 border border-green-500/20 px-3 py-1.5">
-                  <p className="text-[10px] text-green-400 font-medium">Recommendation: HIRE</p>
-                </div>
-              </div>
-
-              {/* Floating card: AI Level indicator */}
-              <div
-                className="absolute -top-4 -right-8 w-44 rounded-xl border border-purple-500/30 bg-gray-900/95 backdrop-blur-xl p-3 shadow-2xl shadow-purple-900/20"
-                style={{ transform: "rotateY(-12deg) rotateX(6deg) translateZ(60px)" }}
-              >
-                <p className="text-[10px] font-medium text-gray-400 mb-2">AI Level Control</p>
-                <div className="flex gap-1">
-                  {["L0", "L1", "L2", "L3", "L4"].map((l, i) => (
-                    <div
-                      key={l}
-                      className={`flex-1 rounded py-1 text-center text-[9px] font-bold ${
-                        i === 2
-                          ? "bg-blue-500 text-white"
-                          : "bg-gray-800 text-gray-500"
-                      }`}
-                    >
-                      {l}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+            {/* Right: 3D Floating Code Mockup */}
+            <ScrollReveal delay={0.3} direction="right" className="hidden lg:block h-[500px]">
+              <Suspense fallback={<Scene3DFallback />}>
+                <FloatingCode />
+              </Suspense>
+            </ScrollReveal>
           </div>
         </div>
 
@@ -457,12 +527,19 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== VISUAL INTERVIEW FLOW - 3D Perspective Section ===== */}
+      {/* ===== 2. VISUAL INTERVIEW FLOW ===== */}
       <section className="relative py-32 bg-gray-950">
         <div className="absolute inset-0 bg-gradient-to-b from-purple-900/5 via-transparent to-blue-900/5" />
 
+        {/* Floating geometric shapes between sections */}
+        <div className="absolute inset-0 pointer-events-none opacity-40 hidden lg:block">
+          <Suspense fallback={null}>
+            <GeometricShapes />
+          </Suspense>
+        </div>
+
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
+          <ScrollReveal className="text-center mb-20">
             <p className="text-sm font-semibold uppercase tracking-widest text-purple-400 mb-4">The Complete Flow</p>
             <h2 className="text-4xl sm:text-5xl font-bold text-white leading-tight">
               From Job Posting to
@@ -471,155 +548,14 @@ export default function Home() {
             <p className="mt-6 text-lg text-gray-400 max-w-3xl mx-auto">
               Watch how Intervue.AI transforms every step of the hiring process with intelligent automation and transparent AI auditing.
             </p>
-          </div>
+          </ScrollReveal>
 
-          {/* 3D Flow Cards */}
-          <div className="relative" style={{ perspective: "1500px" }}>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[
-                {
-                  step: "01",
-                  title: "Create Position & Template",
-                  desc: "Define your open role, configure interview questions, set AI levels per question, and customize difficulty.",
-                  color: "from-purple-600 to-purple-800",
-                  borderColor: "border-purple-500/30",
-                  mockup: (
-                    <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5 space-y-1.5">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] text-white font-medium">Senior Frontend Engineer</span>
-                        <span className="text-[8px] bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded">OPEN</span>
-                      </div>
-                      <div className="h-1 rounded-full bg-gray-800 overflow-hidden"><div className="w-2/3 h-full bg-purple-500 rounded-full" /></div>
-                      <div className="flex gap-1">
-                        <span className="text-[8px] bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded">React</span>
-                        <span className="text-[8px] bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded">TypeScript</span>
-                        <span className="text-[8px] bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded">3 rounds</span>
-                      </div>
-                    </div>
-                  ),
-                },
-                {
-                  step: "02",
-                  title: "Schedule & Invite",
-                  desc: "Use the calendar to find available interviewer slots, schedule sessions, and send candidates their unique interview links.",
-                  color: "from-blue-600 to-blue-800",
-                  borderColor: "border-blue-500/30",
-                  mockup: (
-                    <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5">
-                      <div className="grid grid-cols-7 gap-0.5 mb-1">
-                        {["S","M","T","W","T","F","S"].map((d,i) => (
-                          <div key={i} className="text-center text-[7px] text-gray-500 font-medium">{d}</div>
-                        ))}
-                      </div>
-                      <div className="grid grid-cols-7 gap-0.5">
-                        {Array.from({length: 14}, (_, i) => (
-                          <div key={i} className={`text-center text-[8px] py-0.5 rounded ${
-                            i === 5 ? "bg-purple-500 text-white font-bold" :
-                            i === 8 ? "bg-blue-500/30 text-blue-300" :
-                            "text-gray-500"
-                          }`}>{i + 10}</div>
-                        ))}
-                      </div>
-                    </div>
-                  ),
-                },
-                {
-                  step: "03",
-                  title: "Live Interview",
-                  desc: "Candidate codes in real-time with controlled AI. Interviewer watches, adjusts AI levels on the fly, and communicates via video + chat.",
-                  color: "from-cyan-600 to-cyan-800",
-                  borderColor: "border-cyan-500/30",
-                  mockup: (
-                    <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5">
-                      <div className="flex gap-1.5">
-                        <div className="flex-1 rounded bg-gray-900 p-1.5">
-                          <div className="space-y-0.5 font-mono text-[7px] text-gray-400">
-                            <p><span className="text-purple-400">fn</span> solve() &#123;</p>
-                            <p className="pl-2"><span className="text-blue-300">let</span> result = <span className="text-green-300">vec!</span>[];</p>
-                            <p className="pl-2 text-gray-600">{"// optimizing..."}</p>
-                            <p>&#125;<span className="animate-pulse text-white">|</span></p>
-                          </div>
-                        </div>
-                        <div className="w-12 space-y-1">
-                          <div className="aspect-square rounded bg-purple-500/20 flex items-center justify-center text-[7px] text-purple-300">AI</div>
-                          <div className="aspect-square rounded bg-green-500/20 flex items-center justify-center text-[7px] text-green-300">HD</div>
-                        </div>
-                      </div>
-                    </div>
-                  ),
-                },
-                {
-                  step: "04",
-                  title: "AI Audits Everything",
-                  desc: "Every keystroke, AI interaction, and behavior is logged. The audit engine generates structured scorecards automatically.",
-                  color: "from-green-600 to-green-800",
-                  borderColor: "border-green-500/30",
-                  mockup: (
-                    <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5 space-y-1">
-                      {[
-                        { label: "Problem Solving", pct: "88%", w: "w-[88%]", c: "bg-green-500" },
-                        { label: "Code Quality", pct: "76%", w: "w-[76%]", c: "bg-blue-500" },
-                        { label: "Communication", pct: "92%", w: "w-[92%]", c: "bg-purple-500" },
-                      ].map((s) => (
-                        <div key={s.label} className="flex items-center gap-2">
-                          <span className="text-[8px] text-gray-400 w-20 truncate">{s.label}</span>
-                          <div className="flex-1 h-1.5 rounded-full bg-gray-800"><div className={`h-full rounded-full ${s.c} ${s.w}`} /></div>
-                          <span className="text-[8px] text-white font-medium w-6 text-right">{s.pct}</span>
-                        </div>
-                      ))}
-                    </div>
-                  ),
-                },
-                {
-                  step: "05",
-                  title: "Pipeline & Compare",
-                  desc: "Move candidates through pipeline stages. Generate AI comparisons between candidates competing for the same role.",
-                  color: "from-amber-600 to-amber-800",
-                  borderColor: "border-amber-500/30",
-                  mockup: (
-                    <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5">
-                      <div className="space-y-1">
-                        {[
-                          { name: "Alex K.", stage: "TECHNICAL", score: "87", sc: "text-green-400" },
-                          { name: "Sara M.", stage: "BEHAVIORAL", score: "82", sc: "text-blue-400" },
-                          { name: "Jay P.", stage: "SCREENING", score: "--", sc: "text-gray-500" },
-                        ].map((c) => (
-                          <div key={c.name} className="flex items-center justify-between">
-                            <span className="text-[9px] text-white">{c.name}</span>
-                            <span className="text-[7px] bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded">{c.stage}</span>
-                            <span className={`text-[9px] font-bold ${c.sc}`}>{c.score}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ),
-                },
-                {
-                  step: "06",
-                  title: "Hire with Confidence",
-                  desc: "Make data-backed decisions with AI recommendations, detailed scorecards, risk flags, and candidate comparisons.",
-                  color: "from-rose-600 to-rose-800",
-                  borderColor: "border-rose-500/30",
-                  mockup: (
-                    <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5 text-center">
-                      <div className="inline-flex items-center gap-1.5 rounded-full bg-green-500/20 border border-green-500/30 px-3 py-1">
-                        <svg className="w-3 h-3 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span className="text-[10px] font-bold text-green-400">RECOMMEND: HIRE</span>
-                      </div>
-                      <p className="mt-1.5 text-[8px] text-gray-500">Confidence: 94% | Score: 87/100</p>
-                    </div>
-                  ),
-                },
-              ].map((card, idx) => (
+          {/* Flow Cards */}
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" staggerDelay={0.1}>
+            {flowCards.map((card) => (
+              <StaggerItem key={card.step}>
                 <div
-                  key={card.step}
-                  className={`group rounded-2xl border ${card.borderColor} bg-gray-900/80 backdrop-blur-sm p-6 transition-all duration-500 hover:scale-[1.03] hover:-translate-y-1`}
-                  style={{
-                    transform: `rotateX(${idx % 2 === 0 ? 2 : -2}deg)`,
-                    transformStyle: "preserve-3d",
-                  }}
+                  className={`group rounded-2xl border ${card.borderColor} bg-gray-900/80 backdrop-blur-sm p-6 transition-all duration-500 hover:scale-[1.03] hover:-translate-y-1 h-full`}
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${card.color} text-xs font-bold text-white shadow-lg`}>
@@ -630,47 +566,48 @@ export default function Home() {
                   <p className="text-sm text-gray-400 leading-relaxed">{card.desc}</p>
                   {card.mockup}
                 </div>
-              ))}
-            </div>
-          </div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
         </div>
       </section>
 
-      {/* ===== FEATURES GRID ===== */}
-      <section className="relative py-32 bg-gray-900/50">
+      {/* ===== 3. FEATURES GRID ===== */}
+      <section id="features" className="relative py-32 bg-gray-900/50">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/5 to-transparent" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <ScrollReveal className="text-center mb-16">
             <p className="text-sm font-semibold uppercase tracking-widest text-blue-400 mb-4">Everything You Need</p>
             <h2 className="text-4xl sm:text-5xl font-bold text-white">
               One Platform, Zero Gaps
             </h2>
             <p className="mt-6 text-lg text-gray-400 max-w-2xl mx-auto">
-              Code editor, video calls, AI assistance, audit engine, pipeline tracking, scheduling, and practice mode -- all built in.
+              Code editor, video calls, AI assistance, audit engine, pipeline tracking, scheduling, browser execution, and 1,010+ practice problems -- all built in.
             </p>
-          </div>
+          </ScrollReveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4" staggerDelay={0.05}>
             {platformFeatures.map((f) => (
-              <div
-                key={f.title}
-                className={`group rounded-xl border ${f.border} bg-gradient-to-b ${f.gradient} p-6 transition-all hover:scale-[1.03] hover:-translate-y-1`}
-              >
-                <div className={`mb-4 ${f.iconColor}`}>
-                  {f.icon}
+              <StaggerItem key={f.title}>
+                <div
+                  className={`group rounded-xl border ${f.border} bg-gradient-to-b ${f.gradient} p-6 transition-all hover:scale-[1.03] hover:-translate-y-1 h-full`}
+                >
+                  <div className={`mb-4 ${f.iconColor}`}>
+                    {f.icon}
+                  </div>
+                  <h3 className="text-base font-semibold text-white mb-2">{f.title}</h3>
+                  <p className="text-sm text-gray-400 leading-relaxed">{f.description}</p>
                 </div>
-                <h3 className="text-base font-semibold text-white mb-2">{f.title}</h3>
-                <p className="text-sm text-gray-400 leading-relaxed">{f.description}</p>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </section>
 
-      {/* ===== AI LEVELS ===== */}
+      {/* ===== 4. AI LEVELS with 3D Brain ===== */}
       <section className="py-32 bg-gray-950">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <ScrollReveal className="text-center mb-16">
             <p className="text-sm font-semibold uppercase tracking-widest text-purple-400 mb-4">The Core Differentiator</p>
             <h2 className="text-4xl sm:text-5xl font-bold text-white">
               5 Levels of AI Control
@@ -679,46 +616,132 @@ export default function Home() {
               You decide exactly how much help candidates get. Every level is logged, audited, and scored differently.
               Interviewers can even adjust levels mid-session.
             </p>
-          </div>
+          </ScrollReveal>
 
-          <div className="flex flex-col lg:flex-row gap-3 items-stretch justify-center">
-            {aiLevels.map((ai) => (
-              <div
-                key={ai.level}
-                className={`group relative flex-1 max-w-xs rounded-2xl border border-gray-800 bg-gray-900 p-6 transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-xl ${ai.glow}`}
-              >
-                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${ai.color} mb-4 shadow-lg`}>
-                  <span className="text-sm font-bold text-white">{ai.level}</span>
-                </div>
-                <h3 className="text-lg font-semibold text-white mb-2">{ai.label}</h3>
-                <p className="text-sm text-gray-400 leading-relaxed">{ai.description}</p>
-              </div>
-            ))}
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* 3D AI Brain */}
+            <ScrollReveal direction="left" className="h-[400px] hidden lg:block">
+              <Suspense fallback={<Scene3DFallback />}>
+                <AIBrain />
+              </Suspense>
+            </ScrollReveal>
+
+            {/* Level cards */}
+            <StaggerContainer className="space-y-3" staggerDelay={0.1}>
+              {aiLevels.map((ai) => (
+                <StaggerItem key={ai.level}>
+                  <div
+                    className={`group relative flex items-center gap-4 rounded-xl border border-gray-800 bg-gray-900 p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg ${ai.glow}`}
+                  >
+                    <div className={`flex-shrink-0 inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${ai.color} shadow-lg`}>
+                      <span className="text-sm font-bold text-white">{ai.level}</span>
+                    </div>
+                    <div>
+                      <h3 className="text-base font-semibold text-white">{ai.label}</h3>
+                      <p className="text-sm text-gray-400">{ai.description}</p>
+                    </div>
+                  </div>
+                </StaggerItem>
+              ))}
+            </StaggerContainer>
           </div>
         </div>
       </section>
 
-      {/* ===== FOR CANDIDATES ===== */}
+      {/* ===== 5. PRACTICE MODULE (NEW) ===== */}
       <section className="relative py-32 bg-gray-900/50 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-pink-900/5 to-transparent" />
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left: Content */}
+            <ScrollReveal>
+              <p className="text-sm font-semibold uppercase tracking-widest text-pink-400 mb-4">Practice Module</p>
+              <h2 className="text-4xl sm:text-5xl font-bold text-white leading-tight">
+                1,010+ Problems.
+                <br />
+                <span className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
+                  73 Curated. 15 Patterns.
+                </span>
+              </h2>
+              <p className="mt-6 text-lg text-gray-400 leading-relaxed">
+                Master technical interviews with our comprehensive problem bank. AI-enriched problems with test cases,
+                starter code, and structured study plans following proven patterns.
+              </p>
+
+              {/* FAANG badges */}
+              <div className="mt-8 flex flex-wrap gap-2">
+                {faangCompanies.map((c) => (
+                  <span key={c.name} className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold ${c.bg} ${c.color}`}>
+                    {c.name}
+                  </span>
+                ))}
+              </div>
+
+              {/* Feature bullets */}
+              <div className="mt-8 space-y-3">
+                {[
+                  { title: "AI Enrichment", desc: "Every problem enhanced with detailed hints, approaches, and complexity analysis" },
+                  { title: "Browser Code Execution", desc: "Run code in 10+ languages with real-time test case validation" },
+                  { title: "15 Study Patterns", desc: "Two Pointers, Sliding Window, BFS/DFS, Dynamic Programming, and more" },
+                  { title: "Progress Tracking", desc: "Track solved problems, accuracy, and skill growth over time" },
+                ].map((item) => (
+                  <div key={item.title} className="flex items-start gap-3">
+                    <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center">
+                      <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-white">{item.title}</p>
+                      <p className="text-sm text-gray-400">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <Link
+                href="/practice"
+                className="mt-10 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-pink-600 to-purple-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-pink-600/20 transition-all hover:shadow-pink-600/40 hover:scale-[1.02]"
+              >
+                Start Practicing Free
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </ScrollReveal>
+
+            {/* Right: 3D Practice Visualization */}
+            <ScrollReveal delay={0.2} direction="right" className="h-[450px] hidden lg:block">
+              <Suspense fallback={<Scene3DFallback />}>
+                <PracticeViz />
+              </Suspense>
+            </ScrollReveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== 6. FOR CANDIDATES with 3D Globe ===== */}
+      <section className="relative py-32 bg-gray-950 overflow-hidden">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-3xl" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
+            <ScrollReveal>
               <p className="text-sm font-semibold uppercase tracking-widest text-cyan-400 mb-4">For Candidates</p>
               <h2 className="text-4xl sm:text-5xl font-bold text-white leading-tight">
                 Practice, Prepare,
                 <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent"> Perform</span>
               </h2>
               <p className="mt-6 text-lg text-gray-400 leading-relaxed">
-                Get access to AI-generated practice problems, a professional code editor, and the exact same environment
-                you will use in your real interview. Build confidence before the big day.
+                Get access to 1,010+ practice problems, 15 study patterns, a professional code editor, and the exact same
+                environment you will use in your real interview. Build confidence before the big day.
               </p>
 
               <div className="mt-8 space-y-4">
                 {[
-                  { title: "AI Practice Problems", desc: "Custom-generated problems by difficulty, topic, and role" },
+                  { title: "Pattern-Based Learning", desc: "Master 15 proven patterns used in FAANG interviews" },
+                  { title: "FAANG Problem Banks", desc: "Practice with problems from Google, Amazon, Meta, Apple, and Netflix" },
+                  { title: "Browser Code Execution", desc: "Run code in 10+ languages directly in your browser" },
                   { title: "Real Interview Environment", desc: "Same Monaco editor, same AI levels, same experience" },
-                  { title: "Schedule Interviews", desc: "Browse available slots and book your interview directly" },
                   { title: "Track Your Progress", desc: "View scores, audit feedback, and improvement areas" },
                 ].map((item) => (
                   <div key={item.title} className="flex items-start gap-3">
@@ -744,64 +767,22 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
-            </div>
+            </ScrollReveal>
 
-            {/* 3D Practice Mode Mockup */}
-            <div className="hidden lg:block" style={{ perspective: "1200px" }}>
-              <div
-                className="rounded-2xl border border-gray-700/50 bg-gray-900/90 backdrop-blur-xl shadow-2xl overflow-hidden"
-                style={{ transform: "rotateY(6deg) rotateX(-3deg)" }}
-              >
-                <div className="flex items-center gap-2 border-b border-gray-800 bg-gray-950/80 px-4 py-2.5">
-                  <div className="flex gap-1.5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
-                  </div>
-                  <div className="flex-1 text-center text-[10px] text-gray-500 font-mono">Practice Mode</div>
-                </div>
-                <div className="p-5 space-y-4">
-                  <div>
-                    <h4 className="text-sm font-semibold text-white">Two Sum</h4>
-                    <div className="mt-1 flex gap-2">
-                      <span className="text-[9px] bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full font-medium">Easy</span>
-                      <span className="text-[9px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full font-medium">Arrays</span>
-                      <span className="text-[9px] bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded-full font-medium">Hash Map</span>
-                    </div>
-                  </div>
-                  <div className="rounded-lg bg-gray-950 border border-gray-800 p-3 font-mono text-[10px] text-gray-400">
-                    <p className="text-gray-500">{"// Given an array of integers nums and an integer"}</p>
-                    <p className="text-gray-500">{"// target, return indices of the two numbers"}</p>
-                    <p className="text-gray-500">{"// such that they add up to target."}</p>
-                    <p className="mt-2"><span className="text-purple-400">function</span> <span className="text-blue-300">twoSum</span>(nums, target) &#123;</p>
-                    <p className="pl-3 text-gray-600">{"// Your code here"}<span className="animate-pulse text-white">|</span></p>
-                    <p>&#125;</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <div className="flex-1 rounded-lg bg-gray-800/50 border border-gray-700 p-2.5 text-center">
-                      <p className="text-[9px] text-gray-500 mb-0.5">Test Cases</p>
-                      <p className="text-sm font-bold text-green-400">3/5</p>
-                    </div>
-                    <div className="flex-1 rounded-lg bg-gray-800/50 border border-gray-700 p-2.5 text-center">
-                      <p className="text-[9px] text-gray-500 mb-0.5">Time</p>
-                      <p className="text-sm font-bold text-white">12:34</p>
-                    </div>
-                    <div className="flex-1 rounded-lg bg-gray-800/50 border border-gray-700 p-2.5 text-center">
-                      <p className="text-[9px] text-gray-500 mb-0.5">AI Level</p>
-                      <p className="text-sm font-bold text-purple-400">L2</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {/* 3D Globe */}
+            <ScrollReveal delay={0.2} direction="right" className="h-[450px] hidden lg:block">
+              <Suspense fallback={<Scene3DFallback />}>
+                <Globe />
+              </Suspense>
+            </ScrollReveal>
           </div>
         </div>
       </section>
 
-      {/* ===== COMPARISON TABLE ===== */}
-      <section className="py-32 bg-gray-950">
+      {/* ===== 7. COMPARISON TABLE ===== */}
+      <section className="py-32 bg-gray-900/50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <ScrollReveal className="text-center mb-16">
             <p className="text-sm font-semibold uppercase tracking-widest text-green-400 mb-4">The Honest Comparison</p>
             <h2 className="text-4xl sm:text-5xl font-bold text-white">
               Why Intervue.AI?
@@ -809,58 +790,60 @@ export default function Home() {
             <p className="mt-6 text-lg text-gray-400 max-w-2xl mx-auto">
               The only platform built from scratch for the AI era of technical hiring.
             </p>
-          </div>
+          </ScrollReveal>
 
-          <div className="overflow-x-auto rounded-2xl border border-gray-800 shadow-2xl shadow-purple-900/10">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-gray-800 bg-gray-900">
-                  <th className="px-6 py-5 text-left text-sm font-semibold text-gray-300">Feature</th>
-                  <th className="px-6 py-5 text-center">
-                    <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent text-sm font-bold">Intervue.AI</span>
-                  </th>
-                  <th className="px-6 py-5 text-center text-sm font-semibold text-gray-500">HackerRank</th>
-                  <th className="px-6 py-5 text-center text-sm font-semibold text-gray-500">CoderPad</th>
-                  <th className="px-6 py-5 text-center text-sm font-semibold text-gray-500">Karat</th>
-                  <th className="px-6 py-5 text-center text-sm font-semibold text-gray-500">LeetCode</th>
-                </tr>
-              </thead>
-              <tbody>
-                {comparisonFeatures.map((row, i) => (
-                  <tr key={row.feature} className={`border-b border-gray-800/50 ${i % 2 === 0 ? "bg-gray-950" : "bg-gray-900/30"}`}>
-                    <td className="px-6 py-4 text-sm text-gray-300 font-medium">{row.feature}</td>
-                    <td className="px-6 py-4 text-center">
-                      {row.intervue ? (
-                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-500/20">
-                          <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                          </svg>
-                        </span>
-                      ) : (
-                        <span className="text-gray-600">&#10007;</span>
-                      )}
-                    </td>
-                    {[row.hackerrank, row.coderpad, row.karat, row.leetcode].map((val, j) => (
-                      <td key={j} className="px-6 py-4 text-center">
-                        {val ? (
-                          <span className="text-gray-400">&#10003;</span>
+          <ScrollReveal>
+            <div className="overflow-x-auto rounded-2xl border border-gray-800 shadow-2xl shadow-purple-900/10">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-gray-800 bg-gray-900">
+                    <th className="px-6 py-5 text-left text-sm font-semibold text-gray-300">Feature</th>
+                    <th className="px-6 py-5 text-center">
+                      <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent text-sm font-bold">Intervue.AI</span>
+                    </th>
+                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-500">HackerRank</th>
+                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-500">CoderPad</th>
+                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-500">Karat</th>
+                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-500">LeetCode</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {comparisonFeatures.map((row, i) => (
+                    <tr key={row.feature} className={`border-b border-gray-800/50 ${i % 2 === 0 ? "bg-gray-950" : "bg-gray-900/30"}`}>
+                      <td className="px-6 py-4 text-sm text-gray-300 font-medium">{row.feature}</td>
+                      <td className="px-6 py-4 text-center">
+                        {row.intervue ? (
+                          <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-500/20">
+                            <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                            </svg>
+                          </span>
                         ) : (
-                          <span className="text-gray-700">&#10007;</span>
+                          <span className="text-gray-600">&#10007;</span>
                         )}
                       </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                      {[row.hackerrank, row.coderpad, row.karat, row.leetcode].map((val, j) => (
+                        <td key={j} className="px-6 py-4 text-center">
+                          {val ? (
+                            <span className="text-gray-400">&#10003;</span>
+                          ) : (
+                            <span className="text-gray-700">&#10007;</span>
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
-      {/* ===== PRICING ===== */}
-      <section className="py-32 bg-gray-900/50">
+      {/* ===== 8. PRICING ===== */}
+      <section id="pricing" className="py-32 bg-gray-950">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <ScrollReveal className="text-center mb-16">
             <p className="text-sm font-semibold uppercase tracking-widest text-amber-400 mb-4">Pricing</p>
             <h2 className="text-4xl sm:text-5xl font-bold text-white">
               Simple, Transparent Pricing
@@ -868,67 +851,73 @@ export default function Home() {
             <p className="mt-6 text-lg text-gray-400 max-w-2xl mx-auto">
               Start free. Scale as you grow. No hidden fees.
             </p>
-          </div>
+          </ScrollReveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" staggerDelay={0.1}>
             {pricingPlans.map((plan) => (
-              <div
-                key={plan.name}
-                className={`relative rounded-2xl border p-8 transition-all duration-300 hover:scale-105 hover:-translate-y-1 ${
-                  plan.highlighted
-                    ? "border-purple-500 bg-gradient-to-b from-purple-900/30 to-gray-900 shadow-2xl shadow-purple-500/10"
-                    : "border-gray-800 bg-gray-900 hover:border-gray-700"
-                }`}
-              >
-                {plan.highlighted && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="rounded-full bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-1 text-xs font-semibold text-white shadow-lg">
-                      Most Popular
-                    </span>
-                  </div>
-                )}
-
-                <h3 className="text-lg font-semibold text-white">{plan.name}</h3>
-                <p className="mt-1 text-sm text-gray-400">{plan.description}</p>
-
-                <div className="mt-6 flex items-baseline">
-                  <span className="text-4xl font-bold text-white">{plan.price}</span>
-                  <span className="ml-1 text-gray-400">{plan.period}</span>
-                </div>
-
-                <ul className="mt-8 space-y-3">
-                  {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-3 text-sm text-gray-300">
-                      <svg className="h-4 w-4 shrink-0 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-
-                <Link
-                  href="/auth/signup?role=company"
-                  className={`mt-8 block w-full rounded-xl py-3 text-center text-sm font-semibold transition-all ${
+              <StaggerItem key={plan.name}>
+                <div
+                  className={`relative rounded-2xl border p-8 transition-all duration-300 hover:scale-105 hover:-translate-y-1 h-full ${
                     plan.highlighted
-                      ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-500 hover:to-blue-500 shadow-lg shadow-purple-600/20"
-                      : "border border-gray-700 bg-gray-800 text-gray-200 hover:bg-gray-700"
+                      ? "border-purple-500 bg-gradient-to-b from-purple-900/30 to-gray-900 shadow-2xl shadow-purple-500/10"
+                      : "border-gray-800 bg-gray-900 hover:border-gray-700"
                   }`}
                 >
-                  {plan.cta}
-                </Link>
-              </div>
+                  {plan.highlighted && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                      <span className="rounded-full bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-1 text-xs font-semibold text-white shadow-lg">
+                        Most Popular
+                      </span>
+                    </div>
+                  )}
+
+                  <h3 className="text-lg font-semibold text-white">{plan.name}</h3>
+                  <p className="mt-1 text-sm text-gray-400">{plan.description}</p>
+
+                  <div className="mt-6 flex items-baseline">
+                    <span className="text-4xl font-bold text-white">{plan.price}</span>
+                    <span className="ml-1 text-gray-400">{plan.period}</span>
+                  </div>
+
+                  <ul className="mt-8 space-y-3">
+                    {plan.features.map((feature) => (
+                      <li key={feature} className="flex items-center gap-3 text-sm text-gray-300">
+                        <svg className="h-4 w-4 shrink-0 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Link
+                    href="/auth/signup?role=company"
+                    className={`mt-8 block w-full rounded-xl py-3 text-center text-sm font-semibold transition-all ${
+                      plan.highlighted
+                        ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-500 hover:to-blue-500 shadow-lg shadow-purple-600/20"
+                        : "border border-gray-700 bg-gray-800 text-gray-200 hover:bg-gray-700"
+                    }`}
+                  >
+                    {plan.cta}
+                  </Link>
+                </div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </section>
 
-      {/* ===== CTA BANNER ===== */}
-      <section className="relative py-32 bg-gray-950 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-900/20 via-transparent to-blue-900/20" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-600/10 rounded-full blur-3xl" />
+      {/* ===== 9. CTA BANNER with Particles ===== */}
+      <section className="relative py-32 bg-gray-900/50 overflow-hidden">
+        {/* Background particles effect */}
+        <div className="absolute inset-0 pointer-events-none">
+          <Suspense fallback={null}>
+            <ParticleField />
+          </Suspense>
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-900/30 via-transparent to-blue-900/30" />
 
-        <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+        <ScrollReveal className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
             Ready to Transform
             <br />
@@ -953,10 +942,10 @@ export default function Home() {
               I&apos;m a Candidate
             </Link>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
-      {/* ===== FOOTER ===== */}
+      {/* ===== 10. FOOTER ===== */}
       <footer className="border-t border-gray-800 bg-gray-950 py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
@@ -981,6 +970,7 @@ export default function Home() {
               <div className="space-y-2.5">
                 <Link href="/auth/signup?role=candidate" className="block text-sm text-gray-400 hover:text-white transition-colors">Sign Up</Link>
                 <Link href="/practice" className="block text-sm text-gray-400 hover:text-white transition-colors">Practice Mode</Link>
+                <Link href="/practice?tab=patterns" className="block text-sm text-gray-400 hover:text-white transition-colors">Study Plans</Link>
               </div>
             </div>
             <div>
