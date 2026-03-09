@@ -5,8 +5,8 @@ import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ScrollReveal";
 
-// Dynamic imports for 3D components (SSR disabled)
-import ParticleField from "@/components/3d/ParticleField";
+// Dynamic imports (SSR disabled for WebGL/Three.js)
+const FluidSimulation = dynamic(() => import("@/components/FluidSimulation"), { ssr: false });
 const AIBrain = dynamic(() => import("@/components/3d/AIBrain"), { ssr: false });
 const Globe = dynamic(() => import("@/components/3d/Globe"), { ssr: false });
 const GeometricShapes = dynamic(() => import("@/components/3d/GeometricShapes"), { ssr: false });
@@ -414,8 +414,10 @@ export default function Home() {
     <div className="min-h-screen bg-gray-950 overflow-hidden">
       {/* ===== 1. HERO SECTION with 3D Particles + FloatingCode ===== */}
       <section className="relative min-h-[100vh] flex items-center">
-        {/* Floating badges background */}
-        <ParticleField />
+        {/* Interactive fluid simulation background */}
+        <Suspense fallback={null}>
+          <FluidSimulation />
+        </Suspense>
 
         {/* Gradient overlays */}
         <div className="absolute inset-0 pointer-events-none">
@@ -1044,8 +1046,10 @@ export default function Home() {
 
       {/* ===== 9. CTA BANNER with Particles ===== */}
       <section className="relative py-32 bg-gray-900/50 overflow-hidden">
-        {/* Background floating badges */}
-        <ParticleField />
+        {/* Fluid simulation background */}
+        <Suspense fallback={null}>
+          <FluidSimulation />
+        </Suspense>
         <div className="absolute inset-0 bg-gradient-to-r from-purple-900/30 via-transparent to-blue-900/30" />
 
         <ScrollReveal className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
