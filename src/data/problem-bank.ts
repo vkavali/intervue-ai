@@ -1133,4 +1133,9 @@ function derivePattern(p: ProblemEntry): string {
 
 const RAW_BANK: ProblemEntry[] = [...GOOGLE, ...GOOGLE2, ...AMAZON, ...META, ...APPLE, ...NETFLIX, ...GENERAL1, ...GENERAL2];
 
-export const PROBLEM_BANK: ProblemEntry[] = RAW_BANK.map(p => ({ ...p, pattern: derivePattern(p) }));
+// Import generated problems (3000+ with full test cases, starter code, constraints)
+import { GENERATED_PROBLEMS } from "./generated-bank";
+
+const HAND_CURATED: ProblemEntry[] = RAW_BANK.map(p => ({ ...p, pattern: derivePattern(p) }));
+
+export const PROBLEM_BANK: ProblemEntry[] = [...HAND_CURATED, ...GENERATED_PROBLEMS];
