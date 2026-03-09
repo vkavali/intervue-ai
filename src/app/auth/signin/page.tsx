@@ -27,9 +27,9 @@ function SignInForm() {
   // Redirect if already logged in
   useEffect(() => {
     if (status === "authenticated" && session) {
-      router.push("/auth/redirect");
+      router.push(callbackUrl);
     }
-  }, [status, session, router]);
+  }, [status, session, router, callbackUrl]);
 
   // Show nothing while checking session
   if (status === "loading" || status === "authenticated") {

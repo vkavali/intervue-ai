@@ -54,12 +54,14 @@ function SignUpForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const callbackUrl = searchParams.get("callbackUrl");
+
   // Redirect if already logged in
   useEffect(() => {
     if (status === "authenticated" && session) {
-      router.push("/auth/redirect");
+      router.push(callbackUrl || "/auth/redirect");
     }
-  }, [status, session, router]);
+  }, [status, session, router, callbackUrl]);
 
   // Show nothing while checking session
   if (status === "loading" || status === "authenticated") {
@@ -109,7 +111,7 @@ function SignUpForm() {
         return;
       }
 
-      router.push("/auth/redirect");
+      router.push(callbackUrl || "/auth/redirect");
       router.refresh();
     } catch {
       setError("An unexpected error occurred. Please try again.");

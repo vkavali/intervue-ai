@@ -1,25 +1,16 @@
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
-const protectedPaths = ["/practice", "/dashboard"];
-
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-
-  const isProtected = protectedPaths.some(
-    (p) => pathname === p || pathname.startsWith(p + "/")
-  );
-
-  if (!isProtected) {
-    return NextResponse.next();
-  }
-
-  const token = await getToken({ req: request });
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
 
   if (!token) {
     const signupUrl = new URL("/auth/signup", request.url);
     signupUrl.searchParams.set("role", "candidate");
-    signupUrl.searchParams.set("callbackUrl", pathname);
+    signupUrl.searchParams.set("callbackUrl", request.nextUrl.pathname);
     return NextResponse.redirect(signupUrl);
   }
 
@@ -27,5 +18,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/practice/:path*", "/dashboard/:path*"],
+  matcher: ["/practice", "/practice/:path*"],
 };

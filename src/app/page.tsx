@@ -837,7 +837,7 @@ export default function Home() {
               </div>
 
               <Link
-                href="/auth/signup?role=candidate"
+                href="/practice"
                 className="mt-10 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-pink-600 to-purple-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-pink-600/20 transition-all hover:shadow-pink-600/40 hover:scale-[1.02]"
               >
                 Start Practicing Free
@@ -1104,8 +1104,8 @@ export default function Home() {
               <h4 className="text-sm font-semibold text-white mb-4">For Candidates</h4>
               <div className="space-y-2.5">
                 <Link href="/auth/signup?role=candidate" className="block text-sm text-gray-400 hover:text-white transition-colors">Sign Up</Link>
-                <Link href="/auth/signup?role=candidate" className="block text-sm text-gray-400 hover:text-white transition-colors">Practice Mode</Link>
-                <Link href="/auth/signup?role=candidate" className="block text-sm text-gray-400 hover:text-white transition-colors">Study Plans</Link>
+                <Link href="/practice" className="block text-sm text-gray-400 hover:text-white transition-colors">Practice Mode</Link>
+                <Link href="/practice?tab=patterns" className="block text-sm text-gray-400 hover:text-white transition-colors">Study Plans</Link>
               </div>
             </div>
             <div>
