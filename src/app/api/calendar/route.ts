@@ -30,25 +30,14 @@ export async function GET(req: NextRequest) {
     const startOfMonth = new Date(year, month - 1, 1);
     const endOfMonth = new Date(year, month, 0, 23, 59, 59, 999);
 
-    // Fetch sessions for this month (scheduled in range OR unscheduled)
-    const sessions = await prisma.interviewSession.findMany({
+    // Fetch scheduled sessions for this month
+    const scheduledSessions = await prisma.interviewSession.findMany({
       where: {
         companyId: user.companyId,
-        OR: [
-          {
-            scheduledAt: {
-              gte: startOfMonth,
-              lte: endOfMonth,
-            },
-          },
-          {
-            scheduledAt: null,
-            createdAt: {
-              gte: startOfMonth,
-              lte: endOfMonth,
-            },
-          },
-        ],
+        scheduledAt: {
+          gte: startOfMonth,
+          lte: endOfMonth,
+        },
       },
       include: {
         candidate: { select: { id: true, name: true, email: true } },
@@ -57,6 +46,28 @@ export async function GET(req: NextRequest) {
       },
       orderBy: { scheduledAt: "asc" },
     });
+
+    // Fetch unscheduled sessions created this month
+    const allCompanySessions = await prisma.interviewSession.findMany({
+      where: {
+        companyId: user.companyId,
+        createdAt: {
+          gte: startOfMonth,
+          lte: endOfMonth,
+        },
+      },
+      include: {
+        candidate: { select: { id: true, name: true, email: true } },
+        interviewer: { select: { id: true, name: true, email: true } },
+        template: { select: { id: true, title: true, role: true, seniority: true } },
+      },
+      orderBy: { createdAt: "asc" },
+    });
+    const unscheduledSessions = allCompanySessions.filter(s => !s.scheduledAt);
+
+    // Merge: scheduled (sorted by date) + unscheduled
+    const scheduledIds = new Set(scheduledSessions.map(s => s.id));
+    const sessions = [...scheduledSessions, ...unscheduledSessions.filter(s => !scheduledIds.has(s.id))];
 
     // Fetch interviewer availability for this month (scoped to company)
     const companyInterviewers = await prisma.user.findMany({

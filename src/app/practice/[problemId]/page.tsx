@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo, Suspense } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Editor from "@monaco-editor/react";
 import Link from "next/link";
@@ -60,6 +60,14 @@ const difficultyColors: Record<string, string> = {
 // ─── Component ──────────────────────────────────────────────────────────────────
 
 export default function PracticeProblemPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center"><div className="text-gray-400">Loading...</div></div>}>
+      <PracticeProblemContent />
+    </Suspense>
+  );
+}
+
+function PracticeProblemContent() {
   const params = useParams();
   const searchParams = useSearchParams();
   const problemId = params.problemId as string;

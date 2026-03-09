@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
@@ -98,6 +98,14 @@ function getRankBadgeColor(rank: number): string {
 }
 
 export default function CandidateComparePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center"><div className="text-gray-400">Loading...</div></div>}>
+      <CandidateCompareContent />
+    </Suspense>
+  );
+}
+
+function CandidateCompareContent() {
   const searchParams = useSearchParams();
   const role = searchParams.get("role") || "";
 
