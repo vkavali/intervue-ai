@@ -20,6 +20,9 @@ export async function GET() {
 
     const progress = await prisma.practiceProgress.findMany({
       where: { userId: user.id },
+      include: {
+        _count: { select: { submissions: true } },
+      },
       orderBy: { lastSavedAt: "desc" },
     });
 
@@ -56,6 +59,10 @@ export async function POST(req: NextRequest) {
       language,
       status,
       timeSpentSeconds,
+      isSubmission,
+      submissionStatus,
+      testsPassed,
+      testsTotal,
     } = body;
 
     if (!problemId && !bankProblemId) {
@@ -106,7 +113,63 @@ export async function POST(req: NextRequest) {
       update: data,
     });
 
-    return NextResponse.json({ progress });
+    // Create submission record if this is a submission
+    let submission = null;
+    if (isSubmission && code && language) {
+      const subStatus = submissionStatus || (status === "COMPLETED" ? "ACCEPTED" : "WRONG_ANSWER");
+      submission = await prisma.practiceSubmission.create({
+        data: {
+          userId: user.id,
+          progressId: progress.id,
+          bankProblemId: bankProblemId || null,
+          problemId: problemId || null,
+          code,
+          language,
+          status: subStatus,
+          testsPassed: testsPassed || 0,
+          testsTotal: testsTotal || 0,
+          timeSpentSeconds: timeSpentSeconds || 0,
+        },
+      });
+
+      // Update bestSubmissionId if this is the best submission so far
+      const currentBest = progress.bestSubmissionId
+        ? await prisma.practiceSubmission.findUnique({
+            where: { id: progress.bestSubmissionId },
+          })
+        : null;
+
+      if (!currentBest || (testsPassed || 0) > currentBest.testsPassed) {
+        await prisma.practiceProgress.update({
+          where: { id: progress.id },
+          data: { bestSubmissionId: submission.id },
+        });
+      }
+
+      // If all tests passed on a bank problem, contribute to community
+      if (subStatus === "ACCEPTED" && bankProblemId && testsPassed > 0 && testsPassed === testsTotal) {
+        await prisma.communitySubmission.upsert({
+          where: {
+            bankProblemId_userId_language: {
+              bankProblemId,
+              userId: user.id,
+              language,
+            },
+          },
+          create: {
+            bankProblemId,
+            userId: user.id,
+            code,
+            language,
+          },
+          update: {
+            code,
+          },
+        });
+      }
+    }
+
+    return NextResponse.json({ progress, submission });
   } catch (error) {
     console.error("POST /api/practice/progress error:", error);
     return NextResponse.json(

@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { resolveProblem } from "@/lib/problem-resolver";
 import Link from "next/link";
 
 const statusColors: Record<string, { bg: string; text: string; dot: string }> = {
@@ -45,6 +46,19 @@ export default async function CandidateDashboard() {
     },
     orderBy: { createdAt: "desc" },
   });
+
+  // Fetch practice progress
+  const practiceProgress = await prisma.practiceProgress.findMany({
+    where: { userId },
+    select: { id: true, bankProblemId: true, problemId: true, status: true, timeSpentSeconds: true, updatedAt: true },
+    orderBy: { updatedAt: "desc" },
+  });
+
+  const practiceSolved = practiceProgress.filter((p) => p.status === "COMPLETED").length;
+  const practiceInProgress = practiceProgress.filter((p) => p.status === "IN_PROGRESS").length;
+  const practiceTotalTime = practiceProgress.reduce((sum, p) => sum + p.timeSpentSeconds, 0);
+  const practiceTotal = practiceProgress.length;
+  const recentPractice = practiceProgress.slice(0, 5);
 
   const now = new Date();
   const completedSessions = sessions.filter((s) => s.status === "COMPLETED");
@@ -140,6 +154,84 @@ export default async function CandidateDashboard() {
           </div>
         </Link>
       </div>
+
+      {/* Practice Stats */}
+      {practiceTotal > 0 && (
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-white">Practice Progress</h2>
+            <Link href="/practice/analytics" className="text-xs text-purple-400 hover:text-purple-300 transition-colors">
+              View Practice Analytics &rarr;
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div className="rounded-xl border border-green-500/20 bg-gray-900/50 p-5">
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Problems Solved</p>
+              <p className="mt-2 text-3xl font-bold text-green-400">{practiceSolved}</p>
+              <p className="mt-1 text-xs text-gray-500">Completed</p>
+            </div>
+            <div className="rounded-xl border border-yellow-500/20 bg-gray-900/50 p-5">
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">In Progress</p>
+              <p className="mt-2 text-3xl font-bold text-yellow-400">{practiceInProgress}</p>
+              <p className="mt-1 text-xs text-gray-500">Working on</p>
+            </div>
+            <div className="rounded-xl border border-blue-500/20 bg-gray-900/50 p-5">
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Practice Time</p>
+              <p className="mt-2 text-3xl font-bold text-blue-400">
+                {practiceTotalTime >= 3600
+                  ? `${Math.floor(practiceTotalTime / 3600)}h ${Math.floor((practiceTotalTime % 3600) / 60)}m`
+                  : `${Math.floor(practiceTotalTime / 60)}m`}
+              </p>
+              <p className="mt-1 text-xs text-gray-500">Total time spent</p>
+            </div>
+            <div className="rounded-xl border border-purple-500/20 bg-gray-900/50 p-5">
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Attempted</p>
+              <p className="mt-2 text-3xl font-bold text-purple-400">{practiceTotal}</p>
+              <p className="mt-1 text-xs text-gray-500">Problems started</p>
+            </div>
+          </div>
+
+          {/* Recent Practice */}
+          {recentPractice.length > 0 && (
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium text-gray-400">Recent Practice</h3>
+              {recentPractice.map((p) => {
+                const problemData = resolveProblem(p.bankProblemId || p.problemId || "");
+                const title = problemData?.title || p.bankProblemId || p.problemId || "Unknown Problem";
+                const practiceStatusColors: Record<string, { bg: string; text: string }> = {
+                  COMPLETED: { bg: "bg-green-500/10", text: "text-green-400" },
+                  IN_PROGRESS: { bg: "bg-yellow-500/10", text: "text-yellow-400" },
+                  ABANDONED: { bg: "bg-gray-500/10", text: "text-gray-400" },
+                };
+                const style = practiceStatusColors[p.status] || practiceStatusColors.IN_PROGRESS;
+                const timeStr = p.timeSpentSeconds >= 3600
+                  ? `${Math.floor(p.timeSpentSeconds / 3600)}h ${Math.floor((p.timeSpentSeconds % 3600) / 60)}m`
+                  : `${Math.floor(p.timeSpentSeconds / 60)}m`;
+                return (
+                  <Link
+                    key={p.id}
+                    href={`/practice/${p.bankProblemId || p.problemId}`}
+                    className="flex items-center justify-between rounded-lg border border-gray-800 bg-gray-900/50 p-3 hover:border-gray-700 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2">
+                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold ${style.bg} ${style.text}`}>
+                          {p.status === "COMPLETED" ? "Solved" : p.status === "IN_PROGRESS" ? "In Progress" : "Abandoned"}
+                        </span>
+                      </div>
+                      <span className="text-sm text-gray-300">{title}</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-[10px] text-gray-500">
+                      <span>{timeStr}</span>
+                      <span>{new Date(p.updatedAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}</span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Active Interviews */}
       {activeSessions.length > 0 && (

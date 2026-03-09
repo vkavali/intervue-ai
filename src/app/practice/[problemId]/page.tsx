@@ -251,13 +251,28 @@ function PracticeProblemContent() {
   const [cursorInfo, setCursorInfo] = useState({ line: 1, column: 1, selected: 0 });
   const [leftPanelWidth, setLeftPanelWidth] = useState(340);
   const [bottomPanelHeight, setBottomPanelHeight] = useState(280);
-  const [problemTab, setProblemTab] = useState<"description" | "hints" | "editorial">("description");
+  const [problemTab, setProblemTab] = useState<"description" | "hints" | "editorial" | "notes" | "history" | "solutions">("description");
   const [customTestCases, setCustomTestCases] = useState<TestCase[]>([]);
   const [addingCustomTC, setAddingCustomTC] = useState(false);
   const [customInput, setCustomInput] = useState("");
   const [customExpected, setCustomExpected] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitResult, setSubmitResult] = useState<"accepted" | "wrong" | null>(null);
+  const [progressId, setProgressId] = useState<string | null>(null);
+  const [progressStatus, setProgressStatus] = useState<string>("IN_PROGRESS");
+  const [notes, setNotes] = useState("");
+  const [notesSaving, setNotesSaving] = useState(false);
+  const notesSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [submissions, setSubmissions] = useState<{
+    id: string; code: string; language: string; status: string;
+    testsPassed: number; testsTotal: number; timeSpentSeconds: number; submittedAt: string;
+  }[]>([]);
+  const [loadingSubmissions, setLoadingSubmissions] = useState(false);
+  const [communitySolutions, setCommunitySolutions] = useState<{
+    id: string; code: string; language: string; username: string; submittedAt: string;
+  }[]>([]);
+  const [loadingCommunity, setLoadingCommunity] = useState(false);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [hints, setHints] = useState<string[]>([]);
   const [loadingHints, setLoadingHints] = useState(false);
   const [hintsRevealed, setHintsRevealed] = useState(0);
@@ -340,11 +355,38 @@ function PracticeProblemContent() {
             status: "IN_PROGRESS",
             timeSpentSeconds: elapsedTime,
           }),
-        }).catch(() => {});
+        })
+          .then((res) => res.ok ? res.json() : null)
+          .then((data) => {
+            if (data?.progress?.id && !progressId) {
+              setProgressId(data.progress.id);
+            }
+          })
+          .catch(() => {});
       }
     }, 30000);
     return () => clearInterval(saveInterval);
-  }, [code, language, problemId, elapsedTime]);
+  }, [code, language, problemId, elapsedTime, progressId]);
+
+  // Load existing progress (progressId, notes, status) on mount
+  useEffect(() => {
+    fetch("/api/practice/progress")
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => {
+        if (data?.progress) {
+          const match = data.progress.find(
+            (p: { bankProblemId?: string; problemId?: string }) =>
+              p.bankProblemId === problemId || p.problemId === problemId
+          );
+          if (match) {
+            setProgressId(match.id);
+            setProgressStatus(match.status);
+            if (match.notes) setNotes(match.notes);
+          }
+        }
+      })
+      .catch(() => {});
+  }, [problemId]);
 
   // Scroll AI chat to bottom
   useEffect(() => {
@@ -588,20 +630,34 @@ function PracticeProblemContent() {
     const results = await runTestsInternal(allTestCases);
     setTestResults(results);
     const allPassed = results.every(r => r.passed);
+    const passed = results.filter(r => r.passed).length;
     setSubmitResult(allPassed ? "accepted" : "wrong");
 
-    // Save progress
-    fetch("/api/practice/progress", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        bankProblemId: problemId,
-        code,
-        language,
-        status: allPassed ? "COMPLETED" : "IN_PROGRESS",
-        timeSpentSeconds: elapsedTime,
-      }),
-    }).catch(() => {});
+    // Save progress with submission metadata
+    try {
+      const res = await fetch("/api/practice/progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          bankProblemId: problemId,
+          code,
+          language,
+          status: allPassed ? "COMPLETED" : "IN_PROGRESS",
+          timeSpentSeconds: elapsedTime,
+          isSubmission: true,
+          submissionStatus: allPassed ? "ACCEPTED" : passed > 0 ? "PARTIAL" : "WRONG_ANSWER",
+          testsPassed: passed,
+          testsTotal: results.length,
+        }),
+      });
+      const data = await res.json();
+      if (data.progress?.id) {
+        setProgressId(data.progress.id);
+        setProgressStatus(data.progress.status);
+      }
+    } catch {
+      // silently fail
+    }
 
     setSubmitting(false);
     // Clear submit result after 5 seconds
@@ -695,6 +751,77 @@ function PracticeProblemContent() {
       setLoadingCoaching(false);
     }
   }, [loadingCoaching, problem, problemId, code, language, elapsedTime, testResults]);
+
+  // ── Notes auto-save (debounced) ─────────────────────────────────────────────
+  const handleNotesChange = useCallback((value: string) => {
+    setNotes(value);
+    if (!progressId) return;
+    if (notesSaveTimer.current) clearTimeout(notesSaveTimer.current);
+    notesSaveTimer.current = setTimeout(() => {
+      setNotesSaving(true);
+      fetch(`/api/practice/progress/${progressId}/notes`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ notes: value }),
+      })
+        .catch(() => {})
+        .finally(() => setNotesSaving(false));
+    }, 1000);
+  }, [progressId]);
+
+  // ── Fetch submission history ──────────────────────────────────────────────
+  const fetchSubmissions = useCallback(async () => {
+    if (!progressId || loadingSubmissions) return;
+    setLoadingSubmissions(true);
+    try {
+      const res = await fetch(`/api/practice/progress/${progressId}/submissions`);
+      const data = await res.json();
+      if (data.submissions) setSubmissions(data.submissions);
+    } catch {
+      // silently fail
+    } finally {
+      setLoadingSubmissions(false);
+    }
+  }, [progressId, loadingSubmissions]);
+
+  // ── Fetch community solutions ─────────────────────────────────────────────
+  const fetchCommunity = useCallback(async () => {
+    if (loadingCommunity) return;
+    setLoadingCommunity(true);
+    try {
+      const res = await fetch(`/api/practice/community/${problemId}`);
+      const data = await res.json();
+      if (data.solutions) setCommunitySolutions(data.solutions);
+    } catch {
+      // silently fail
+    } finally {
+      setLoadingCommunity(false);
+    }
+  }, [problemId, loadingCommunity]);
+
+  // ── Clear progress ────────────────────────────────────────────────────────
+  const handleClearProgress = useCallback(async () => {
+    if (!progressId) return;
+    try {
+      await fetch(`/api/practice/progress/${progressId}`, { method: "DELETE" });
+      // Reset local state
+      setProgressId(null);
+      setProgressStatus("IN_PROGRESS");
+      setNotes("");
+      setSubmissions([]);
+      setCommunitySolutions([]);
+      setTestResults(null);
+      setSubmitResult(null);
+      setCoaching(null);
+      setElapsedTime(0);
+      if (problem) {
+        setCode(problem.starterCode[language] || generateStarterCode(problem.title, language));
+      }
+    } catch {
+      // silently fail
+    }
+    setShowClearConfirm(false);
+  }, [progressId, problem, language]);
 
   // ── Handle AI prompt ────────────────────────────────────────────────────────
   async function handleAiSubmit(e: React.FormEvent) {
@@ -934,6 +1061,19 @@ function PracticeProblemContent() {
             )}
           </div>
 
+          {/* Clear Progress */}
+          {progressId && (
+            <button
+              onClick={() => setShowClearConfirm(true)}
+              className="rounded bg-gray-800 p-1.5 text-gray-500 hover:text-red-400 hover:bg-gray-700 transition-colors"
+              title="Clear all progress"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          )}
+
           {/* Reset Code */}
           <button
             onClick={handleResetCode}
@@ -1023,10 +1163,10 @@ function PracticeProblemContent() {
           style={{ width: leftPanelWidth }}
         >
           {/* Problem tabs */}
-          <div className="flex border-b border-gray-800 px-4 pt-2 shrink-0">
+          <div className="flex border-b border-gray-800 px-4 pt-2 shrink-0 overflow-x-auto">
             <button
               onClick={() => setProblemTab("description")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-t transition-colors ${
+              className={`px-2.5 py-1.5 text-xs font-medium rounded-t transition-colors whitespace-nowrap ${
                 problemTab === "description" ? "bg-gray-800 text-white border-b-2 border-purple-500" : "text-gray-500 hover:text-gray-300"
               }`}
             >
@@ -1034,7 +1174,7 @@ function PracticeProblemContent() {
             </button>
             <button
               onClick={() => { setProblemTab("hints"); if (hints.length === 0) fetchHints(); }}
-              className={`px-3 py-1.5 text-xs font-medium rounded-t transition-colors ${
+              className={`px-2.5 py-1.5 text-xs font-medium rounded-t transition-colors whitespace-nowrap ${
                 problemTab === "hints" ? "bg-gray-800 text-white border-b-2 border-yellow-500" : "text-gray-500 hover:text-gray-300"
               }`}
             >
@@ -1042,12 +1182,38 @@ function PracticeProblemContent() {
             </button>
             <button
               onClick={() => { setProblemTab("editorial"); if (!editorial && !editorialError) fetchEditorial(); }}
-              className={`px-3 py-1.5 text-xs font-medium rounded-t transition-colors ${
+              className={`px-2.5 py-1.5 text-xs font-medium rounded-t transition-colors whitespace-nowrap ${
                 problemTab === "editorial" ? "bg-gray-800 text-white border-b-2 border-green-500" : "text-gray-500 hover:text-gray-300"
               }`}
             >
               Editorial
             </button>
+            <button
+              onClick={() => setProblemTab("notes")}
+              className={`px-2.5 py-1.5 text-xs font-medium rounded-t transition-colors whitespace-nowrap ${
+                problemTab === "notes" ? "bg-gray-800 text-white border-b-2 border-cyan-500" : "text-gray-500 hover:text-gray-300"
+              }`}
+            >
+              Notes
+            </button>
+            <button
+              onClick={() => { setProblemTab("history"); if (progressId && submissions.length === 0) fetchSubmissions(); }}
+              className={`px-2.5 py-1.5 text-xs font-medium rounded-t transition-colors whitespace-nowrap ${
+                problemTab === "history" ? "bg-gray-800 text-white border-b-2 border-orange-500" : "text-gray-500 hover:text-gray-300"
+              }`}
+            >
+              History
+            </button>
+            {progressStatus === "COMPLETED" && (
+              <button
+                onClick={() => { setProblemTab("solutions"); if (communitySolutions.length === 0) fetchCommunity(); }}
+                className={`px-2.5 py-1.5 text-xs font-medium rounded-t transition-colors whitespace-nowrap ${
+                  problemTab === "solutions" ? "bg-gray-800 text-white border-b-2 border-teal-500" : "text-gray-500 hover:text-gray-300"
+                }`}
+              >
+                Solutions
+              </button>
+            )}
           </div>
 
           <div className="flex-1 overflow-y-auto p-5">
@@ -1243,6 +1409,150 @@ function PracticeProblemContent() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
                     <p className="text-xs text-gray-500">Submit a solution or spend 20+ minutes to unlock the editorial.</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ── Notes Tab ────────────────────────────────────────────────── */}
+            {problemTab === "notes" && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+                    <svg className="w-4 h-4 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    Notes
+                  </h3>
+                  {notesSaving && (
+                    <span className="text-[10px] text-gray-500">Saving...</span>
+                  )}
+                </div>
+                <p className="text-xs text-gray-500">Personal notes for this problem. Auto-saved as you type.</p>
+                {!progressId ? (
+                  <p className="text-xs text-gray-500 py-4 text-center">Start solving to enable notes.</p>
+                ) : (
+                  <textarea
+                    value={notes}
+                    onChange={(e) => handleNotesChange(e.target.value)}
+                    placeholder="Write your notes here... approach ideas, edge cases, key insights..."
+                    className="w-full h-64 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-300 placeholder-gray-600 focus:border-cyan-500 focus:outline-none resize-none font-mono"
+                  />
+                )}
+              </div>
+            )}
+
+            {/* ── History Tab ──────────────────────────────────────────────── */}
+            {problemTab === "history" && (
+              <div className="space-y-3">
+                <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+                  <svg className="w-4 h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Submission History
+                </h3>
+
+                {!progressId ? (
+                  <p className="text-xs text-gray-500 py-4 text-center">No submissions yet. Submit your solution to see history.</p>
+                ) : loadingSubmissions ? (
+                  <div className="flex items-center gap-2 text-xs text-gray-400 py-4 justify-center">
+                    <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Loading submissions...
+                  </div>
+                ) : submissions.length === 0 ? (
+                  <div className="text-center py-6">
+                    <p className="text-xs text-gray-500">No submissions yet.</p>
+                    <p className="text-[10px] text-gray-600 mt-1">Click Submit to record your first attempt.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {submissions.map((sub) => {
+                      const statusColors: Record<string, string> = {
+                        ACCEPTED: "bg-green-500/10 text-green-400 border-green-500/30",
+                        WRONG_ANSWER: "bg-red-500/10 text-red-400 border-red-500/30",
+                        PARTIAL: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30",
+                      };
+                      return (
+                        <div key={sub.id} className="rounded-lg border border-gray-700 bg-gray-800/50 p-3">
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold ${statusColors[sub.status] || "text-gray-400"}`}>
+                                {sub.status.replace("_", " ")}
+                              </span>
+                              <span className="text-[10px] text-gray-500">
+                                {sub.testsPassed}/{sub.testsTotal} tests
+                              </span>
+                            </div>
+                            <span className="text-[10px] text-gray-600">{sub.language}</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] text-gray-500">
+                              {new Date(sub.submittedAt).toLocaleString(undefined, {
+                                month: "short", day: "numeric", hour: "2-digit", minute: "2-digit",
+                              })}
+                            </span>
+                            <button
+                              onClick={() => {
+                                setCode(sub.code);
+                                setLanguage(sub.language);
+                              }}
+                              className="text-[10px] text-purple-400 hover:text-purple-300 font-medium"
+                            >
+                              Load Code
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ── Solutions Tab ────────────────────────────────────────────── */}
+            {problemTab === "solutions" && (
+              <div className="space-y-3">
+                <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+                  <svg className="w-4 h-4 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  Community Solutions
+                </h3>
+
+                {loadingCommunity ? (
+                  <div className="flex items-center gap-2 text-xs text-gray-400 py-4 justify-center">
+                    <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Loading solutions...
+                  </div>
+                ) : communitySolutions.length === 0 ? (
+                  <div className="text-center py-6">
+                    <p className="text-xs text-gray-500">No community solutions yet.</p>
+                    <p className="text-[10px] text-gray-600 mt-1">Be the first to solve this problem!</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {communitySolutions.map((sol) => (
+                      <div key={sol.id} className="rounded-lg border border-gray-700 bg-gray-800/50 overflow-hidden">
+                        <div className="flex items-center justify-between px-3 py-2 border-b border-gray-700">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs text-gray-300 font-medium">{sol.username}</span>
+                            <span className="text-[10px] text-gray-500 rounded bg-gray-700 px-1.5 py-0.5">{sol.language}</span>
+                          </div>
+                          <span className="text-[10px] text-gray-600">
+                            {new Date(sol.submittedAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                          </span>
+                        </div>
+                        <pre className="px-3 py-2 text-xs font-mono text-gray-300 overflow-x-auto max-h-48 overflow-y-auto">
+                          {sol.code}
+                        </pre>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
@@ -1822,6 +2132,36 @@ function PracticeProblemContent() {
           </form>
         </div>
       </div>
+
+      {/* ─── Clear Progress Confirmation ───────────────────────────────────── */}
+      {showClearConfirm && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center" onClick={() => setShowClearConfirm(false)}>
+          <div className="bg-gray-900 border border-gray-700 rounded-xl shadow-2xl w-96 max-w-[90vw]" onClick={(e) => e.stopPropagation()}>
+            <div className="px-5 py-4 border-b border-gray-800">
+              <h3 className="text-sm font-bold text-white">Clear Progress</h3>
+            </div>
+            <div className="p-5">
+              <p className="text-sm text-gray-300 mb-4">
+                Reset all progress and submission history for this problem? This cannot be undone.
+              </p>
+              <div className="flex justify-end gap-2">
+                <button
+                  onClick={() => setShowClearConfirm(false)}
+                  className="px-3 py-1.5 rounded-lg text-xs text-gray-400 hover:text-white bg-gray-800 hover:bg-gray-700 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleClearProgress}
+                  className="px-3 py-1.5 rounded-lg text-xs font-medium text-white bg-red-600 hover:bg-red-500 transition-colors"
+                >
+                  Clear Progress
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ─── Keyboard Shortcuts Modal ─────────────────────────────────────── */}
       {showShortcuts && (

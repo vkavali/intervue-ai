@@ -40,6 +40,8 @@ model User {
   notifications       Notification[]     @relation("UserNotifications")
   practiceProblems    PracticeProblem[]  @relation("UserPracticeProblems")
   practiceProgress    PracticeProgress[] @relation("UserPracticeProgress")
+  practiceSubmissions PracticeSubmission[] @relation("UserPracticeSubmissions")
+  communitySubmissions CommunitySubmission[] @relation("UserCommunitySubmissions")
   weaknessProfile     WeaknessProfile?   @relation("UserWeaknessProfile")
   violations          Violation[]        @relation("UserViolations")
   chatMessages        ChatMessage[]      @relation("UserChatMessages")
@@ -285,15 +287,55 @@ model PracticeProgress {
   language         String?   // Last used language
   status           String    @default("IN_PROGRESS") // IN_PROGRESS | COMPLETED | ABANDONED
   timeSpentSeconds Int       @default(0)
+  notes            String?   // Personal markdown notes
+  bestSubmissionId String?   // ID of best submission
   lastSavedAt      DateTime  @default(now())
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 
-  user    User             @relation("UserPracticeProgress", fields: [userId], references: [id])
-  problem PracticeProblem? @relation("ProblemProgress", fields: [problemId], references: [id])
+  user        User                @relation("UserPracticeProgress", fields: [userId], references: [id])
+  problem     PracticeProblem?    @relation("ProblemProgress", fields: [problemId], references: [id])
+  submissions PracticeSubmission[] @relation("ProgressSubmissions")
 
   @@unique([userId, problemId])
   @@unique([userId, bankProblemId])
+}
+
+// ─── PracticeSubmission ──────────────────────────────────────────────────────
+// Immutable record per submit attempt
+
+model PracticeSubmission {
+  id               String   @id @default(cuid())
+  userId           String
+  progressId       String
+  bankProblemId    String?
+  problemId        String?
+  code             String
+  language         String
+  status           String   // ACCEPTED | WRONG_ANSWER | PARTIAL
+  testsPassed      Int      @default(0)
+  testsTotal       Int      @default(0)
+  timeSpentSeconds Int      @default(0)
+  submittedAt      DateTime @default(now())
+
+  user     User             @relation("UserPracticeSubmissions", fields: [userId], references: [id])
+  progress PracticeProgress @relation("ProgressSubmissions", fields: [progressId], references: [id], onDelete: Cascade)
+}
+
+// ─── CommunitySubmission ─────────────────────────────────────────────────────
+// Accepted solutions contributed to the community bank
+
+model CommunitySubmission {
+  id            String   @id @default(cuid())
+  bankProblemId String
+  userId        String
+  code          String
+  language      String
+  submittedAt   DateTime @default(now())
+
+  user User @relation("UserCommunitySubmissions", fields: [userId], references: [id])
+
+  @@unique([bankProblemId, userId, language])
 }
 
 // ─── Violation ──────────────────────────────────────────────────────────────
