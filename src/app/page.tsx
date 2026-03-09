@@ -113,7 +113,7 @@ const platformFeatures = [
   },
   {
     title: "Practice Mode",
-    description: "1,010+ curated problems with AI enrichment, test cases, and starter code. Master 15 study patterns with structured learning paths.",
+    description: "4,000+ problems with server-side execution in 7 languages, AI coaching, editorial walkthroughs, and 15 structured study patterns.",
     icon: (
       <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.26 10.147a60.438 60.438 0 00-.491 6.347A48.62 48.62 0 0112 20.904a48.62 48.62 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.636 50.636 0 00-2.658-.813A59.906 59.906 0 0112 3.493a59.903 59.903 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
@@ -149,8 +149,8 @@ const platformFeatures = [
     iconColor: "text-red-400",
   },
   {
-    title: "Browser Code Execution",
-    description: "Run code directly in the browser with Judge0 engine. Support for 10+ languages with real-time test case validation.",
+    title: "Server-Side Execution",
+    description: "Run and judge code server-side in 7 languages via Piston, Judge0, or local runtimes. Full test case validation with per-language adapters.",
     icon: (
       <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z" />
@@ -185,7 +185,7 @@ const comparisonFeatures = [
   { feature: "AI Interaction Logging", intervue: true, hackerrank: false, coderpad: false, karat: false, leetcode: false },
   { feature: "Hire/No-Hire AI", intervue: true, hackerrank: false, coderpad: false, karat: true, leetcode: false },
   { feature: "Anti-Cheat System", intervue: true, hackerrank: true, coderpad: false, karat: false, leetcode: false },
-  { feature: "Browser Code Execution", intervue: true, hackerrank: true, coderpad: true, karat: false, leetcode: true },
+  { feature: "Server-Side Execution (7 langs)", intervue: true, hackerrank: true, coderpad: true, karat: false, leetcode: true },
   { feature: "Pattern-Based Study Plans", intervue: true, hackerrank: false, coderpad: false, karat: false, leetcode: false },
 ];
 
@@ -216,7 +216,7 @@ const pricingPlans = [
       "Priority support",
       "Custom question library",
       "Calendar & scheduling",
-      "1,010+ practice problems",
+      "4,000+ practice problems",
     ],
     cta: "Start Free Trial",
     highlighted: true,
@@ -485,13 +485,13 @@ export default function Home() {
               {/* Trust bar with stats */}
               <div className="mt-12 flex flex-wrap items-center gap-6 text-sm text-gray-500">
                 <div className="flex items-center gap-2">
-                  <span className="text-purple-400 font-bold text-lg">1,010+</span>
+                  <span className="text-purple-400 font-bold text-lg">4,000+</span>
                   <span>Problems</span>
                 </div>
                 <div className="w-px h-4 bg-gray-700" />
                 <div className="flex items-center gap-2">
-                  <span className="text-blue-400 font-bold text-lg">73</span>
-                  <span>Curated</span>
+                  <span className="text-blue-400 font-bold text-lg">7</span>
+                  <span>Languages</span>
                 </div>
                 <div className="w-px h-4 bg-gray-700" />
                 <div className="flex items-center gap-2">
@@ -719,7 +719,7 @@ export default function Home() {
               One Platform, Zero Gaps
             </h2>
             <p className="mt-6 text-lg text-gray-400 max-w-2xl mx-auto">
-              Code editor, video calls, AI assistance, audit engine, pipeline tracking, scheduling, browser execution, and 1,010+ practice problems -- all built in.
+              Code editor, video calls, AI assistance, audit engine, pipeline tracking, scheduling, server-side execution in 7 languages, and 4,000+ practice problems -- all built in.
             </p>
           </ScrollReveal>
 
@@ -794,15 +794,15 @@ export default function Home() {
             <ScrollReveal>
               <p className="text-sm font-semibold uppercase tracking-widest text-pink-400 mb-4">Practice Module</p>
               <h2 className="text-4xl sm:text-5xl font-bold text-white leading-tight">
-                1,010+ Problems.
+                4,000+ Problems.
                 <br />
                 <span className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
-                  73 Curated. 15 Patterns.
+                  7 Languages. 15 Patterns.
                 </span>
               </h2>
               <p className="mt-6 text-lg text-gray-400 leading-relaxed">
-                Master technical interviews with our comprehensive problem bank. AI-enriched problems with test cases,
-                starter code, and structured study plans following proven patterns.
+                Master technical interviews with LeetCode-style server-side execution. Run and judge code in JavaScript,
+                TypeScript, Python, Java, C++, Go, and Rust with AI coaching, editorial walkthroughs, and structured study plans.
               </p>
 
               {/* FAANG badges */}
@@ -818,9 +818,9 @@ export default function Home() {
               <div className="mt-8 space-y-3">
                 {[
                   { title: "AI Enrichment", desc: "Every problem enhanced with detailed hints, approaches, and complexity analysis" },
-                  { title: "Browser Code Execution", desc: "Run code in 10+ languages with real-time test case validation" },
+                  { title: "Server-Side Execution", desc: "Run and judge code in JavaScript, TypeScript, Python, Java, C++, Go, and Rust" },
                   { title: "15 Study Patterns", desc: "Two Pointers, Sliding Window, BFS/DFS, Dynamic Programming, and more" },
-                  { title: "Progress Tracking", desc: "Track solved problems, accuracy, and skill growth over time" },
+                  { title: "AI Coaching & Editorial", desc: "Get AI-powered coaching feedback, editorials, and weakness profiling after each attempt" },
                 ].map((item) => (
                   <div key={item.title} className="flex items-start gap-3">
                     <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center">
@@ -869,17 +869,17 @@ export default function Home() {
                 <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent"> Perform</span>
               </h2>
               <p className="mt-6 text-lg text-gray-400 leading-relaxed">
-                Get access to 1,010+ practice problems, 15 study patterns, a professional code editor, and the exact same
-                environment you will use in your real interview. Build confidence before the big day.
+                Get access to 4,000+ practice problems, 15 study patterns, server-side execution in 7 languages, AI coaching,
+                and the exact same environment you will use in your real interview. Build confidence before the big day.
               </p>
 
               <div className="mt-8 space-y-4">
                 {[
                   { title: "Pattern-Based Learning", desc: "Master 15 proven patterns used in FAANG interviews" },
                   { title: "FAANG Problem Banks", desc: "Practice with problems from Google, Amazon, Meta, Apple, and Netflix" },
-                  { title: "Browser Code Execution", desc: "Run code in 10+ languages directly in your browser" },
+                  { title: "7-Language Execution", desc: "Run and test code in JS, TS, Python, Java, C++, Go, and Rust -- server-side with instant feedback" },
                   { title: "Real Interview Environment", desc: "Same Monaco editor, same AI levels, same experience" },
-                  { title: "Track Your Progress", desc: "View scores, audit feedback, and improvement areas" },
+                  { title: "AI Coaching & Analytics", desc: "Get AI coaching, weakness profiling, editorial walkthroughs, and progress analytics" },
                 ].map((item) => (
                   <div key={item.title} className="flex items-start gap-3">
                     <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center">

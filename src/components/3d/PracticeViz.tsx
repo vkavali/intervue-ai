@@ -76,11 +76,11 @@ function Chart() {
   });
 
   const bars: BarData[] = [
-    { label: "Problems", value: 1010, maxValue: 1100, color: "#a855f7", x: -1.8 },
-    { label: "Curated", value: 73, maxValue: 1100, color: "#3b82f6", x: -0.9 },
-    { label: "Patterns", value: 15, maxValue: 1100, color: "#06b6d4", x: 0 },
-    { label: "Easy", value: 350, maxValue: 1100, color: "#22c55e", x: 0.9 },
-    { label: "Medium", value: 450, maxValue: 1100, color: "#eab308", x: 1.8 },
+    { label: "Problems", value: 4000, maxValue: 4500, color: "#a855f7", x: -1.8 },
+    { label: "Languages", value: 7, maxValue: 4500, color: "#3b82f6", x: -0.9 },
+    { label: "Patterns", value: 15, maxValue: 4500, color: "#06b6d4", x: 0 },
+    { label: "Easy", value: 1400, maxValue: 4500, color: "#22c55e", x: 0.9 },
+    { label: "Medium", value: 1800, maxValue: 4500, color: "#eab308", x: 1.8 },
   ];
 
   return (
