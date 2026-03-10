@@ -94,7 +94,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   href="/auth/signup"
-                  className="rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-blue-500"
+                  className="rounded-md border border-india-green bg-transparent px-3 py-1.5 text-sm font-medium text-india-green-light transition-colors hover:bg-india-green/10"
                 >
                   Sign Up
                 </Link>

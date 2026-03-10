@@ -657,7 +657,7 @@ export default function InterviewerSessionView({
                 <button
                   onClick={submitAiLevelChange}
                   disabled={!aiSliderReason.trim() || updatingAiLevel}
-                  className="rounded bg-saffron px-3 py-1.5 text-xs font-medium text-white hover:bg-saffron-light disabled:opacity-50 transition-colors"
+                  className="rounded border border-saffron bg-transparent px-3 py-1.5 text-xs font-medium text-saffron hover:bg-saffron/10 disabled:opacity-50 transition-colors"
                 >
                   {updatingAiLevel ? "..." : "Apply"}
                 </button>

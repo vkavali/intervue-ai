@@ -193,7 +193,7 @@ export default function PracticeAnalyticsPage() {
             </svg>
             <h2 className="text-lg font-semibold text-white mb-2">No Data Yet</h2>
             <p className="text-gray-500 mb-6">Start practicing problems to see your analytics and get personalized recommendations.</p>
-            <Link href="/practice" className="rounded-lg bg-saffron px-6 py-2.5 text-sm font-medium text-white hover:bg-saffron transition-colors">
+            <Link href="/practice" className="rounded-lg border border-saffron bg-transparent px-6 py-2.5 text-sm font-medium text-saffron hover:bg-saffron/10 transition-colors">
               Start Practicing
             </Link>
           </div>
@@ -345,7 +345,7 @@ export default function PracticeAnalyticsPage() {
                       </div>
                       <Link
                         href={`/practice/${rec.id}?aiLevel=2`}
-                        className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-saffron px-3 py-2 text-xs font-medium text-white hover:bg-saffron transition-colors"
+                        className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-saffron bg-transparent px-3 py-2 text-xs font-medium text-saffron hover:bg-saffron/10 transition-colors"
                       >
                         Start Practice
                       </Link>

@@ -187,7 +187,7 @@ export default function AddCandidatePage() {
               }}
               className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
                 mode === "search"
-                  ? "bg-saffron text-white"
+                  ? "bg-white/10 text-white border border-saffron"
                   : "text-gray-400 hover:text-white"
               }`}
             >
@@ -201,7 +201,7 @@ export default function AddCandidatePage() {
               }}
               className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
                 mode === "new"
-                  ? "bg-saffron text-white"
+                  ? "bg-white/10 text-white border border-saffron"
                   : "text-gray-400 hover:text-white"
               }`}
             >
@@ -418,7 +418,7 @@ export default function AddCandidatePage() {
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex items-center gap-2 rounded-lg bg-saffron px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-saffron disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 rounded-lg border border-saffron bg-transparent px-5 py-2.5 text-sm font-medium text-saffron transition-colors hover:bg-saffron/10 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {submitting ? (
                 <>

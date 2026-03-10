@@ -254,7 +254,7 @@ export default function SessionPage() {
           </p>
           <a
             href="/dashboard"
-            className="rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white hover:bg-saffron-light transition-colors"
+            className="rounded-lg border border-saffron bg-transparent px-4 py-2 text-sm font-medium text-saffron hover:bg-saffron/10 transition-colors"
           >
             Return to Dashboard
           </a>
@@ -289,7 +289,7 @@ export default function SessionPage() {
           </p>
           <a
             href="/dashboard"
-            className="rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white hover:bg-saffron-light transition-colors"
+            className="rounded-lg border border-saffron bg-transparent px-4 py-2 text-sm font-medium text-saffron hover:bg-saffron/10 transition-colors"
           >
             Return to Dashboard
           </a>
@@ -454,7 +454,7 @@ export default function SessionPage() {
           </p>
           <a
             href="/dashboard"
-            className="rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white hover:bg-saffron-light transition-colors"
+            className="rounded-lg border border-saffron bg-transparent px-4 py-2 text-sm font-medium text-saffron hover:bg-saffron/10 transition-colors"
           >
             Return to Dashboard
           </a>

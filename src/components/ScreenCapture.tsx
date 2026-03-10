@@ -155,7 +155,7 @@ export default function ScreenCapture({ sessionId, isInterviewer }: ScreenCaptur
             <div className="flex gap-3">
               <button
                 onClick={startRecording}
-                className="flex-1 rounded-lg bg-saffron px-4 py-2.5 text-sm font-medium text-white hover:bg-saffron transition-colors"
+                className="flex-1 rounded-lg border border-saffron bg-transparent px-4 py-2.5 text-sm font-medium text-saffron hover:bg-saffron/10 transition-colors"
               >
                 Share Screen
               </button>

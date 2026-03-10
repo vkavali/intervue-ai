@@ -122,7 +122,7 @@ export default async function CandidatePipelinePage() {
         </div>
         <Link
           href="/dashboard/candidates/add"
-          className="inline-flex items-center gap-2 rounded-lg bg-saffron px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-saffron"
+          className="inline-flex items-center gap-2 rounded-lg border border-saffron bg-transparent px-4 py-2.5 text-sm font-medium text-saffron transition-colors hover:bg-saffron/10"
         >
           <svg
             className="h-4 w-4"
@@ -193,7 +193,7 @@ export default async function CandidatePipelinePage() {
           </p>
           <Link
             href="/dashboard/candidates/add"
-            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white hover:bg-saffron"
+            className="mt-4 inline-flex items-center gap-2 rounded-lg border border-saffron bg-transparent px-4 py-2 text-sm font-medium text-saffron hover:bg-saffron/10"
           >
             <svg
               className="h-4 w-4"

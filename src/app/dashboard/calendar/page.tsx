@@ -328,7 +328,7 @@ export default function CalendarPage() {
                       {isValidDay && (
                         <>
                           <div className={`mb-1 flex h-7 w-7 items-center justify-center rounded-full text-sm font-medium ${
-                            isToday ? "bg-saffron text-white" : isSelected ? "text-saffron-light" : "text-gray-300"
+                            isToday ? "bg-white/10 text-white border border-saffron" : isSelected ? "text-saffron-light" : "text-gray-300"
                           }`}>
                             {dayNum}
                           </div>
@@ -417,7 +417,7 @@ export default function CalendarPage() {
                           </Link>
                           {s.status === "PENDING" && (
                             <>
-                              <button onClick={() => { setRescheduleSession(s); setRescheduleDate(`${year}-${String(month).padStart(2,"0")}-${String(selectedDay).padStart(2,"0")}`); }} className="rounded bg-blue-500/10 px-2 py-1 text-xs text-blue-400 hover:bg-blue-500/20">
+                              <button onClick={() => { setRescheduleSession(s); setRescheduleDate(`${year}-${String(month).padStart(2,"0")}-${String(selectedDay).padStart(2,"0")}`); }} className="rounded bg-blue-500/10 px-2 py-1 text-xs text-blue-400 hover:bg-india-green/10/20">
                                 Reschedule
                               </button>
                               <button onClick={() => handleCancelSession(s.id)} className="rounded bg-red-500/10 px-2 py-1 text-xs text-red-400 hover:bg-red-500/20">
@@ -574,7 +574,7 @@ export default function CalendarPage() {
               <button
                 onClick={handleReschedule}
                 disabled={!rescheduleDate || savingReschedule}
-                className="rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white hover:bg-saffron-dark disabled:opacity-50"
+                className="rounded-lg border border-saffron bg-transparent px-4 py-2 text-sm font-medium text-saffron hover:bg-saffron/10 disabled:opacity-50"
               >
                 {savingReschedule ? "Saving..." : "Confirm"}
               </button>

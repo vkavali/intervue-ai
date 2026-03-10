@@ -169,7 +169,7 @@ export default function AIAssistControl({
             <button
               onClick={confirmChange}
               disabled={isSubmitting}
-              className="flex-1 rounded bg-blue-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-blue-500 disabled:opacity-50"
+              className="flex-1 rounded border border-india-green bg-transparent px-3 py-1.5 text-xs font-medium text-india-green-light transition-colors hover:bg-india-green/10 disabled:opacity-50"
             >
               {isSubmitting ? "Updating..." : "Confirm"}
             </button>

@@ -140,7 +140,7 @@ export default function PositionsPage() {
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="inline-flex items-center gap-2 rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-saffron-dark"
+          className="inline-flex items-center gap-2 rounded-lg border border-saffron bg-transparent px-4 py-2 text-sm font-medium text-saffron transition-colors hover:bg-saffron/10"
         >
           {showForm ? (
             "Cancel"
@@ -262,7 +262,7 @@ export default function PositionsPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex items-center gap-2 rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-saffron-dark disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-lg border border-saffron bg-transparent px-4 py-2 text-sm font-medium text-saffron transition-colors hover:bg-saffron/10 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {submitting ? "Creating..." : "Create Position"}
             </button>

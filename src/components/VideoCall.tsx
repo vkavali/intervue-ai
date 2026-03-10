@@ -392,7 +392,7 @@ export default function VideoCall({ sessionId, userId, isInterviewer = false }: 
 
         <button
           onClick={toggleScreenShare}
-          className={`rounded p-1.5 transition-colors ${isScreenSharing ? "bg-blue-600 text-white" : "bg-gray-700 text-white hover:bg-gray-600"}`}
+          className={`rounded p-1.5 transition-colors ${isScreenSharing ? "bg-white/10 text-white border border-india-green" : "bg-gray-700 text-white hover:bg-gray-600"}`}
           title={isScreenSharing ? "Stop sharing" : "Share screen"}
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -416,7 +416,7 @@ export default function VideoCall({ sessionId, userId, isInterviewer = false }: 
                 setIsCameraOn(false);
               }
             }}
-            className={`rounded p-1.5 transition-colors ${isAudioOnly ? "bg-saffron text-white" : "bg-gray-700 text-white hover:bg-gray-600"}`}
+            className={`rounded p-1.5 transition-colors ${isAudioOnly ? "bg-white/10 text-white border border-saffron" : "bg-gray-700 text-white hover:bg-gray-600"}`}
             title={isAudioOnly ? "Switch to video" : "Audio only"}
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

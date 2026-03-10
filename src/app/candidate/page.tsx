@@ -513,7 +513,7 @@ export default async function CandidateDashboard() {
           </p>
           <Link
             href="/practice"
-            className="mt-6 inline-flex items-center gap-2 rounded-lg bg-saffron px-5 py-2.5 text-sm font-medium text-white hover:bg-saffron transition-colors"
+            className="mt-6 inline-flex items-center gap-2 rounded-lg border border-saffron bg-transparent px-5 py-2.5 text-sm font-medium text-saffron hover:bg-saffron/10 transition-colors"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />

@@ -164,7 +164,7 @@ export default function AISidebar({
                 <div
                   className={`max-w-[85%] rounded-lg px-3 py-2 text-sm ${
                     msg.role === "user"
-                      ? "bg-blue-600 text-white"
+                      ? "bg-white/10 text-white border border-india-green"
                       : "bg-gray-800 text-gray-200 border border-gray-700"
                   }`}
                 >
@@ -217,7 +217,7 @@ export default function AISidebar({
             <button
               onClick={sendMessage}
               disabled={isLoading || !input.trim()}
-              className="self-end rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+              className="self-end rounded-lg border border-india-green bg-transparent px-3 py-2 text-sm font-medium text-india-green-light transition-colors hover:bg-india-green/10 disabled:cursor-not-allowed disabled:opacity-50"
             >
               <svg
                 className="h-4 w-4"

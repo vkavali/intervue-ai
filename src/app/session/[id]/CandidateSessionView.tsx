@@ -557,7 +557,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
                 onClick={() => setCurrentQuestionIndex(idx)}
                 className={`flex h-7 w-7 items-center justify-center rounded text-xs font-medium transition-colors ${
                   idx === currentQuestionIndex
-                    ? "bg-saffron text-white"
+                    ? "bg-white/10 text-white border border-saffron"
                     : "bg-editor-surface text-gray-400 hover:bg-editor-hover"
                 }`}
               >
@@ -610,7 +610,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
           <button
             onClick={() => setShowChat(!showChat)}
             className={`relative rounded-lg px-2 py-1.5 text-xs font-medium transition-colors ${
-              showChat ? "bg-blue-600 text-white" : "bg-editor-surface text-gray-400 hover:text-white"
+              showChat ? "bg-white/10 text-white border border-india-green" : "bg-editor-surface text-gray-400 hover:text-white"
             }`}
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1094,7 +1094,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
               <button
                 type="submit"
                 disabled={currentAiLevel === 0 || aiLoading || !aiPrompt.trim() || timeExpired}
-                className="rounded-lg bg-saffron px-3 py-2 text-sm font-medium text-white hover:bg-saffron-light disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="rounded-lg border border-saffron bg-transparent px-3 py-2 text-sm font-medium text-saffron hover:bg-saffron/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

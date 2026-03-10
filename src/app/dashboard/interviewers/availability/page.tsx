@@ -351,7 +351,7 @@ export default function AvailabilityPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="inline-flex items-center gap-2 rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-saffron-dark focus:outline-none focus:ring-2 focus:ring-saffron focus:ring-offset-2 focus:ring-offset-gray-900 disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-lg border border-saffron bg-transparent px-4 py-2 text-sm font-medium text-saffron transition-colors hover:bg-saffron/10 focus:outline-none focus:ring-2 focus:ring-saffron focus:ring-offset-2 focus:ring-offset-gray-900 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {submitting ? (
               <>
@@ -442,7 +442,7 @@ export default function AvailabilityPage() {
             <p className="mt-2 text-sm text-red-400">{error}</p>
             <button
               onClick={fetchSlots}
-              className="mt-4 inline-flex items-center gap-2 rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-saffron-dark"
+              className="mt-4 inline-flex items-center gap-2 rounded-lg border border-saffron bg-transparent px-4 py-2 text-sm font-medium text-saffron transition-colors hover:bg-saffron/10"
             >
               Try Again
             </button>

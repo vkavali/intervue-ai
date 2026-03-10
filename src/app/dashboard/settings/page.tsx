@@ -162,7 +162,7 @@ export default async function SettingsPage() {
             </div>
             <a
               href="/dashboard/billing"
-              className="mt-4 block w-full rounded-lg bg-saffron px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-saffron transition-colors"
+              className="mt-4 block w-full rounded-lg border border-saffron bg-transparent px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-saffron/10 transition-colors"
             >
               Manage Billing
             </a>

@@ -128,7 +128,7 @@ export default function CreateSessionPage() {
                     `${window.location.origin}${success.sessionLink}`
                   );
                 }}
-                className="shrink-0 rounded bg-saffron px-3 py-1.5 text-xs font-medium text-white hover:bg-saffron"
+                className="shrink-0 rounded border border-saffron bg-transparent px-3 py-1.5 text-xs font-medium text-saffron hover:bg-saffron/10"
               >
                 Copy
               </button>
@@ -149,7 +149,7 @@ export default function CreateSessionPage() {
                 setInterviewerEmail("");
                 setScheduledAt("");
               }}
-              className="rounded-lg bg-saffron px-5 py-2.5 text-sm font-medium text-white hover:bg-saffron transition-colors"
+              className="rounded-lg border border-saffron bg-transparent px-5 py-2.5 text-sm font-medium text-saffron hover:bg-saffron/10 transition-colors"
             >
               Create Another
             </button>

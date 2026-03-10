@@ -301,7 +301,7 @@ const flowCards = [
         <div className="grid grid-cols-7 gap-0.5">
           {Array.from({length: 14}, (_, i) => (
             <div key={i} className={`text-center text-[8px] py-0.5 rounded ${
-              i === 5 ? "bg-saffron text-white font-bold" :
+              i === 5 ? "border border-saffron bg-transparent text-saffron font-bold" :
               i === 8 ? "bg-blue-500/30 text-blue-300" :
               "text-gray-500"
             }`}>{i + 10}</div>
@@ -641,7 +641,7 @@ export default function Home() {
                         key={l}
                         className={`flex-1 rounded py-1 text-center text-[9px] font-bold ${
                           i === 2
-                            ? "bg-blue-500 text-white"
+                            ? "bg-white/10 text-white border border-india-green"
                             : "bg-gray-800 text-gray-500"
                         }`}
                       >

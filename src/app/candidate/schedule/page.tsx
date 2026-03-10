@@ -261,7 +261,7 @@ export default function CandidateSchedulePage() {
           </p>
           <button
             onClick={fetchSlots}
-            className="mt-6 inline-flex items-center gap-2 rounded-lg bg-saffron px-5 py-2.5 text-sm font-medium text-white hover:bg-saffron transition-colors"
+            className="mt-6 inline-flex items-center gap-2 rounded-lg border border-saffron bg-transparent px-5 py-2.5 text-sm font-medium text-saffron hover:bg-saffron/10 transition-colors"
           >
             <svg
               className="w-4 h-4"

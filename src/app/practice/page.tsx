@@ -280,7 +280,7 @@ function PracticeModeContent() {
 
         <Link
           href={href}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-saffron px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-saffron"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-saffron bg-transparent px-4 py-2.5 text-sm font-medium text-saffron transition-colors hover:bg-saffron/10"
         >
           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
             <path d="M8 5v14l11-7z" />
@@ -455,7 +455,7 @@ function PracticeModeContent() {
 
                     <button
                       onClick={() => { setPatternFilter(pattern.id); setActiveTab("problems"); setCurrentPage(1); }}
-                      className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-saffron px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-saffron"
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-saffron bg-transparent px-4 py-2.5 text-sm font-medium text-saffron transition-colors hover:bg-saffron/10"
                     >
                       {progress > 0 ? "Continue Pattern" : "Start Pattern"}
                     </button>
@@ -513,7 +513,7 @@ function PracticeModeContent() {
                   else if (currentPage >= totalPages - 3) page = totalPages - 6 + i;
                   else page = currentPage - 3 + i;
                   return (
-                    <button key={page} onClick={() => setCurrentPage(page)} className={`rounded-lg px-3 py-1.5 text-sm ${currentPage === page ? "bg-saffron text-white" : "bg-gray-800 text-gray-300 hover:bg-gray-700"}`}>{page}</button>
+                    <button key={page} onClick={() => setCurrentPage(page)} className={`rounded-lg px-3 py-1.5 text-sm ${currentPage === page ? "bg-white/10 text-white border border-saffron" : "bg-gray-800 text-gray-300 hover:bg-gray-700"}`}>{page}</button>
                   );
                 })}
                 <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="rounded-lg bg-gray-800 px-3 py-1.5 text-sm text-gray-300 hover:bg-gray-700 disabled:opacity-30">Next</button>

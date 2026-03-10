@@ -501,7 +501,7 @@ function CustomPracticeContent() {
         <div className="text-center">
           <h2 className="text-2xl font-bold text-white mb-2">No Problem Loaded</h2>
           <p className="text-gray-400 mb-6">Generate problems from the Practice Mode page first.</p>
-          <Link href="/practice" className="rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white hover:bg-saffron transition-colors">
+          <Link href="/practice" className="rounded-lg border border-saffron bg-transparent px-4 py-2 text-sm font-medium text-saffron hover:bg-saffron/10 transition-colors">
             Back to Practice
           </Link>
         </div>
@@ -592,7 +592,7 @@ function CustomPracticeContent() {
                   <label className="text-[10px] uppercase text-gray-500 font-semibold">Tab Size</label>
                   <div className="flex gap-1 mt-1">
                     {[2, 4].map(s => (
-                      <button key={s} onClick={() => setTabSize(s)} className={`px-2 py-0.5 rounded text-xs ${tabSize === s ? "bg-saffron text-white" : "bg-gray-700 text-gray-400 hover:text-white"}`}>{s}</button>
+                      <button key={s} onClick={() => setTabSize(s)} className={`px-2 py-0.5 rounded text-xs ${tabSize === s ? "bg-white/10 text-white border border-saffron" : "bg-gray-700 text-gray-400 hover:text-white"}`}>{s}</button>
                     ))}
                   </div>
                 </div>
@@ -600,7 +600,7 @@ function CustomPracticeContent() {
                   <label className="text-[10px] uppercase text-gray-500 font-semibold">Word Wrap</label>
                   <div className="flex gap-1 mt-1">
                     {(["on", "off"] as const).map(w => (
-                      <button key={w} onClick={() => setWordWrap(w)} className={`px-2 py-0.5 rounded text-xs capitalize ${wordWrap === w ? "bg-saffron text-white" : "bg-gray-700 text-gray-400 hover:text-white"}`}>{w}</button>
+                      <button key={w} onClick={() => setWordWrap(w)} className={`px-2 py-0.5 rounded text-xs capitalize ${wordWrap === w ? "bg-white/10 text-white border border-saffron" : "bg-gray-700 text-gray-400 hover:text-white"}`}>{w}</button>
                     ))}
                   </div>
                 </div>
@@ -690,7 +690,7 @@ function CustomPracticeContent() {
 
         {/* Left Panel Resize Handle */}
         <div
-          className="w-1 cursor-col-resize bg-gray-800 hover:bg-saffron/50 active:bg-saffron transition-colors shrink-0"
+          className="w-1 cursor-col-resize bg-gray-800 hover:bg-white/20 active:bg-white/40 transition-colors shrink-0"
           onMouseDown={(e) => {
             e.preventDefault();
             isDraggingLeft.current = true;
@@ -728,7 +728,7 @@ function CustomPracticeContent() {
           {/* Bottom Panel Resize Handle */}
           {bottomPanelOpen && (
             <div
-              className="h-1 cursor-row-resize bg-gray-800 hover:bg-saffron/50 active:bg-saffron transition-colors shrink-0"
+              className="h-1 cursor-row-resize bg-gray-800 hover:bg-white/20 active:bg-white/40 transition-colors shrink-0"
               onMouseDown={(e) => {
                 e.preventDefault();
                 isDraggingBottom.current = true;
@@ -967,7 +967,7 @@ function CustomPracticeContent() {
           <form onSubmit={handleAiSubmit} className="border-t border-gray-800 p-3">
             <div className="flex gap-2">
               <input type="text" value={aiPrompt} onChange={(e) => setAiPrompt(e.target.value)} disabled={aiLevel === 0} placeholder={aiLevel === 0 ? "AI disabled" : "Ask the AI for help..."} className="flex-1 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron disabled:opacity-50" />
-              <button type="submit" disabled={aiLevel === 0 || aiLoading || !aiPrompt.trim()} className="rounded-lg bg-saffron px-3 py-2 text-sm font-medium text-white hover:bg-saffron disabled:opacity-50 transition-colors">
+              <button type="submit" disabled={aiLevel === 0 || aiLoading || !aiPrompt.trim()} className="rounded-lg border border-saffron bg-transparent px-3 py-2 text-sm font-medium text-saffron hover:bg-saffron/10 disabled:opacity-50 transition-colors">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
               </button>
             </div>

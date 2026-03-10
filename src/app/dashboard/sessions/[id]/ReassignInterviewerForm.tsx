@@ -77,7 +77,7 @@ export function ReassignInterviewerForm({
       <button
         type="submit"
         disabled={loading || !selectedId || selectedId === currentInterviewerId}
-        className="rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white hover:bg-saffron disabled:opacity-50 disabled:cursor-not-allowed"
+        className="rounded-lg border border-saffron bg-transparent px-4 py-2 text-sm font-medium text-saffron hover:bg-saffron/10 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {loading ? "Saving..." : "Reassign"}
       </button>
