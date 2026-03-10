@@ -10,26 +10,56 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const school = await prisma.school.findFirst({
-      where: { adminId: session.user.id },
-      include: {
-        students: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            level: true,
-            xp: true,
-            currentStreak: true,
-            lastActiveDate: true,
-            _count: {
-              select: { practiceProgress: { where: { status: "COMPLETED" } } },
+    let school: { students: { id: string; name: string | null; email: string | null; level: number; xp: number; currentStreak: number; lastActiveDate: Date | null; _count: { practiceProgress: number } }[] } | null = null;
+
+    try {
+      school = await prisma.school.findFirst({
+        where: { adminId: session.user.id },
+        include: {
+          students: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              level: true,
+              xp: true,
+              currentStreak: true,
+              lastActiveDate: true,
+              _count: {
+                select: { practiceProgress: { where: { status: "COMPLETED" } } },
+              },
+            },
+            orderBy: { xp: "desc" },
+          },
+        },
+      });
+    } catch {
+      // Gamification columns may not exist — fall back to basic query
+      try {
+        const basicSchool = await prisma.school.findFirst({
+          where: { adminId: session.user.id },
+          include: {
+            students: {
+              select: { id: true, name: true, email: true },
             },
           },
-          orderBy: { xp: "desc" },
-        },
-      },
-    });
+        });
+        if (basicSchool) {
+          school = {
+            students: basicSchool.students.map((s) => ({
+              ...s,
+              level: 1,
+              xp: 0,
+              currentStreak: 0,
+              lastActiveDate: null,
+              _count: { practiceProgress: 0 },
+            })),
+          };
+        }
+      } catch {
+        // School table may not exist
+      }
+    }
 
     if (!school) {
       return NextResponse.json({ error: "School not found" }, { status: 404 });

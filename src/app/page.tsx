@@ -1,52 +1,43 @@
 "use client";
 
 import Link from "next/link";
-import dynamic from "next/dynamic";
-import { Suspense } from "react";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ScrollReveal";
-
-// Dynamic imports (SSR disabled for WebGL/Three.js)
-const FluidSimulation = dynamic(() => import("@/components/FluidSimulation"), { ssr: false });
-const AIBrain = dynamic(() => import("@/components/3d/AIBrain"), { ssr: false });
-const Globe = dynamic(() => import("@/components/3d/Globe"), { ssr: false });
-const GeometricShapes = dynamic(() => import("@/components/3d/GeometricShapes"), { ssr: false });
-const PracticeViz = dynamic(() => import("@/components/3d/PracticeViz"), { ssr: false });
 
 const aiLevels = [
   {
     level: "L0",
     label: "No AI",
     description: "Pure unassisted coding assessment.",
-    color: "from-red-500 to-red-600",
-    glow: "shadow-red-500/20",
+    color: "bg-red-50 border-red-200 text-red-600",
+    badge: "bg-red-100 text-red-700",
   },
   {
     level: "L1",
     label: "Hint Only",
     description: "Socratic nudges without revealing answers.",
-    color: "from-yellow-500 to-amber-600",
-    glow: "shadow-yellow-500/20",
+    color: "bg-yellow-50 border-yellow-200 text-yellow-700",
+    badge: "bg-yellow-100 text-yellow-700",
   },
   {
     level: "L2",
     label: "Scaffold",
     description: "Solution skeletons with TODO comments.",
-    color: "from-blue-500 to-blue-600",
-    glow: "shadow-blue-500/20",
+    color: "bg-blue-50 border-blue-200 text-blue-600",
+    badge: "bg-blue-100 text-blue-700",
   },
   {
     level: "L3",
     label: "Guide",
     description: "Detailed explanations and approaches.",
-    color: "from-purple-500 to-purple-600",
-    glow: "shadow-purple-500/20",
+    color: "bg-purple-50 border-purple-200 text-purple-600",
+    badge: "bg-purple-100 text-purple-700",
   },
   {
     level: "L4",
     label: "Full Copilot",
     description: "Unrestricted AI -- code, debug, optimize.",
-    color: "from-green-500 to-emerald-600",
-    glow: "shadow-green-500/20",
+    color: "bg-green-50 border-green-200 text-green-600",
+    badge: "bg-green-100 text-green-700",
   },
 ];
 
@@ -59,9 +50,8 @@ const platformFeatures = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
       </svg>
     ),
-    gradient: "from-blue-500/20 to-cyan-500/10",
-    border: "border-blue-500/20",
-    iconColor: "text-blue-400",
+    iconBg: "bg-blue-50",
+    iconColor: "text-blue-600",
   },
   {
     title: "AI Audit Engine",
@@ -71,9 +61,8 @@ const platformFeatures = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
       </svg>
     ),
-    gradient: "from-purple-500/20 to-violet-500/10",
-    border: "border-purple-500/20",
-    iconColor: "text-purple-400",
+    iconBg: "bg-purple-50",
+    iconColor: "text-purple-600",
   },
   {
     title: "Video & Chat",
@@ -83,9 +72,8 @@ const platformFeatures = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
       </svg>
     ),
-    gradient: "from-green-500/20 to-emerald-500/10",
-    border: "border-green-500/20",
-    iconColor: "text-green-400",
+    iconBg: "bg-green-50",
+    iconColor: "text-green-600",
   },
   {
     title: "Candidate Pipeline",
@@ -95,9 +83,8 @@ const platformFeatures = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
       </svg>
     ),
-    gradient: "from-amber-500/20 to-orange-500/10",
-    border: "border-amber-500/20",
-    iconColor: "text-amber-400",
+    iconBg: "bg-amber-50",
+    iconColor: "text-amber-600",
   },
   {
     title: "Calendar & Scheduling",
@@ -107,9 +94,8 @@ const platformFeatures = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
       </svg>
     ),
-    gradient: "from-cyan-500/20 to-teal-500/10",
-    border: "border-cyan-500/20",
-    iconColor: "text-cyan-400",
+    iconBg: "bg-cyan-50",
+    iconColor: "text-cyan-600",
   },
   {
     title: "Practice Mode",
@@ -119,9 +105,8 @@ const platformFeatures = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.26 10.147a60.438 60.438 0 00-.491 6.347A48.62 48.62 0 0112 20.904a48.62 48.62 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.636 50.636 0 00-2.658-.813A59.906 59.906 0 0112 3.493a59.903 59.903 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
       </svg>
     ),
-    gradient: "from-pink-500/20 to-rose-500/10",
-    border: "border-pink-500/20",
-    iconColor: "text-pink-400",
+    iconBg: "bg-pink-50",
+    iconColor: "text-pink-600",
   },
   {
     title: "Open Positions",
@@ -131,9 +116,8 @@ const platformFeatures = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
       </svg>
     ),
-    gradient: "from-indigo-500/20 to-blue-500/10",
-    border: "border-indigo-500/20",
-    iconColor: "text-indigo-400",
+    iconBg: "bg-indigo-50",
+    iconColor: "text-indigo-600",
   },
   {
     title: "Anti-Cheat Monitoring",
@@ -144,9 +128,8 @@ const platformFeatures = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
       </svg>
     ),
-    gradient: "from-red-500/20 to-orange-500/10",
-    border: "border-red-500/20",
-    iconColor: "text-red-400",
+    iconBg: "bg-red-50",
+    iconColor: "text-red-600",
   },
   {
     title: "Code Execution",
@@ -156,9 +139,8 @@ const platformFeatures = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z" />
       </svg>
     ),
-    gradient: "from-emerald-500/20 to-green-500/10",
-    border: "border-emerald-500/20",
-    iconColor: "text-emerald-400",
+    iconBg: "bg-emerald-50",
+    iconColor: "text-emerald-600",
   },
   {
     title: "Pattern-Based Learning",
@@ -168,9 +150,8 @@ const platformFeatures = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
       </svg>
     ),
-    gradient: "from-violet-500/20 to-purple-500/10",
-    border: "border-violet-500/20",
-    iconColor: "text-violet-400",
+    iconBg: "bg-violet-50",
+    iconColor: "text-violet-600",
   },
 ];
 
@@ -187,6 +168,13 @@ const comparisonFeatures = [
   { feature: "Anti-Cheat System", intervue: true, hackerrank: true, coderpad: false, karat: false, leetcode: false },
   { feature: "Code Execution (7 Languages)", intervue: true, hackerrank: true, coderpad: true, karat: false, leetcode: true },
   { feature: "Pattern-Based Study Plans", intervue: true, hackerrank: false, coderpad: false, karat: false, leetcode: false },
+  { feature: "XP & Leveling", intervue: true, hackerrank: false, coderpad: false, karat: false, leetcode: false },
+  { feature: "Achievement Badges", intervue: true, hackerrank: true, coderpad: false, karat: false, leetcode: false },
+  { feature: "Daily Challenges", intervue: true, hackerrank: true, coderpad: false, karat: false, leetcode: true },
+  { feature: "Leaderboard", intervue: true, hackerrank: true, coderpad: false, karat: false, leetcode: true },
+  { feature: "Activity Heatmap", intervue: true, hackerrank: false, coderpad: false, karat: false, leetcode: true },
+  { feature: "School/University Mode", intervue: true, hackerrank: false, coderpad: false, karat: false, leetcode: false },
+  { feature: "Enrollment Codes", intervue: true, hackerrank: false, coderpad: false, karat: false, leetcode: false },
 ];
 
 const pricingPlans = [
@@ -203,6 +191,8 @@ const pricingPlans = [
     ],
     cta: "Get Started",
     highlighted: false,
+    accent: "saffron",
+    href: "/auth/signup?role=company",
   },
   {
     name: "Growth",
@@ -220,6 +210,8 @@ const pricingPlans = [
     ],
     cta: "Start Free Trial",
     highlighted: true,
+    accent: "saffron",
+    href: "/auth/signup?role=company",
   },
   {
     name: "Enterprise",
@@ -237,6 +229,8 @@ const pricingPlans = [
     ],
     cta: "Contact Sales",
     highlighted: false,
+    accent: "saffron",
+    href: "/auth/signup?role=company",
   },
   {
     name: "Pay Per Interview",
@@ -252,35 +246,47 @@ const pricingPlans = [
     ],
     cta: "Get Started",
     highlighted: false,
+    accent: "saffron",
+    href: "/auth/signup?role=company",
+  },
+  {
+    name: "Education",
+    price: "$5",
+    period: "/student/month",
+    description: "For schools and universities",
+    features: [
+      "Enrollment codes",
+      "Student assignments",
+      "Class-wide analytics",
+      "XP & badge tracking",
+      "Leaderboard per school",
+      "Priority support",
+    ],
+    cta: "Set Up Your School",
+    highlighted: false,
+    accent: "pink",
+    href: "/auth/signup?role=school",
   },
 ];
-
-function Scene3DFallback() {
-  return (
-    <div className="w-full h-full flex items-center justify-center">
-      <div className="w-8 h-8 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
-    </div>
-  );
-}
 
 const flowCards = [
   {
     step: "01",
     title: "Create Position & Template",
     desc: "Define your open role, configure interview questions, set AI levels per question, and customize difficulty.",
-    color: "from-purple-600 to-purple-800",
-    borderColor: "border-purple-500/30",
+    color: "bg-purple-600",
+    borderColor: "border-purple-200",
     mockup: (
-      <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5 space-y-1.5">
+      <div className="mt-3 rounded-lg bg-gray-50 border border-gray-200 p-2.5 space-y-1.5">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] text-white font-medium">Senior Frontend Engineer</span>
-          <span className="text-[8px] bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded">OPEN</span>
+          <span className="text-[10px] text-gray-900 font-medium">Senior Frontend Engineer</span>
+          <span className="text-[8px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded">OPEN</span>
         </div>
-        <div className="h-1 rounded-full bg-gray-800 overflow-hidden"><div className="w-2/3 h-full bg-purple-500 rounded-full" /></div>
+        <div className="h-1 rounded-full bg-gray-200 overflow-hidden"><div className="w-2/3 h-full bg-purple-500 rounded-full" /></div>
         <div className="flex gap-1">
-          <span className="text-[8px] bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded">React</span>
-          <span className="text-[8px] bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded">TypeScript</span>
-          <span className="text-[8px] bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded">3 rounds</span>
+          <span className="text-[8px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">React</span>
+          <span className="text-[8px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">TypeScript</span>
+          <span className="text-[8px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">3 rounds</span>
         </div>
       </div>
     ),
@@ -289,20 +295,20 @@ const flowCards = [
     step: "02",
     title: "Schedule & Invite",
     desc: "Use the calendar to find available interviewer slots, schedule sessions, and send candidates their unique interview links.",
-    color: "from-blue-600 to-blue-800",
-    borderColor: "border-blue-500/30",
+    color: "bg-blue-600",
+    borderColor: "border-blue-200",
     mockup: (
-      <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5">
+      <div className="mt-3 rounded-lg bg-gray-50 border border-gray-200 p-2.5">
         <div className="grid grid-cols-7 gap-0.5 mb-1">
           {["S","M","T","W","T","F","S"].map((d,i) => (
-            <div key={i} className="text-center text-[7px] text-gray-500 font-medium">{d}</div>
+            <div key={i} className="text-center text-[7px] text-gray-400 font-medium">{d}</div>
           ))}
         </div>
         <div className="grid grid-cols-7 gap-0.5">
           {Array.from({length: 14}, (_, i) => (
             <div key={i} className={`text-center text-[8px] py-0.5 rounded ${
               i === 5 ? "bg-purple-500 text-white font-bold" :
-              i === 8 ? "bg-blue-500/30 text-blue-300" :
+              i === 8 ? "bg-blue-100 text-blue-700" :
               "text-gray-500"
             }`}>{i + 10}</div>
           ))}
@@ -314,22 +320,22 @@ const flowCards = [
     step: "03",
     title: "Live Interview",
     desc: "Candidate codes in real-time with controlled AI. Interviewer watches, adjusts AI levels on the fly, and communicates via video + chat.",
-    color: "from-cyan-600 to-cyan-800",
-    borderColor: "border-cyan-500/30",
+    color: "bg-cyan-600",
+    borderColor: "border-cyan-200",
     mockup: (
-      <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5">
+      <div className="mt-3 rounded-lg bg-gray-50 border border-gray-200 p-2.5">
         <div className="flex gap-1.5">
-          <div className="flex-1 rounded bg-gray-900 p-1.5">
-            <div className="space-y-0.5 font-mono text-[7px] text-gray-400">
-              <p><span className="text-purple-400">fn</span> solve() &#123;</p>
-              <p className="pl-2"><span className="text-blue-300">let</span> result = <span className="text-green-300">vec!</span>[];</p>
-              <p className="pl-2 text-gray-600">{"// optimizing..."}</p>
-              <p>&#125;<span className="animate-pulse text-white">|</span></p>
+          <div className="flex-1 rounded bg-white border border-gray-100 p-1.5">
+            <div className="space-y-0.5 font-mono text-[7px] text-gray-500">
+              <p><span className="text-purple-600">fn</span> solve() &#123;</p>
+              <p className="pl-2"><span className="text-blue-600">let</span> result = <span className="text-green-600">vec!</span>[];</p>
+              <p className="pl-2 text-gray-400">{"// optimizing..."}</p>
+              <p>&#125;<span className="animate-pulse text-gray-900">|</span></p>
             </div>
           </div>
           <div className="w-12 space-y-1">
-            <div className="aspect-square rounded bg-purple-500/20 flex items-center justify-center text-[7px] text-purple-300">AI</div>
-            <div className="aspect-square rounded bg-green-500/20 flex items-center justify-center text-[7px] text-green-300">HD</div>
+            <div className="aspect-square rounded bg-purple-50 border border-purple-200 flex items-center justify-center text-[7px] text-purple-600">AI</div>
+            <div className="aspect-square rounded bg-green-50 border border-green-200 flex items-center justify-center text-[7px] text-green-600">HD</div>
           </div>
         </div>
       </div>
@@ -339,19 +345,19 @@ const flowCards = [
     step: "04",
     title: "AI Audits Everything",
     desc: "Every keystroke, AI interaction, and behavior is logged. The audit engine generates structured scorecards automatically.",
-    color: "from-green-600 to-green-800",
-    borderColor: "border-green-500/30",
+    color: "bg-green-600",
+    borderColor: "border-green-200",
     mockup: (
-      <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5 space-y-1">
+      <div className="mt-3 rounded-lg bg-gray-50 border border-gray-200 p-2.5 space-y-1">
         {[
           { label: "Problem Solving", pct: "88%", w: "w-[88%]", c: "bg-green-500" },
           { label: "Code Quality", pct: "76%", w: "w-[76%]", c: "bg-blue-500" },
           { label: "Communication", pct: "92%", w: "w-[92%]", c: "bg-purple-500" },
         ].map((s) => (
           <div key={s.label} className="flex items-center gap-2">
-            <span className="text-[8px] text-gray-400 w-20 truncate">{s.label}</span>
-            <div className="flex-1 h-1.5 rounded-full bg-gray-800"><div className={`h-full rounded-full ${s.c} ${s.w}`} /></div>
-            <span className="text-[8px] text-white font-medium w-6 text-right">{s.pct}</span>
+            <span className="text-[8px] text-gray-500 w-20 truncate">{s.label}</span>
+            <div className="flex-1 h-1.5 rounded-full bg-gray-200"><div className={`h-full rounded-full ${s.c} ${s.w}`} /></div>
+            <span className="text-[8px] text-gray-700 font-medium w-6 text-right">{s.pct}</span>
           </div>
         ))}
       </div>
@@ -361,19 +367,19 @@ const flowCards = [
     step: "05",
     title: "Pipeline & Compare",
     desc: "Move candidates through pipeline stages. Generate AI comparisons between candidates competing for the same role.",
-    color: "from-amber-600 to-amber-800",
-    borderColor: "border-amber-500/30",
+    color: "bg-amber-600",
+    borderColor: "border-amber-200",
     mockup: (
-      <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5">
+      <div className="mt-3 rounded-lg bg-gray-50 border border-gray-200 p-2.5">
         <div className="space-y-1">
           {[
-            { name: "Alex K.", stage: "TECHNICAL", score: "87", sc: "text-green-400" },
-            { name: "Sara M.", stage: "BEHAVIORAL", score: "82", sc: "text-blue-400" },
-            { name: "Jay P.", stage: "SCREENING", score: "--", sc: "text-gray-500" },
+            { name: "Alex K.", stage: "TECHNICAL", score: "87", sc: "text-green-600" },
+            { name: "Sara M.", stage: "BEHAVIORAL", score: "82", sc: "text-blue-600" },
+            { name: "Jay P.", stage: "SCREENING", score: "--", sc: "text-gray-400" },
           ].map((c) => (
             <div key={c.name} className="flex items-center justify-between">
-              <span className="text-[9px] text-white">{c.name}</span>
-              <span className="text-[7px] bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded">{c.stage}</span>
+              <span className="text-[9px] text-gray-700">{c.name}</span>
+              <span className="text-[7px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">{c.stage}</span>
               <span className={`text-[9px] font-bold ${c.sc}`}>{c.score}</span>
             </div>
           ))}
@@ -385,86 +391,71 @@ const flowCards = [
     step: "06",
     title: "Hire with Confidence",
     desc: "Make data-backed decisions with AI recommendations, detailed scorecards, risk flags, and candidate comparisons.",
-    color: "from-rose-600 to-rose-800",
-    borderColor: "border-rose-500/30",
+    color: "bg-rose-600",
+    borderColor: "border-rose-200",
     mockup: (
-      <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5 text-center">
-        <div className="inline-flex items-center gap-1.5 rounded-full bg-green-500/20 border border-green-500/30 px-3 py-1">
-          <svg className="w-3 h-3 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div className="mt-3 rounded-lg bg-gray-50 border border-gray-200 p-2.5 text-center">
+        <div className="inline-flex items-center gap-1.5 rounded-full bg-green-50 border border-green-200 px-3 py-1">
+          <svg className="w-3 h-3 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
-          <span className="text-[10px] font-bold text-green-400">RECOMMEND: HIRE</span>
+          <span className="text-[10px] font-bold text-green-700">RECOMMEND: HIRE</span>
         </div>
-        <p className="mt-1.5 text-[8px] text-gray-500">Confidence: 94% | Score: 87/100</p>
+        <p className="mt-1.5 text-[8px] text-gray-400">Confidence: 94% | Score: 87/100</p>
       </div>
     ),
   },
 ];
 
 const faangCompanies = [
-  { name: "Google", color: "text-blue-400", bg: "bg-blue-500/10 border-blue-500/20" },
-  { name: "Amazon", color: "text-amber-400", bg: "bg-amber-500/10 border-amber-500/20" },
-  { name: "Meta", color: "text-blue-300", bg: "bg-blue-400/10 border-blue-400/20" },
-  { name: "Apple", color: "text-gray-300", bg: "bg-gray-500/10 border-gray-500/20" },
-  { name: "Netflix", color: "text-red-400", bg: "bg-red-500/10 border-red-500/20" },
+  { name: "Google", color: "text-blue-600", bg: "bg-blue-50 border-blue-200" },
+  { name: "Amazon", color: "text-amber-600", bg: "bg-amber-50 border-amber-200" },
+  { name: "Meta", color: "text-blue-500", bg: "bg-blue-50 border-blue-200" },
+  { name: "Apple", color: "text-gray-600", bg: "bg-gray-50 border-gray-200" },
+  { name: "Netflix", color: "text-red-600", bg: "bg-red-50 border-red-200" },
 ];
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-950 overflow-hidden">
-      {/* ===== 1. HERO SECTION with 3D Particles + FloatingCode ===== */}
-      <section className="relative min-h-[100vh] flex items-center">
-        {/* Interactive fluid simulation background */}
-        <Suspense fallback={null}>
-          <FluidSimulation />
-        </Suspense>
-
-        {/* Gradient overlays */}
+    <div className="min-h-screen bg-white overflow-hidden">
+      {/* ===== 1. HERO ===== */}
+      <section className="relative min-h-[90vh] flex items-center bg-white">
+        {/* Subtle gradient background */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-blue-900/20" />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-b from-purple-600/10 to-transparent rounded-full blur-3xl" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-b from-saffron/5 via-india-green/5 to-transparent rounded-full blur-3xl" />
         </div>
-
-        {/* Grid overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.02] pointer-events-none"
-          style={{
-            backgroundImage: "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)",
-            backgroundSize: "60px 60px",
-          }}
-        />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-32 w-full">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left: Copy */}
             <ScrollReveal>
-              <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-4 py-1.5 text-sm text-purple-300 mb-8 backdrop-blur-sm">
+              <div className="inline-flex items-center gap-2 rounded-full border border-india-green/30 bg-india-green/10 px-4 py-1.5 text-sm text-india-green mb-8">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500" />
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-india-green opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-india-green" />
                 </span>
-                AI-Powered Interview Platform
+                AI-Powered Interview + Practice Platform
               </div>
 
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1]">
-                <span className="bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent">
+                <span className="text-gray-900">
                   Interview
                 </span>
                 <br />
-                <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">
                   Reimagined.
                 </span>
               </h1>
 
-              <p className="mt-8 text-lg sm:text-xl text-gray-400 leading-relaxed max-w-xl">
+              <p className="mt-8 text-lg sm:text-xl text-gray-500 leading-relaxed max-w-xl">
                 The platform where AI assistance is company-controlled, every session is
-                auto-audited, and hiring decisions are backed by data -- not gut feelings.
+                auto-audited, and candidates earn XP, unlock badges, and compete on leaderboards. Schools can enroll entire classrooms with a single code.
               </p>
 
               <div className="mt-10 flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/auth/signup?role=company"
-                  className="group inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 text-base font-semibold text-white shadow-2xl shadow-purple-600/25 transition-all hover:shadow-purple-600/40 hover:scale-[1.02] active:scale-[0.98]"
+                  className="group inline-flex items-center justify-center rounded-xl bg-saffron px-8 py-4 text-base font-semibold text-white shadow-lg shadow-saffron/20 transition-all hover:shadow-saffron/40 hover:scale-[1.02] active:scale-[0.98]"
                 >
                   Start Hiring Smarter
                   <svg className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -473,168 +464,162 @@ export default function Home() {
                 </Link>
                 <Link
                   href="/auth/signup?role=candidate"
-                  className="group inline-flex items-center justify-center rounded-xl border border-gray-700 bg-gray-900/80 backdrop-blur-sm px-8 py-4 text-base font-semibold text-gray-200 transition-all hover:bg-gray-800 hover:border-gray-500 hover:scale-[1.02] active:scale-[0.98]"
+                  className="group inline-flex items-center justify-center rounded-xl bg-india-green px-8 py-4 text-base font-semibold text-white shadow-lg shadow-india-green/20 transition-all hover:shadow-india-green/40 hover:scale-[1.02] active:scale-[0.98]"
                 >
                   Practice for Free
                   <svg className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </Link>
+                <Link
+                  href="#schools"
+                  className="group inline-flex items-center justify-center rounded-xl bg-pink-500 px-8 py-4 text-base font-semibold text-white shadow-lg shadow-pink-500/20 transition-all hover:shadow-pink-500/40 hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  For Schools
+                </Link>
               </div>
 
-              {/* Trust bar with stats */}
-              <div className="mt-12 flex flex-wrap items-center gap-6 text-sm text-gray-500">
+              {/* Trust bar */}
+              <div className="mt-12 flex flex-wrap items-center gap-6 text-sm text-gray-400">
                 <div className="flex items-center gap-2">
-                  <span className="text-purple-400 font-bold text-lg">4,000+</span>
+                  <span className="text-saffron font-bold text-lg">4,000+</span>
                   <span>Problems</span>
                 </div>
-                <div className="w-px h-4 bg-gray-700" />
+                <div className="w-px h-4 bg-gray-200" />
                 <div className="flex items-center gap-2">
-                  <span className="text-blue-400 font-bold text-lg">7</span>
+                  <span className="text-india-green font-bold text-lg">7</span>
                   <span>Languages</span>
                 </div>
-                <div className="w-px h-4 bg-gray-700" />
+                <div className="w-px h-4 bg-gray-200" />
                 <div className="flex items-center gap-2">
-                  <span className="text-cyan-400 font-bold text-lg">15</span>
-                  <span>Patterns</span>
+                  <span className="text-saffron font-bold text-lg">17</span>
+                  <span>Badges</span>
                 </div>
-                <div className="w-px h-4 bg-gray-700" />
+                <div className="w-px h-4 bg-gray-200" />
                 <div className="flex items-center gap-2">
-                  <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  No credit card required
+                  <span className="text-india-green font-bold text-lg">15</span>
+                  <span>Patterns</span>
                 </div>
               </div>
             </ScrollReveal>
 
-            {/* Right: 3D Floating Mockup */}
+            {/* Right: Mockup */}
             <ScrollReveal delay={0.3} direction="right" className="relative hidden lg:block">
               <div style={{ perspective: "1200px" }}>
-                {/* Main dashboard mockup - rotated in 3D */}
                 <div
-                  className="relative rounded-2xl border border-gray-700/50 bg-gray-900/90 backdrop-blur-xl shadow-2xl shadow-purple-900/20 overflow-hidden"
+                  className="relative rounded-2xl border border-gray-200 bg-white shadow-2xl shadow-gray-200/50 overflow-hidden"
                   style={{ transform: "rotateY(-8deg) rotateX(4deg) rotateZ(1deg)" }}
                 >
                   {/* Browser chrome */}
-                  <div className="flex items-center gap-2 border-b border-gray-800 bg-gray-950/80 px-4 py-3">
+                  <div className="flex items-center gap-2 border-b border-gray-100 bg-gray-50 px-4 py-3">
                     <div className="flex gap-1.5">
-                      <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                      <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                      <div className="w-3 h-3 rounded-full bg-green-500/80" />
+                      <div className="w-3 h-3 rounded-full bg-red-400" />
+                      <div className="w-3 h-3 rounded-full bg-yellow-400" />
+                      <div className="w-3 h-3 rounded-full bg-green-400" />
                     </div>
                     <div className="flex-1 flex justify-center">
-                      <div className="rounded-lg bg-gray-800/80 px-4 py-1 text-xs text-gray-500 font-mono">
+                      <div className="rounded-lg bg-gray-100 px-4 py-1 text-xs text-gray-400 font-mono">
                         intervue.ai/session/live
                       </div>
                     </div>
                   </div>
 
                   {/* Mock interview UI */}
-                  <div className="p-4 grid grid-cols-5 gap-3" style={{ minHeight: "320px" }}>
+                  <div className="p-4 grid grid-cols-5 gap-3 bg-white" style={{ minHeight: "320px" }}>
                     {/* Code editor area */}
-                    <div className="col-span-3 rounded-lg border border-gray-800 bg-gray-950 p-3">
+                    <div className="col-span-3 rounded-lg border border-gray-200 bg-gray-50 p-3">
                       <div className="flex items-center gap-2 mb-3">
-                        <div className="rounded bg-blue-500/20 px-2 py-0.5 text-[10px] font-mono text-blue-400">JavaScript</div>
-                        <div className="rounded bg-yellow-500/20 px-2 py-0.5 text-[10px] font-mono text-yellow-400">Medium</div>
+                        <div className="rounded bg-blue-50 px-2 py-0.5 text-[10px] font-mono text-blue-600">JavaScript</div>
+                        <div className="rounded bg-yellow-50 px-2 py-0.5 text-[10px] font-mono text-yellow-600">Medium</div>
                       </div>
                       <div className="space-y-1.5 font-mono text-[11px]">
-                        <p><span className="text-purple-400">function</span> <span className="text-blue-300">twoSum</span><span className="text-gray-500">(</span><span className="text-orange-300">nums</span><span className="text-gray-500">,</span> <span className="text-orange-300">target</span><span className="text-gray-500">)</span> <span className="text-gray-500">&#123;</span></p>
-                        <p className="pl-4"><span className="text-purple-400">const</span> <span className="text-blue-300">map</span> <span className="text-gray-500">=</span> <span className="text-purple-400">new</span> <span className="text-yellow-300">Map</span><span className="text-gray-500">();</span></p>
-                        <p className="pl-4"><span className="text-purple-400">for</span> <span className="text-gray-500">(</span><span className="text-purple-400">let</span> <span className="text-blue-300">i</span> <span className="text-gray-500">=</span> <span className="text-green-300">0</span><span className="text-gray-500">;</span> <span className="text-blue-300">i</span> <span className="text-gray-500">&lt;</span> <span className="text-orange-300">nums</span><span className="text-gray-500">.</span><span className="text-blue-300">length</span><span className="text-gray-500">;</span> <span className="text-blue-300">i</span><span className="text-gray-500">++)</span> <span className="text-gray-500">&#123;</span></p>
-                        <p className="pl-8"><span className="text-purple-400">const</span> <span className="text-blue-300">comp</span> <span className="text-gray-500">=</span> <span className="text-orange-300">target</span> <span className="text-gray-500">-</span> <span className="text-orange-300">nums</span><span className="text-gray-500">[</span><span className="text-blue-300">i</span><span className="text-gray-500">];</span></p>
-                        <p className="pl-8"><span className="text-purple-400">if</span> <span className="text-gray-500">(</span><span className="text-blue-300">map</span><span className="text-gray-500">.</span><span className="text-yellow-300">has</span><span className="text-gray-500">(</span><span className="text-blue-300">comp</span><span className="text-gray-500">))</span></p>
-                        <p className="pl-12"><span className="text-purple-400">return</span> <span className="text-gray-500">[</span><span className="text-blue-300">map</span><span className="text-gray-500">.</span><span className="text-yellow-300">get</span><span className="text-gray-500">(</span><span className="text-blue-300">comp</span><span className="text-gray-500">),</span> <span className="text-blue-300">i</span><span className="text-gray-500">];</span></p>
-                        <p className="pl-8"><span className="text-blue-300">map</span><span className="text-gray-500">.</span><span className="text-yellow-300">set</span><span className="text-gray-500">(</span><span className="text-orange-300">nums</span><span className="text-gray-500">[</span><span className="text-blue-300">i</span><span className="text-gray-500">],</span> <span className="text-blue-300">i</span><span className="text-gray-500">);</span></p>
-                        <p className="pl-4"><span className="text-gray-500">&#125;</span></p>
-                        <p><span className="text-gray-500">&#125;</span><span className="animate-pulse text-white">|</span></p>
+                        <p><span className="text-purple-600">function</span> <span className="text-blue-600">twoSum</span><span className="text-gray-400">(</span><span className="text-orange-500">nums</span><span className="text-gray-400">,</span> <span className="text-orange-500">target</span><span className="text-gray-400">)</span> <span className="text-gray-400">&#123;</span></p>
+                        <p className="pl-4"><span className="text-purple-600">const</span> <span className="text-blue-600">map</span> <span className="text-gray-400">=</span> <span className="text-purple-600">new</span> <span className="text-yellow-600">Map</span><span className="text-gray-400">();</span></p>
+                        <p className="pl-4"><span className="text-purple-600">for</span> <span className="text-gray-400">(</span><span className="text-purple-600">let</span> <span className="text-blue-600">i</span> <span className="text-gray-400">=</span> <span className="text-green-600">0</span><span className="text-gray-400">;</span> <span className="text-blue-600">i</span> <span className="text-gray-400">&lt;</span> <span className="text-orange-500">nums</span><span className="text-gray-400">.</span><span className="text-blue-600">length</span><span className="text-gray-400">;</span> <span className="text-blue-600">i</span><span className="text-gray-400">++)</span> <span className="text-gray-400">&#123;</span></p>
+                        <p className="pl-8"><span className="text-purple-600">const</span> <span className="text-blue-600">comp</span> <span className="text-gray-400">=</span> <span className="text-orange-500">target</span> <span className="text-gray-400">-</span> <span className="text-orange-500">nums</span><span className="text-gray-400">[</span><span className="text-blue-600">i</span><span className="text-gray-400">];</span></p>
+                        <p className="pl-8"><span className="text-purple-600">if</span> <span className="text-gray-400">(</span><span className="text-blue-600">map</span><span className="text-gray-400">.</span><span className="text-yellow-600">has</span><span className="text-gray-400">(</span><span className="text-blue-600">comp</span><span className="text-gray-400">))</span></p>
+                        <p className="pl-12"><span className="text-purple-600">return</span> <span className="text-gray-400">[</span><span className="text-blue-600">map</span><span className="text-gray-400">.</span><span className="text-yellow-600">get</span><span className="text-gray-400">(</span><span className="text-blue-600">comp</span><span className="text-gray-400">),</span> <span className="text-blue-600">i</span><span className="text-gray-400">];</span></p>
+                        <p className="pl-8"><span className="text-blue-600">map</span><span className="text-gray-400">.</span><span className="text-yellow-600">set</span><span className="text-gray-400">(</span><span className="text-orange-500">nums</span><span className="text-gray-400">[</span><span className="text-blue-600">i</span><span className="text-gray-400">],</span> <span className="text-blue-600">i</span><span className="text-gray-400">);</span></p>
+                        <p className="pl-4"><span className="text-gray-400">&#125;</span></p>
+                        <p><span className="text-gray-400">&#125;</span><span className="animate-pulse text-gray-900">|</span></p>
                       </div>
                     </div>
 
                     {/* Side panel */}
                     <div className="col-span-2 space-y-3">
-                      {/* AI Chat */}
-                      <div className="rounded-lg border border-gray-800 bg-gray-950 p-3">
+                      <div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
                         <div className="flex items-center gap-2 mb-2">
-                          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
+                          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-saffron to-india-green flex items-center justify-center">
                             <span className="text-[8px] font-bold text-white">AI</span>
                           </div>
-                          <span className="text-[10px] font-medium text-gray-400">AI Assist (L2)</span>
+                          <span className="text-[10px] font-medium text-gray-500">AI Assist (L2)</span>
                         </div>
-                        <div className="rounded-lg bg-purple-500/10 border border-purple-500/20 p-2">
-                          <p className="text-[10px] text-purple-300 leading-relaxed">
-                            Consider using a HashMap to achieve O(n) time complexity. Think about what complement you need for each element...
+                        <div className="rounded-lg bg-saffron/10 border border-saffron/20 p-2">
+                          <p className="text-[10px] text-saffron leading-relaxed">
+                            Consider using a HashMap to achieve O(n) time complexity. Think about what complement you need...
                           </p>
                         </div>
                       </div>
 
-                      {/* Video call mini */}
-                      <div className="rounded-lg border border-gray-800 bg-gray-950 p-2">
+                      <div className="rounded-lg border border-gray-200 bg-gray-50 p-2">
                         <div className="grid grid-cols-2 gap-1.5">
-                          <div className="aspect-video rounded bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                            <div className="w-8 h-8 rounded-full bg-purple-500/30 flex items-center justify-center text-[10px] text-purple-300 font-semibold">JD</div>
+                          <div className="aspect-video rounded bg-gray-100 flex items-center justify-center">
+                            <div className="w-8 h-8 rounded-full bg-saffron/20 flex items-center justify-center text-[10px] text-saffron font-semibold">JD</div>
                           </div>
-                          <div className="aspect-video rounded bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                            <div className="w-8 h-8 rounded-full bg-blue-500/30 flex items-center justify-center text-[10px] text-blue-300 font-semibold">MK</div>
+                          <div className="aspect-video rounded bg-gray-100 flex items-center justify-center">
+                            <div className="w-8 h-8 rounded-full bg-india-green/20 flex items-center justify-center text-[10px] text-india-green font-semibold">MK</div>
                           </div>
                         </div>
                       </div>
 
-                      {/* Score preview */}
-                      <div className="rounded-lg border border-gray-800 bg-gray-950 p-3">
-                        <p className="text-[10px] font-medium text-gray-400 mb-2">Live Assessment</p>
+                      <div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
+                        <p className="text-[10px] font-medium text-gray-500 mb-2">Live Assessment</p>
                         <div className="space-y-1.5">
-                          <div className="flex items-center justify-between">
-                            <span className="text-[9px] text-gray-500">Problem Comprehension</span>
-                            <div className="w-16 h-1.5 rounded-full bg-gray-800 overflow-hidden">
-                              <div className="w-[85%] h-full rounded-full bg-green-500" />
+                          {[
+                            { label: "Comprehension", w: "w-[85%]", c: "bg-green-500" },
+                            { label: "Code Quality", w: "w-[72%]", c: "bg-blue-500" },
+                            { label: "AI Usage", w: "w-[60%]", c: "bg-saffron" },
+                          ].map((s) => (
+                            <div key={s.label} className="flex items-center justify-between">
+                              <span className="text-[9px] text-gray-400">{s.label}</span>
+                              <div className="w-16 h-1.5 rounded-full bg-gray-200 overflow-hidden">
+                                <div className={`${s.w} h-full rounded-full ${s.c}`} />
+                              </div>
                             </div>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-[9px] text-gray-500">Code Quality</span>
-                            <div className="w-16 h-1.5 rounded-full bg-gray-800 overflow-hidden">
-                              <div className="w-[72%] h-full rounded-full bg-blue-500" />
-                            </div>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-[9px] text-gray-500">AI Usage</span>
-                            <div className="w-16 h-1.5 rounded-full bg-gray-800 overflow-hidden">
-                              <div className="w-[60%] h-full rounded-full bg-purple-500" />
-                            </div>
-                          </div>
+                          ))}
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Floating card: Audit result */}
+                {/* Floating: Audit result */}
                 <div
-                  className="absolute -bottom-8 -left-12 w-56 rounded-xl border border-green-500/30 bg-gray-900/95 backdrop-blur-xl p-4 shadow-2xl shadow-green-900/20"
+                  className="absolute -bottom-8 -left-12 w-56 rounded-xl border border-green-200 bg-white shadow-xl p-4"
                   style={{ transform: "rotateY(8deg) rotateX(-2deg) translateZ(40px)" }}
                 >
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
-                      <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center">
+                      <svg className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                     </div>
                     <div>
-                      <p className="text-xs font-semibold text-white">Audit Complete</p>
+                      <p className="text-xs font-semibold text-gray-900">Audit Complete</p>
                       <p className="text-[10px] text-gray-400">Score: 87/100</p>
                     </div>
                   </div>
-                  <div className="rounded-lg bg-green-500/10 border border-green-500/20 px-3 py-1.5">
-                    <p className="text-[10px] text-green-400 font-medium">Recommendation: HIRE</p>
+                  <div className="rounded-lg bg-green-50 border border-green-200 px-3 py-1.5">
+                    <p className="text-[10px] text-green-700 font-medium">Recommendation: HIRE</p>
                   </div>
                 </div>
 
-                {/* Floating card: AI Level indicator */}
+                {/* Floating: AI Level indicator */}
                 <div
-                  className="absolute -top-4 -right-8 w-44 rounded-xl border border-purple-500/30 bg-gray-900/95 backdrop-blur-xl p-3 shadow-2xl shadow-purple-900/20"
+                  className="absolute -top-4 -right-8 w-44 rounded-xl border border-saffron/30 bg-white shadow-xl p-3"
                   style={{ transform: "rotateY(-12deg) rotateX(6deg) translateZ(60px)" }}
                 >
-                  <p className="text-[10px] font-medium text-gray-400 mb-2">AI Level Control</p>
+                  <p className="text-[10px] font-medium text-gray-500 mb-2">AI Level Control</p>
                   <div className="flex gap-1">
                     {["L0", "L1", "L2", "L3", "L4"].map((l, i) => (
                       <div
@@ -642,7 +627,7 @@ export default function Home() {
                         className={`flex-1 rounded py-1 text-center text-[9px] font-bold ${
                           i === 2
                             ? "bg-blue-500 text-white"
-                            : "bg-gray-800 text-gray-500"
+                            : "bg-gray-100 text-gray-400"
                         }`}
                       >
                         {l}
@@ -656,7 +641,7 @@ export default function Home() {
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-500">
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-400">
           <span className="text-xs tracking-wider uppercase">Explore</span>
           <svg className="w-5 h-5 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
@@ -664,43 +649,119 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 2. VISUAL INTERVIEW FLOW ===== */}
-      <section className="relative py-32 bg-gray-950">
-        <div className="absolute inset-0 bg-gradient-to-b from-purple-900/5 via-transparent to-blue-900/5" />
-
-        {/* Floating geometric shapes between sections */}
-        <div className="absolute inset-0 pointer-events-none opacity-40 hidden lg:block">
-          <Suspense fallback={null}>
-            <GeometricShapes />
-          </Suspense>
-        </div>
-
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-20">
-            <p className="text-sm font-semibold uppercase tracking-widest text-purple-400 mb-4">The Complete Flow</p>
-            <h2 className="text-4xl sm:text-5xl font-bold text-white leading-tight">
-              From Job Posting to
-              <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent"> Hire Decision</span>
+      {/* ===== 2. WHO IT'S FOR ===== */}
+      <section className="py-24 bg-gray-50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ScrollReveal className="text-center mb-16">
+            <p className="text-sm font-semibold uppercase tracking-widest text-saffron mb-4">Built For Everyone</p>
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900">
+              Who It&apos;s For
             </h2>
-            <p className="mt-6 text-lg text-gray-400 max-w-3xl mx-auto">
+          </ScrollReveal>
+
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6" staggerDelay={0.1}>
+            {/* Companies */}
+            <StaggerItem>
+              <div className="rounded-2xl border border-gray-200 bg-white p-8 h-full transition-all hover:shadow-lg hover:-translate-y-1">
+                <div className="w-12 h-12 rounded-xl bg-saffron/10 flex items-center justify-center mb-6">
+                  <svg className="w-6 h-6 text-saffron" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Companies</h3>
+                <p className="text-sm text-gray-500 mb-4">Run AI-controlled technical interviews with full audit trails and data-driven hiring decisions.</p>
+                <ul className="space-y-2 mb-6">
+                  {["5-level AI control per interview", "Auto-generated scorecards", "Candidate pipeline & comparisons", "Calendar scheduling & video"].map((f) => (
+                    <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
+                      <svg className="w-4 h-4 text-saffron shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <Link href="/auth/signup?role=company" className="text-sm font-semibold text-saffron hover:text-saffron/80">
+                  Start Hiring &rarr;
+                </Link>
+              </div>
+            </StaggerItem>
+
+            {/* Candidates */}
+            <StaggerItem>
+              <div className="rounded-2xl border border-gray-200 bg-white p-8 h-full transition-all hover:shadow-lg hover:-translate-y-1">
+                <div className="w-12 h-12 rounded-xl bg-india-green/10 flex items-center justify-center mb-6">
+                  <svg className="w-6 h-6 text-india-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Candidates</h3>
+                <p className="text-sm text-gray-500 mb-4">Practice with 4,000+ problems, earn XP, unlock 17 badges, and climb the leaderboard.</p>
+                <ul className="space-y-2 mb-6">
+                  {["XP, levels, and streaks", "17 achievement badges", "Global leaderboard", "7-language code execution"].map((f) => (
+                    <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
+                      <svg className="w-4 h-4 text-india-green shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <Link href="/auth/signup?role=candidate" className="text-sm font-semibold text-india-green hover:text-india-green/80">
+                  Start Practicing &rarr;
+                </Link>
+              </div>
+            </StaggerItem>
+
+            {/* Schools */}
+            <StaggerItem>
+              <div className="rounded-2xl border border-pink-200 bg-white p-8 h-full transition-all hover:shadow-lg hover:-translate-y-1">
+                <div className="w-12 h-12 rounded-xl bg-pink-50 flex items-center justify-center mb-6">
+                  <svg className="w-6 h-6 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.26 10.147a60.438 60.438 0 00-.491 6.347A48.62 48.62 0 0112 20.904a48.62 48.62 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.636 50.636 0 00-2.658-.813A59.906 59.906 0 0112 3.493a59.903 59.903 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Schools & Universities</h3>
+                <p className="text-sm text-gray-500 mb-4">Enroll entire classrooms with one code. Assign problems, track student progress, and view class analytics.</p>
+                <ul className="space-y-2 mb-6">
+                  {["Enrollment codes for classes", "Assignment creation", "Class-wide analytics dashboard", "$5/student/month pricing"].map((f) => (
+                    <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
+                      <svg className="w-4 h-4 text-pink-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <Link href="#schools" className="text-sm font-semibold text-pink-500 hover:text-pink-600">
+                  Learn More &rarr;
+                </Link>
+              </div>
+            </StaggerItem>
+          </StaggerContainer>
+        </div>
+      </section>
+
+      {/* ===== 3. HOW IT WORKS ===== */}
+      <section className="py-24 bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ScrollReveal className="text-center mb-20">
+            <p className="text-sm font-semibold uppercase tracking-widest text-india-green mb-4">The Complete Flow</p>
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight">
+              From Job Posting to
+              <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent"> Hire Decision</span>
+            </h2>
+            <p className="mt-6 text-lg text-gray-500 max-w-3xl mx-auto">
               Watch how Intervue.AI transforms every step of the hiring process with intelligent automation and transparent AI auditing.
             </p>
           </ScrollReveal>
 
-          {/* Flow Cards */}
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" staggerDelay={0.1}>
             {flowCards.map((card) => (
               <StaggerItem key={card.step}>
                 <div
-                  className={`group rounded-2xl border ${card.borderColor} bg-gray-900/80 backdrop-blur-sm p-6 transition-all duration-500 hover:scale-[1.03] hover:-translate-y-1 h-full`}
+                  className={`group rounded-2xl border ${card.borderColor} bg-white p-6 transition-all duration-500 hover:shadow-lg hover:scale-[1.03] hover:-translate-y-1 h-full`}
                 >
                   <div className="flex items-center gap-3 mb-3">
-                    <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${card.color} text-xs font-bold text-white shadow-lg`}>
+                    <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${card.color} text-xs font-bold text-white shadow-lg`}>
                       {card.step}
                     </span>
-                    <h3 className="text-base font-semibold text-white">{card.title}</h3>
+                    <h3 className="text-base font-semibold text-gray-900">{card.title}</h3>
                   </div>
-                  <p className="text-sm text-gray-400 leading-relaxed">{card.desc}</p>
+                  <p className="text-sm text-gray-500 leading-relaxed">{card.desc}</p>
                   {card.mockup}
                 </div>
               </StaggerItem>
@@ -709,58 +770,297 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 3. FEATURES GRID ===== */}
-      <section id="features" className="relative py-32 bg-gray-900/50">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/5 to-transparent" />
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* ===== 4. GAMIFICATION SHOWCASE ===== */}
+      <section className="py-24 bg-gray-50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left: Gamification Mockup */}
+            <ScrollReveal>
+              <div className="rounded-2xl border border-gray-200 bg-white shadow-lg p-6 space-y-5">
+                {/* XP Bar */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-saffron/10 text-xs font-bold text-saffron">12</span>
+                      <span className="text-sm font-semibold text-gray-900">Level 12</span>
+                    </div>
+                    <span className="text-xs text-gray-400">2,450 / 3,000 XP</span>
+                  </div>
+                  <div className="h-2.5 rounded-full bg-gray-100 overflow-hidden">
+                    <div className="w-[82%] h-full rounded-full bg-gradient-to-r from-saffron to-india-green" />
+                  </div>
+                </div>
+
+                {/* Streak */}
+                <div className="flex items-center gap-4 rounded-xl bg-orange-50 border border-orange-200 p-4">
+                  <span className="text-3xl">🔥</span>
+                  <div>
+                    <p className="text-lg font-bold text-gray-900">14-Day Streak</p>
+                    <p className="text-xs text-gray-500">Personal best: 23 days</p>
+                  </div>
+                </div>
+
+                {/* Heatmap mini */}
+                <div>
+                  <p className="text-xs font-medium text-gray-500 mb-2">Activity Heatmap</p>
+                  <div className="flex gap-0.5">
+                    {Array.from({ length: 28 }, (_, i) => {
+                      const intensity = [0,1,0,2,3,1,0,0,2,3,3,2,1,0,1,2,3,3,2,1,0,1,3,3,2,3,3,2][i];
+                      const colors = ["bg-gray-100", "bg-green-200", "bg-green-400", "bg-green-600"];
+                      return <div key={i} className={`w-3 h-3 rounded-sm ${colors[intensity]}`} />;
+                    })}
+                  </div>
+                </div>
+
+                {/* Badge row */}
+                <div>
+                  <p className="text-xs font-medium text-gray-500 mb-2">Recent Badges</p>
+                  <div className="flex gap-2">
+                    {[
+                      { emoji: "🏆", name: "First Solve" },
+                      { emoji: "🔥", name: "7-Day Streak" },
+                      { emoji: "⚡", name: "Speed Demon" },
+                      { emoji: "🧠", name: "DP Master" },
+                      { emoji: "🎯", name: "Perfectionist" },
+                    ].map((b) => (
+                      <div key={b.name} className="flex flex-col items-center gap-1">
+                        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 border border-gray-200 text-lg">{b.emoji}</span>
+                        <span className="text-[9px] text-gray-400">{b.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </ScrollReveal>
+
+            {/* Right: Content */}
+            <ScrollReveal delay={0.2} direction="right">
+              <p className="text-sm font-semibold uppercase tracking-widest text-saffron mb-4">Gamification</p>
+              <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight">
+                Earn XP. Level Up.
+                <br />
+                <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">Compete.</span>
+              </h2>
+              <p className="mt-6 text-lg text-gray-500 leading-relaxed">
+                Practice isn&apos;t just about solving problems -- it&apos;s about building momentum. Every solve earns XP, maintains your streak, and pushes you up the leaderboard.
+              </p>
+
+              <div className="mt-8 space-y-4">
+                {[
+                  { title: "XP & Leveling System", desc: "Earn XP for every problem solved. Level up to unlock new milestones and show your progress." },
+                  { title: "17 Achievement Badges", desc: "From First Solve to DP Master -- unlock badges that showcase your skills." },
+                  { title: "Global Leaderboard", desc: "Compete with developers worldwide. See where you rank by XP, problems solved, and streaks." },
+                  { title: "Daily Challenges", desc: "A new curated problem every day. Keep your streak alive and earn bonus XP." },
+                  { title: "Activity Heatmap", desc: "Visualize your consistency over time, GitHub-style. See your coding patterns at a glance." },
+                  { title: "Confetti Celebrations", desc: "Unlock a badge? Level up? Get a satisfying confetti burst to celebrate your wins." },
+                ].map((item) => (
+                  <div key={item.title} className="flex items-start gap-3">
+                    <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-saffron to-india-green flex items-center justify-center">
+                      <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">{item.title}</p>
+                      <p className="text-sm text-gray-500">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <Link
+                href="/auth/signup?role=candidate"
+                className="mt-10 inline-flex items-center gap-2 rounded-xl bg-india-green px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-india-green/20 transition-all hover:shadow-india-green/40 hover:scale-[1.02]"
+              >
+                Start Earning XP
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </ScrollReveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== 5. SCHOOL/UNIVERSITY PARTNERSHIP ===== */}
+      <section id="schools" className="py-24 bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
-            <p className="text-sm font-semibold uppercase tracking-widest text-blue-400 mb-4">Everything You Need</p>
-            <h2 className="text-4xl sm:text-5xl font-bold text-white">
-              One Platform, Zero Gaps
+            <p className="text-sm font-semibold uppercase tracking-widest text-pink-500 mb-4">For Educators</p>
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight">
+              Bring Coding Practice to
+              <span className="text-pink-500"> Your Classroom</span>
             </h2>
-            <p className="mt-6 text-lg text-gray-400 max-w-2xl mx-auto">
-              Code editor, video calls, AI assistance, audit engine, pipeline tracking, scheduling, code execution in 7 languages, and 4,000+ practice problems -- all built in.
+            <p className="mt-6 text-lg text-gray-500 max-w-3xl mx-auto">
+              Set up your school in minutes. Share an enrollment code with students and get a complete analytics dashboard to track class-wide progress.
             </p>
           </ScrollReveal>
 
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4" staggerDelay={0.05}>
-            {platformFeatures.map((f) => (
-              <StaggerItem key={f.title}>
-                <div
-                  className={`group rounded-xl border ${f.border} bg-gradient-to-b ${f.gradient} p-6 transition-all hover:scale-[1.03] hover:-translate-y-1 h-full`}
-                >
-                  <div className={`mb-4 ${f.iconColor}`}>
-                    {f.icon}
-                  </div>
-                  <h3 className="text-base font-semibold text-white mb-2">{f.title}</h3>
-                  <p className="text-sm text-gray-400 leading-relaxed">{f.description}</p>
+          {/* 4-step flow */}
+          <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20" staggerDelay={0.1}>
+            {[
+              { step: "1", title: "Sign Up as School", desc: "Create a school admin account and set up your institution profile.", icon: "🏫" },
+              { step: "2", title: "Share Enrollment Code", desc: "Get a unique enrollment code. Students enter it during signup to join your school.", icon: "🔗" },
+              { step: "3", title: "Assign Problems", desc: "Create assignments with specific problems, difficulty levels, and due dates.", icon: "📋" },
+              { step: "4", title: "Monitor Analytics", desc: "Track XP, streaks, problems solved, and time spent across your entire class.", icon: "📊" },
+            ].map((s) => (
+              <StaggerItem key={s.step}>
+                <div className="rounded-2xl border border-pink-200 bg-white p-6 text-center transition-all hover:shadow-lg hover:-translate-y-1 h-full">
+                  <span className="text-3xl mb-3 block">{s.icon}</span>
+                  <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-pink-500 text-white text-sm font-bold mb-3">{s.step}</div>
+                  <h3 className="text-base font-semibold text-gray-900 mb-2">{s.title}</h3>
+                  <p className="text-sm text-gray-500">{s.desc}</p>
                 </div>
               </StaggerItem>
             ))}
           </StaggerContainer>
+
+          {/* Feature deep dive */}
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left: Dashboard mockup */}
+            <ScrollReveal>
+              <div className="rounded-2xl border border-gray-200 bg-white shadow-lg overflow-hidden">
+                {/* Header */}
+                <div className="border-b border-gray-100 bg-gray-50 px-6 py-4">
+                  <div className="flex items-center gap-3">
+                    <span className="inline-flex items-center rounded-full bg-pink-50 border border-pink-200 px-2.5 py-0.5 text-xs font-medium text-pink-600">School Admin</span>
+                    <span className="text-sm font-medium text-gray-900">Stanford CS Department</span>
+                  </div>
+                </div>
+                {/* Stats grid */}
+                <div className="p-6 grid grid-cols-2 gap-4">
+                  <div className="rounded-xl bg-gray-50 border border-gray-100 p-4">
+                    <p className="text-[10px] text-gray-400 uppercase font-medium">Total Students</p>
+                    <p className="text-2xl font-bold text-gray-900 mt-1">142</p>
+                  </div>
+                  <div className="rounded-xl bg-gray-50 border border-gray-100 p-4">
+                    <p className="text-[10px] text-gray-400 uppercase font-medium">Active This Week</p>
+                    <p className="text-2xl font-bold text-green-500 mt-1">89</p>
+                  </div>
+                  <div className="rounded-xl bg-gray-50 border border-gray-100 p-4">
+                    <p className="text-[10px] text-gray-400 uppercase font-medium">Avg Problems Solved</p>
+                    <p className="text-2xl font-bold text-saffron mt-1">37</p>
+                  </div>
+                  <div className="rounded-xl bg-gray-50 border border-gray-100 p-4">
+                    <p className="text-[10px] text-gray-400 uppercase font-medium">Avg Level</p>
+                    <p className="text-2xl font-bold text-india-green mt-1">8.4</p>
+                  </div>
+                </div>
+                {/* Student table */}
+                <div className="px-6 pb-6">
+                  <table className="w-full text-[11px]">
+                    <thead>
+                      <tr className="border-b border-gray-100">
+                        <th className="text-left py-2 text-gray-400 font-medium">Student</th>
+                        <th className="text-left py-2 text-gray-400 font-medium">Level</th>
+                        <th className="text-left py-2 text-gray-400 font-medium">XP</th>
+                        <th className="text-left py-2 text-gray-400 font-medium">Streak</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50">
+                      {[
+                        { name: "Alex K.", level: 14, xp: "3,200", streak: 21 },
+                        { name: "Sara M.", level: 12, xp: "2,800", streak: 14 },
+                        { name: "Jay P.", level: 10, xp: "2,100", streak: 7 },
+                      ].map((s) => (
+                        <tr key={s.name}>
+                          <td className="py-2 text-gray-700 font-medium">{s.name}</td>
+                          <td className="py-2"><span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-saffron/10 text-[9px] font-bold text-saffron">{s.level}</span></td>
+                          <td className="py-2 text-gray-500">{s.xp}</td>
+                          <td className="py-2 text-gray-500">🔥 {s.streak}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </ScrollReveal>
+
+            {/* Right: Feature bullets */}
+            <ScrollReveal delay={0.2} direction="right">
+              <div className="space-y-4">
+                {[
+                  { title: "One Enrollment Code", desc: "Share a single code with your entire class. Students enter it at signup and are automatically linked to your school." },
+                  { title: "Custom Assignments", desc: "Pick specific problems, set difficulty levels and due dates. Track completion rates and scores." },
+                  { title: "Class-Wide Analytics", desc: "See aggregated stats: total problems solved, average XP, time spent, and activity trends across all students." },
+                  { title: "Individual Student Tracking", desc: "Drill down into any student to see their XP, level, streak, problems solved, and time spent." },
+                  { title: "XP & Badge Leaderboard", desc: "Foster healthy competition with a school-specific leaderboard showing top performers." },
+                  { title: "Affordable Pricing", desc: "Just $5 per student per month. No setup fees, no contracts. Cancel anytime." },
+                ].map((item) => (
+                  <div key={item.title} className="flex items-start gap-3">
+                    <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-pink-500 flex items-center justify-center">
+                      <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">{item.title}</p>
+                      <p className="text-sm text-gray-500">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <Link
+                href="/auth/signup?role=school"
+                className="mt-10 inline-flex items-center gap-2 rounded-xl bg-pink-500 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-pink-500/20 transition-all hover:shadow-pink-500/40 hover:scale-[1.02]"
+              >
+                Set Up Your School
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </ScrollReveal>
+          </div>
         </div>
       </section>
 
-      {/* ===== 4. AI LEVELS with 3D Brain ===== */}
-      <section className="py-32 bg-gray-950">
+      {/* ===== 6. AI LEVELS ===== */}
+      <section className="py-24 bg-gray-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
-            <p className="text-sm font-semibold uppercase tracking-widest text-purple-400 mb-4">The Core Differentiator</p>
-            <h2 className="text-4xl sm:text-5xl font-bold text-white">
+            <p className="text-sm font-semibold uppercase tracking-widest text-saffron mb-4">The Core Differentiator</p>
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900">
               5 Levels of AI Control
             </h2>
-            <p className="mt-6 text-lg text-gray-400 max-w-3xl mx-auto">
+            <p className="mt-6 text-lg text-gray-500 max-w-3xl mx-auto">
               You decide exactly how much help candidates get. Every level is logged, audited, and scored differently.
               Interviewers can even adjust levels mid-session.
             </p>
           </ScrollReveal>
 
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* 3D AI Brain */}
-            <ScrollReveal direction="left" className="h-[400px] hidden lg:block">
-              <Suspense fallback={<Scene3DFallback />}>
-                <AIBrain />
-              </Suspense>
+            {/* AI Level Selector Mockup */}
+            <ScrollReveal direction="left">
+              <div className="rounded-2xl border border-gray-200 bg-white shadow-lg p-6">
+                <div className="flex items-center gap-2 mb-6">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-saffron to-india-green flex items-center justify-center">
+                    <span className="text-xs font-bold text-white">AI</span>
+                  </div>
+                  <span className="text-sm font-semibold text-gray-900">AI Level Controller</span>
+                </div>
+                <div className="space-y-2">
+                  {aiLevels.map((ai, i) => (
+                    <div
+                      key={ai.level}
+                      className={`flex items-center gap-3 rounded-xl border p-3 transition-all ${
+                        i === 2 ? "border-blue-400 bg-blue-50 ring-2 ring-blue-200" : "border-gray-200 bg-white"
+                      }`}
+                    >
+                      <span className={`flex-shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-lg text-xs font-bold ${ai.badge}`}>
+                        {ai.level}
+                      </span>
+                      <div className="flex-1">
+                        <p className={`text-sm font-semibold ${i === 2 ? "text-blue-700" : "text-gray-900"}`}>{ai.label}</p>
+                        <p className="text-xs text-gray-500">{ai.description}</p>
+                      </div>
+                      {i === 2 && (
+                        <span className="text-xs font-medium text-blue-600 bg-blue-100 px-2 py-0.5 rounded-full">Active</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
             </ScrollReveal>
 
             {/* Level cards */}
@@ -768,14 +1068,14 @@ export default function Home() {
               {aiLevels.map((ai) => (
                 <StaggerItem key={ai.level}>
                   <div
-                    className={`group relative flex items-center gap-4 rounded-xl border border-gray-800 bg-gray-900 p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg ${ai.glow}`}
+                    className={`group relative flex items-center gap-4 rounded-xl border ${ai.color} p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-md`}
                   >
-                    <div className={`flex-shrink-0 inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${ai.color} shadow-lg`}>
-                      <span className="text-sm font-bold text-white">{ai.level}</span>
+                    <div className={`flex-shrink-0 inline-flex items-center justify-center w-12 h-12 rounded-xl ${ai.badge} shadow-sm`}>
+                      <span className="text-sm font-bold">{ai.level}</span>
                     </div>
                     <div>
-                      <h3 className="text-base font-semibold text-white">{ai.label}</h3>
-                      <p className="text-sm text-gray-400">{ai.description}</p>
+                      <h3 className="text-base font-semibold text-gray-900">{ai.label}</h3>
+                      <p className="text-sm text-gray-500">{ai.description}</p>
                     </div>
                   </div>
                 </StaggerItem>
@@ -785,24 +1085,50 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 5. PRACTICE MODULE (NEW) ===== */}
-      <section className="relative py-32 bg-gray-900/50 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-pink-900/5 to-transparent" />
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* ===== 7. FEATURES GRID ===== */}
+      <section id="features" className="py-24 bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ScrollReveal className="text-center mb-16">
+            <p className="text-sm font-semibold uppercase tracking-widest text-india-green mb-4">Everything You Need</p>
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900">
+              One Platform, Zero Gaps
+            </h2>
+            <p className="mt-6 text-lg text-gray-500 max-w-2xl mx-auto">
+              Code editor, video calls, AI assistance, audit engine, pipeline tracking, scheduling, code execution in 7 languages, and 4,000+ practice problems -- all built in.
+            </p>
+          </ScrollReveal>
+
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4" staggerDelay={0.05}>
+            {platformFeatures.map((f) => (
+              <StaggerItem key={f.title}>
+                <div
+                  className="group rounded-xl border border-gray-200 bg-white p-6 transition-all hover:shadow-lg hover:scale-[1.03] hover:-translate-y-1 h-full"
+                >
+                  <div className={`mb-4 w-12 h-12 rounded-lg ${f.iconBg} flex items-center justify-center ${f.iconColor}`}>
+                    {f.icon}
+                  </div>
+                  <h3 className="text-base font-semibold text-gray-900 mb-2">{f.title}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed">{f.description}</p>
+                </div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+        </div>
+      </section>
+
+      {/* ===== 8. FOR CANDIDATES ===== */}
+      <section className="py-24 bg-gray-50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left: Content */}
             <ScrollReveal>
-              <p className="text-sm font-semibold uppercase tracking-widest text-pink-400 mb-4">Practice Module</p>
-              <h2 className="text-4xl sm:text-5xl font-bold text-white leading-tight">
-                4,000+ Problems.
-                <br />
-                <span className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
-                  7 Languages. 15 Patterns.
-                </span>
+              <p className="text-sm font-semibold uppercase tracking-widest text-india-green mb-4">For Candidates</p>
+              <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight">
+                Practice, Prepare,
+                <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent"> Perform</span>
               </h2>
-              <p className="mt-6 text-lg text-gray-400 leading-relaxed">
-                Master technical interviews with LeetCode-style code execution. Run and judge code in JavaScript,
-                TypeScript, Python, Java, C++, Go, and Rust with AI coaching, editorial walkthroughs, and structured study plans.
+              <p className="mt-6 text-lg text-gray-500 leading-relaxed">
+                Get access to 4,000+ practice problems, 15 study patterns, code execution in 7 languages, AI coaching,
+                and the exact same environment you will use in your real interview.
               </p>
 
               {/* FAANG badges */}
@@ -814,82 +1140,23 @@ export default function Home() {
                 ))}
               </div>
 
-              {/* Feature bullets */}
               <div className="mt-8 space-y-3">
                 {[
-                  { title: "AI Enrichment", desc: "Every problem enhanced with detailed hints, approaches, and complexity analysis" },
-                  { title: "Code Execution", desc: "Run and judge code in JavaScript, TypeScript, Python, Java, C++, Go, and Rust" },
+                  { title: "4,000+ Problems", desc: "Comprehensive problem bank covering all difficulty levels and topics" },
+                  { title: "7-Language Execution", desc: "Run and test code in JS, TS, Python, Java, C++, Go, and Rust" },
                   { title: "15 Study Patterns", desc: "Two Pointers, Sliding Window, BFS/DFS, Dynamic Programming, and more" },
-                  { title: "AI Coaching & Editorial", desc: "Get AI-powered coaching feedback, editorials, and weakness profiling after each attempt" },
+                  { title: "AI Coaching & Editorial", desc: "Get AI-powered coaching feedback, editorials, and weakness profiling" },
+                  { title: "XP, Badges & Leaderboard", desc: "Earn XP, unlock 17 achievement badges, and compete globally" },
                 ].map((item) => (
                   <div key={item.title} className="flex items-start gap-3">
-                    <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center">
+                    <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-saffron to-india-green flex items-center justify-center">
                       <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                       </svg>
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-white">{item.title}</p>
-                      <p className="text-sm text-gray-400">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <Link
-                href="/practice"
-                className="mt-10 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-pink-600 to-purple-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-pink-600/20 transition-all hover:shadow-pink-600/40 hover:scale-[1.02]"
-              >
-                Start Practicing Free
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-            </ScrollReveal>
-
-            {/* Right: 3D Practice Visualization */}
-            <ScrollReveal delay={0.2} direction="right" className="h-[450px] hidden lg:block">
-              <Suspense fallback={<Scene3DFallback />}>
-                <PracticeViz />
-              </Suspense>
-            </ScrollReveal>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== 6. FOR CANDIDATES with 3D Globe ===== */}
-      <section className="relative py-32 bg-gray-950 overflow-hidden">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-3xl" />
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <ScrollReveal>
-              <p className="text-sm font-semibold uppercase tracking-widest text-cyan-400 mb-4">For Candidates</p>
-              <h2 className="text-4xl sm:text-5xl font-bold text-white leading-tight">
-                Practice, Prepare,
-                <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent"> Perform</span>
-              </h2>
-              <p className="mt-6 text-lg text-gray-400 leading-relaxed">
-                Get access to 4,000+ practice problems, 15 study patterns, code execution in 7 languages, AI coaching,
-                and the exact same environment you will use in your real interview. Build confidence before the big day.
-              </p>
-
-              <div className="mt-8 space-y-4">
-                {[
-                  { title: "Pattern-Based Learning", desc: "Master 15 proven patterns used in FAANG interviews" },
-                  { title: "FAANG Problem Banks", desc: "Practice with problems from Google, Amazon, Meta, Apple, and Netflix" },
-                  { title: "7-Language Execution", desc: "Run and test code in JS, TS, Python, Java, C++, Go, and Rust with instant feedback" },
-                  { title: "Real Interview Environment", desc: "Same Monaco editor, same AI levels, same experience" },
-                  { title: "AI Coaching & Analytics", desc: "Get AI coaching, weakness profiling, editorial walkthroughs, and progress analytics" },
-                ].map((item) => (
-                  <div key={item.title} className="flex items-start gap-3">
-                    <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center">
-                      <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-white">{item.title}</p>
-                      <p className="text-sm text-gray-400">{item.desc}</p>
+                      <p className="text-sm font-semibold text-gray-900">{item.title}</p>
+                      <p className="text-sm text-gray-500">{item.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -897,7 +1164,7 @@ export default function Home() {
 
               <Link
                 href="/auth/signup?role=candidate"
-                className="mt-10 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-cyan-600/20 transition-all hover:shadow-cyan-600/40 hover:scale-[1.02]"
+                className="mt-10 inline-flex items-center gap-2 rounded-xl bg-india-green px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-india-green/20 transition-all hover:shadow-india-green/40 hover:scale-[1.02]"
               >
                 Start Practicing Free
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -906,57 +1173,99 @@ export default function Home() {
               </Link>
             </ScrollReveal>
 
-            {/* 3D Globe */}
-            <ScrollReveal delay={0.2} direction="right" className="h-[450px] hidden lg:block">
-              <Suspense fallback={<Scene3DFallback />}>
-                <Globe />
-              </Suspense>
+            {/* Right: Practice page mockup */}
+            <ScrollReveal delay={0.2} direction="right">
+              <div className="rounded-2xl border border-gray-200 bg-white shadow-lg overflow-hidden">
+                <div className="border-b border-gray-100 bg-gray-50 px-6 py-3 flex items-center gap-2">
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-red-400" />
+                    <div className="w-3 h-3 rounded-full bg-yellow-400" />
+                    <div className="w-3 h-3 rounded-full bg-green-400" />
+                  </div>
+                  <span className="text-xs text-gray-400 font-mono ml-2">intervue.ai/practice</span>
+                </div>
+                <div className="p-6 space-y-4">
+                  {/* Problem header */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-xs bg-yellow-50 text-yellow-700 border border-yellow-200 px-2 py-0.5 rounded font-medium">Medium</span>
+                      <h4 className="text-sm font-semibold text-gray-900 mt-1">Two Sum</h4>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs text-gray-400">+25 XP</p>
+                      <p className="text-xs text-india-green font-medium">Arrays</p>
+                    </div>
+                  </div>
+                  {/* Mini editor */}
+                  <div className="rounded-lg bg-gray-50 border border-gray-200 p-3 font-mono text-[10px] text-gray-600 space-y-0.5">
+                    <p><span className="text-purple-600">function</span> <span className="text-blue-600">twoSum</span>(nums, target) &#123;</p>
+                    <p className="pl-3"><span className="text-purple-600">const</span> map = <span className="text-purple-600">new</span> Map();</p>
+                    <p className="pl-3 text-gray-400">{"// Your code here..."}</p>
+                    <p>&#125;</p>
+                  </div>
+                  {/* Test results */}
+                  <div className="space-y-1.5">
+                    {[
+                      { label: "Test 1: [2,7,11,15], target=9", pass: true },
+                      { label: "Test 2: [3,2,4], target=6", pass: true },
+                      { label: "Test 3: [3,3], target=6", pass: false },
+                    ].map((t) => (
+                      <div key={t.label} className="flex items-center gap-2 text-[10px]">
+                        <span className={`w-4 h-4 rounded-full flex items-center justify-center ${t.pass ? "bg-green-50 text-green-500" : "bg-red-50 text-red-500"}`}>
+                          {t.pass ? "✓" : "✗"}
+                        </span>
+                        <span className="text-gray-500">{t.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </ScrollReveal>
           </div>
         </div>
       </section>
 
-      {/* ===== 7. COMPARISON TABLE ===== */}
-      <section className="py-32 bg-gray-900/50">
+      {/* ===== 9. COMPARISON TABLE ===== */}
+      <section className="py-24 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
-            <p className="text-sm font-semibold uppercase tracking-widest text-green-400 mb-4">The Honest Comparison</p>
-            <h2 className="text-4xl sm:text-5xl font-bold text-white">
+            <p className="text-sm font-semibold uppercase tracking-widest text-india-green mb-4">The Honest Comparison</p>
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900">
               Why Intervue.AI?
             </h2>
-            <p className="mt-6 text-lg text-gray-400 max-w-2xl mx-auto">
+            <p className="mt-6 text-lg text-gray-500 max-w-2xl mx-auto">
               The only platform built from scratch for the AI era of technical hiring.
             </p>
           </ScrollReveal>
 
           <ScrollReveal>
-            <div className="overflow-x-auto rounded-2xl border border-gray-800 shadow-2xl shadow-purple-900/10">
+            <div className="overflow-x-auto rounded-2xl border border-gray-200 shadow-lg">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-800 bg-gray-900">
-                    <th className="px-6 py-5 text-left text-sm font-semibold text-gray-300">Feature</th>
+                  <tr className="border-b border-gray-200 bg-gray-50">
+                    <th className="px-6 py-5 text-left text-sm font-semibold text-gray-700">Feature</th>
                     <th className="px-6 py-5 text-center">
-                      <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent text-sm font-bold">Intervue.AI</span>
+                      <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent text-sm font-bold">Intervue.AI</span>
                     </th>
-                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-500">HackerRank</th>
-                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-500">CoderPad</th>
-                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-500">Karat</th>
-                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-500">LeetCode</th>
+                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-400">HackerRank</th>
+                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-400">CoderPad</th>
+                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-400">Karat</th>
+                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-400">LeetCode</th>
                   </tr>
                 </thead>
                 <tbody>
                   {comparisonFeatures.map((row, i) => (
-                    <tr key={row.feature} className={`border-b border-gray-800/50 ${i % 2 === 0 ? "bg-gray-950" : "bg-gray-900/30"}`}>
-                      <td className="px-6 py-4 text-sm text-gray-300 font-medium">{row.feature}</td>
+                    <tr key={row.feature} className={`border-b border-gray-100 ${i % 2 === 0 ? "bg-white" : "bg-gray-50/50"}`}>
+                      <td className="px-6 py-4 text-sm text-gray-700 font-medium">{row.feature}</td>
                       <td className="px-6 py-4 text-center">
                         {row.intervue ? (
-                          <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-500/20">
-                            <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-50">
+                            <svg className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                             </svg>
                           </span>
                         ) : (
-                          <span className="text-gray-600">&#10007;</span>
+                          <span className="text-gray-300">&#10007;</span>
                         )}
                       </td>
                       {[row.hackerrank, row.coderpad, row.karat, row.leetcode].map((val, j) => (
@@ -964,7 +1273,7 @@ export default function Home() {
                           {val ? (
                             <span className="text-gray-400">&#10003;</span>
                           ) : (
-                            <span className="text-gray-700">&#10007;</span>
+                            <span className="text-gray-200">&#10007;</span>
                           )}
                         </td>
                       ))}
@@ -977,49 +1286,51 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 8. PRICING ===== */}
-      <section id="pricing" className="py-32 bg-gray-950">
+      {/* ===== 10. PRICING ===== */}
+      <section id="pricing" className="py-24 bg-gray-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
-            <p className="text-sm font-semibold uppercase tracking-widest text-amber-400 mb-4">Pricing</p>
-            <h2 className="text-4xl sm:text-5xl font-bold text-white">
+            <p className="text-sm font-semibold uppercase tracking-widest text-saffron mb-4">Pricing</p>
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900">
               Simple, Transparent Pricing
             </h2>
-            <p className="mt-6 text-lg text-gray-400 max-w-2xl mx-auto">
+            <p className="mt-6 text-lg text-gray-500 max-w-2xl mx-auto">
               Start free. Scale as you grow. No hidden fees.
             </p>
           </ScrollReveal>
 
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" staggerDelay={0.1}>
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5" staggerDelay={0.1}>
             {pricingPlans.map((plan) => (
               <StaggerItem key={plan.name}>
                 <div
-                  className={`relative rounded-2xl border p-8 transition-all duration-300 hover:scale-105 hover:-translate-y-1 h-full ${
+                  className={`relative rounded-2xl border p-7 transition-all duration-300 hover:scale-105 hover:-translate-y-1 h-full ${
                     plan.highlighted
-                      ? "border-purple-500 bg-gradient-to-b from-purple-900/30 to-gray-900 shadow-2xl shadow-purple-500/10"
-                      : "border-gray-800 bg-gray-900 hover:border-gray-700"
+                      ? "border-saffron bg-white shadow-xl shadow-saffron/10"
+                      : plan.accent === "pink"
+                        ? "border-pink-200 bg-white hover:border-pink-300"
+                        : "border-gray-200 bg-white hover:border-gray-300"
                   }`}
                 >
                   {plan.highlighted && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                      <span className="rounded-full bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-1 text-xs font-semibold text-white shadow-lg">
+                      <span className="rounded-full bg-saffron px-4 py-1 text-xs font-semibold text-white shadow-lg">
                         Most Popular
                       </span>
                     </div>
                   )}
 
-                  <h3 className="text-lg font-semibold text-white">{plan.name}</h3>
-                  <p className="mt-1 text-sm text-gray-400">{plan.description}</p>
+                  <h3 className="text-lg font-semibold text-gray-900">{plan.name}</h3>
+                  <p className="mt-1 text-sm text-gray-500">{plan.description}</p>
 
-                  <div className="mt-6 flex items-baseline">
-                    <span className="text-4xl font-bold text-white">{plan.price}</span>
+                  <div className="mt-5 flex items-baseline">
+                    <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
                     <span className="ml-1 text-gray-400">{plan.period}</span>
                   </div>
 
-                  <ul className="mt-8 space-y-3">
+                  <ul className="mt-6 space-y-2.5">
                     {plan.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-3 text-sm text-gray-300">
-                        <svg className="h-4 w-4 shrink-0 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <li key={feature} className="flex items-center gap-2.5 text-sm text-gray-600">
+                        <svg className={`h-4 w-4 shrink-0 ${plan.accent === "pink" ? "text-pink-500" : "text-saffron"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
                         {feature}
@@ -1028,11 +1339,13 @@ export default function Home() {
                   </ul>
 
                   <Link
-                    href="/auth/signup?role=company"
-                    className={`mt-8 block w-full rounded-xl py-3 text-center text-sm font-semibold transition-all ${
+                    href={plan.href}
+                    className={`mt-7 block w-full rounded-xl py-3 text-center text-sm font-semibold transition-all ${
                       plan.highlighted
-                        ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-500 hover:to-blue-500 shadow-lg shadow-purple-600/20"
-                        : "border border-gray-700 bg-gray-800 text-gray-200 hover:bg-gray-700"
+                        ? "bg-saffron text-white hover:bg-saffron/90 shadow-lg shadow-saffron/20"
+                        : plan.accent === "pink"
+                          ? "border border-pink-300 bg-pink-50 text-pink-600 hover:bg-pink-100"
+                          : "border border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100"
                     }`}
                   >
                     {plan.cta}
@@ -1044,79 +1357,94 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 9. CTA BANNER with Particles ===== */}
-      <section className="relative py-32 bg-gray-900/50 overflow-hidden">
-        {/* Fluid simulation background */}
-        <Suspense fallback={null}>
-          <FluidSimulation />
-        </Suspense>
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-900/30 via-transparent to-blue-900/30" />
-
-        <ScrollReveal className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
-            Ready to Transform
-            <br />
-            <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
-              Your Hiring?
-            </span>
-          </h2>
-          <p className="mt-8 text-xl text-gray-400 max-w-2xl mx-auto">
-            Join the companies using AI-controlled interviews to find the best engineers -- faster and more fairly.
-          </p>
-          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/auth/signup?role=company"
-              className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 px-10 py-4 text-lg font-semibold text-white shadow-2xl shadow-purple-600/25 transition-all hover:shadow-purple-600/40 hover:scale-[1.02]"
-            >
-              Get Started Free
-            </Link>
-            <Link
-              href="/auth/signup?role=candidate"
-              className="inline-flex items-center justify-center rounded-xl border border-gray-600 bg-gray-900/80 backdrop-blur-sm px-10 py-4 text-lg font-semibold text-gray-200 transition-all hover:bg-gray-800 hover:border-gray-500 hover:scale-[1.02]"
-            >
-              I&apos;m a Candidate
-            </Link>
-          </div>
-        </ScrollReveal>
+      {/* ===== 11. CTA BANNER ===== */}
+      <section className="py-24 bg-white">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <ScrollReveal>
+            <div className="rounded-3xl bg-gradient-to-r from-saffron/10 to-india-green/10 border border-gray-200 p-12 sm:p-16 text-center">
+              <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight">
+                Ready to Transform
+                <br />
+                <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">
+                  Your Hiring?
+                </span>
+              </h2>
+              <p className="mt-6 text-lg text-gray-500 max-w-2xl mx-auto">
+                Join the companies using AI-controlled interviews to find the best engineers -- faster and more fairly.
+              </p>
+              <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+                <Link
+                  href="/auth/signup?role=company"
+                  className="inline-flex items-center justify-center rounded-xl bg-saffron px-10 py-4 text-lg font-semibold text-white shadow-lg shadow-saffron/20 transition-all hover:shadow-saffron/40 hover:scale-[1.02]"
+                >
+                  Start Hiring
+                </Link>
+                <Link
+                  href="/auth/signup?role=candidate"
+                  className="inline-flex items-center justify-center rounded-xl bg-india-green px-10 py-4 text-lg font-semibold text-white shadow-lg shadow-india-green/20 transition-all hover:shadow-india-green/40 hover:scale-[1.02]"
+                >
+                  I&apos;m a Candidate
+                </Link>
+                <Link
+                  href="/auth/signup?role=school"
+                  className="inline-flex items-center justify-center rounded-xl bg-pink-500 px-10 py-4 text-lg font-semibold text-white shadow-lg shadow-pink-500/20 transition-all hover:shadow-pink-500/40 hover:scale-[1.02]"
+                >
+                  For Schools
+                </Link>
+              </div>
+            </div>
+          </ScrollReveal>
+        </div>
       </section>
 
-      {/* ===== 10. FOOTER ===== */}
-      <footer className="border-t border-gray-800 bg-gray-950 py-16">
+      {/* ===== 12. FOOTER ===== */}
+      <footer className="border-t border-gray-200 bg-gray-50 py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
             <div>
-              <span className="text-2xl font-bold tracking-tight text-white">
-                Intervue<span className="text-blue-400">.AI</span>
+              <span className="text-2xl font-bold tracking-tight text-gray-900">
+                Intervue<span className="text-india-green">.AI</span>
               </span>
               <p className="mt-3 text-sm text-gray-500 leading-relaxed">
                 The AI-controlled interview platform for modern engineering teams.
               </p>
             </div>
             <div>
-              <h4 className="text-sm font-semibold text-white mb-4">For Companies</h4>
+              <h4 className="text-sm font-semibold text-gray-900 mb-4">For Companies</h4>
               <div className="space-y-2.5">
-                <Link href="/auth/signup?role=company" className="block text-sm text-gray-400 hover:text-white transition-colors">Sign Up</Link>
-                <Link href="/#pricing" className="block text-sm text-gray-400 hover:text-white transition-colors">Pricing</Link>
-                <Link href="/#features" className="block text-sm text-gray-400 hover:text-white transition-colors">Features</Link>
+                <Link href="/auth/signup?role=company" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">Sign Up</Link>
+                <Link href="/#pricing" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">Pricing</Link>
+                <Link href="/#features" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">Features</Link>
               </div>
             </div>
             <div>
-              <h4 className="text-sm font-semibold text-white mb-4">For Candidates</h4>
+              <h4 className="text-sm font-semibold text-gray-900 mb-4">For Candidates</h4>
               <div className="space-y-2.5">
-                <Link href="/auth/signup?role=candidate" className="block text-sm text-gray-400 hover:text-white transition-colors">Sign Up</Link>
-                <Link href="/practice" className="block text-sm text-gray-400 hover:text-white transition-colors">Practice Mode</Link>
-                <Link href="/practice?tab=patterns" className="block text-sm text-gray-400 hover:text-white transition-colors">Study Plans</Link>
+                <Link href="/auth/signup?role=candidate" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">Sign Up</Link>
+                <Link href="/practice" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">Practice Mode</Link>
+                <Link href="/practice?tab=patterns" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">Study Plans</Link>
+                <Link href="/leaderboard" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">Leaderboard</Link>
+                <Link href="/candidate/badges" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">Badges</Link>
               </div>
             </div>
             <div>
-              <h4 className="text-sm font-semibold text-white mb-4">Platform</h4>
+              <h4 className="text-sm font-semibold text-gray-900 mb-4">For Schools</h4>
               <div className="space-y-2.5">
-                <Link href="/auth/signin" className="block text-sm text-gray-400 hover:text-white transition-colors">Sign In</Link>
+                <Link href="/auth/signup?role=school" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">Sign Up</Link>
+                <Link href="/school/enrollment" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">Enrollment</Link>
+                <Link href="/school/assignments" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">Assignments</Link>
+                <Link href="/school/analytics" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">Analytics</Link>
+              </div>
+            </div>
+            <div>
+              <h4 className="text-sm font-semibold text-gray-900 mb-4">Platform</h4>
+              <div className="space-y-2.5">
+                <Link href="/auth/signin" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">Sign In</Link>
               </div>
             </div>
           </div>
-          <div className="border-t border-gray-800 pt-8 flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <p className="text-sm text-gray-500">
+          <div className="border-t border-gray-200 pt-8 flex flex-col items-center justify-between gap-4 sm:flex-row">
+            <p className="text-sm text-gray-400">
               &copy; {new Date().getFullYear()} Intervue.AI. All rights reserved.
             </p>
           </div>
