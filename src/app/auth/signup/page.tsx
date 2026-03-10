@@ -5,7 +5,7 @@ import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-type Role = "COMPANY_ADMIN" | "INTERVIEWER" | "CANDIDATE";
+type Role = "COMPANY_ADMIN" | "INTERVIEWER" | "CANDIDATE" | "SCHOOL_ADMIN";
 
 const roleOptions: { value: Role; label: string; description: string }[] = [
   {
@@ -22,6 +22,11 @@ const roleOptions: { value: Role; label: string; description: string }[] = [
     value: "CANDIDATE",
     label: "Candidate",
     description: "Take coding interviews with AI-assisted problem solving",
+  },
+  {
+    value: "SCHOOL_ADMIN",
+    label: "School / University",
+    description: "Manage student accounts with education pricing",
   },
 ];
 
@@ -87,6 +92,7 @@ function SignUpForm() {
           password,
           role,
           companyName: role === "COMPANY_ADMIN" ? companyName : undefined,
+          schoolName: role === "SCHOOL_ADMIN" ? companyName : undefined,
         }),
       });
 
@@ -231,13 +237,13 @@ function SignUpForm() {
               </div>
             </div>
 
-            {role === "COMPANY_ADMIN" && (
+            {(role === "COMPANY_ADMIN" || role === "SCHOOL_ADMIN") && (
               <div>
                 <label
                   htmlFor="companyName"
                   className="block text-sm font-medium text-gray-700 mb-1.5"
                 >
-                  Company Name
+                  {role === "SCHOOL_ADMIN" ? "Institution Name" : "Company Name"}
                 </label>
                 <input
                   id="companyName"
@@ -246,7 +252,7 @@ function SignUpForm() {
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
                   className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors"
-                  placeholder="Acme Inc."
+                  placeholder={role === "SCHOOL_ADMIN" ? "Stanford University" : "Acme Inc."}
                 />
               </div>
             )}

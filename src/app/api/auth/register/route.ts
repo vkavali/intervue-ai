@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, email: rawEmail, password, role, companyName } = body;
+    const { name, email: rawEmail, password, role, companyName, schoolName } = body;
     const email = rawEmail?.toLowerCase().trim();
 
     // Validate required fields
@@ -17,10 +17,10 @@ export async function POST(req: NextRequest) {
     }
 
     // Validate role
-    const validRoles = ["COMPANY_ADMIN", "INTERVIEWER", "CANDIDATE"];
+    const validRoles = ["COMPANY_ADMIN", "INTERVIEWER", "CANDIDATE", "SCHOOL_ADMIN"];
     if (!validRoles.includes(role)) {
       return NextResponse.json(
-        { error: "Invalid role. Must be COMPANY_ADMIN, INTERVIEWER, or CANDIDATE" },
+        { error: "Invalid role. Must be COMPANY_ADMIN, INTERVIEWER, CANDIDATE, or SCHOOL_ADMIN" },
         { status: 400 }
       );
     }
@@ -37,6 +37,14 @@ export async function POST(req: NextRequest) {
     if (role === "COMPANY_ADMIN" && !companyName) {
       return NextResponse.json(
         { error: "Company name is required for Company Admin role" },
+        { status: 400 }
+      );
+    }
+
+    // Check if SCHOOL_ADMIN has provided a school name
+    if (role === "SCHOOL_ADMIN" && !schoolName) {
+      return NextResponse.json(
+        { error: "Institution name is required for School Admin role" },
         { status: 400 }
       );
     }
@@ -83,6 +91,41 @@ export async function POST(req: NextRequest) {
             email: user.email,
             role: user.role,
             companyId: user.companyId,
+          },
+        },
+        { status: 201 }
+      );
+    }
+
+    // If SCHOOL_ADMIN, create school and link admin
+    if (role === "SCHOOL_ADMIN") {
+      // Generate 6-char enrollment code
+      const enrollmentCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+
+      const user = await prisma.user.create({
+        data: {
+          name,
+          email,
+          password: hashedPassword,
+          role,
+        },
+      });
+
+      await prisma.school.create({
+        data: {
+          name: schoolName,
+          enrollmentCode,
+          adminId: user.id,
+        },
+      });
+
+      return NextResponse.json(
+        {
+          user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
           },
         },
         { status: 201 }

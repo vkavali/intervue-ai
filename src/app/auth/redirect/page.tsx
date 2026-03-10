@@ -16,6 +16,8 @@ export default async function AuthRedirectPage() {
       redirect("/dashboard");
     case "COMPANY_ADMIN":
       redirect("/dashboard");
+    case "SCHOOL_ADMIN":
+      redirect("/school");
     default:
       redirect("/dashboard");
   }

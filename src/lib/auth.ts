@@ -7,6 +7,7 @@ export enum UserRole {
   COMPANY_ADMIN = 'COMPANY_ADMIN',
   INTERVIEWER = 'INTERVIEWER',
   CANDIDATE = 'CANDIDATE',
+  SCHOOL_ADMIN = 'SCHOOL_ADMIN',
 }
 
 declare module 'next-auth' {

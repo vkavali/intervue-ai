@@ -1,7 +1,10 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { xpProgressInLevel, getLevel } from "@/lib/gamification";
 import Link from "next/link";
+import SidebarGamification from "./SidebarGamification";
 
 const sidebarLinks = [
   {
@@ -32,6 +35,24 @@ const sidebarLinks = [
     ),
   },
   {
+    href: "/candidate/badges",
+    label: "Badges",
+    icon: (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+      </svg>
+    ),
+  },
+  {
+    href: "/candidate/leaderboard",
+    label: "Leaderboard",
+    icon: (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+      </svg>
+    ),
+  },
+  {
     href: "/candidate/profile",
     label: "Profile",
     icon: (
@@ -58,11 +79,37 @@ export default async function CandidateLayout({
     redirect("/dashboard");
   }
 
+  // Fetch gamification data for sidebar
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email! },
+    select: { xp: true, level: true, currentStreak: true, longestStreak: true, lastActiveDate: true },
+  });
+
+  const xp = user?.xp || 0;
+  const level = getLevel(xp);
+  const progress = xpProgressInLevel(xp);
+  const currentStreak = user?.currentStreak || 0;
+  const longestStreak = user?.longestStreak || 0;
+  const lastActive = user?.lastActiveDate;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const isActiveToday = lastActive ? new Date(lastActive).toDateString() === today.toDateString() : false;
+
   return (
     <div className="flex min-h-[calc(100vh-4rem)] bg-gray-50">
       {/* Sidebar */}
       <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:border-r lg:border-gray-200 lg:bg-white">
-        <nav className="flex-1 space-y-1 px-3 py-6">
+        {/* Gamification widgets */}
+        <SidebarGamification
+          xp={xp}
+          level={level}
+          xpProgress={progress}
+          currentStreak={currentStreak}
+          longestStreak={longestStreak}
+          isActiveToday={isActiveToday}
+        />
+
+        <nav className="flex-1 space-y-1 px-3 py-4">
           {sidebarLinks.map((link) => (
             <Link
               key={link.href}

@@ -8,12 +8,14 @@ const roleBadgeColors: Record<string, string> = {
   COMPANY_ADMIN: "border-saffron text-saffron-dark bg-saffron/10",
   INTERVIEWER: "border-india-green text-india-green-dark bg-india-green/10",
   CANDIDATE: "border-india-green text-india-green-dark bg-india-green/10",
+  SCHOOL_ADMIN: "border-pink-400 text-pink-600 bg-pink-50",
 }
 
 const roleBadgeLabels: Record<string, string> = {
   COMPANY_ADMIN: "Admin",
   INTERVIEWER: "Interviewer",
   CANDIDATE: "Candidate",
+  SCHOOL_ADMIN: "School",
 }
 
 export default function Navbar() {
@@ -42,7 +44,9 @@ export default function Navbar() {
                   href={
                     session.user.role === "CANDIDATE"
                       ? "/candidate"
-                      : "/dashboard"
+                      : session.user.role === "SCHOOL_ADMIN"
+                        ? "/school"
+                        : "/dashboard"
                   }
                   className="rounded-md px-3 py-1.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
                 >

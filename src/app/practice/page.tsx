@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { PROBLEM_BANK } from "@/data/problem-bank";
 import { CURATED_PATTERNS, CURATED_PROBLEMS } from "@/data/curated-75";
+import DailyChallengeCard from "@/components/gamification/DailyChallengeCard";
 
 const ITEMS_PER_PAGE = 24;
 
@@ -135,6 +136,28 @@ function PracticeModeContent() {
     setter(value);
     setCurrentPage(1);
   };
+
+  // Daily challenge
+  const [dailyChallenge, setDailyChallenge] = useState<{
+    problem: { id: string; title: string; difficulty: string; description: string; tags: string } | null;
+    bonusXP: number;
+    completed: boolean;
+    timeUntilNextMs: number;
+  } | null>(null);
+
+  // Gamification stats for header
+  const [gamStats, setGamStats] = useState<{ level: number; currentStreak: number; xp: number } | null>(null);
+
+  useEffect(() => {
+    fetch("/api/gamification/daily-challenge")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => { if (data?.challenge) setDailyChallenge(data.challenge); })
+      .catch(() => {});
+    fetch("/api/gamification/stats")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => { if (data) setGamStats({ level: data.level, currentStreak: data.currentStreak, xp: data.xp }); })
+      .catch(() => {});
+  }, []);
 
   // Saved problems from DB
   const [savedProblems, setSavedProblems] = useState<SavedProblem[]>([]);
@@ -278,15 +301,20 @@ function PracticeModeContent() {
           ))}
         </div>
 
-        <Link
-          href={href}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-saffron bg-transparent px-4 py-2.5 text-sm font-medium text-saffron transition-colors hover:bg-saffron/10"
-        >
-          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M8 5v14l11-7z" />
-          </svg>
-          {progressStatus === "COMPLETED" ? "Review" : progressStatus === "IN_PROGRESS" ? "Continue" : "Start Practice"}
-        </Link>
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] text-gray-400">
+            +{{ EASY: 10, MEDIUM: 25, HARD: 50 }[problem.difficulty] || 10} XP
+          </span>
+          <Link
+            href={href}
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-saffron bg-transparent px-4 py-2.5 text-sm font-medium text-saffron transition-colors hover:bg-saffron/10"
+          >
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+            {progressStatus === "COMPLETED" ? "Review" : progressStatus === "IN_PROGRESS" ? "Continue" : "Start Practice"}
+          </Link>
+        </div>
       </div>
     );
   }
@@ -305,16 +333,47 @@ function PracticeModeContent() {
             </svg>
             <span className="text-sm text-saffron">Practice Mode</span>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            Practice Mode
-          </h1>
-          <p className="mt-2 text-gray-500 max-w-2xl">
-            Sharpen your coding skills with curated problems or generate custom ones tailored to your target company and role.
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">
+                Practice Mode
+              </h1>
+              <p className="mt-2 text-gray-500 max-w-2xl">
+                Sharpen your coding skills with curated problems or generate custom ones tailored to your target company and role.
+              </p>
+            </div>
+            {gamStats && (
+              <div className="hidden sm:flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-saffron/10 text-sm font-bold text-saffron">{gamStats.level}</span>
+                  <div className="text-right">
+                    <p className="text-xs font-medium text-gray-900">Level {gamStats.level}</p>
+                    <p className="text-[10px] text-gray-400">{gamStats.xp.toLocaleString()} XP</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className={`text-base ${gamStats.currentStreak > 0 ? "animate-pulse" : "opacity-40"}`}>🔥</span>
+                  <span className="text-sm font-semibold text-gray-700">{gamStats.currentStreak}</span>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
       <div className="mx-auto max-w-6xl px-6 py-8">
+        {/* Daily Challenge Banner */}
+        {dailyChallenge?.problem && (
+          <div className="mb-8">
+            <DailyChallengeCard
+              problem={dailyChallenge.problem}
+              bonusXP={dailyChallenge.bonusXP}
+              completed={dailyChallenge.completed}
+              timeUntilNextMs={dailyChallenge.timeUntilNextMs}
+            />
+          </div>
+        )}
+
         {/* AI Level Selector */}
         <div className="mb-10">
           <h2 className="text-lg font-semibold text-gray-900 mb-1">AI Assistance Level</h2>

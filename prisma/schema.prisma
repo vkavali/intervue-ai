@@ -9,7 +9,7 @@ datasource db {
 
 // ─── Enums (SQLite doesn't support native enums, so we use string fields) ───
 
-// Role:              COMPANY_ADMIN | INTERVIEWER | CANDIDATE
+// Role:              COMPANY_ADMIN | INTERVIEWER | CANDIDATE | SCHOOL_ADMIN
 // Plan:              STARTER | GROWTH | ENTERPRISE | PAY_PER_INTERVIEW
 // Seniority:         JUNIOR | MID | SENIOR | STAFF | PRINCIPAL
 // Difficulty:        EASY | MEDIUM | HARD
@@ -23,16 +23,23 @@ model User {
   email              String   @unique
   name               String
   password           String
-  role               String   // COMPANY_ADMIN | INTERVIEWER | CANDIDATE
+  role               String   // COMPANY_ADMIN | INTERVIEWER | CANDIDATE | SCHOOL_ADMIN
   companyId          String?
   activeSessionToken String?  // Current active session token for single-device enforcement
   lastLoginAt        DateTime? // Track last login time
   lastLoginIp        String?  // Track last login IP
   profilePublic      Boolean  @default(true)
+  xp                 Int      @default(0)
+  level              Int      @default(1)
+  currentStreak      Int      @default(0)
+  longestStreak      Int      @default(0)
+  lastActiveDate     DateTime?
+  schoolId           String?
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
   company             Company?           @relation(fields: [companyId], references: [id])
+  school              School?            @relation(fields: [schoolId], references: [id])
   candidateSessions   InterviewSession[] @relation("CandidateSessions")
   interviewerSessions InterviewSession[] @relation("InterviewerSessions")
   aiLevelOverrides    AILevelOverride[]  @relation("OverriddenByUser")
@@ -48,6 +55,10 @@ model User {
   chatMessages        ChatMessage[]      @relation("UserChatMessages")
   sessionLogs         SessionLog[]       @relation("UserSessionLogs")
   availability        InterviewerAvailability[] @relation("InterviewerAvailability")
+  xpTransactions      XPTransaction[]    @relation("UserXPTransactions")
+  badges              UserBadge[]        @relation("UserBadges")
+  dailyActivities     DailyActivity[]    @relation("UserDailyActivities")
+  adminSchool         School?            @relation("SchoolAdmin")
 }
 
 // ─── Company ────────────────────────────────────────────────────────────────────
@@ -273,8 +284,9 @@ model PracticeProblem {
   role        String?  // Role context if generated for specific role
   createdAt   DateTime @default(now())
 
-  user     User               @relation("UserPracticeProblems", fields: [userId], references: [id])
-  progress PracticeProgress[] @relation("ProblemProgress")
+  user            User               @relation("UserPracticeProblems", fields: [userId], references: [id])
+  progress        PracticeProgress[] @relation("ProblemProgress")
+  dailyChallenges DailyChallenge[]   @relation("ChallengeProblem")
 }
 
 // ─── PracticeProgress ────────────────────────────────────────────────────────
@@ -499,4 +511,86 @@ model ThinkingAnalysis {
   updatedAt           DateTime @updatedAt
 
   session InterviewSession @relation(fields: [sessionId], references: [id])
+}
+
+// ─── Gamification ─────────────────────────────────────────────────────────
+
+model XPTransaction {
+  id        String   @id @default(cuid())
+  userId    String
+  amount    Int
+  reason    String   // PROBLEM_SOLVED, DAILY_LOGIN, STREAK_BONUS, BADGE_EARNED, DAILY_CHALLENGE
+  sourceId  String?  // optional link to problem/session
+  createdAt DateTime @default(now())
+
+  user User @relation("UserXPTransactions", fields: [userId], references: [id])
+}
+
+model Badge {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  name        String
+  description String
+  icon        String      // emoji or icon key
+  category    String      // SKILL, STREAK, MILESTONE, SPECIAL
+  threshold   Int         // e.g. 7 for "7-day streak"
+  users       UserBadge[]
+}
+
+model UserBadge {
+  id        String   @id @default(cuid())
+  userId    String
+  badgeId   String
+  earnedAt  DateTime @default(now())
+
+  user  User  @relation("UserBadges", fields: [userId], references: [id])
+  badge Badge @relation(fields: [badgeId], references: [id])
+
+  @@unique([userId, badgeId])
+}
+
+model DailyActivity {
+  id        String   @id @default(cuid())
+  userId    String
+  date      String   // "YYYY-MM-DD" for heatmap
+  problems  Int      @default(0)
+  xpEarned  Int      @default(0)
+
+  user User @relation("UserDailyActivities", fields: [userId], references: [id])
+
+  @@unique([userId, date])
+}
+
+model DailyChallenge {
+  id        String   @id @default(cuid())
+  date      String   @unique  // "YYYY-MM-DD"
+  problemId String
+  bonusXP   Int      @default(50)
+
+  problem PracticeProblem @relation("ChallengeProblem", fields: [problemId], references: [id])
+}
+
+// ─── School Partnership ───────────────────────────────────────────────────
+
+model School {
+  id             String   @id @default(cuid())
+  name           String
+  enrollmentCode String   @unique
+  maxStudents    Int      @default(100)
+  plan           String   @default("EDUCATION")
+  adminId        String   @unique
+  createdAt      DateTime @default(now())
+
+  admin    User   @relation("SchoolAdmin", fields: [adminId], references: [id])
+  students User[]
+}
+
+model SchoolAssignment {
+  id          String   @id @default(cuid())
+  schoolId    String
+  title       String
+  description String?
+  problemIds  String   // JSON array of problem IDs
+  dueDate     DateTime?
+  createdAt   DateTime @default(now())
 }

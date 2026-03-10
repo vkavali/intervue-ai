@@ -76,6 +76,31 @@ export const PLANS = {
       apiAccess: true,
     },
   },
+  EDUCATION: {
+    name: 'Education',
+    priceId: process.env.STRIPE_EDUCATION_PRICE_ID || '',
+    price: 5,
+    currency: 'usd',
+    interval: 'month' as const,
+    features: [
+      'Per-student pricing ($5/student/month)',
+      'Full problem bank access',
+      'AI assist (L0-L4)',
+      'Student progress tracking',
+      'Assignment management',
+      'Class analytics',
+      'Enrollment codes',
+      'CSV export',
+    ],
+    limits: {
+      interviewsPerMonth: 0,
+      maxAILevel: 4,
+      customQuestions: true,
+      auditReports: false,
+      teamMembers: 1,
+      apiAccess: false,
+    },
+  },
 } as const
 
 export type PlanKey = keyof typeof PLANS

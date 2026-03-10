@@ -7,6 +7,7 @@ import Link from "next/link";
 import { PROBLEM_BANK, type ProblemEntry } from "@/data/problem-bank";
 import { CURATED_PROBLEMS } from "@/data/curated-75";
 import { GENERATED_PROBLEMS } from "@/data/generated-bank";
+import LevelUpModal from "@/components/gamification/LevelUpModal";
 
 // ─── Practice problem data ──────────────────────────────────────────────────────
 
@@ -258,6 +259,11 @@ function PracticeProblemContent() {
   const [customExpected, setCustomExpected] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitResult, setSubmitResult] = useState<"accepted" | "wrong" | null>(null);
+
+  // Gamification celebration state
+  const [gamXPToast, setGamXPToast] = useState<string | null>(null);
+  const [gamBadgeToast, setGamBadgeToast] = useState<string | null>(null);
+  const [showLevelUp, setShowLevelUp] = useState<{ level: number; xp: number; badges: Array<{ name: string; icon: string }> } | null>(null);
   const [progressId, setProgressId] = useState<string | null>(null);
   const [progressStatus, setProgressStatus] = useState<string>("IN_PROGRESS");
   const [notes, setNotes] = useState("");
@@ -655,6 +661,20 @@ function PracticeProblemContent() {
         setProgressId(data.progress.id);
         setProgressStatus(data.progress.status);
       }
+      // Handle gamification celebrations
+      if (data.gamification) {
+        const g = data.gamification;
+        if (g.xpAwarded) {
+          setGamXPToast(`+${g.xpAwarded} XP`);
+          setTimeout(() => setGamXPToast(null), 3000);
+        }
+        if (g.leveledUp) {
+          setShowLevelUp({ level: g.newLevel, xp: g.newXP, badges: g.newBadges || [] });
+        } else if (g.newBadges && g.newBadges.length > 0) {
+          setGamBadgeToast(g.newBadges.map((b: { icon: string; name: string }) => `${b.icon} ${b.name}`).join(", "));
+          setTimeout(() => setGamBadgeToast(null), 4000);
+        }
+      }
     } catch {
       // silently fail
     }
@@ -951,6 +971,27 @@ function PracticeProblemContent() {
         }`}>
           {submitResult === "accepted" ? "Accepted - All test cases passed!" : "Wrong Answer - Some test cases failed"}
         </div>
+      )}
+
+      {/* ─── Gamification Toasts ──────────────────────────────────────────── */}
+      {gamXPToast && (
+        <div className="fixed top-4 right-4 z-50 rounded-lg border border-saffron/30 bg-white px-4 py-2 shadow-lg animate-bounce">
+          <span className="text-sm font-bold text-saffron">{gamXPToast}</span>
+        </div>
+      )}
+      {gamBadgeToast && (
+        <div className="fixed top-16 right-4 z-50 rounded-lg border border-india-green/30 bg-white px-4 py-2 shadow-lg">
+          <p className="text-xs text-gray-500 mb-0.5">Badge Earned!</p>
+          <span className="text-sm font-medium text-india-green-dark">{gamBadgeToast}</span>
+        </div>
+      )}
+      {showLevelUp && (
+        <LevelUpModal
+          newLevel={showLevelUp.level}
+          xp={showLevelUp.xp}
+          newBadges={showLevelUp.badges}
+          onClose={() => setShowLevelUp(null)}
+        />
       )}
 
       {/* ─── Top Bar ──────────────────────────────────────────────────────── */}

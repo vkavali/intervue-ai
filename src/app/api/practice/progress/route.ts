@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { awardXP, updateStreak, checkAndAwardBadges, recordProblemSolved, DIFFICULTY_XP } from "@/lib/gamification";
 
 // GET /api/practice/progress - Get all practice progress for user
 export async function GET() {
@@ -169,7 +170,42 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    return NextResponse.json({ progress, submission });
+    // ─── Gamification hooks ──────────────────────────────────────────────────
+    let gamification = null;
+    if (isSubmission && submissionStatus === "ACCEPTED" && status === "COMPLETED") {
+      try {
+        // Determine difficulty for XP
+        let difficulty = "EASY";
+        if (problemId) {
+          const prob = await prisma.practiceProblem.findUnique({
+            where: { id: problemId },
+            select: { difficulty: true },
+          });
+          if (prob) difficulty = prob.difficulty;
+        }
+
+        const xpAmount = DIFFICULTY_XP[difficulty] || 10;
+        const xpResult = await awardXP(user.id, xpAmount, "PROBLEM_SOLVED", progress.id);
+        const streakResult = await updateStreak(user.id);
+        await recordProblemSolved(user.id);
+        const newBadges = await checkAndAwardBadges(user.id);
+
+        gamification = {
+          xpAwarded: xpAmount,
+          newXP: xpResult.newXP,
+          newLevel: xpResult.newLevel,
+          leveledUp: xpResult.leveledUp,
+          streak: streakResult.currentStreak,
+          streakRecord: streakResult.newRecord,
+          streakMilestone: streakResult.milestoneHit,
+          newBadges,
+        };
+      } catch (err) {
+        console.error("Gamification hook error (non-fatal):", err);
+      }
+    }
+
+    return NextResponse.json({ progress, submission, gamification });
   } catch (error) {
     console.error("POST /api/practice/progress error:", error);
     return NextResponse.json(
