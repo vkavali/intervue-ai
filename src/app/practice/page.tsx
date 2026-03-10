@@ -20,9 +20,9 @@ for (const p of CURATED_PATTERNS) { PATTERN_LABELS[p.id] = p.name; }
 const CURATED_IDS = new Set(CURATED_PROBLEMS.map(p => p.id));
 
 const AI_LEVEL_OPTIONS = [
-  { value: 0, label: "L0 No AI", description: "Solve independently", color: "text-red-400", border: "border-red-500/30", bg: "bg-red-500/10" },
+  { value: 0, label: "L0 No AI", description: "Solve independently", color: "text-accent-red", border: "border-accent-red/30", bg: "bg-accent-red/10" },
   { value: 1, label: "L1 Hint", description: "Socratic questions only", color: "text-yellow-400", border: "border-yellow-500/30", bg: "bg-yellow-500/10" },
-  { value: 2, label: "L2 Scaffold", description: "Solution skeletons", color: "text-blue-400", border: "border-blue-500/30", bg: "bg-blue-500/10" },
+  { value: 2, label: "L2 Scaffold", description: "Solution skeletons", color: "text-india-green", border: "border-blue-500/30", bg: "bg-india-green/10" },
   { value: 3, label: "L3 Guide", description: "Concept explanations", color: "text-saffron", border: "border-saffron/30", bg: "bg-saffron/10" },
   { value: 4, label: "L4 Copilot", description: "Full AI assistance", color: "text-green-400", border: "border-green-500/30", bg: "bg-green-500/10" },
 ];
@@ -53,12 +53,12 @@ interface SavedProblem extends GeneratedProblem {
 const difficultyColors: Record<string, { text: string; bg: string; border: string }> = {
   EASY: { text: "text-green-400", bg: "bg-green-500/10", border: "border-green-500/30" },
   MEDIUM: { text: "text-yellow-400", bg: "bg-yellow-500/10", border: "border-yellow-500/30" },
-  HARD: { text: "text-red-400", bg: "bg-red-500/10", border: "border-red-500/30" },
+  HARD: { text: "text-accent-red", bg: "bg-accent-red/10", border: "border-accent-red/30" },
 };
 
 export default function PracticeModePage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center"><div className="text-gray-400">Loading...</div></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center"><div className="text-gray-500">Loading...</div></div>}>
       <PracticeModeContent />
     </Suspense>
   );
@@ -213,7 +213,7 @@ function PracticeModeContent() {
     return (
       <div
         key={problem.id}
-        className="group rounded-xl border border-gray-800 bg-gray-900/50 p-5 transition-all hover:border-saffron/30 hover:bg-gray-900"
+        className="group rounded-xl border border-gray-200 bg-white p-5 transition-all hover:border-saffron/30 hover:bg-white"
       >
         <div className="flex items-center justify-between mb-3">
           <span
@@ -233,7 +233,7 @@ function PracticeModeContent() {
               </span>
             )}
             {problem.company && (
-              <span className="inline-flex items-center rounded-full bg-blue-500/10 border border-blue-500/30 px-2 py-0.5 text-[10px] text-blue-400">
+              <span className="inline-flex items-center rounded-full bg-india-green/10 border border-blue-500/30 px-2 py-0.5 text-[10px] text-india-green">
                 {problem.company}
               </span>
             )}
@@ -254,24 +254,24 @@ function PracticeModeContent() {
           </div>
         </div>
 
-        <h3 className="text-base font-semibold text-white mb-2 group-hover:text-saffron-light transition-colors">
+        <h3 className="text-base font-semibold text-gray-900 mb-2 group-hover:text-saffron-dark transition-colors">
           {problem.title}
         </h3>
 
-        <p className="text-sm text-gray-400 mb-3 line-clamp-2">
+        <p className="text-sm text-gray-500 mb-3 line-clamp-2">
           {problem.description}
         </p>
 
         <div className="flex flex-wrap gap-1.5 mb-4">
           {problem.pattern && (
-            <span className="rounded bg-saffron-dark/30 border border-saffron/20 px-2 py-0.5 text-[10px] text-saffron-light">
+            <span className="rounded bg-saffron-dark/30 border border-saffron/20 px-2 py-0.5 text-[10px] text-saffron-dark">
               {PATTERN_LABELS[problem.pattern] || problem.pattern}
             </span>
           )}
           {problem.tags.slice(0, 2).map((tag) => (
             <span
               key={tag}
-              className="rounded bg-gray-800 px-2 py-0.5 text-xs text-gray-400"
+              className="rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-500"
             >
               {tag}
             </span>
@@ -292,12 +292,12 @@ function PracticeModeContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100">
+    <div className="min-h-screen bg-gray-50 text-gray-100">
       {/* Header */}
-      <div className="border-b border-gray-800 bg-gray-900/80 backdrop-blur-sm">
+      <div className="border-b border-gray-200 bg-gray-50 backdrop-blur-sm">
         <div className="mx-auto max-w-6xl px-6 py-8">
           <div className="flex items-center gap-3 mb-2">
-            <Link href="/candidate" className="text-sm text-gray-500 hover:text-gray-300 transition-colors">
+            <Link href="/candidate" className="text-sm text-gray-500 hover:text-gray-700 transition-colors">
               Dashboard
             </Link>
             <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -305,10 +305,10 @@ function PracticeModeContent() {
             </svg>
             <span className="text-sm text-saffron">Practice Mode</span>
           </div>
-          <h1 className="text-3xl font-bold text-white">
+          <h1 className="text-3xl font-bold text-gray-900">
             Practice Mode
           </h1>
-          <p className="mt-2 text-gray-400 max-w-2xl">
+          <p className="mt-2 text-gray-500 max-w-2xl">
             Sharpen your coding skills with curated problems or generate custom ones tailored to your target company and role.
           </p>
         </div>
@@ -317,7 +317,7 @@ function PracticeModeContent() {
       <div className="mx-auto max-w-6xl px-6 py-8">
         {/* AI Level Selector */}
         <div className="mb-10">
-          <h2 className="text-lg font-semibold text-white mb-1">AI Assistance Level</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-1">AI Assistance Level</h2>
           <p className="text-sm text-gray-500 mb-4">
             Select how much AI help you want during practice.
           </p>
@@ -329,7 +329,7 @@ function PracticeModeContent() {
                 className={`relative rounded-lg border p-4 text-left transition-all ${
                   selectedAiLevel === option.value
                     ? `${option.border} ${option.bg} ring-1 ring-saffron/50`
-                    : "border-gray-800 bg-gray-900/50 hover:border-gray-700 hover:bg-gray-900"
+                    : "border-gray-200 bg-white hover:border-gray-200 hover:bg-white"
                 }`}
               >
                 {selectedAiLevel === option.value && (
@@ -351,13 +351,13 @@ function PracticeModeContent() {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex gap-1 mb-8 border-b border-gray-800">
+        <div className="flex gap-1 mb-8 border-b border-gray-200">
           <button
             onClick={() => setActiveTab("studyplans")}
             className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${
               activeTab === "studyplans"
                 ? "border-saffron text-saffron"
-                : "border-transparent text-gray-500 hover:text-gray-300"
+                : "border-transparent text-gray-500 hover:text-gray-700"
             }`}
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -370,7 +370,7 @@ function PracticeModeContent() {
             className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
               activeTab === "problems"
                 ? "border-saffron text-saffron"
-                : "border-transparent text-gray-500 hover:text-gray-300"
+                : "border-transparent text-gray-500 hover:text-gray-700"
             }`}
           >
             Practice Problems ({allProblems.length})
@@ -380,7 +380,7 @@ function PracticeModeContent() {
             className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${
               activeTab === "generate"
                 ? "border-saffron text-saffron"
-                : "border-transparent text-gray-500 hover:text-gray-300"
+                : "border-transparent text-gray-500 hover:text-gray-700"
             }`}
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -390,7 +390,7 @@ function PracticeModeContent() {
           </button>
           <Link
             href="/practice/analytics"
-            className="px-4 py-2.5 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-300 transition-colors flex items-center gap-2"
+            className="px-4 py-2.5 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition-colors flex items-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -403,8 +403,8 @@ function PracticeModeContent() {
         {activeTab === "studyplans" && (
           <div>
             <div className="mb-6">
-              <h2 className="text-xl font-bold text-white mb-2">Study Plans</h2>
-              <p className="text-sm text-gray-400">
+              <h2 className="text-xl font-bold text-gray-900 mb-2">Study Plans</h2>
+              <p className="text-sm text-gray-500">
                 Master essential coding patterns with curated problem sets. Each pattern builds skills needed for technical interviews.
               </p>
             </div>
@@ -418,13 +418,13 @@ function PracticeModeContent() {
                 return (
                   <div
                     key={pattern.id}
-                    className="rounded-xl border border-gray-800 bg-gray-900/50 p-5 hover:border-saffron/30 hover:bg-gray-900 transition-all"
+                    className="rounded-xl border border-gray-200 bg-white p-5 hover:border-saffron/30 hover:bg-white transition-all"
                   >
                     <div className="flex items-start justify-between mb-3">
-                      <h3 className="text-base font-semibold text-white">{pattern.name}</h3>
+                      <h3 className="text-base font-semibold text-gray-900">{pattern.name}</h3>
                       <span className="text-xs text-gray-500">{pattern.problems.length} problems</span>
                     </div>
-                    <p className="text-sm text-gray-400 mb-4 line-clamp-2">{pattern.description}</p>
+                    <p className="text-sm text-gray-500 mb-4 line-clamp-2">{pattern.description}</p>
 
                     {/* Difficulty breakdown */}
                     <div className="flex gap-2 mb-3">
@@ -435,7 +435,7 @@ function PracticeModeContent() {
                         <span className="text-[10px] text-yellow-400 bg-yellow-500/10 border border-yellow-500/20 rounded-full px-2 py-0.5">{medium} Med</span>
                       )}
                       {hard > 0 && (
-                        <span className="text-[10px] text-red-400 bg-red-500/10 border border-red-500/20 rounded-full px-2 py-0.5">{hard} Hard</span>
+                        <span className="text-[10px] text-accent-red bg-accent-red/10 border border-red-500/20 rounded-full px-2 py-0.5">{hard} Hard</span>
                       )}
                     </div>
 
@@ -445,7 +445,7 @@ function PracticeModeContent() {
                         <span>{solved}/{pattern.problems.length} solved</span>
                         <span>{progress}%</span>
                       </div>
-                      <div className="h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                      <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-saffron rounded-full transition-all"
                           style={{ width: `${progress}%` }}
@@ -476,19 +476,19 @@ function PracticeModeContent() {
                 value={searchQuery}
                 onChange={(e) => updateFilter(setSearchQuery, e.target.value)}
                 placeholder="Search problems by title, description, or tag..."
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               />
               <div className="flex flex-wrap gap-2">
-                <select value={companyFilter} onChange={(e) => updateFilter(setCompanyFilter, e.target.value)} className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white focus:border-saffron focus:outline-none">
+                <select value={companyFilter} onChange={(e) => updateFilter(setCompanyFilter, e.target.value)} className="rounded-lg border border-gray-200 bg-gray-100 px-3 py-1.5 text-sm text-gray-900 focus:border-saffron focus:outline-none">
                   {COMPANY_FILTERS.map(c => <option key={c} value={c}>{c === "All" ? "All Companies" : c}</option>)}
                 </select>
-                <select value={difficultyFilter} onChange={(e) => updateFilter(setDifficultyFilter, e.target.value)} className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white focus:border-saffron focus:outline-none">
+                <select value={difficultyFilter} onChange={(e) => updateFilter(setDifficultyFilter, e.target.value)} className="rounded-lg border border-gray-200 bg-gray-100 px-3 py-1.5 text-sm text-gray-900 focus:border-saffron focus:outline-none">
                   {DIFFICULTY_FILTERS.map(d => <option key={d} value={d}>{d === "All" ? "All Difficulties" : d}</option>)}
                 </select>
-                <select value={categoryFilter} onChange={(e) => updateFilter(setCategoryFilter, e.target.value)} className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white focus:border-saffron focus:outline-none">
+                <select value={categoryFilter} onChange={(e) => updateFilter(setCategoryFilter, e.target.value)} className="rounded-lg border border-gray-200 bg-gray-100 px-3 py-1.5 text-sm text-gray-900 focus:border-saffron focus:outline-none">
                   {CATEGORY_FILTERS.map(c => <option key={c} value={c}>{c === "All" ? "All Categories" : c}</option>)}
                 </select>
-                <select value={patternFilter} onChange={(e) => updateFilter(setPatternFilter, e.target.value)} className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white focus:border-saffron focus:outline-none">
+                <select value={patternFilter} onChange={(e) => updateFilter(setPatternFilter, e.target.value)} className="rounded-lg border border-gray-200 bg-gray-100 px-3 py-1.5 text-sm text-gray-900 focus:border-saffron focus:outline-none">
                   {PATTERN_FILTERS.map(p => <option key={p} value={p}>{p === "All" ? "All Patterns" : PATTERN_LABELS[p] || p}</option>)}
                 </select>
                 <span className="flex items-center text-xs text-gray-500 ml-auto">
@@ -505,7 +505,7 @@ function PracticeModeContent() {
             {/* Pagination */}
             {totalPages > 1 && (
               <div className="mt-8 flex items-center justify-center gap-2">
-                <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="rounded-lg bg-gray-800 px-3 py-1.5 text-sm text-gray-300 hover:bg-gray-700 disabled:opacity-30">Prev</button>
+                <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="rounded-lg bg-gray-100 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-200 disabled:opacity-30">Prev</button>
                 {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
                   let page: number;
                   if (totalPages <= 7) page = i + 1;
@@ -513,10 +513,10 @@ function PracticeModeContent() {
                   else if (currentPage >= totalPages - 3) page = totalPages - 6 + i;
                   else page = currentPage - 3 + i;
                   return (
-                    <button key={page} onClick={() => setCurrentPage(page)} className={`rounded-lg px-3 py-1.5 text-sm ${currentPage === page ? "bg-white/10 text-white border border-saffron" : "bg-gray-800 text-gray-300 hover:bg-gray-700"}`}>{page}</button>
+                    <button key={page} onClick={() => setCurrentPage(page)} className={`rounded-lg px-3 py-1.5 text-sm ${currentPage === page ? "bg-gray-100 text-gray-900 border border-saffron" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}>{page}</button>
                   );
                 })}
-                <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="rounded-lg bg-gray-800 px-3 py-1.5 text-sm text-gray-300 hover:bg-gray-700 disabled:opacity-30">Next</button>
+                <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="rounded-lg bg-gray-100 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-200 disabled:opacity-30">Next</button>
               </div>
             )}
           </div>
@@ -536,7 +536,7 @@ function PracticeModeContent() {
               </div>
             ) : savedProblems.length > 0 ? (
               <div className="mb-8">
-                <h3 className="text-lg font-semibold text-white mb-1">Your Practice Problems</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-1">Your Practice Problems</h3>
                 <p className="text-sm text-gray-500 mb-4">
                   Previously generated problems saved to your account.
                 </p>
@@ -554,16 +554,16 @@ function PracticeModeContent() {
                 <svg className="w-5 h-5 text-saffron" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
-                <h2 className="text-lg font-semibold text-white">Generate Company-Specific Practice</h2>
+                <h2 className="text-lg font-semibold text-gray-900">Generate Company-Specific Practice</h2>
               </div>
-              <p className="text-sm text-gray-400 mb-6">
+              <p className="text-sm text-gray-500 mb-6">
                 Enter a company name, role, and optionally a job description. AI will generate relevant coding problems tailored to what that company typically asks for that position.
               </p>
 
               <form onSubmit={handleGenerate} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
                       Company Name <span className="text-gray-600">(optional)</span>
                     </label>
                     <input
@@ -571,12 +571,12 @@ function PracticeModeContent() {
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
                       placeholder="e.g., Stripe, Airbnb, Spotify"
-                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors"
+                      className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1.5">
-                      Role <span className="text-red-400">*</span>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                      Role <span className="text-accent-red">*</span>
                     </label>
                     <input
                       type="text"
@@ -584,13 +584,13 @@ function PracticeModeContent() {
                       onChange={(e) => setRole(e.target.value)}
                       required
                       placeholder="e.g., Senior Backend Engineer, Frontend Developer"
-                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors"
+                      className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
                     Job Description / Skills to Test <span className="text-gray-600">(optional)</span>
                   </label>
                   <textarea
@@ -598,19 +598,19 @@ function PracticeModeContent() {
                     onChange={(e) => setJobDescription(e.target.value)}
                     rows={3}
                     placeholder="Paste a job description or describe specific skills: e.g., 'Must know distributed systems, API design, and SQL optimization. Team works on payment processing infrastructure.'"
-                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors resize-none"
+                    className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors resize-none"
                   />
                 </div>
 
                 <div className="flex items-end gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
                       Difficulty
                     </label>
                     <select
                       value={difficulty}
                       onChange={(e) => setDifficulty(e.target.value)}
-                      className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-saffron focus:outline-none"
+                      className="rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 focus:border-saffron focus:outline-none"
                     >
                       <option value="">Mixed</option>
                       <option value="EASY">Easy</option>
@@ -622,7 +622,7 @@ function PracticeModeContent() {
                   <button
                     type="submit"
                     disabled={generating || !role.trim()}
-                    className="rounded-lg bg-gradient-to-r from-saffron to-india-green px-6 py-2.5 text-sm font-semibold text-white hover:from-saffron-light hover:to-india-green-light disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2"
+                    className="rounded-lg bg-gradient-to-r from-saffron to-india-green px-6 py-2.5 text-sm font-semibold text-gray-900 hover:from-saffron-light hover:to-india-green-light disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2"
                   >
                     {generating ? (
                       <>
@@ -645,7 +645,7 @@ function PracticeModeContent() {
               </form>
 
               {genError && (
-                <div className="mt-4 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+                <div className="mt-4 rounded-lg border border-accent-red/30 bg-accent-red/10 px-4 py-3 text-sm text-accent-red">
                   {genError}
                 </div>
               )}
@@ -654,7 +654,7 @@ function PracticeModeContent() {
             {/* Generated Problems */}
             {generatedProblems.length > 0 && (
               <div>
-                <h3 className="text-lg font-semibold text-white mb-1">
+                <h3 className="text-lg font-semibold text-gray-900 mb-1">
                   Generated Problems {company && `for ${company}`}
                 </h3>
                 <p className="text-sm text-gray-500 mb-4">
@@ -672,7 +672,7 @@ function PracticeModeContent() {
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                 </svg>
-                <p className="text-gray-400">AI is generating practice problems tailored to your specifications...</p>
+                <p className="text-gray-500">AI is generating practice problems tailored to your specifications...</p>
                 <p className="text-xs text-gray-600 mt-1">This may take 10-15 seconds</p>
               </div>
             )}

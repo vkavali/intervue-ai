@@ -122,7 +122,7 @@ export function ShareReportButton({ sessionId, existingShareToken }: ShareReport
         <button
           onClick={handleRevoke}
           disabled={loading}
-          className="inline-flex items-center gap-2 rounded-lg border border-red-500/30 px-4 py-2 text-sm font-medium text-red-400 hover:bg-red-500/10 transition-colors disabled:opacity-50"
+          className="inline-flex items-center gap-2 rounded-lg border border-accent-red/30 px-4 py-2 text-sm font-medium text-accent-red hover:bg-accent-red/10 transition-colors disabled:opacity-50"
         >
           Revoke Link
         </button>

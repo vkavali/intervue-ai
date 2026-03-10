@@ -337,7 +337,7 @@ export default function AvailabilityPage() {
           </div>
 
           {submitError && (
-            <div className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+            <div className="rounded-lg border border-accent-red/30 bg-accent-red/10 px-4 py-3 text-sm text-accent-red">
               {submitError}
             </div>
           )}
@@ -435,11 +435,11 @@ export default function AvailabilityPage() {
           </div>
         ) : error ? (
           <div className="px-6 py-16 text-center">
-            <svg className="mx-auto h-12 w-12 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="mx-auto h-12 w-12 text-accent-red" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
             </svg>
             <h3 className="mt-4 text-lg font-medium text-gray-900">Failed to load availability</h3>
-            <p className="mt-2 text-sm text-red-400">{error}</p>
+            <p className="mt-2 text-sm text-accent-red">{error}</p>
             <button
               onClick={fetchSlots}
               className="mt-4 inline-flex items-center gap-2 rounded-lg border border-saffron bg-transparent px-4 py-2 text-sm font-medium text-saffron transition-colors hover:bg-saffron/10"
@@ -506,7 +506,7 @@ export default function AvailabilityPage() {
                     <button
                       onClick={() => handleDelete(slot.id)}
                       disabled={deleting === slot.id}
-                      className="rounded px-2 py-1 text-xs text-red-400 hover:bg-red-500/10 hover:text-red-300 disabled:opacity-50"
+                      className="rounded px-2 py-1 text-xs text-accent-red hover:bg-accent-red/10 hover:text-red-300 disabled:opacity-50"
                     >
                       {deleting === slot.id ? "Deleting..." : "Delete"}
                     </button>

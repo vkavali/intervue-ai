@@ -254,7 +254,7 @@ export default function PositionsPage() {
             </div>
 
             {error && (
-              <div className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+              <div className="rounded-lg border border-accent-red/30 bg-accent-red/10 px-4 py-3 text-sm text-accent-red">
                 {error}
               </div>
             )}
@@ -352,7 +352,7 @@ export default function PositionsPage() {
                   <div className="flex-1" />
                   <button
                     onClick={() => handleDelete(p.id)}
-                    className="rounded px-2 py-1 text-xs text-red-400 hover:bg-red-500/10 hover:text-red-300"
+                    className="rounded px-2 py-1 text-xs text-accent-red hover:bg-accent-red/10 hover:text-red-300"
                   >
                     Delete
                   </button>

@@ -15,7 +15,7 @@ export function MetricBar({ label, value, maxValue = 10 }: MetricBarProps) {
   const textColor =
     value >= 8 ? "text-green-400" :
     value >= 6 ? "text-yellow-400" :
-    value >= 4 ? "text-orange-400" : "text-red-400"
+    value >= 4 ? "text-orange-400" : "text-accent-red"
 
   const glowShadow =
     value >= 8 ? "shadow-green-500/20" :

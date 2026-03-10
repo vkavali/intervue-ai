@@ -111,8 +111,8 @@ export default function BillingPage() {
 
       {/* Error banner */}
       {error && (
-        <div className="mb-6 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3">
-          <p className="text-sm font-medium text-red-400">{error}</p>
+        <div className="mb-6 rounded-lg border border-accent-red/30 bg-accent-red/10 px-4 py-3">
+          <p className="text-sm font-medium text-accent-red">{error}</p>
         </div>
       )}
 

@@ -162,7 +162,7 @@ export default function CreateSessionPage() {
             {/* Candidate Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Candidate Email <span className="text-red-400">*</span>
+                Candidate Email <span className="text-accent-red">*</span>
               </label>
               <input
                 type="email"
@@ -211,7 +211,7 @@ export default function CreateSessionPage() {
             </div>
 
             {error && (
-              <div className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+              <div className="rounded-lg border border-accent-red/30 bg-accent-red/10 px-4 py-3 text-sm text-accent-red">
                 {error}
               </div>
             )}

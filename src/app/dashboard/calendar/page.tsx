@@ -420,7 +420,7 @@ export default function CalendarPage() {
                               <button onClick={() => { setRescheduleSession(s); setRescheduleDate(`${year}-${String(month).padStart(2,"0")}-${String(selectedDay).padStart(2,"0")}`); }} className="rounded bg-india-green/10 px-2 py-1 text-xs text-india-green hover:bg-india-green/20">
                                 Reschedule
                               </button>
-                              <button onClick={() => handleCancelSession(s.id)} className="rounded bg-red-500/10 px-2 py-1 text-xs text-red-400 hover:bg-red-500/20">
+                              <button onClick={() => handleCancelSession(s.id)} className="rounded bg-accent-red/10 px-2 py-1 text-xs text-accent-red hover:bg-accent-red/50/20">
                                 Cancel
                               </button>
                             </>
@@ -481,7 +481,7 @@ export default function CalendarPage() {
                           <p className="text-sm text-gray-900">{formatTimeLabel(a.startTime)} - {formatTimeLabel(a.endTime)}</p>
                           <p className="text-xs text-gray-500">{a.interviewer.name}</p>
                         </div>
-                        <button onClick={() => handleDeleteAvailability(a.id)} className="rounded p-1 text-gray-500 hover:bg-red-500/10 hover:text-red-400">
+                        <button onClick={() => handleDeleteAvailability(a.id)} className="rounded p-1 text-gray-500 hover:bg-accent-red/10 hover:text-accent-red">
                           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                         </button>
                       </div>

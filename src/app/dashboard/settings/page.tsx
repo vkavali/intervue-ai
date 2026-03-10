@@ -212,14 +212,14 @@ export default async function SettingsPage() {
           </div>
 
           {/* Danger Zone */}
-          <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-6">
-            <h2 className="text-lg font-semibold text-red-400 mb-2">Danger Zone</h2>
+          <div className="rounded-xl border border-red-500/20 bg-accent-red/50/5 p-6">
+            <h2 className="text-lg font-semibold text-accent-red mb-2">Danger Zone</h2>
             <p className="text-xs text-gray-500 mb-4">
               These actions are irreversible. Please proceed with caution.
             </p>
             <button
               disabled
-              className="w-full rounded-lg border border-red-500/30 px-4 py-2 text-sm font-medium text-red-400 opacity-50 cursor-not-allowed"
+              className="w-full rounded-lg border border-accent-red/30 px-4 py-2 text-sm font-medium text-accent-red opacity-50 cursor-not-allowed"
             >
               Delete Company (Contact Support)
             </button>

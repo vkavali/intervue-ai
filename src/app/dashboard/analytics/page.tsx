@@ -15,7 +15,7 @@ const statusConfig: Record<string, { label: string; color: string; bg: string }>
   PENDING: { label: 'Pending', color: 'bg-yellow-500', bg: 'bg-yellow-500/10 text-yellow-400' },
   ACTIVE: { label: 'Active', color: 'bg-blue-500', bg: 'bg-india-green/10 text-india-green' },
   COMPLETED: { label: 'Completed', color: 'bg-green-500', bg: 'bg-green-500/10 text-green-400' },
-  CANCELLED: { label: 'Cancelled', color: 'bg-red-500', bg: 'bg-red-500/10 text-red-400' },
+  CANCELLED: { label: 'Cancelled', color: 'bg-accent-red/50', bg: 'bg-accent-red/10 text-accent-red' },
 }
 
 function getMonthLabel(date: Date): string {
@@ -664,7 +664,7 @@ export default async function AnalyticsPage() {
                 className={`rounded-lg p-3 text-center ${
                   parseFloat(aiDiffPercent) >= 0
                     ? 'bg-green-500/10 border border-green-500/20'
-                    : 'bg-red-500/10 border border-red-500/20'
+                    : 'bg-accent-red/10 border border-red-500/20'
                 }`}
               >
                 <p className="text-sm text-gray-700">
@@ -672,7 +672,7 @@ export default async function AnalyticsPage() {
                   <span className="font-semibold text-saffron">L3+ AI</span> scored{' '}
                   <span
                     className={`font-bold ${
-                      parseFloat(aiDiffPercent) >= 0 ? 'text-green-400' : 'text-red-400'
+                      parseFloat(aiDiffPercent) >= 0 ? 'text-green-400' : 'text-accent-red'
                     }`}
                   >
                     {parseFloat(aiDiffPercent) >= 0 ? '+' : ''}

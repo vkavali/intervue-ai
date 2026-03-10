@@ -15,7 +15,7 @@ export function ScoreRing({ score, size = 120, strokeWidth = 8, className = "", 
   const color =
     score >= 80 ? "text-green-400" :
     score >= 60 ? "text-yellow-400" :
-    score >= 40 ? "text-orange-400" : "text-red-400"
+    score >= 40 ? "text-orange-400" : "text-accent-red"
 
   const glowColor =
     score >= 80 ? "drop-shadow-[0_0_8px_rgba(74,222,128,0.4)]" :
@@ -25,7 +25,7 @@ export function ScoreRing({ score, size = 120, strokeWidth = 8, className = "", 
   const trackColor =
     score >= 80 ? "text-green-400/10" :
     score >= 60 ? "text-yellow-400/10" :
-    score >= 40 ? "text-orange-400/10" : "text-red-400/10"
+    score >= 40 ? "text-orange-400/10" : "text-accent-red/10"
 
   // Scale font sizes proportionally
   const scoreFontSize = size >= 100 ? "text-3xl" : size >= 70 ? "text-lg" : "text-sm"

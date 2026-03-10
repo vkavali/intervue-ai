@@ -42,7 +42,7 @@ interface ComparisonAnalysis {
 const confidenceColors: Record<string, string> = {
   high: "bg-green-500/10 text-green-400 border-green-500/30",
   medium: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30",
-  low: "bg-red-500/10 text-red-400 border-red-500/30",
+  low: "bg-accent-red/10 text-accent-red border-accent-red/30",
 };
 
 function SkeletonCard() {
@@ -244,10 +244,10 @@ function CandidateCompareContent() {
 
       {/* Error State */}
       {error && (
-        <div className="mb-6 rounded-xl border border-red-500/30 bg-red-500/10 px-6 py-4">
+        <div className="mb-6 rounded-xl border border-accent-red/30 bg-accent-red/10 px-6 py-4">
           <div className="flex items-center gap-3">
             <svg
-              className="h-5 w-5 text-red-400"
+              className="h-5 w-5 text-accent-red"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -259,7 +259,7 @@ function CandidateCompareContent() {
                 d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
               />
             </svg>
-            <p className="text-sm text-red-400">{error}</p>
+            <p className="text-sm text-accent-red">{error}</p>
           </div>
         </div>
       )}
@@ -461,7 +461,7 @@ function CandidateCompareContent() {
                         {candidate.concerns.map((concern, idx) => (
                           <span
                             key={idx}
-                            className="inline-flex items-center rounded-full border border-red-500/30 bg-red-500/10 px-2 py-0.5 text-xs text-red-400"
+                            className="inline-flex items-center rounded-full border border-accent-red/30 bg-accent-red/10 px-2 py-0.5 text-xs text-accent-red"
                           >
                             {concern}
                           </span>

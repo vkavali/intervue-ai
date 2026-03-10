@@ -7,7 +7,7 @@ const statusColors: Record<string, string> = {
   PENDING: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30",
   ACTIVE: "bg-green-500/10 text-green-400 border-green-500/30",
   COMPLETED: "bg-india-green/10 text-india-green border-india-green/30",
-  CANCELLED: "bg-red-500/10 text-red-400 border-red-500/30",
+  CANCELLED: "bg-accent-red/10 text-accent-red border-accent-red/30",
 };
 
 export default async function DashboardPage() {

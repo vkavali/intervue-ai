@@ -8,7 +8,7 @@ const statusColors: Record<string, string> = {
   PENDING: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30",
   ACTIVE: "bg-green-500/10 text-green-400 border-green-500/30",
   COMPLETED: "bg-india-green/10 text-india-green border-india-green/30",
-  CANCELLED: "bg-red-500/10 text-red-400 border-red-500/30",
+  CANCELLED: "bg-accent-red/10 text-accent-red border-accent-red/30",
 };
 
 export default async function SessionsPage() {
@@ -178,7 +178,7 @@ export default async function SessionsPage() {
                           </span>
                         )}
                         {s.auditReport.suggestedDecision === "NO_HIRE" && (
-                          <span className="inline-flex items-center rounded-full bg-red-500/10 border border-red-500/30 px-2 py-0.5 text-xs font-medium text-red-400">
+                          <span className="inline-flex items-center rounded-full bg-accent-red/10 border border-accent-red/30 px-2 py-0.5 text-xs font-medium text-accent-red">
                             NO HIRE
                           </span>
                         )}
@@ -202,7 +202,7 @@ export default async function SessionsPage() {
                           const isSessionExpired = s.startedAt && s.totalDurationMinutes &&
                             new Date(s.startedAt).getTime() + s.totalDurationMinutes * 60 * 1000 < Date.now();
                           return isSessionExpired ? (
-                            <span className="text-xs font-medium text-red-400">Expired</span>
+                            <span className="text-xs font-medium text-accent-red">Expired</span>
                           ) : (
                             <Link
                               href={`/session/${s.id}`}

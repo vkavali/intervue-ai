@@ -11,7 +11,7 @@ const stageColors: Record<string, string> = {
   BEHAVIORAL: "bg-teal-500/10 text-teal-400 border-teal-500/30",
   FINAL: "bg-indigo-500/10 text-indigo-400 border-indigo-500/30",
   HIRED: "bg-green-500/10 text-green-400 border-green-500/30",
-  REJECTED: "bg-red-500/10 text-red-400 border-red-500/30",
+  REJECTED: "bg-accent-red/10 text-accent-red border-accent-red/30",
   ON_HOLD: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30",
 };
 

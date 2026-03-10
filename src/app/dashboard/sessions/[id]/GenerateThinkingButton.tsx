@@ -40,7 +40,7 @@ export function GenerateThinkingButton({
   return (
     <div className="flex items-center gap-2">
       {error && (
-        <span className="text-xs text-red-400">{error}</span>
+        <span className="text-xs text-accent-red">{error}</span>
       )}
       <button
         onClick={handleGenerate}

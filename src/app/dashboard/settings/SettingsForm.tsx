@@ -73,7 +73,7 @@ export function SettingsForm({
         </div>
 
         {message && (
-          <p className={`text-sm ${message.includes("success") ? "text-green-400" : "text-red-400"}`}>
+          <p className={`text-sm ${message.includes("success") ? "text-green-400" : "text-accent-red"}`}>
             {message}
           </p>
         )}

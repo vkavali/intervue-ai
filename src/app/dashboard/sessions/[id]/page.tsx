@@ -11,7 +11,7 @@ const statusColors: Record<string, string> = {
   PENDING: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30",
   ACTIVE: "bg-green-500/10 text-green-400 border-green-500/30",
   COMPLETED: "bg-india-green/10 text-india-green border-india-green/30",
-  CANCELLED: "bg-red-500/10 text-red-400 border-red-500/30",
+  CANCELLED: "bg-accent-red/10 text-accent-red border-accent-red/30",
 };
 
 const aiLevelLabels: Record<number, string> = {
@@ -24,13 +24,13 @@ const aiLevelLabels: Record<number, string> = {
 
 const logActionLabels: Record<string, { label: string; color: string }> = {
   JOIN: { label: "Joined", color: "text-green-400" },
-  LEAVE: { label: "Left", color: "text-red-400" },
+  LEAVE: { label: "Left", color: "text-accent-red" },
   CODE_CHANGE: { label: "Code Change", color: "text-india-green" },
   LANGUAGE_CHANGE: { label: "Language Change", color: "text-india-green" },
   AI_REQUEST: { label: "AI Request", color: "text-saffron" },
   NOTE_ADDED: { label: "Note Added", color: "text-yellow-400" },
   OVERRIDE: { label: "AI Override", color: "text-orange-400" },
-  VIOLATION: { label: "Violation", color: "text-red-500" },
+  VIOLATION: { label: "Violation", color: "text-accent-red" },
 };
 
 export default async function SessionDetailPage({
@@ -240,9 +240,9 @@ export default async function SessionDetailPage({
               ).map(([type, count]) => (
                 <div
                   key={type}
-                  className="rounded-lg border border-red-500/20 bg-red-500/5 px-3 py-2"
+                  className="rounded-lg border border-red-500/20 bg-accent-red/50/5 px-3 py-2"
                 >
-                  <span className="text-xs font-medium text-red-400">
+                  <span className="text-xs font-medium text-accent-red">
                     {type.replace(/_/g, " ")}
                   </span>
                   <span className="ml-2 text-sm font-bold text-red-300">{count}</span>
@@ -260,7 +260,7 @@ export default async function SessionDetailPage({
                   <span className="text-xs text-gray-500">
                     {new Date(v.timestamp).toLocaleTimeString()}
                   </span>
-                  <span className="text-xs font-medium text-red-400">
+                  <span className="text-xs font-medium text-accent-red">
                     {v.type.replace(/_/g, " ")}
                   </span>
                   <span className="text-xs text-gray-500">{v.user.name}</span>
@@ -296,7 +296,7 @@ export default async function SessionDetailPage({
                   s.auditReport.suggestedDecision === "HIRE"
                     ? "text-green-400"
                     : s.auditReport.suggestedDecision === "NO_HIRE"
-                      ? "text-red-400"
+                      ? "text-accent-red"
                       : "text-yellow-400"
                 }`}
               >
@@ -480,14 +480,14 @@ export default async function SessionDetailPage({
             {(() => {
               const concerns = JSON.parse(s.thinkingAnalysis.concerns) as string[];
               return concerns.length > 0 ? (
-                <div className="rounded-lg border border-red-500/20 bg-red-500/5 p-4">
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-red-400 mb-2">
+                <div className="rounded-lg border border-red-500/20 bg-accent-red/50/5 p-4">
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-accent-red mb-2">
                     Concerns
                   </h4>
                   <ul className="space-y-1">
                     {concerns.map((c, i) => (
                       <li key={i} className="text-sm text-gray-700 flex items-start gap-2">
-                        <span className="text-red-400 mt-0.5">!</span>
+                        <span className="text-accent-red mt-0.5">!</span>
                         {c}
                       </li>
                     ))}

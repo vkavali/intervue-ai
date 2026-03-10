@@ -173,10 +173,10 @@ export default function CandidateSchedulePage() {
 
       {/* Error Message */}
       {error && (
-        <div className="mb-6 rounded-xl border border-red-500/30 bg-red-500/10 p-5">
+        <div className="mb-6 rounded-xl border border-accent-red/30 bg-accent-red/10 p-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-500/20 text-red-400">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent-red/50/20 text-accent-red">
                 <svg
                   className="w-5 h-5"
                   fill="none"
@@ -192,13 +192,13 @@ export default function CandidateSchedulePage() {
                 </svg>
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-red-400">Error</h3>
+                <h3 className="text-sm font-semibold text-accent-red">Error</h3>
                 <p className="text-xs text-red-300/70 mt-0.5">{error}</p>
               </div>
             </div>
             <button
               onClick={() => setError(null)}
-              className="text-red-400 hover:text-red-300 transition-colors"
+              className="text-accent-red hover:text-red-300 transition-colors"
             >
               <svg
                 className="w-4 h-4"

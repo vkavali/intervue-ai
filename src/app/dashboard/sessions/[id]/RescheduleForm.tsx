@@ -116,7 +116,7 @@ export function RescheduleForm({ sessionId, currentScheduledAt }: RescheduleForm
           Cancel
         </button>
       </div>
-      {error && <p className="mt-2 text-sm text-red-400">{error}</p>}
+      {error && <p className="mt-2 text-sm text-accent-red">{error}</p>}
       {success && <p className="mt-2 text-sm text-green-400">{success}</p>}
     </form>
   );

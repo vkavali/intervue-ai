@@ -361,7 +361,7 @@ export default async function CandidateDashboard() {
                     <p className="text-xs text-gray-500">
                       {s.company.name} &middot; {s.template.role} &middot; {s.template.seniority}
                     </p>
-                    <p className="text-xs text-red-400/70 mt-1">
+                    <p className="text-xs text-accent-red/70 mt-1">
                       Expired: {new Date(s.scheduledAt!).toLocaleDateString("en-US", {
                         weekday: "short",
                         month: "short",
@@ -398,7 +398,7 @@ export default async function CandidateDashboard() {
               const report = s.auditReport;
               const decisionColors: Record<string, string> = {
                 HIRE: "text-green-400 bg-green-500/10 border-green-500/30",
-                NO_HIRE: "text-red-400 bg-red-500/10 border-red-500/30",
+                NO_HIRE: "text-accent-red bg-accent-red/10 border-accent-red/30",
                 FURTHER_ROUND: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30",
               };
 
@@ -464,7 +464,7 @@ export default async function CandidateDashboard() {
                           <p className={`mt-1 text-lg font-semibold ${
                             metric.value >= 8 ? "text-green-400" :
                             metric.value >= 6 ? "text-yellow-400" :
-                            metric.value >= 4 ? "text-orange-400" : "text-red-400"
+                            metric.value >= 4 ? "text-orange-400" : "text-accent-red"
                           }`}>
                             {metric.value.toFixed(1)}
                           </p>

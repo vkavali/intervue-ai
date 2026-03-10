@@ -506,7 +506,7 @@ export default function NewInterviewPage() {
       </div>
 
       {error && (
-        <div className="mb-6 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+        <div className="mb-6 rounded-lg border border-accent-red/30 bg-accent-red/10 px-4 py-3 text-sm text-accent-red">
           {error}
         </div>
       )}
@@ -1031,7 +1031,7 @@ export default function NewInterviewPage() {
                               ? "bg-green-500/10 text-green-400"
                               : problem.difficulty === "MEDIUM"
                                 ? "bg-yellow-500/10 text-yellow-400"
-                                : "bg-red-500/10 text-red-400"
+                                : "bg-accent-red/10 text-accent-red"
                           }`}
                         >
                           {problem.difficulty}
@@ -1142,7 +1142,7 @@ export default function NewInterviewPage() {
                   <button
                     type="button"
                     onClick={() => removeQuestion(question.id)}
-                    className="text-sm text-red-400 hover:text-red-300 transition-colors"
+                    className="text-sm text-accent-red hover:text-red-300 transition-colors"
                   >
                     Remove
                   </button>

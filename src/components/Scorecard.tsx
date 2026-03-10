@@ -34,7 +34,7 @@ const decisionLabels: Record<string, { label: string; color: string; bgColor: st
   strong_hire: { label: "Strong Hire", color: "text-green-400", bgColor: "bg-green-900/30 border-green-700" },
   hire: { label: "Hire", color: "text-green-300", bgColor: "bg-green-900/20 border-green-800" },
   no_hire: { label: "No Hire", color: "text-red-300", bgColor: "bg-red-900/20 border-red-800" },
-  strong_no_hire: { label: "Strong No Hire", color: "text-red-400", bgColor: "bg-red-900/30 border-red-700" },
+  strong_no_hire: { label: "Strong No Hire", color: "text-accent-red", bgColor: "bg-red-900/30 border-red-700" },
 }
 
 const riskSeverityStyles: Record<string, { bg: string; text: string; dot: string }> = {

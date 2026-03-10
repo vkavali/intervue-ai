@@ -25,7 +25,7 @@ export function SessionTimer({ startedAt, totalDurationMinutes }: SessionTimerPr
   }, [startedAt, totalDurationMinutes]);
 
   if (remaining <= 0) {
-    return <span className="text-xs font-medium text-red-400">Expired</span>;
+    return <span className="text-xs font-medium text-accent-red">Expired</span>;
   }
 
   const mins = Math.floor(remaining / 60);
@@ -33,7 +33,7 @@ export function SessionTimer({ startedAt, totalDurationMinutes }: SessionTimerPr
   const isLow = remaining < 300;
 
   return (
-    <span className={`text-xs font-mono ${isLow ? "text-red-400" : "text-green-400"}`}>
+    <span className={`text-xs font-mono ${isLow ? "text-accent-red" : "text-green-400"}`}>
       {mins}:{secs.toString().padStart(2, "0")} left
     </span>
   );

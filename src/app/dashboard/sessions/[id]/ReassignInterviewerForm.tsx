@@ -81,7 +81,7 @@ export function ReassignInterviewerForm({
       >
         {loading ? "Saving..." : "Reassign"}
       </button>
-      {error && <p className="text-sm text-red-400">{error}</p>}
+      {error && <p className="text-sm text-accent-red">{error}</p>}
       {success && <p className="text-sm text-green-400">{success}</p>}
     </form>
   );

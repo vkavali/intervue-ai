@@ -192,7 +192,7 @@ export default async function TalentProfilePage({
                 const scoreColor =
                   report.overallScore >= 80 ? "border-green-500/30 hover:border-green-500/50" :
                   report.overallScore >= 60 ? "border-yellow-500/30 hover:border-yellow-500/50" :
-                  report.overallScore >= 40 ? "border-orange-500/30 hover:border-orange-500/50" : "border-red-500/30 hover:border-red-500/50"
+                  report.overallScore >= 40 ? "border-orange-500/30 hover:border-orange-500/50" : "border-accent-red/30 hover:border-red-500/50"
 
                 const scoreGradient =
                   report.overallScore >= 80 ? "from-green-900/10" :

@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 
 const aiLevelLabels: Record<number, { label: string; color: string }> = {
-  0: { label: "L0 No AI", color: "text-red-400 bg-red-500/10 border-red-500/30" },
+  0: { label: "L0 No AI", color: "text-accent-red bg-accent-red/10 border-accent-red/30" },
   1: { label: "L1 Hint", color: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30" },
   2: { label: "L2 Scaffold", color: "text-india-green bg-india-green/10 border-india-green/30" },
   3: { label: "L3 Guide", color: "text-saffron bg-saffron/10 border-saffron/30" },
@@ -15,7 +15,7 @@ const aiLevelLabels: Record<number, { label: string; color: string }> = {
 const difficultyColors: Record<string, string> = {
   EASY: "text-green-400 bg-green-500/10 border-green-500/30",
   MEDIUM: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30",
-  HARD: "text-red-400 bg-red-500/10 border-red-500/30",
+  HARD: "text-accent-red bg-accent-red/10 border-accent-red/30",
 };
 
 export default async function InterviewDetailPage({

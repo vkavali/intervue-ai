@@ -20,7 +20,7 @@ const typeIcons: Record<string, { icon: JSX.Element; color: string }> = {
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
     ),
-    color: "text-green-400",
+    color: "text-green-500",
   },
   SESSION_COMPLETED: {
     icon: (
@@ -28,7 +28,7 @@ const typeIcons: Record<string, { icon: JSX.Element; color: string }> = {
         <path strokeLinecap="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
       </svg>
     ),
-    color: "text-blue-400",
+    color: "text-india-green",
   },
   REVIEW_PENDING: {
     icon: (
@@ -36,7 +36,7 @@ const typeIcons: Record<string, { icon: JSX.Element; color: string }> = {
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15a2.25 2.25 0 012.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
       </svg>
     ),
-    color: "text-orange-400",
+    color: "text-saffron",
   },
   CANDIDATE_WAITING: {
     icon: (
@@ -44,7 +44,7 @@ const typeIcons: Record<string, { icon: JSX.Element; color: string }> = {
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
     ),
-    color: "text-yellow-400",
+    color: "text-yellow-500",
   },
   PIPELINE_UPDATE: {
     icon: (
@@ -175,7 +175,7 @@ export default function NotificationBell() {
       {/* Bell Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative rounded-md p-2 text-gray-300 transition-colors hover:bg-gray-700 hover:text-white"
+        className="relative rounded-md p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900"
         aria-label="Notifications"
       >
         <svg
@@ -194,7 +194,7 @@ export default function NotificationBell() {
 
         {/* Unread badge */}
         {unreadCount > 0 && (
-          <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
+          <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-accent-red px-1 text-[10px] font-bold text-white">
             {unreadCount > 99 ? "99+" : unreadCount}
           </span>
         )}
@@ -202,17 +202,17 @@ export default function NotificationBell() {
 
       {/* Dropdown Panel */}
       {isOpen && (
-        <div className="absolute right-0 top-full z-50 mt-2 w-96 rounded-lg border border-gray-700 bg-gray-900 shadow-xl">
+        <div className="absolute right-0 top-full z-50 mt-2 w-96 rounded-lg border border-gray-200 bg-white shadow-lg">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-gray-700 px-4 py-3">
-            <h3 className="text-sm font-semibold text-gray-100">
+          <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3">
+            <h3 className="text-sm font-semibold text-gray-900">
               Notifications
             </h3>
             {unreadCount > 0 && (
               <button
                 onClick={markAllRead}
                 disabled={isLoading}
-                className="text-xs font-medium text-blue-400 transition-colors hover:text-blue-300 disabled:opacity-50"
+                className="text-xs font-medium text-saffron transition-colors hover:text-saffron-dark disabled:opacity-50"
               >
                 Mark all as read
               </button>
@@ -232,8 +232,8 @@ export default function NotificationBell() {
                   <button
                     key={notification.id}
                     onClick={() => handleNotificationClick(notification)}
-                    className={`flex w-full items-start gap-3 border-b border-gray-800 px-4 py-3 text-left transition-colors hover:bg-gray-800 ${
-                      !notification.read ? "bg-gray-800/50" : ""
+                    className={`flex w-full items-start gap-3 border-b border-gray-100 px-4 py-3 text-left transition-colors hover:bg-gray-50 ${
+                      !notification.read ? "bg-saffron/5" : ""
                     }`}
                   >
                     {/* Type Icon */}
@@ -247,21 +247,21 @@ export default function NotificationBell() {
                         <p
                           className={`text-sm leading-snug ${
                             notification.read
-                              ? "text-gray-300"
-                              : "font-medium text-gray-100"
+                              ? "text-gray-600"
+                              : "font-medium text-gray-900"
                           }`}
                         >
                           {notification.title}
                         </p>
                         {/* Unread dot */}
                         {!notification.read && (
-                          <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-blue-500" />
+                          <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-saffron" />
                         )}
                       </div>
-                      <p className="mt-0.5 line-clamp-2 text-xs text-gray-400">
+                      <p className="mt-0.5 line-clamp-2 text-xs text-gray-500">
                         {notification.message}
                       </p>
-                      <p className="mt-1 text-xs text-gray-500">
+                      <p className="mt-1 text-xs text-gray-400">
                         {timeAgo(notification.createdAt)}
                       </p>
                     </div>

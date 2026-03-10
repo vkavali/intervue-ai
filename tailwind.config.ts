@@ -34,6 +34,11 @@ const config: Config = {
           light:   '#f2d0d3',
           dark:    '#d4969b',
         },
+        'accent-red': {
+          DEFAULT: '#c75c5c',
+          light:   '#d98888',
+          dark:    '#a84444',
+        },
         editor: {
           DEFAULT: '#111118',   // warm deep dark (main bg)
           panel:   '#18181f',   // warm panel bg (sidebars, top bar)

@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 
 const aiLevelLabels: Record<number, { label: string; color: string }> = {
-  0: { label: "L0 No AI", color: "text-red-400" },
+  0: { label: "L0 No AI", color: "text-accent-red" },
   1: { label: "L1 Hint", color: "text-yellow-400" },
   2: { label: "L2 Scaffold", color: "text-india-green" },
   3: { label: "L3 Guide", color: "text-saffron" },
@@ -17,7 +17,7 @@ const seniorityColors: Record<string, string> = {
   MID: "bg-india-green/10 text-india-green border-india-green/30",
   SENIOR: "bg-saffron/10 text-saffron border-saffron/30",
   STAFF: "bg-orange-500/10 text-orange-400 border-orange-500/30",
-  PRINCIPAL: "bg-red-500/10 text-red-400 border-red-500/30",
+  PRINCIPAL: "bg-accent-red/10 text-accent-red border-accent-red/30",
 };
 
 export default async function InterviewsPage() {

@@ -92,7 +92,7 @@ export default async function CandidateInterviewsPage() {
                         {interview.company.name} &middot; {interview.template.role} &middot; {interview.template.seniority} &middot; {interview.template.roundType}
                       </p>
                       {interview.scheduledAt && (
-                        <p className={`text-xs mt-1 ${isPastDue ? "text-red-400/70" : "text-gray-500"}`}>
+                        <p className={`text-xs mt-1 ${isPastDue ? "text-accent-red/70" : "text-gray-500"}`}>
                           {isPastDue ? "Expired: " : ""}
                           {new Date(interview.scheduledAt).toLocaleDateString("en-US", {
                             weekday: "short",

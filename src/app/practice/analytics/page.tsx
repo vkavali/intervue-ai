@@ -40,7 +40,7 @@ interface Recommendation {
 const diffColors: Record<string, string> = {
   EASY: "text-green-400",
   MEDIUM: "text-yellow-400",
-  HARD: "text-red-400",
+  HARD: "text-accent-red",
 };
 
 function formatTime(seconds: number): string {
@@ -154,8 +154,8 @@ export default function PracticeAnalyticsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
-        <div className="flex items-center gap-2 text-gray-400">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="flex items-center gap-2 text-gray-500">
           <svg className="animate-spin w-5 h-5" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
@@ -167,12 +167,12 @@ export default function PracticeAnalyticsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100">
+    <div className="min-h-screen bg-gray-50 text-gray-100">
       {/* Header */}
-      <div className="border-b border-gray-800 bg-gray-900/80 backdrop-blur-sm">
+      <div className="border-b border-gray-200 bg-gray-50 backdrop-blur-sm">
         <div className="mx-auto max-w-6xl px-6 py-8">
           <div className="flex items-center gap-3 mb-2">
-            <Link href="/practice" className="text-sm text-gray-500 hover:text-gray-300 transition-colors">
+            <Link href="/practice" className="text-sm text-gray-500 hover:text-gray-700 transition-colors">
               Practice
             </Link>
             <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -180,8 +180,8 @@ export default function PracticeAnalyticsPage() {
             </svg>
             <span className="text-sm text-saffron">Analytics</span>
           </div>
-          <h1 className="text-3xl font-bold text-white">Practice Analytics</h1>
-          <p className="mt-2 text-gray-400">Track your progress, identify weaknesses, and get personalized recommendations.</p>
+          <h1 className="text-3xl font-bold text-gray-900">Practice Analytics</h1>
+          <p className="mt-2 text-gray-500">Track your progress, identify weaknesses, and get personalized recommendations.</p>
         </div>
       </div>
 
@@ -191,7 +191,7 @@ export default function PracticeAnalyticsPage() {
             <svg className="mx-auto h-12 w-12 text-gray-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
             </svg>
-            <h2 className="text-lg font-semibold text-white mb-2">No Data Yet</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-2">No Data Yet</h2>
             <p className="text-gray-500 mb-6">Start practicing problems to see your analytics and get personalized recommendations.</p>
             <Link href="/practice" className="rounded-lg border border-saffron bg-transparent px-6 py-2.5 text-sm font-medium text-saffron hover:bg-saffron/10 transition-colors">
               Start Practicing
@@ -202,12 +202,12 @@ export default function PracticeAnalyticsPage() {
             {/* Overall Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { label: "Problems Attempted", value: profile.overallStats.totalAttempted, color: "text-blue-400" },
+                { label: "Problems Attempted", value: profile.overallStats.totalAttempted, color: "text-india-green" },
                 { label: "Completed", value: profile.overallStats.totalCompleted, color: "text-green-400" },
                 { label: "Completion Rate", value: `${Math.round(profile.overallStats.overallCompletionRate * 100)}%`, color: "text-saffron" },
                 { label: "Avg Time", value: formatTime(profile.overallStats.avgTimeSeconds), color: "text-yellow-400" },
               ].map((stat) => (
-                <div key={stat.label} className="rounded-xl border border-gray-800 bg-gray-900/50 p-5">
+                <div key={stat.label} className="rounded-xl border border-gray-200 bg-white p-5">
                   <p className="text-xs text-gray-500 uppercase font-semibold mb-1">{stat.label}</p>
                   <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
                 </div>
@@ -217,8 +217,8 @@ export default function PracticeAnalyticsPage() {
             {/* Radar Chart + Weak Areas */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Radar */}
-              <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-6">
-                <h2 className="text-lg font-semibold text-white mb-4">Skill Radar</h2>
+              <div className="rounded-xl border border-gray-200 bg-white p-6">
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Skill Radar</h2>
                 {allPatterns.length >= 3 ? (
                   <RadarChart stats={allPatterns} />
                 ) : (
@@ -227,8 +227,8 @@ export default function PracticeAnalyticsPage() {
               </div>
 
               {/* Weak Patterns */}
-              <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-6">
-                <h2 className="text-lg font-semibold text-white mb-4">
+              <div className="rounded-xl border border-gray-200 bg-white p-6">
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">
                   {profile.weakPatterns.length > 0 ? "Areas to Improve" : "Pattern Scores"}
                 </h2>
                 <div className="space-y-3">
@@ -236,15 +236,15 @@ export default function PracticeAnalyticsPage() {
                     <div key={stat.pattern} className="flex items-center gap-3">
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm text-gray-300">{stat.pattern}</span>
-                          <span className={`text-xs font-semibold ${stat.score >= 60 ? "text-green-400" : stat.score >= 40 ? "text-yellow-400" : "text-red-400"}`}>
+                          <span className="text-sm text-gray-700">{stat.pattern}</span>
+                          <span className={`text-xs font-semibold ${stat.score >= 60 ? "text-green-400" : stat.score >= 40 ? "text-yellow-400" : "text-accent-red"}`}>
                             {stat.score}/100
                           </span>
                         </div>
-                        <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                           <div
                             className={`h-full rounded-full transition-all ${
-                              stat.score >= 60 ? "bg-green-500" : stat.score >= 40 ? "bg-yellow-500" : "bg-red-500"
+                              stat.score >= 60 ? "bg-green-500" : stat.score >= 40 ? "bg-yellow-500" : "bg-accent-red/50"
                             }`}
                             style={{ width: `${stat.score}%` }}
                           />
@@ -262,12 +262,12 @@ export default function PracticeAnalyticsPage() {
             </div>
 
             {/* Pattern Breakdown Table */}
-            <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-6">
-              <h2 className="text-lg font-semibold text-white mb-4">Pattern Breakdown</h2>
+            <div className="rounded-xl border border-gray-200 bg-white p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Pattern Breakdown</h2>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="text-left text-xs text-gray-500 uppercase border-b border-gray-800">
+                    <tr className="text-left text-xs text-gray-500 uppercase border-b border-gray-200">
                       <th className="pb-3 pr-4">Pattern</th>
                       <th className="pb-3 pr-4">Attempted</th>
                       <th className="pb-3 pr-4">Completed</th>
@@ -279,26 +279,26 @@ export default function PracticeAnalyticsPage() {
                   </thead>
                   <tbody>
                     {allPatterns.map((stat) => (
-                      <tr key={stat.pattern} className="border-b border-gray-800/50 hover:bg-gray-800/30">
-                        <td className="py-3 pr-4 text-gray-300 font-medium">{stat.pattern}</td>
-                        <td className="py-3 pr-4 text-gray-400">{stat.attempted}</td>
+                      <tr key={stat.pattern} className="border-b border-gray-200/50 hover:bg-gray-50">
+                        <td className="py-3 pr-4 text-gray-700 font-medium">{stat.pattern}</td>
+                        <td className="py-3 pr-4 text-gray-500">{stat.attempted}</td>
                         <td className="py-3 pr-4 text-green-400">{stat.completed}</td>
-                        <td className="py-3 pr-4 text-red-400">{stat.abandoned}</td>
+                        <td className="py-3 pr-4 text-accent-red">{stat.abandoned}</td>
                         <td className="py-3 pr-4">
-                          <span className={`${stat.completionRate >= 0.7 ? "text-green-400" : stat.completionRate >= 0.4 ? "text-yellow-400" : "text-red-400"}`}>
+                          <span className={`${stat.completionRate >= 0.7 ? "text-green-400" : stat.completionRate >= 0.4 ? "text-yellow-400" : "text-accent-red"}`}>
                             {Math.round(stat.completionRate * 100)}%
                           </span>
                         </td>
-                        <td className="py-3 pr-4 text-gray-400">{formatTime(stat.avgTimeSeconds)}</td>
+                        <td className="py-3 pr-4 text-gray-500">{formatTime(stat.avgTimeSeconds)}</td>
                         <td className="py-3">
                           <div className="flex items-center gap-2">
-                            <div className="w-16 h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                            <div className="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                               <div
-                                className={`h-full rounded-full ${stat.score >= 60 ? "bg-green-500" : stat.score >= 40 ? "bg-yellow-500" : "bg-red-500"}`}
+                                className={`h-full rounded-full ${stat.score >= 60 ? "bg-green-500" : stat.score >= 40 ? "bg-yellow-500" : "bg-accent-red/50"}`}
                                 style={{ width: `${stat.score}%` }}
                               />
                             </div>
-                            <span className="text-gray-400 text-xs">{stat.score}</span>
+                            <span className="text-gray-500 text-xs">{stat.score}</span>
                           </div>
                         </td>
                       </tr>
@@ -309,12 +309,12 @@ export default function PracticeAnalyticsPage() {
             </div>
 
             {/* Recommendations */}
-            <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-6">
-              <h2 className="text-lg font-semibold text-white mb-1">Recommended Next Problems</h2>
+            <div className="rounded-xl border border-gray-200 bg-white p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-1">Recommended Next Problems</h2>
               <p className="text-sm text-gray-500 mb-4">Based on your weakness profile and practice history.</p>
 
               {loadingRecs ? (
-                <div className="flex items-center gap-2 text-sm text-gray-400 py-4">
+                <div className="flex items-center gap-2 text-sm text-gray-500 py-4">
                   <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
@@ -324,9 +324,9 @@ export default function PracticeAnalyticsPage() {
               ) : recommendations.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {recommendations.map((rec) => (
-                    <div key={rec.id} className="rounded-lg border border-gray-700 bg-gray-800/50 p-4 hover:border-saffron/30 transition-colors">
+                    <div key={rec.id} className="rounded-lg border border-gray-200 bg-gray-50 p-4 hover:border-saffron/30 transition-colors">
                       <div className="flex items-center justify-between mb-2">
-                        <span className={`text-xs font-medium ${diffColors[rec.difficulty] || "text-gray-400"}`}>
+                        <span className={`text-xs font-medium ${diffColors[rec.difficulty] || "text-gray-500"}`}>
                           {rec.difficulty}
                         </span>
                         {rec.pattern && (
@@ -335,7 +335,7 @@ export default function PracticeAnalyticsPage() {
                           </span>
                         )}
                       </div>
-                      <h3 className="text-sm font-semibold text-white mb-2">{rec.title}</h3>
+                      <h3 className="text-sm font-semibold text-gray-900 mb-2">{rec.title}</h3>
                       <div className="space-y-1 mb-3">
                         {rec.reasons.map((reason, i) => (
                           <p key={i} className="text-[11px] text-gray-500 flex items-start gap-1">

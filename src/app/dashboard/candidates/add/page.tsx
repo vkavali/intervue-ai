@@ -402,8 +402,8 @@ export default function AddCandidatePage() {
 
           {/* Submit Error */}
           {submitError && (
-            <div className="mt-4 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3">
-              <p className="text-sm text-red-400">{submitError}</p>
+            <div className="mt-4 rounded-lg border border-accent-red/30 bg-accent-red/10 px-4 py-3">
+              <p className="text-sm text-accent-red">{submitError}</p>
             </div>
           )}
 

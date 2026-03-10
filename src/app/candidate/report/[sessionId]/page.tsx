@@ -9,7 +9,7 @@ import Link from "next/link"
 
 const decisionConfig: Record<string, { label: string; color: string; bg: string; glow: string }> = {
   HIRE: { label: "Hire", color: "text-green-400", bg: "bg-green-500/10 border-green-500/30", glow: "shadow-green-500/20" },
-  NO_HIRE: { label: "No Hire", color: "text-red-400", bg: "bg-red-500/10 border-red-500/30", glow: "shadow-red-500/20" },
+  NO_HIRE: { label: "No Hire", color: "text-accent-red", bg: "bg-accent-red/10 border-accent-red/30", glow: "shadow-red-500/20" },
   FURTHER_ROUND: { label: "Further Round", color: "text-yellow-400", bg: "bg-yellow-500/10 border-yellow-500/30", glow: "shadow-yellow-500/20" },
 }
 
@@ -218,7 +218,7 @@ export default async function CandidateReportPage({
               {improvements.map((m) => (
                 <div key={m.label} className="flex items-center justify-between rounded-xl bg-amber-500/5 border border-amber-500/10 p-4 transition-all hover:border-amber-500/30">
                   <span className="text-sm font-medium text-gray-200">{m.label}</span>
-                  <span className={`text-sm font-bold ${m.value >= 4 ? "text-amber-400" : "text-red-400"}`}>
+                  <span className={`text-sm font-bold ${m.value >= 4 ? "text-amber-400" : "text-accent-red"}`}>
                     {m.value.toFixed(1)} / 10
                   </span>
                 </div>
@@ -226,8 +226,8 @@ export default async function CandidateReportPage({
             </div>
           )}
           {riskFlags.length > 0 && (
-            <div className="rounded-xl bg-red-500/5 border border-red-500/10 p-5">
-              <h3 className="text-sm font-semibold text-red-400 mb-3">Risk Flags</h3>
+            <div className="rounded-xl bg-accent-red/50/5 border border-red-500/10 p-5">
+              <h3 className="text-sm font-semibold text-accent-red mb-3">Risk Flags</h3>
               <ul className="space-y-2">
                 {riskFlags.map((flag, i) => (
                   <li key={i} className="flex items-start gap-2.5 text-sm text-gray-500">
