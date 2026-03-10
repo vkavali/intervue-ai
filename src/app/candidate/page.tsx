@@ -23,19 +23,34 @@ export default async function CandidateDashboard() {
 
   const userId = session.user.id;
 
-  // Fetch user gamification data
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: {
-      xp: true,
-      level: true,
-      currentStreak: true,
-      longestStreak: true,
-      lastActiveDate: true,
-    },
-  });
+  // Fetch user gamification data (graceful if tables/columns don't exist yet)
+  let xp = 0;
+  let userGam: { currentStreak: number; longestStreak: number; lastActiveDate: Date | null } | null = null;
+  let globalRank = 1;
+  let recentBadges: Array<{ badge: { slug: string; name: string; icon: string }; earnedAt: Date }> = [];
+  let heatmap: Array<{ date: string; problems: number; xpEarned: number }> = [];
 
-  const xp = user?.xp || 0;
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        xp: true,
+        level: true,
+        currentStreak: true,
+        longestStreak: true,
+        lastActiveDate: true,
+      },
+    });
+    xp = user?.xp || 0;
+    userGam = user ? { currentStreak: user.currentStreak, longestStreak: user.longestStreak, lastActiveDate: user.lastActiveDate } : null;
+
+    globalRank = (await prisma.user.count({
+      where: { xp: { gt: xp }, role: "CANDIDATE" },
+    })) + 1;
+  } catch {
+    // Gamification columns may not exist yet
+  }
+
   const level = getLevel(xp);
   const xpProgress = xpProgressInLevel(xp);
 
@@ -44,25 +59,25 @@ export default async function CandidateDashboard() {
     where: { userId, status: "COMPLETED" },
   });
 
-  const globalRank = (await prisma.user.count({
-    where: { xp: { gt: xp }, role: "CANDIDATE" },
-  })) + 1;
+  try {
+    // Get recent badges
+    recentBadges = await prisma.userBadge.findMany({
+      where: { userId },
+      include: { badge: true },
+      orderBy: { earnedAt: "desc" },
+      take: 5,
+    });
 
-  // Get recent badges
-  const recentBadges = await prisma.userBadge.findMany({
-    where: { userId },
-    include: { badge: true },
-    orderBy: { earnedAt: "desc" },
-    take: 5,
-  });
-
-  // Get heatmap data (last 365 days)
-  const oneYearAgo = new Date();
-  oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
-  const heatmap = await prisma.dailyActivity.findMany({
-    where: { userId, date: { gte: oneYearAgo.toISOString().split("T")[0] } },
-    orderBy: { date: "asc" },
-  });
+    // Get heatmap data (last 365 days)
+    const oneYearAgo = new Date();
+    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+    heatmap = await prisma.dailyActivity.findMany({
+      where: { userId, date: { gte: oneYearAgo.toISOString().split("T")[0] } },
+      orderBy: { date: "asc" },
+    });
+  } catch {
+    // Badge/activity tables may not exist yet
+  }
 
   // Fetch candidate's interview sessions
   const sessions = await prisma.interviewSession.findMany({
@@ -155,11 +170,11 @@ export default async function CandidateDashboard() {
         <div className="rounded-xl border border-gray-200 bg-white p-5">
           <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Streak</p>
           <div className="flex items-center gap-2 mt-2">
-            <span className={`text-2xl ${user?.currentStreak ? "animate-pulse" : "opacity-40"}`}>🔥</span>
-            <p className="text-3xl font-bold text-gray-900">{user?.currentStreak || 0}</p>
+            <span className={`text-2xl ${userGam?.currentStreak ? "animate-pulse" : "opacity-40"}`}>🔥</span>
+            <p className="text-3xl font-bold text-gray-900">{userGam?.currentStreak || 0}</p>
           </div>
           <p className="mt-1 text-xs text-gray-500">
-            Best: {user?.longestStreak || 0} days
+            Best: {userGam?.longestStreak || 0} days
           </p>
         </div>
 

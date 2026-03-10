@@ -79,21 +79,25 @@ export default async function CandidateLayout({
     redirect("/dashboard");
   }
 
-  // Fetch gamification data for sidebar
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email! },
-    select: { xp: true, level: true, currentStreak: true, longestStreak: true, lastActiveDate: true },
-  });
-
-  const xp = user?.xp || 0;
+  // Fetch gamification data for sidebar (graceful if columns don't exist yet)
+  let xp = 0, currentStreak = 0, longestStreak = 0, isActiveToday = false;
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email! },
+      select: { xp: true, level: true, currentStreak: true, longestStreak: true, lastActiveDate: true },
+    });
+    xp = user?.xp || 0;
+    currentStreak = user?.currentStreak || 0;
+    longestStreak = user?.longestStreak || 0;
+    const lastActive = user?.lastActiveDate;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    isActiveToday = lastActive ? new Date(lastActive).toDateString() === today.toDateString() : false;
+  } catch {
+    // Gamification columns may not exist yet - use defaults
+  }
   const level = getLevel(xp);
   const progress = xpProgressInLevel(xp);
-  const currentStreak = user?.currentStreak || 0;
-  const longestStreak = user?.longestStreak || 0;
-  const lastActive = user?.lastActiveDate;
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const isActiveToday = lastActive ? new Date(lastActive).toDateString() === today.toDateString() : false;
 
   return (
     <div className="flex min-h-[calc(100vh-4rem)] bg-gray-50">
