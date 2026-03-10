@@ -84,8 +84,8 @@ export default function BillingPage() {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white">Billing</h1>
-        <p className="mt-1 text-sm text-gray-400">
+        <h1 className="text-2xl font-bold text-gray-900">Billing</h1>
+        <p className="mt-1 text-sm text-gray-500">
           Manage your subscription and billing details
         </p>
       </div>
@@ -117,14 +117,14 @@ export default function BillingPage() {
       )}
 
       {/* Current Plan Card */}
-      <div className="mb-8 rounded-xl border border-gray-800 bg-gray-900 p-6">
+      <div className="mb-8 rounded-xl border border-gray-200 bg-white p-6">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm text-gray-400">Current Plan</p>
-            <h2 className="mt-1 text-xl font-semibold text-white">
+            <p className="text-sm text-gray-500">Current Plan</p>
+            <h2 className="mt-1 text-xl font-semibold text-gray-900">
               {PLANS[currentPlan].name}
             </h2>
-            <p className="mt-1 text-sm text-gray-400">
+            <p className="mt-1 text-sm text-gray-500">
               {currentPlan === "FREE"
                 ? "You are on the free plan"
                 : `$${PLANS[currentPlan].price}/month`}
@@ -134,7 +134,7 @@ export default function BillingPage() {
             <button
               onClick={handlePortal}
               disabled={portalLoading}
-              className="inline-flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-700 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {portalLoading ? (
                 <svg
@@ -185,8 +185,8 @@ export default function BillingPage() {
 
       {/* Pricing Cards */}
       <div className="mb-4">
-        <h2 className="text-lg font-semibold text-white">Plans</h2>
-        <p className="mt-1 text-sm text-gray-400">
+        <h2 className="text-lg font-semibold text-gray-900">Plans</h2>
+        <p className="mt-1 text-sm text-gray-500">
           Choose the plan that fits your hiring needs
         </p>
       </div>
@@ -201,12 +201,12 @@ export default function BillingPage() {
           return (
             <div
               key={planKey}
-              className={`relative rounded-xl border bg-gray-900 p-6 transition-all ${
+              className={`relative rounded-xl border bg-white p-6 transition-all ${
                 current
                   ? "border-saffron ring-1 ring-saffron/20"
                   : recommended
                   ? "border-saffron/50"
-                  : "border-gray-800 hover:border-gray-700"
+                  : "border-gray-200 hover:border-gray-200"
               }`}
             >
               {/* Recommended badge */}
@@ -221,7 +221,7 @@ export default function BillingPage() {
               {/* Current badge */}
               {current && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="inline-flex items-center rounded-full bg-green-600 px-3 py-1 text-xs font-semibold text-white">
+                  <span className="inline-flex items-center rounded-full border border-india-green bg-transparent px-3 py-1 text-xs font-semibold text-gray-900">
                     Current Plan
                   </span>
                 </div>
@@ -229,15 +229,15 @@ export default function BillingPage() {
 
               {/* Plan header */}
               <div className="mb-6 mt-2">
-                <h3 className="text-lg font-semibold text-white">
+                <h3 className="text-lg font-semibold text-gray-900">
                   {plan.name}
                 </h3>
                 <div className="mt-2 flex items-baseline gap-1">
-                  <span className="text-3xl font-bold text-white">
+                  <span className="text-3xl font-bold text-gray-900">
                     {plan.price === 0 ? "Free" : `$${plan.price}`}
                   </span>
                   {plan.price > 0 && (
-                    <span className="text-sm text-gray-400">/month</span>
+                    <span className="text-sm text-gray-500">/month</span>
                   )}
                 </div>
               </div>
@@ -259,7 +259,7 @@ export default function BillingPage() {
                         d="M5 13l4 4L19 7"
                       />
                     </svg>
-                    <span className="text-sm text-gray-300">{feature}</span>
+                    <span className="text-sm text-gray-700">{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -268,7 +268,7 @@ export default function BillingPage() {
               {current ? (
                 <button
                   disabled
-                  className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-sm font-medium text-gray-400 cursor-not-allowed"
+                  className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-sm font-medium text-gray-500 cursor-not-allowed"
                 >
                   Current Plan
                 </button>
@@ -308,7 +308,7 @@ export default function BillingPage() {
               ) : (
                 <button
                   disabled
-                  className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-sm font-medium text-gray-500 cursor-not-allowed"
+                  className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-sm font-medium text-gray-500 cursor-not-allowed"
                 >
                   Downgrade via Manage Billing
                 </button>
@@ -319,13 +319,13 @@ export default function BillingPage() {
       </div>
 
       {/* FAQ / Info section */}
-      <div className="mt-12 rounded-xl border border-gray-800 bg-gray-900 p-6">
-        <h3 className="text-lg font-semibold text-white">
+      <div className="mt-12 rounded-xl border border-gray-200 bg-white p-6">
+        <h3 className="text-lg font-semibold text-gray-900">
           Frequently Asked Questions
         </h3>
         <div className="mt-4 space-y-4">
           <div>
-            <h4 className="text-sm font-medium text-gray-300">
+            <h4 className="text-sm font-medium text-gray-700">
               Can I change plans at any time?
             </h4>
             <p className="mt-1 text-sm text-gray-500">
@@ -336,7 +336,7 @@ export default function BillingPage() {
             </p>
           </div>
           <div>
-            <h4 className="text-sm font-medium text-gray-300">
+            <h4 className="text-sm font-medium text-gray-700">
               What happens if I cancel?
             </h4>
             <p className="mt-1 text-sm text-gray-500">
@@ -346,7 +346,7 @@ export default function BillingPage() {
             </p>
           </div>
           <div>
-            <h4 className="text-sm font-medium text-gray-300">
+            <h4 className="text-sm font-medium text-gray-700">
               Do you offer annual billing?
             </h4>
             <p className="mt-1 text-sm text-gray-500">

@@ -29,7 +29,7 @@ export function ProfileVisibilityToggle({ initialValue }: ProfileVisibilityToggl
   return (
     <div className="flex items-center justify-between">
       <div>
-        <p className="text-sm text-white">Public Profile</p>
+        <p className="text-sm text-gray-900">Public Profile</p>
         <p className="text-xs text-gray-500">
           {isPublic ? "Your talent profile is visible to everyone" : "Your talent profile is hidden"}
         </p>

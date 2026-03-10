@@ -66,7 +66,7 @@ function SignUpForm() {
   // Show nothing while checking session
   if (status === "loading" || status === "authenticated") {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-950">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="animate-spin h-8 w-8 border-2 border-saffron border-t-transparent rounded-full" />
       </div>
     );
@@ -120,12 +120,12 @@ function SignUpForm() {
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-12">
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-gray-50 px-4 py-12">
       <div className="w-full max-w-lg">
-        <div className="rounded-2xl border border-gray-800 bg-gray-900 p-8 shadow-xl">
+        <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
           <div className="mb-8 text-center">
-            <h1 className="text-2xl font-bold text-white">Create Your Account</h1>
-            <p className="mt-2 text-sm text-gray-400">
+            <h1 className="text-2xl font-bold text-gray-900">Create Your Account</h1>
+            <p className="mt-2 text-sm text-gray-500">
               {role === "CANDIDATE"
                 ? "Join Intervue.AI and ace your next coding interview"
                 : role === "INTERVIEWER"
@@ -135,7 +135,7 @@ function SignUpForm() {
           </div>
 
           {error && (
-            <div className="mb-6 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+            <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
               {error}
             </div>
           )}
@@ -144,7 +144,7 @@ function SignUpForm() {
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-300 mb-1.5"
+                className="block text-sm font-medium text-gray-700 mb-1.5"
               >
                 Full Name
               </label>
@@ -154,7 +154,7 @@ function SignUpForm() {
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors"
+                className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors"
                 placeholder="John Doe"
               />
             </div>
@@ -162,7 +162,7 @@ function SignUpForm() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-300 mb-1.5"
+                className="block text-sm font-medium text-gray-700 mb-1.5"
               >
                 Email Address
               </label>
@@ -172,7 +172,7 @@ function SignUpForm() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors"
+                className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors"
                 placeholder="you@example.com"
               />
             </div>
@@ -180,7 +180,7 @@ function SignUpForm() {
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-300 mb-1.5"
+                className="block text-sm font-medium text-gray-700 mb-1.5"
               >
                 Password
               </label>
@@ -191,13 +191,13 @@ function SignUpForm() {
                 minLength={8}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors"
+                className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors"
                 placeholder="Minimum 8 characters"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-3">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
                 I am a...
               </label>
               <div className="grid grid-cols-1 gap-3">
@@ -206,8 +206,8 @@ function SignUpForm() {
                     key={option.value}
                     className={`flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition-all ${
                       role === option.value
-                        ? "border-saffron bg-saffron/10"
-                        : "border-gray-700 bg-gray-800 hover:border-gray-600"
+                        ? "border-saffron bg-saffron/5"
+                        : "border-gray-200 bg-white hover:border-gray-300"
                     }`}
                   >
                     <input
@@ -219,10 +219,10 @@ function SignUpForm() {
                       className="mt-1 accent-saffron"
                     />
                     <div>
-                      <span className="block text-sm font-medium text-white">
+                      <span className="block text-sm font-medium text-gray-900">
                         {option.label}
                       </span>
-                      <span className="block text-xs text-gray-400 mt-0.5">
+                      <span className="block text-xs text-gray-500 mt-0.5">
                         {option.description}
                       </span>
                     </div>
@@ -235,7 +235,7 @@ function SignUpForm() {
               <div>
                 <label
                   htmlFor="companyName"
-                  className="block text-sm font-medium text-gray-300 mb-1.5"
+                  className="block text-sm font-medium text-gray-700 mb-1.5"
                 >
                   Company Name
                 </label>
@@ -245,7 +245,7 @@ function SignUpForm() {
                   required
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
-                  className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors"
+                  className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors"
                   placeholder="Acme Inc."
                 />
               </div>
@@ -254,7 +254,7 @@ function SignUpForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg bg-gradient-to-r from-saffron to-india-green py-2.5 text-sm font-semibold text-white transition-all hover:from-saffron-light hover:to-india-green-light disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full rounded-lg border border-saffron bg-transparent py-2.5 text-sm font-semibold text-saffron-dark transition-all hover:bg-saffron/10 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -270,11 +270,11 @@ function SignUpForm() {
             </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-gray-400">
+          <p className="mt-6 text-center text-sm text-gray-500">
             Already have an account?{" "}
             <Link
               href="/auth/signin"
-              className="font-medium text-saffron hover:text-saffron-light transition-colors"
+              className="font-medium text-saffron hover:text-saffron-dark transition-colors"
             >
               Sign in
             </Link>

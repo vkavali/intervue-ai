@@ -7,8 +7,8 @@ import Link from "next/link";
 const statusColors: Record<string, { bg: string; text: string; dot: string; label: string }> = {
   PENDING: { bg: "bg-yellow-500/10", text: "text-yellow-400", dot: "bg-yellow-400", label: "Scheduled" },
   ACTIVE: { bg: "bg-green-500/10", text: "text-green-400", dot: "bg-green-400", label: "In Progress" },
-  COMPLETED: { bg: "bg-blue-500/10", text: "text-blue-400", dot: "bg-blue-400", label: "Completed" },
-  CANCELLED: { bg: "bg-gray-500/10", text: "text-gray-400", dot: "bg-gray-400", label: "Cancelled" },
+  COMPLETED: { bg: "bg-india-green/10", text: "text-india-green", dot: "bg-blue-400", label: "Completed" },
+  CANCELLED: { bg: "bg-gray-500/10", text: "text-gray-500", dot: "bg-gray-400", label: "Cancelled" },
 };
 
 export default async function CandidateInterviewsPage() {
@@ -37,19 +37,19 @@ export default async function CandidateInterviewsPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white">My Interviews</h1>
-        <p className="mt-1 text-gray-400">
+        <h1 className="text-2xl font-bold text-gray-900">My Interviews</h1>
+        <p className="mt-1 text-gray-500">
           View all your scheduled, active, and completed interviews.
         </p>
       </div>
 
       {interviews.length === 0 ? (
-        <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-12 text-center">
+        <div className="rounded-xl border border-gray-200 bg-white p-12 text-center">
           <svg className="mx-auto h-12 w-12 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
           </svg>
-          <h3 className="mt-4 text-lg font-semibold text-white">No interviews yet</h3>
-          <p className="mt-2 text-sm text-gray-400 max-w-sm mx-auto">
+          <h3 className="mt-4 text-lg font-semibold text-gray-900">No interviews yet</h3>
+          <p className="mt-2 text-sm text-gray-500 max-w-sm mx-auto">
             You haven&apos;t been invited to any interviews yet. Practice your skills while you wait.
           </p>
           <Link
@@ -73,8 +73,8 @@ export default async function CandidateInterviewsPage() {
             return (
               <div
                 key={interview.id}
-                className={`rounded-xl border bg-gray-900/50 p-5 transition-colors ${
-                  isPastDue ? "border-gray-700/50 opacity-75" : "border-gray-800 hover:border-gray-700"
+                className={`rounded-xl border bg-white p-5 transition-colors ${
+                  isPastDue ? "border-gray-200 opacity-75" : "border-gray-200 hover:border-gray-200"
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -85,10 +85,10 @@ export default async function CandidateInterviewsPage() {
                       </svg>
                     </div>
                     <div>
-                      <h3 className={`text-sm font-semibold ${isPastDue ? "text-gray-300" : "text-white"}`}>
+                      <h3 className={`text-sm font-semibold ${isPastDue ? "text-gray-700" : "text-gray-900"}`}>
                         {interview.template.title}
                       </h3>
-                      <p className="text-xs text-gray-400">
+                      <p className="text-xs text-gray-500">
                         {interview.company.name} &middot; {interview.template.role} &middot; {interview.template.seniority} &middot; {interview.template.roundType}
                       </p>
                       {interview.scheduledAt && (
@@ -109,7 +109,7 @@ export default async function CandidateInterviewsPage() {
                   <div className="flex items-center gap-3">
                     {interview.auditReport && (
                       <div className="text-right mr-2">
-                        <p className="text-lg font-bold text-white">
+                        <p className="text-lg font-bold text-gray-900">
                           {interview.auditReport.overallScore.toFixed(1)}
                         </p>
                         <p className="text-[10px] text-gray-500 uppercase">Score</p>
@@ -117,7 +117,7 @@ export default async function CandidateInterviewsPage() {
                     )}
 
                     <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${
-                      isPastDue ? "bg-gray-500/10 text-gray-400" : `${status.bg} ${status.text}`
+                      isPastDue ? "bg-gray-500/10 text-gray-500" : `${status.bg} ${status.text}`
                     }`}>
                       <span className={`h-1.5 w-1.5 rounded-full ${isPastDue ? "bg-gray-400" : status.dot}`} />
                       {isPastDue ? "Expired" : status.label}
@@ -126,7 +126,7 @@ export default async function CandidateInterviewsPage() {
                     {interview.status === "ACTIVE" && !isPastDue && (
                       <Link
                         href={`/session/${interview.id}`}
-                        className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-500 transition-colors"
+                        className="rounded-lg border border-india-green bg-transparent px-4 py-2 text-sm font-medium text-gray-900 hover:bg-india-green/10 transition-colors"
                       >
                         Resume
                       </Link>
@@ -135,7 +135,7 @@ export default async function CandidateInterviewsPage() {
                     {interview.status === "PENDING" && !isPastDue && (
                       <Link
                         href={`/session/${interview.id}`}
-                        className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-500 transition-colors"
+                        className="rounded-lg border border-india-green bg-transparent px-4 py-2 text-sm font-medium text-gray-900 hover:bg-india-green/10 transition-colors"
                       >
                         Join
                       </Link>
@@ -153,7 +153,7 @@ export default async function CandidateInterviewsPage() {
                     {isPastDue && (
                       <a
                         href={`mailto:?subject=Interview Reschedule Request - ${interview.template.title}&body=Hi, I would like to request a reschedule for my interview: ${interview.template.title} (${interview.template.role}).`}
-                        className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-xs font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
+                        className="rounded-lg border border-gray-200 bg-gray-100 px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-200 hover:text-gray-900 transition-colors"
                       >
                         Contact Recruiter
                       </a>

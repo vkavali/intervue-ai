@@ -114,7 +114,7 @@ export default function CandidateSchedulePage() {
       {/* Back link */}
       <Link
         href="/candidate"
-        className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors mb-6"
+        className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors mb-6"
       >
         <svg
           className="w-4 h-4"
@@ -134,8 +134,8 @@ export default function CandidateSchedulePage() {
 
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white">Schedule an Interview</h1>
-        <p className="mt-1 text-gray-400">
+        <h1 className="text-2xl font-bold text-gray-900">Schedule an Interview</h1>
+        <p className="mt-1 text-gray-500">
           Browse available time slots and book one that works for you.
         </p>
       </div>
@@ -224,12 +224,12 @@ export default function CandidateSchedulePage() {
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="rounded-xl border border-gray-800 bg-gray-900/50 p-6 animate-pulse"
+              className="rounded-xl border border-gray-200 bg-white p-6 animate-pulse"
             >
-              <div className="h-5 w-40 bg-gray-800 rounded mb-4" />
+              <div className="h-5 w-40 bg-gray-100 rounded mb-4" />
               <div className="space-y-3">
-                <div className="h-16 bg-gray-800/50 rounded-lg" />
-                <div className="h-16 bg-gray-800/50 rounded-lg" />
+                <div className="h-16 bg-gray-50 rounded-lg" />
+                <div className="h-16 bg-gray-50 rounded-lg" />
               </div>
             </div>
           ))}
@@ -238,7 +238,7 @@ export default function CandidateSchedulePage() {
 
       {/* Empty State */}
       {!loading && slots.length === 0 && !error && (
-        <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-12 text-center">
+        <div className="rounded-xl border border-gray-200 bg-white p-12 text-center">
           <svg
             className="mx-auto h-12 w-12 text-gray-600"
             fill="none"
@@ -252,10 +252,10 @@ export default function CandidateSchedulePage() {
               d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
             />
           </svg>
-          <h3 className="mt-4 text-lg font-semibold text-white">
+          <h3 className="mt-4 text-lg font-semibold text-gray-900">
             No available slots
           </h3>
-          <p className="mt-2 text-sm text-gray-400 max-w-sm mx-auto">
+          <p className="mt-2 text-sm text-gray-500 max-w-sm mx-auto">
             There are no interview slots available right now. Please check back
             later or contact your recruiter.
           </p>
@@ -303,7 +303,7 @@ export default function CandidateSchedulePage() {
                     />
                   </svg>
                 </div>
-                <h2 className="text-sm font-semibold text-white">
+                <h2 className="text-sm font-semibold text-gray-900">
                   {formatDate(dateKey)}
                 </h2>
               </div>
@@ -313,7 +313,7 @@ export default function CandidateSchedulePage() {
                 {groupedSlots[dateKey].map((slot) => (
                   <div
                     key={slot.id}
-                    className="rounded-xl border border-gray-800 bg-gray-900 p-5 transition-colors hover:border-gray-700"
+                    className="rounded-xl border border-gray-200 bg-white p-5 transition-colors hover:border-gray-200"
                   >
                     {/* Time range */}
                     <div className="flex items-center gap-2 mb-3">
@@ -330,7 +330,7 @@ export default function CandidateSchedulePage() {
                           d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                         />
                       </svg>
-                      <span className="text-sm font-medium text-white">
+                      <span className="text-sm font-medium text-gray-900">
                         {formatTime(slot.startTime)} &ndash;{" "}
                         {formatTime(slot.endTime)}
                       </span>
@@ -339,7 +339,7 @@ export default function CandidateSchedulePage() {
                     {/* Interviewer info */}
                     {slot.interviewer && (
                       <div className="flex items-center gap-2 mb-4">
-                        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-800 text-[10px] font-medium text-gray-300">
+                        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-[10px] font-medium text-gray-700">
                           {slot.interviewer.name
                             .split(" ")
                             .map((n) => n[0])
@@ -348,7 +348,7 @@ export default function CandidateSchedulePage() {
                             .slice(0, 2)}
                         </div>
                         <div>
-                          <p className="text-xs text-gray-300">
+                          <p className="text-xs text-gray-700">
                             {slot.interviewer.name}
                           </p>
                           <p className="text-[10px] text-gray-500">
@@ -362,7 +362,7 @@ export default function CandidateSchedulePage() {
                     <button
                       onClick={() => handleBook(slot)}
                       disabled={bookingId === slot.id || bookingSuccess}
-                      className="w-full rounded-lg bg-gradient-to-r from-saffron to-india-green px-4 py-2 text-sm font-medium text-white transition-all hover:from-saffron-light hover:to-india-green-light disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full rounded-lg border border-saffron bg-transparent px-4 py-2 text-sm font-medium text-saffron-dark transition-all hover:bg-saffron/10 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {bookingId === slot.id ? (
                         <span className="inline-flex items-center gap-2">

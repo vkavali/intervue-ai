@@ -60,28 +60,28 @@ export function InviteInterviewerForm() {
 
   return (
     <div className="rounded-xl border border-saffron/20 bg-saffron/5 p-5">
-      <h3 className="text-sm font-semibold text-white mb-3">Invite New Interviewer</h3>
+      <h3 className="text-sm font-semibold text-gray-900 mb-3">Invite New Interviewer</h3>
       <form onSubmit={handleInvite} className="flex items-end gap-3">
         <div className="flex-1">
-          <label className="block text-xs font-medium text-gray-400 mb-1">Name</label>
+          <label className="block text-xs font-medium text-gray-500 mb-1">Name</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
             placeholder="John Smith"
-            className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none"
+            className="w-full rounded-lg border border-gray-200 bg-gray-100 px-3 py-2 text-sm text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none"
           />
         </div>
         <div className="flex-1">
-          <label className="block text-xs font-medium text-gray-400 mb-1">Email</label>
+          <label className="block text-xs font-medium text-gray-500 mb-1">Email</label>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
             placeholder="interviewer@company.com"
-            className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none"
+            className="w-full rounded-lg border border-gray-200 bg-gray-100 px-3 py-2 text-sm text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none"
           />
         </div>
         <button
@@ -94,7 +94,7 @@ export function InviteInterviewerForm() {
         <button
           type="button"
           onClick={() => setShowForm(false)}
-          className="rounded-lg bg-gray-800 px-4 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700"
+          className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200"
         >
           Cancel
         </button>

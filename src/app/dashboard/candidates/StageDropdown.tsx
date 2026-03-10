@@ -16,7 +16,7 @@ const STAGES = [
 ];
 
 const stageColors: Record<string, string> = {
-  SCREENING: "text-blue-400",
+  SCREENING: "text-india-green",
   TECHNICAL: "text-saffron",
   SYSTEM_DESIGN: "text-orange-400",
   BEHAVIORAL: "text-teal-400",
@@ -111,7 +111,7 @@ export function StageDropdown({
         ref={btnRef}
         onClick={() => setOpen(!open)}
         disabled={loading}
-        className="inline-flex items-center gap-1 rounded-md border border-gray-700 bg-gray-800 px-2 py-1 text-xs font-medium text-gray-300 transition-colors hover:border-gray-600 hover:bg-gray-700 disabled:opacity-50"
+        className="inline-flex items-center gap-1 rounded-md border border-gray-200 bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 transition-colors hover:border-gray-300 hover:bg-gray-200 disabled:opacity-50"
       >
         {loading ? (
           <svg className="h-3 w-3 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -132,18 +132,18 @@ export function StageDropdown({
         createPortal(
           <div
             ref={menuRef}
-            className="fixed z-[9999] w-44 max-h-64 overflow-y-auto rounded-lg border border-gray-700 bg-gray-900 py-1 shadow-2xl"
+            className="fixed z-[9999] w-44 max-h-64 overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 shadow-2xl"
             style={{ top: pos.top, left: pos.left }}
           >
             {STAGES.map((stage) => (
               <button
                 key={stage}
                 onClick={() => handleStageChange(stage)}
-                className={`flex w-full items-center gap-2 px-3 py-2 text-left text-xs transition-colors hover:bg-gray-800 ${
+                className={`flex w-full items-center gap-2 px-3 py-2 text-left text-xs transition-colors hover:bg-gray-100 ${
                   stage === currentStage
-                    ? "bg-gray-800/50 font-semibold"
+                    ? "bg-gray-50 font-semibold"
                     : "font-medium"
-                } ${stageColors[stage] || "text-gray-300"}`}
+                } ${stageColors[stage] || "text-gray-700"}`}
               >
                 {stage === currentStage && (
                   <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">

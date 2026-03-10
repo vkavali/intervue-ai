@@ -26,9 +26,9 @@ export default async function InterviewersPage() {
 
   if (!user?.companyId) {
     return (
-      <div className="rounded-xl border border-gray-800 bg-gray-900 px-6 py-16 text-center">
-        <h3 className="text-lg font-medium text-white">No Company</h3>
-        <p className="mt-2 text-sm text-gray-400">
+      <div className="rounded-xl border border-gray-200 bg-white px-6 py-16 text-center">
+        <h3 className="text-lg font-medium text-gray-900">No Company</h3>
+        <p className="mt-2 text-sm text-gray-500">
           You are not associated with a company yet.
         </p>
       </div>
@@ -63,8 +63,8 @@ export default async function InterviewersPage() {
       {/* Header */}
       <div className="mb-8 flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Interviewers</h1>
-          <p className="mt-1 text-sm text-gray-400">
+          <h1 className="text-2xl font-bold text-gray-900">Interviewers</h1>
+          <p className="mt-1 text-sm text-gray-500">
             Manage your team of interviewers at {company?.name || "your company"}.
           </p>
         </div>
@@ -72,18 +72,18 @@ export default async function InterviewersPage() {
 
       {/* Stats */}
       <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
-          <p className="text-sm text-gray-400">Total Interviewers</p>
-          <p className="mt-1 text-2xl font-bold text-white">{interviewers.length}</p>
+        <div className="rounded-xl border border-gray-200 bg-white p-5">
+          <p className="text-sm text-gray-500">Total Interviewers</p>
+          <p className="mt-1 text-2xl font-bold text-gray-900">{interviewers.length}</p>
         </div>
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
-          <p className="text-sm text-gray-400">Active (Conducted Sessions)</p>
+        <div className="rounded-xl border border-gray-200 bg-white p-5">
+          <p className="text-sm text-gray-500">Active (Conducted Sessions)</p>
           <p className="mt-1 text-2xl font-bold text-green-400">
             {interviewers.filter((i) => i.interviewerSessions.length > 0).length}
           </p>
         </div>
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
-          <p className="text-sm text-gray-400">Total Sessions Conducted</p>
+        <div className="rounded-xl border border-gray-200 bg-white p-5">
+          <p className="text-sm text-gray-500">Total Sessions Conducted</p>
           <p className="mt-1 text-2xl font-bold text-saffron">
             {interviewers.reduce((sum, i) => sum + i.interviewerSessions.length, 0)}
           </p>
@@ -96,31 +96,31 @@ export default async function InterviewersPage() {
       </div>
 
       {/* Interviewers List */}
-      <div className="overflow-hidden rounded-xl border border-gray-800 bg-gray-900">
+      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-gray-800 bg-gray-950/30">
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+            <tr className="border-b border-gray-200 bg-gray-50/30">
+              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                 Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                 Email
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                 Role
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                 Sessions
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                 Completed
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                 Joined
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-800/50">
+          <tbody className="divide-y divide-gray-200/50">
             {interviewers.map((interviewer) => {
               const totalSessions = interviewer.interviewerSessions.length;
               const completedSessions = interviewer.interviewerSessions.filter(
@@ -128,30 +128,30 @@ export default async function InterviewersPage() {
               ).length;
 
               return (
-                <tr key={interviewer.id} className="transition-colors hover:bg-gray-800/30">
+                <tr key={interviewer.id} className="transition-colors hover:bg-gray-50">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-saffron/10 text-xs font-medium text-saffron">
                         {getInitials(interviewer.name)}
                       </div>
-                      <span className="text-sm font-medium text-white">{interviewer.name}</span>
+                      <span className="text-sm font-medium text-gray-900">{interviewer.name}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-400">{interviewer.email}</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">{interviewer.email}</td>
                   <td className="px-6 py-4">
                     <span
                       className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${
                         interviewer.role === "COMPANY_ADMIN"
-                          ? "bg-blue-500/10 text-blue-400 border-blue-500/30"
+                          ? "bg-india-green/10 text-india-green border-india-green/30"
                           : "bg-green-500/10 text-green-400 border-green-500/30"
                       }`}
                     >
                       {interviewer.role === "COMPANY_ADMIN" ? "Admin" : "Interviewer"}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-300">{totalSessions}</td>
-                  <td className="px-6 py-4 text-sm text-gray-300">{completedSessions}</td>
-                  <td className="px-6 py-4 text-xs text-gray-400">
+                  <td className="px-6 py-4 text-sm text-gray-700">{totalSessions}</td>
+                  <td className="px-6 py-4 text-sm text-gray-700">{completedSessions}</td>
+                  <td className="px-6 py-4 text-xs text-gray-500">
                     {new Date(interviewer.createdAt).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
@@ -169,8 +169,8 @@ export default async function InterviewersPage() {
             <svg className="mx-auto h-12 w-12 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
-            <h3 className="mt-4 text-lg font-medium text-white">No interviewers yet</h3>
-            <p className="mt-2 text-sm text-gray-400">
+            <h3 className="mt-4 text-lg font-medium text-gray-900">No interviewers yet</h3>
+            <p className="mt-2 text-sm text-gray-500">
               Invite interviewers to start conducting AI-powered interviews.
             </p>
           </div>

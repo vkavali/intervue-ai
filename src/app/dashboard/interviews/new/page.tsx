@@ -497,10 +497,10 @@ export default function NewInterviewPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white">
+        <h1 className="text-2xl font-bold text-gray-900">
           Create Interview Template
         </h1>
-        <p className="mt-1 text-sm text-gray-400">
+        <p className="mt-1 text-sm text-gray-500">
           Configure the interview structure and add questions
         </p>
       </div>
@@ -515,15 +515,15 @@ export default function NewInterviewPage() {
       <div className="mb-8 rounded-xl border border-saffron/30 bg-gradient-to-br from-saffron/5 to-india-green/5 p-6">
         <div className="flex items-center gap-3 mb-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-saffron to-india-green">
-            <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="h-5 w-5 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-white">
+            <h2 className="text-lg font-semibold text-gray-900">
               AI Generate Interview
             </h2>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-gray-500">
               Describe your ideal interview and let AI build it for you
             </p>
           </div>
@@ -533,7 +533,7 @@ export default function NewInterviewPage() {
           rows={4}
           value={aiInterviewPrompt}
           onChange={(e) => setAiInterviewPrompt(e.target.value)}
-          className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-3 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron resize-none"
+          className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron resize-none"
           placeholder="e.g., I need a 45-minute React interview for a senior developer. Focus on hooks, performance optimization, and state management. Test problem-solving ability and code quality. Use moderate AI assistance."
         />
 
@@ -543,7 +543,7 @@ export default function NewInterviewPage() {
             disabled={aiInterviewLoading || !aiInterviewPrompt.trim() || !role.trim() || !interviewType || !industry}
             onClick={handleGenerateInterview}
             title={!role.trim() || !interviewType || !industry ? "Fill in Role, Interview Type, and Industry first" : ""}
-            className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-saffron to-india-green px-5 py-2.5 text-sm font-semibold text-white transition-all hover:from-saffron-light hover:to-india-green-light disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 rounded-lg border border-saffron bg-transparent px-5 py-2.5 text-sm font-semibold text-saffron-dark transition-all hover:bg-saffron/10 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {aiInterviewLoading ? (
               <>
@@ -578,23 +578,23 @@ export default function NewInterviewPage() {
                   Assessment Criteria
                 </h3>
               </div>
-              <p className="text-sm text-gray-300 whitespace-pre-line leading-relaxed">
+              <p className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">
                 {assessmentCriteria}
               </p>
             </div>
           )}
 
           {interviewerGuidance && (
-            <div className="rounded-xl border border-blue-500/30 bg-blue-500/5 p-5">
+            <div className="rounded-xl border border-india-green/30 bg-blue-500/5 p-5">
               <div className="flex items-center gap-2 mb-3">
-                <svg className="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5 text-india-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <h3 className="text-sm font-semibold text-blue-400">
+                <h3 className="text-sm font-semibold text-india-green">
                   Interviewer Guidance
                 </h3>
               </div>
-              <p className="text-sm text-gray-300 whitespace-pre-line leading-relaxed">
+              <p className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">
                 {interviewerGuidance}
               </p>
             </div>
@@ -604,14 +604,14 @@ export default function NewInterviewPage() {
 
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Template Details */}
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-6">
-          <h2 className="text-lg font-semibold text-white mb-6">
+        <div className="rounded-xl border border-gray-200 bg-white p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-6">
             Template Details
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-1.5">
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
                 Title
               </label>
               <input
@@ -619,13 +619,13 @@ export default function NewInterviewPage() {
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                 placeholder="e.g., Senior Backend Engineer - System Design"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1.5">
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
                 Role
               </label>
               <input
@@ -633,19 +633,19 @@ export default function NewInterviewPage() {
                 required
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                 placeholder="e.g., Backend Engineer"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1.5">
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
                 Seniority
               </label>
               <select
                 value={seniority}
                 onChange={(e) => setSeniority(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               >
                 <option value="JUNIOR">Junior</option>
                 <option value="MID">Mid</option>
@@ -656,13 +656,13 @@ export default function NewInterviewPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1.5">
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
                 Round Type
               </label>
               <select
                 value={roundType}
                 onChange={(e) => setRoundType(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               >
                 <option value="Technical">Technical</option>
                 <option value="System Design">System Design</option>
@@ -677,13 +677,13 @@ export default function NewInterviewPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1.5">
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
                 Industry
               </label>
               <select
                 value={industry}
                 onChange={(e) => setIndustry(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               >
                 <option value="">Select industry (optional)</option>
                 {INDUSTRIES.map((ind) => (
@@ -695,13 +695,13 @@ export default function NewInterviewPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1.5">
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
                 Interview Type
               </label>
               <select
                 value={interviewType}
                 onChange={(e) => setInterviewType(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               >
                 {INTERVIEW_TYPES.map((t) => (
                   <option key={t.value} value={t.value}>
@@ -722,7 +722,7 @@ export default function NewInterviewPage() {
 
             {!NON_CODING_TYPES.includes(interviewType) && (
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1.5">
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
                 Default AI Level
               </label>
               <div className="space-y-2">
@@ -755,7 +755,7 @@ export default function NewInterviewPage() {
         {/* Questions */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-white">
+            <h2 className="text-lg font-semibold text-gray-900">
               Questions ({questions.length})
             </h2>
             <div className="flex items-center gap-3">
@@ -775,7 +775,7 @@ export default function NewInterviewPage() {
               <button
                 type="button"
                 onClick={() => setShowAiQuestionsModal(true)}
-                className="inline-flex items-center gap-2 rounded-lg border border-saffron/30 bg-saffron/10 px-4 py-2 text-sm font-medium text-saffron transition-colors hover:bg-saffron/20 hover:text-saffron-light"
+                className="inline-flex items-center gap-2 rounded-lg border border-saffron/30 bg-saffron/10 px-4 py-2 text-sm font-medium text-saffron transition-colors hover:bg-saffron/20 hover:text-saffron-dark"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -785,7 +785,7 @@ export default function NewInterviewPage() {
               <button
                 type="button"
                 onClick={addQuestion}
-                className="inline-flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-700 hover:text-white"
+                className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200 hover:text-gray-900"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -805,7 +805,7 @@ export default function NewInterviewPage() {
                 <button
                   type="button"
                   onClick={() => setShowAiQuestionsModal(false)}
-                  className="text-gray-400 hover:text-gray-300 transition-colors"
+                  className="text-gray-500 hover:text-gray-700 transition-colors"
                 >
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -815,7 +815,7 @@ export default function NewInterviewPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
                     Number of Questions
                   </label>
                   <input
@@ -828,18 +828,18 @@ export default function NewInterviewPage() {
                         Math.min(Math.max(parseInt(e.target.value) || 1, 1), 10)
                       )
                     }
-                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                    className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
                     Difficulty Preference
                   </label>
                   <select
                     value={aiQDifficulty}
                     onChange={(e) => setAiQDifficulty(e.target.value)}
-                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                    className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                   >
                     <option value="MIX">Mix of difficulties</option>
                     <option value="EASY">Easy</option>
@@ -849,14 +849,14 @@ export default function NewInterviewPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
                     Specific Topics (optional)
                   </label>
                   <input
                     type="text"
                     value={aiQTopics}
                     onChange={(e) => setAiQTopics(e.target.value)}
-                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                    className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                     placeholder="e.g., arrays, trees, dynamic programming"
                   />
                 </div>
@@ -872,7 +872,7 @@ export default function NewInterviewPage() {
                 <button
                   type="button"
                   onClick={() => setShowAiQuestionsModal(false)}
-                  className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-700"
+                  className="rounded-lg border border-gray-200 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200"
                 >
                   Cancel
                 </button>
@@ -880,7 +880,7 @@ export default function NewInterviewPage() {
                   type="button"
                   disabled={aiQuestionsLoading || !role || !roundType}
                   onClick={handleGenerateQuestions}
-                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-saffron to-india-green px-5 py-2 text-sm font-semibold text-white transition-all hover:from-saffron-light hover:to-india-green-light disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-flex items-center gap-2 rounded-lg border border-saffron bg-transparent px-5 py-2 text-sm font-semibold text-saffron-dark transition-all hover:bg-saffron/10 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {aiQuestionsLoading ? (
                     <>
@@ -913,7 +913,7 @@ export default function NewInterviewPage() {
                 <button
                   type="button"
                   onClick={() => setShowBankPanel(false)}
-                  className="text-gray-400 hover:text-gray-300 transition-colors"
+                  className="text-gray-500 hover:text-gray-700 transition-colors"
                 >
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -934,7 +934,7 @@ export default function NewInterviewPage() {
                         fetchBankProblems(1);
                       }
                     }}
-                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    className="w-full rounded-lg border border-gray-200 bg-gray-100 px-3 py-2 text-sm text-gray-900 placeholder-gray-500 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                     placeholder="Search problems..."
                   />
                 </div>
@@ -942,7 +942,7 @@ export default function NewInterviewPage() {
                   <select
                     value={bankDifficulty}
                     onChange={(e) => setBankDifficulty(e.target.value)}
-                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    className="w-full rounded-lg border border-gray-200 bg-gray-100 px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                   >
                     <option value="">All Difficulties</option>
                     <option value="EASY">Easy</option>
@@ -954,7 +954,7 @@ export default function NewInterviewPage() {
                   <select
                     value={bankCategory}
                     onChange={(e) => setBankCategory(e.target.value)}
-                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    className="w-full rounded-lg border border-gray-200 bg-gray-100 px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                   >
                     <option value="">All Categories</option>
                     {bankCategories.map((c) => (
@@ -966,7 +966,7 @@ export default function NewInterviewPage() {
                   <select
                     value={bankCompany}
                     onChange={(e) => setBankCompany(e.target.value)}
-                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    className="w-full rounded-lg border border-gray-200 bg-gray-100 px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                   >
                     <option value="">All Companies</option>
                     {bankCompanies.map((c) => (
@@ -981,7 +981,7 @@ export default function NewInterviewPage() {
                   type="button"
                   onClick={() => fetchBankProblems(1)}
                   disabled={bankLoading}
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-500 disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-medium text-gray-900 hover:bg-emerald-500 disabled:opacity-50"
                 >
                   {bankLoading ? "Searching..." : "Search"}
                 </button>
@@ -1011,7 +1011,7 @@ export default function NewInterviewPage() {
                     className={`flex items-start gap-3 rounded-lg border p-3 cursor-pointer transition-colors ${
                       bankSelected.has(problem.id)
                         ? "border-emerald-500/50 bg-emerald-500/10"
-                        : "border-gray-700 bg-gray-800 hover:border-gray-600"
+                        : "border-gray-200 bg-gray-100 hover:border-gray-300"
                     }`}
                   >
                     <input
@@ -1022,7 +1022,7 @@ export default function NewInterviewPage() {
                     />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-medium text-white truncate">
+                        <span className="text-sm font-medium text-gray-900 truncate">
                           {problem.title}
                         </span>
                         <span
@@ -1045,14 +1045,14 @@ export default function NewInterviewPage() {
                           <span className="text-[10px] text-emerald-500 shrink-0">enriched</span>
                         )}
                       </div>
-                      <p className="text-xs text-gray-400 line-clamp-1">
+                      <p className="text-xs text-gray-500 line-clamp-1">
                         {problem.description}
                       </p>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {problem.tags.slice(0, 4).map((tag) => (
                           <span
                             key={tag}
-                            className="rounded bg-gray-700 px-1.5 py-0.5 text-[10px] text-gray-400"
+                            className="rounded bg-gray-700 px-1.5 py-0.5 text-[10px] text-gray-500"
                           >
                             {tag}
                           </span>
@@ -1080,18 +1080,18 @@ export default function NewInterviewPage() {
                     type="button"
                     disabled={bankPage <= 1}
                     onClick={() => fetchBankProblems(bankPage - 1)}
-                    className="rounded border border-gray-700 bg-gray-800 px-3 py-1 text-xs text-gray-300 hover:bg-gray-700 disabled:opacity-50"
+                    className="rounded border border-gray-200 bg-gray-100 px-3 py-1 text-xs text-gray-700 hover:bg-gray-200 disabled:opacity-50"
                   >
                     Prev
                   </button>
-                  <span className="text-xs text-gray-400">
+                  <span className="text-xs text-gray-500">
                     Page {bankPage} of {bankTotalPages}
                   </span>
                   <button
                     type="button"
                     disabled={bankPage >= bankTotalPages}
                     onClick={() => fetchBankProblems(bankPage + 1)}
-                    className="rounded border border-gray-700 bg-gray-800 px-3 py-1 text-xs text-gray-300 hover:bg-gray-700 disabled:opacity-50"
+                    className="rounded border border-gray-200 bg-gray-100 px-3 py-1 text-xs text-gray-700 hover:bg-gray-200 disabled:opacity-50"
                   >
                     Next
                   </button>
@@ -1103,7 +1103,7 @@ export default function NewInterviewPage() {
                 <button
                   type="button"
                   onClick={() => setShowBankPanel(false)}
-                  className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-700"
+                  className="rounded-lg border border-gray-200 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200"
                 >
                   Cancel
                 </button>
@@ -1111,7 +1111,7 @@ export default function NewInterviewPage() {
                   type="button"
                   disabled={bankSelected.size === 0 || bankAddingLoading}
                   onClick={handleAddSelectedBankProblems}
-                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-2 text-sm font-semibold text-white transition-all hover:from-emerald-500 hover:to-teal-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-flex items-center gap-2 rounded-lg border border-india-green bg-transparent px-5 py-2 text-sm font-semibold text-india-green-dark transition-all hover:bg-india-green/10 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {bankAddingLoading ? (
                     <>
@@ -1132,10 +1132,10 @@ export default function NewInterviewPage() {
           {questions.map((question, index) => (
             <div
               key={question.id}
-              className="rounded-xl border border-gray-800 bg-gray-900 p-6"
+              className="rounded-xl border border-gray-200 bg-white p-6"
             >
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-sm font-semibold text-gray-300">
+                <h3 className="text-sm font-semibold text-gray-700">
                   Question {index + 1}
                 </h3>
                 {questions.length > 1 && (
@@ -1151,7 +1151,7 @@ export default function NewInterviewPage() {
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
                     Title
                   </label>
                   <input
@@ -1161,13 +1161,13 @@ export default function NewInterviewPage() {
                     onChange={(e) =>
                       updateQuestion(question.id, { title: e.target.value })
                     }
-                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                    className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                     placeholder="e.g., Two Sum"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
                     Description
                   </label>
                   <textarea
@@ -1179,14 +1179,14 @@ export default function NewInterviewPage() {
                         description: e.target.value,
                       })
                     }
-                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron resize-none"
+                    className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron resize-none"
                     placeholder="Describe the problem statement..."
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
                       Constraints
                     </label>
                     <textarea
@@ -1197,13 +1197,13 @@ export default function NewInterviewPage() {
                           constraints: e.target.value,
                         })
                       }
-                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron resize-none"
+                      className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron resize-none"
                       placeholder="e.g., 1 <= nums.length <= 10^4"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
                       Examples
                     </label>
                     <textarea
@@ -1214,7 +1214,7 @@ export default function NewInterviewPage() {
                           examples: e.target.value,
                         })
                       }
-                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron resize-none"
+                      className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron resize-none"
                       placeholder="Input: nums = [2,7,11,15], target = 9&#10;Output: [0,1]"
                     />
                   </div>
@@ -1222,7 +1222,7 @@ export default function NewInterviewPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
                       Difficulty
                     </label>
                     <select
@@ -1232,7 +1232,7 @@ export default function NewInterviewPage() {
                           difficulty: e.target.value,
                         })
                       }
-                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                      className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                     >
                       <option value="EASY">Easy</option>
                       <option value="MEDIUM">Medium</option>
@@ -1241,7 +1241,7 @@ export default function NewInterviewPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
                       AI Level Override
                     </label>
                     <select
@@ -1251,7 +1251,7 @@ export default function NewInterviewPage() {
                           aiLevel: parseInt(e.target.value),
                         })
                       }
-                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                      className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                     >
                       <option value={-1}>Use template default (L{defaultAiLevel})</option>
                       <option value={0}>L0 - No AI</option>
@@ -1263,7 +1263,7 @@ export default function NewInterviewPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
                       Time Limit (minutes)
                     </label>
                     <input
@@ -1277,7 +1277,7 @@ export default function NewInterviewPage() {
                           timeLimit: parseInt(e.target.value) || 30,
                         })
                       }
-                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                      className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                     />
                   </div>
                 </div>
@@ -1288,7 +1288,7 @@ export default function NewInterviewPage() {
           <button
             type="button"
             onClick={addQuestion}
-            className="w-full rounded-xl border-2 border-dashed border-gray-700 py-6 text-sm font-medium text-gray-400 transition-colors hover:border-saffron/50 hover:text-saffron"
+            className="w-full rounded-xl border-2 border-dashed border-gray-200 py-6 text-sm font-medium text-gray-500 transition-colors hover:border-saffron/50 hover:text-saffron"
           >
             + Add Another Question
           </button>
@@ -1299,14 +1299,14 @@ export default function NewInterviewPage() {
           <button
             type="button"
             onClick={() => router.back()}
-            className="rounded-lg border border-gray-700 bg-gray-800 px-6 py-2.5 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-700"
+            className="rounded-lg border border-gray-200 bg-gray-100 px-6 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={loading}
-            className="rounded-lg bg-gradient-to-r from-saffron to-india-green px-6 py-2.5 text-sm font-semibold text-white transition-all hover:from-saffron-light hover:to-india-green-light disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-lg border border-saffron bg-transparent px-6 py-2.5 text-sm font-semibold text-saffron-dark transition-all hover:bg-saffron/10 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? (
               <span className="flex items-center gap-2">

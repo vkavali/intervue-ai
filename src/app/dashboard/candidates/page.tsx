@@ -5,7 +5,7 @@ import Link from "next/link";
 import { StageDropdown } from "./StageDropdown";
 
 const stageColors: Record<string, string> = {
-  SCREENING: "bg-blue-500/10 text-blue-400 border-blue-500/30",
+  SCREENING: "bg-india-green/10 text-india-green border-india-green/30",
   TECHNICAL: "bg-saffron/10 text-saffron border-saffron/30",
   SYSTEM_DESIGN: "bg-orange-500/10 text-orange-400 border-orange-500/30",
   BEHAVIORAL: "bg-teal-500/10 text-teal-400 border-teal-500/30",
@@ -115,8 +115,8 @@ export default async function CandidatePipelinePage() {
       {/* Header */}
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Candidate Pipeline</h1>
-          <p className="mt-1 text-sm text-gray-400">
+          <h1 className="text-2xl font-bold text-gray-900">Candidate Pipeline</h1>
+          <p className="mt-1 text-sm text-gray-500">
             Track candidates across all roles and stages in your hiring pipeline
           </p>
         </div>
@@ -143,26 +143,26 @@ export default async function CandidatePipelinePage() {
 
       {/* Summary Stats */}
       <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
-          <p className="text-sm text-gray-400">Total Candidates</p>
-          <p className="mt-1 text-2xl font-bold text-white">
+        <div className="rounded-xl border border-gray-200 bg-white p-5">
+          <p className="text-sm text-gray-500">Total Candidates</p>
+          <p className="mt-1 text-2xl font-bold text-gray-900">
             {pipelineEntries.length}
           </p>
         </div>
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
-          <p className="text-sm text-gray-400">Active Roles</p>
-          <p className="mt-1 text-2xl font-bold text-white">
+        <div className="rounded-xl border border-gray-200 bg-white p-5">
+          <p className="text-sm text-gray-500">Active Roles</p>
+          <p className="mt-1 text-2xl font-bold text-gray-900">
             {roleGroups.length}
           </p>
         </div>
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
-          <p className="text-sm text-gray-400">In Final Stage</p>
-          <p className="mt-1 text-2xl font-bold text-white">
+        <div className="rounded-xl border border-gray-200 bg-white p-5">
+          <p className="text-sm text-gray-500">In Final Stage</p>
+          <p className="mt-1 text-2xl font-bold text-gray-900">
             {pipelineEntries.filter((e) => e.stage === "FINAL").length}
           </p>
         </div>
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
-          <p className="text-sm text-gray-400">Hired</p>
+        <div className="rounded-xl border border-gray-200 bg-white p-5">
+          <p className="text-sm text-gray-500">Hired</p>
           <p className="mt-1 text-2xl font-bold text-green-400">
             {pipelineEntries.filter((e) => e.stage === "HIRED").length}
           </p>
@@ -171,7 +171,7 @@ export default async function CandidatePipelinePage() {
 
       {/* Pipeline by Role */}
       {roleGroups.length === 0 ? (
-        <div className="rounded-xl border border-gray-800 bg-gray-900 px-6 py-16 text-center">
+        <div className="rounded-xl border border-gray-200 bg-white px-6 py-16 text-center">
           <svg
             className="mx-auto h-12 w-12 text-gray-600"
             fill="none"
@@ -185,10 +185,10 @@ export default async function CandidatePipelinePage() {
               d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
             />
           </svg>
-          <h3 className="mt-4 text-lg font-medium text-white">
+          <h3 className="mt-4 text-lg font-medium text-gray-900">
             No candidates in the pipeline
           </h3>
-          <p className="mt-2 text-sm text-gray-400">
+          <p className="mt-2 text-sm text-gray-500">
             Add candidates to start tracking them through your hiring process.
           </p>
           <Link
@@ -218,10 +218,10 @@ export default async function CandidatePipelinePage() {
             return (
               <div
                 key={groupKey}
-                className="overflow-hidden rounded-xl border border-gray-800 bg-gray-900"
+                className="overflow-hidden rounded-xl border border-gray-200 bg-white"
               >
                 {/* Role Header */}
-                <div className="flex items-center justify-between border-b border-gray-800 px-6 py-4">
+                <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-saffron/10">
                       <svg
@@ -239,10 +239,10 @@ export default async function CandidatePipelinePage() {
                       </svg>
                     </div>
                     <div>
-                      <h2 className="text-lg font-semibold text-white">
+                      <h2 className="text-lg font-semibold text-gray-900">
                         {group.role}
                       </h2>
-                      <p className="text-xs text-gray-400">
+                      <p className="text-xs text-gray-500">
                         {group.seniority} &middot;{" "}
                         {group.entries.length} candidate
                         {group.entries.length !== 1 ? "s" : ""}
@@ -251,7 +251,7 @@ export default async function CandidatePipelinePage() {
                   </div>
                   <Link
                     href={`/dashboard/candidates/compare?role=${encodeURIComponent(group.role)}`}
-                    className="inline-flex items-center gap-2 rounded-lg border border-saffron/30 bg-saffron/10 px-3 py-1.5 text-xs font-medium text-saffron transition-colors hover:bg-saffron/20 hover:text-saffron-light"
+                    className="inline-flex items-center gap-2 rounded-lg border border-saffron/30 bg-saffron/10 px-3 py-1.5 text-xs font-medium text-saffron transition-colors hover:bg-saffron/20 hover:text-saffron-dark"
                   >
                     <svg
                       className="h-3.5 w-3.5"
@@ -274,31 +274,31 @@ export default async function CandidatePipelinePage() {
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
-                      <tr className="border-b border-gray-800/50 bg-gray-950/30">
-                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+                      <tr className="border-b border-gray-200/50 bg-gray-50/30">
+                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                           Name
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                           Email
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                           Current Stage
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                           Rounds
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                           Avg Score
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                           Last Activity
                         </th>
-                        <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-400">
+                        <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
                           Actions
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-800/50">
+                    <tbody className="divide-y divide-gray-200/50">
                       {group.entries.map((entry) => {
                         const sessions =
                           entry.candidate.candidateSessions || [];
@@ -324,22 +324,22 @@ export default async function CandidatePipelinePage() {
                         return (
                           <tr
                             key={entry.id}
-                            className="transition-colors hover:bg-gray-800/30"
+                            className="transition-colors hover:bg-gray-50"
                           >
                             {/* Name */}
                             <td className="px-6 py-4">
                               <div className="flex items-center gap-3">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-800 text-xs font-medium text-gray-300">
+                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-xs font-medium text-gray-700">
                                   {getInitials(entry.candidate.name)}
                                 </div>
-                                <span className="text-sm font-medium text-white">
+                                <span className="text-sm font-medium text-gray-900">
                                   {entry.candidate.name}
                                 </span>
                               </div>
                             </td>
 
                             {/* Email */}
-                            <td className="px-6 py-4 text-sm text-gray-400">
+                            <td className="px-6 py-4 text-sm text-gray-500">
                               {entry.candidate.email}
                             </td>
 
@@ -348,7 +348,7 @@ export default async function CandidatePipelinePage() {
                               <span
                                 className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${
                                   stageColors[entry.stage] ||
-                                  "bg-gray-500/10 text-gray-400 border-gray-500/30"
+                                  "bg-gray-500/10 text-gray-500 border-gray-500/30"
                                 }`}
                               >
                                 {formatStage(entry.stage)}
@@ -356,7 +356,7 @@ export default async function CandidatePipelinePage() {
                             </td>
 
                             {/* Rounds Completed */}
-                            <td className="px-6 py-4 text-sm text-gray-300">
+                            <td className="px-6 py-4 text-sm text-gray-700">
                               {roundsCompleted}
                             </td>
 
@@ -364,7 +364,7 @@ export default async function CandidatePipelinePage() {
                             <td className="px-6 py-4">
                               {avgScore !== null ? (
                                 <div className="flex items-center gap-1">
-                                  <span className="text-sm font-medium text-white">
+                                  <span className="text-sm font-medium text-gray-900">
                                     {avgScore.toFixed(1)}
                                   </span>
                                   <span className="text-xs text-gray-500">
@@ -379,7 +379,7 @@ export default async function CandidatePipelinePage() {
                             </td>
 
                             {/* Last Activity */}
-                            <td className="px-6 py-4 text-xs text-gray-400">
+                            <td className="px-6 py-4 text-xs text-gray-500">
                               {new Date(
                                 lastActivity
                               ).toLocaleDateString("en-US", {
@@ -394,7 +394,7 @@ export default async function CandidatePipelinePage() {
                               <div className="flex items-center justify-end gap-3">
                                 <Link
                                   href={`/dashboard/sessions?candidate=${entry.candidate.id}`}
-                                  className="text-xs font-medium text-saffron transition-colors hover:text-saffron-light"
+                                  className="text-xs font-medium text-saffron transition-colors hover:text-saffron-dark"
                                 >
                                   View Details
                                 </Link>

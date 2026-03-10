@@ -198,18 +198,18 @@ export default function AvailabilityPage() {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white">Interviewer Availability</h1>
-        <p className="mt-1 text-sm text-gray-400">
+        <h1 className="text-2xl font-bold text-gray-900">Interviewer Availability</h1>
+        <p className="mt-1 text-sm text-gray-500">
           Manage and view availability slots for scheduling interviews.
         </p>
       </div>
 
       {/* Weekly Mini Calendar */}
-      <div className="mb-6 rounded-xl border border-gray-800 bg-gray-900 p-4">
+      <div className="mb-6 rounded-xl border border-gray-200 bg-white p-4">
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-white">Weekly View</h2>
+          <h2 className="text-sm font-semibold text-gray-900">Weekly View</h2>
           <div className="flex items-center gap-2">
-            <button onClick={prevWeek} className="rounded p-1 text-gray-400 hover:bg-gray-800 hover:text-white">
+            <button onClick={prevWeek} className="rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900">
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
@@ -217,7 +217,7 @@ export default function AvailabilityPage() {
             <button onClick={thisWeek} className="rounded px-2 py-0.5 text-xs text-saffron hover:bg-saffron/10">
               This Week
             </button>
-            <button onClick={nextWeek} className="rounded p-1 text-gray-400 hover:bg-gray-800 hover:text-white">
+            <button onClick={nextWeek} className="rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900">
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
@@ -233,11 +233,11 @@ export default function AvailabilityPage() {
               <div
                 key={key}
                 className={`rounded-lg border p-2 text-center ${
-                  isToday ? "border-saffron/50 bg-saffron/10" : "border-gray-800 bg-gray-950/30"
+                  isToday ? "border-saffron/50 bg-saffron/10" : "border-gray-200 bg-gray-50/30"
                 }`}
               >
                 <p className="text-[10px] font-medium uppercase text-gray-500">{DAY_NAMES[d.getDay()]}</p>
-                <p className={`text-sm font-semibold ${isToday ? "text-saffron" : "text-white"}`}>
+                <p className={`text-sm font-semibold ${isToday ? "text-saffron" : "text-gray-900"}`}>
                   {d.getDate()}
                 </p>
                 {daySlots.length > 0 ? (
@@ -264,12 +264,12 @@ export default function AvailabilityPage() {
       </div>
 
       {/* Add Availability Form */}
-      <div className="mb-8 rounded-xl border border-gray-800 bg-gray-900 p-6">
-        <h2 className="mb-4 text-lg font-semibold text-white">Add Availability Slot</h2>
+      <div className="mb-8 rounded-xl border border-gray-200 bg-white p-6">
+        <h2 className="mb-4 text-lg font-semibold text-gray-900">Add Availability Slot</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div>
-              <label htmlFor="form-date" className="mb-1 block text-sm font-medium text-gray-300">
+              <label htmlFor="form-date" className="mb-1 block text-sm font-medium text-gray-700">
                 Date
               </label>
               <input
@@ -278,11 +278,11 @@ export default function AvailabilityPage() {
                 required
                 value={formDate}
                 onChange={(e) => setFormDate(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                className="w-full rounded-lg border border-gray-200 bg-gray-100 px-3 py-2 text-sm text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               />
             </div>
             <div>
-              <label htmlFor="form-start-time" className="mb-1 block text-sm font-medium text-gray-300">
+              <label htmlFor="form-start-time" className="mb-1 block text-sm font-medium text-gray-700">
                 Start Time
               </label>
               <input
@@ -291,11 +291,11 @@ export default function AvailabilityPage() {
                 required
                 value={formStartTime}
                 onChange={(e) => setFormStartTime(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                className="w-full rounded-lg border border-gray-200 bg-gray-100 px-3 py-2 text-sm text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               />
             </div>
             <div>
-              <label htmlFor="form-end-time" className="mb-1 block text-sm font-medium text-gray-300">
+              <label htmlFor="form-end-time" className="mb-1 block text-sm font-medium text-gray-700">
                 End Time
               </label>
               <input
@@ -304,34 +304,34 @@ export default function AvailabilityPage() {
                 required
                 value={formEndTime}
                 onChange={(e) => setFormEndTime(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                className="w-full rounded-lg border border-gray-200 bg-gray-100 px-3 py-2 text-sm text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               />
             </div>
           </div>
 
           {/* Recurring option */}
           <div className="flex items-center gap-4">
-            <label className="flex items-center gap-2 text-sm text-gray-300">
+            <label className="flex items-center gap-2 text-sm text-gray-700">
               <input
                 type="checkbox"
                 checked={recurring}
                 onChange={(e) => setRecurring(e.target.checked)}
-                className="rounded border-gray-600 bg-gray-800 text-saffron focus:ring-saffron"
+                className="rounded border-gray-600 bg-gray-100 text-saffron focus:ring-saffron"
               />
               Repeat weekly
             </label>
             {recurring && (
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-400">for</span>
+                <span className="text-sm text-gray-500">for</span>
                 <input
                   type="number"
                   min={2}
                   max={12}
                   value={recurringWeeks}
                   onChange={(e) => setRecurringWeeks(e.target.value)}
-                  className="w-16 rounded-lg border border-gray-700 bg-gray-800 px-2 py-1 text-sm text-white focus:border-saffron focus:outline-none"
+                  className="w-16 rounded-lg border border-gray-200 bg-gray-100 px-2 py-1 text-sm text-gray-900 focus:border-saffron focus:outline-none"
                 />
-                <span className="text-sm text-gray-400">weeks</span>
+                <span className="text-sm text-gray-500">weeks</span>
               </div>
             )}
           </div>
@@ -371,7 +371,7 @@ export default function AvailabilityPage() {
       {/* Filters */}
       <div className="mb-6 flex flex-wrap items-end gap-4">
         <div>
-          <label htmlFor="filter-date" className="mb-1 block text-sm font-medium text-gray-300">
+          <label htmlFor="filter-date" className="mb-1 block text-sm font-medium text-gray-700">
             Filter by Date
           </label>
           <input
@@ -379,19 +379,19 @@ export default function AvailabilityPage() {
             type="date"
             value={filterDate}
             onChange={(e) => setFilterDate(e.target.value)}
-            className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+            className="rounded-lg border border-gray-200 bg-gray-100 px-3 py-2 text-sm text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
           />
         </div>
         {interviewers.length > 0 && (
           <div>
-            <label htmlFor="filter-interviewer" className="mb-1 block text-sm font-medium text-gray-300">
+            <label htmlFor="filter-interviewer" className="mb-1 block text-sm font-medium text-gray-700">
               Interviewer
             </label>
             <select
               id="filter-interviewer"
               value={filterInterviewer}
               onChange={(e) => setFilterInterviewer(e.target.value)}
-              className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+              className="rounded-lg border border-gray-200 bg-gray-100 px-3 py-2 text-sm text-gray-900 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
             >
               <option value="">All Interviewers</option>
               {interviewers.map((i) => (
@@ -405,7 +405,7 @@ export default function AvailabilityPage() {
         {(filterDate || filterInterviewer) && (
           <button
             onClick={() => { setFilterDate(""); setFilterInterviewer(""); }}
-            className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-300 transition-colors hover:bg-gray-700 hover:text-white"
+            className="rounded-lg border border-gray-200 bg-gray-100 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-200 hover:text-gray-900"
           >
             Clear Filters
           </button>
@@ -413,9 +413,9 @@ export default function AvailabilityPage() {
       </div>
 
       {/* Availability Slots List */}
-      <div className="overflow-hidden rounded-xl border border-gray-800 bg-gray-900">
-        <div className="border-b border-gray-800 bg-gray-950/30 px-6 py-3">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400">
+      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+        <div className="border-b border-gray-200 bg-gray-50/30 px-6 py-3">
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500">
             Availability Slots
             {!loading && (
               <span className="ml-2 text-saffron">({slots.length})</span>
@@ -430,7 +430,7 @@ export default function AvailabilityPage() {
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
-              <p className="text-sm text-gray-400">Loading availability slots...</p>
+              <p className="text-sm text-gray-500">Loading availability slots...</p>
             </div>
           </div>
         ) : error ? (
@@ -438,7 +438,7 @@ export default function AvailabilityPage() {
             <svg className="mx-auto h-12 w-12 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
             </svg>
-            <h3 className="mt-4 text-lg font-medium text-white">Failed to load availability</h3>
+            <h3 className="mt-4 text-lg font-medium text-gray-900">Failed to load availability</h3>
             <p className="mt-2 text-sm text-red-400">{error}</p>
             <button
               onClick={fetchSlots}
@@ -452,8 +452,8 @@ export default function AvailabilityPage() {
             <svg className="mx-auto h-12 w-12 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
             </svg>
-            <h3 className="mt-4 text-lg font-medium text-white">No availability slots</h3>
-            <p className="mt-2 text-sm text-gray-400">
+            <h3 className="mt-4 text-lg font-medium text-gray-900">No availability slots</h3>
+            <p className="mt-2 text-sm text-gray-500">
               {filterDate || filterInterviewer
                 ? "No slots found for the current filters. Try adjusting or clearing filters."
                 : "Add your first availability slot using the form above."}
@@ -462,41 +462,41 @@ export default function AvailabilityPage() {
         ) : (
           <table className="w-full">
             <thead>
-              <tr className="border-b border-gray-800">
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+              <tr className="border-b border-gray-200">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                   Date
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                   Start Time
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                   End Time
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                   Interviewer
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-400">
+                <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800/50">
+            <tbody className="divide-y divide-gray-200/50">
               {slots.map((slot) => (
-                <tr key={slot.id} className="transition-colors hover:bg-gray-800/30">
-                  <td className="px-6 py-4 text-sm font-medium text-white">
+                <tr key={slot.id} className="transition-colors hover:bg-gray-50">
+                  <td className="px-6 py-4 text-sm font-medium text-gray-900">
                     {formatDate(slot.date)}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-300">
+                  <td className="px-6 py-4 text-sm text-gray-700">
                     {formatTime(slot.startTime)}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-300">
+                  <td className="px-6 py-4 text-sm text-gray-700">
                     {formatTime(slot.endTime)}
                   </td>
                   <td className="px-6 py-4">
                     {slot.interviewer ? (
                       <div>
-                        <p className="text-sm font-medium text-white">{slot.interviewer.name}</p>
-                        <p className="text-xs text-gray-400">{slot.interviewer.email}</p>
+                        <p className="text-sm font-medium text-gray-900">{slot.interviewer.name}</p>
+                        <p className="text-xs text-gray-500">{slot.interviewer.email}</p>
                       </div>
                     ) : (
                       <span className="text-sm text-gray-500">--</span>

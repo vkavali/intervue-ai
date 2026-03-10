@@ -71,27 +71,27 @@ export function RescheduleForm({ sessionId, currentScheduledAt }: RescheduleForm
         {currentScheduledAt ? "Reschedule" : "Schedule"} Interview
       </h4>
       {currentScheduledAt && (
-        <p className="text-xs text-gray-400 mb-3">
+        <p className="text-xs text-gray-500 mb-3">
           Currently scheduled: {new Date(currentScheduledAt).toLocaleString()}
         </p>
       )}
       <div className="flex items-end gap-3">
         <div>
-          <label className="block text-xs font-medium text-gray-400 mb-1">Date</label>
+          <label className="block text-xs font-medium text-gray-500 mb-1">Date</label>
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
             min={new Date().toISOString().split("T")[0]}
-            className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white focus:border-yellow-500 focus:outline-none"
+            className="rounded-lg border border-gray-200 bg-gray-100 px-3 py-2 text-sm text-gray-900 focus:border-yellow-500 focus:outline-none"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-400 mb-1">Time</label>
+          <label className="block text-xs font-medium text-gray-500 mb-1">Time</label>
           <select
             value={time}
             onChange={(e) => setTime(e.target.value)}
-            className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white focus:border-yellow-500 focus:outline-none"
+            className="rounded-lg border border-gray-200 bg-gray-100 px-3 py-2 text-sm text-gray-900 focus:border-yellow-500 focus:outline-none"
           >
             {Array.from({ length: 24 }, (_, h) =>
               [0, 30].map((m) => {
@@ -104,14 +104,14 @@ export function RescheduleForm({ sessionId, currentScheduledAt }: RescheduleForm
         <button
           type="submit"
           disabled={loading || !date}
-          className="rounded-lg bg-yellow-600 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="rounded-lg bg-yellow-600 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-yellow-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {loading ? "Saving..." : "Confirm"}
         </button>
         <button
           type="button"
           onClick={() => { setOpen(false); setError(""); setSuccess(""); }}
-          className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 transition-colors"
+          className="rounded-lg border border-gray-200 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 transition-colors"
         >
           Cancel
         </button>

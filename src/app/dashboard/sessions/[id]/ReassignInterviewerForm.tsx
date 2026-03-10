@@ -58,13 +58,13 @@ export function ReassignInterviewerForm({
   return (
     <form onSubmit={handleSubmit} className="flex items-end gap-3">
       <div className="flex-1">
-        <label className="block text-xs font-medium text-gray-400 mb-1">
+        <label className="block text-xs font-medium text-gray-500 mb-1">
           Assign Interviewer
         </label>
         <select
           value={selectedId}
           onChange={(e) => setSelectedId(e.target.value)}
-          className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white focus:border-saffron focus:outline-none"
+          className="w-full rounded-lg border border-gray-200 bg-gray-100 px-3 py-2 text-sm text-gray-900 focus:border-saffron focus:outline-none"
         >
           <option value="">Select an interviewer</option>
           {interviewers.map((i) => (

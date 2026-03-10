@@ -78,24 +78,24 @@ export default function CreateSessionPage() {
         <div className="flex items-center gap-3 mb-2">
           <Link
             href={`/dashboard/interviews/${templateId}`}
-            className="text-sm text-gray-400 hover:text-gray-300 transition-colors"
+            className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
           >
             &larr; Back to Template
           </Link>
         </div>
-        <h1 className="text-2xl font-bold text-white">Create Interview Session</h1>
-        <p className="mt-1 text-gray-400">
+        <h1 className="text-2xl font-bold text-gray-900">Create Interview Session</h1>
+        <p className="mt-1 text-gray-500">
           Schedule an interview session using this template.
         </p>
       </div>
 
       {/* Template Info */}
       {template && (
-        <div className="mb-8 rounded-xl border border-gray-800 bg-gray-900/50 p-5">
-          <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Template</h2>
+        <div className="mb-8 rounded-xl border border-gray-200 bg-white p-5">
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Template</h2>
           <div className="flex items-center gap-4">
-            <p className="text-lg font-semibold text-white">{template.title}</p>
-            <span className="text-sm text-gray-400">{template.role}</span>
+            <p className="text-lg font-semibold text-gray-900">{template.title}</p>
+            <span className="text-sm text-gray-500">{template.role}</span>
             <span className="text-xs text-gray-500">{template.seniority}</span>
             <span className="text-xs text-gray-500">{template.roundType}</span>
             <span className="inline-flex items-center rounded-full bg-saffron/10 border border-saffron/30 px-2 py-0.5 text-xs text-saffron">
@@ -111,15 +111,15 @@ export default function CreateSessionPage() {
           <svg className="mx-auto h-12 w-12 text-green-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <h2 className="text-xl font-bold text-white mb-2">Session Created!</h2>
-          <p className="text-gray-400 mb-6">
+          <h2 className="text-xl font-bold text-gray-900 mb-2">Session Created!</h2>
+          <p className="text-gray-500 mb-6">
             The interview session has been created. Share the session link with the candidate.
           </p>
 
-          <div className="rounded-lg bg-gray-800 border border-gray-700 p-4 mb-6 max-w-lg mx-auto">
-            <label className="block text-xs font-medium text-gray-400 mb-1">Session Link</label>
+          <div className="rounded-lg bg-gray-100 border border-gray-200 p-4 mb-6 max-w-lg mx-auto">
+            <label className="block text-xs font-medium text-gray-500 mb-1">Session Link</label>
             <div className="flex items-center gap-2">
-              <code className="flex-1 text-sm text-saffron-light break-all">
+              <code className="flex-1 text-sm text-saffron-dark break-all">
                 {typeof window !== "undefined" ? window.location.origin : ""}{success.sessionLink}
               </code>
               <button
@@ -138,7 +138,7 @@ export default function CreateSessionPage() {
           <div className="flex items-center justify-center gap-3">
             <Link
               href="/dashboard/sessions"
-              className="rounded-lg bg-gray-800 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
+              className="rounded-lg bg-gray-100 px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-200 transition-colors"
             >
               View All Sessions
             </Link>
@@ -161,7 +161,7 @@ export default function CreateSessionPage() {
           <div className="space-y-6">
             {/* Candidate Email */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1.5">
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
                 Candidate Email <span className="text-red-400">*</span>
               </label>
               <input
@@ -170,7 +170,7 @@ export default function CreateSessionPage() {
                 onChange={(e) => setCandidateEmail(e.target.value)}
                 required
                 placeholder="candidate@example.com"
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               />
               <p className="mt-1 text-xs text-gray-500">
                 If the candidate doesn&apos;t have an account, one will be created automatically.
@@ -179,7 +179,7 @@ export default function CreateSessionPage() {
 
             {/* Interviewer Email */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1.5">
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
                 Interviewer Email <span className="text-gray-500">(optional)</span>
               </label>
               <input
@@ -187,7 +187,7 @@ export default function CreateSessionPage() {
                 value={interviewerEmail}
                 onChange={(e) => setInterviewerEmail(e.target.value)}
                 placeholder="interviewer@yourcompany.com"
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               />
               <p className="mt-1 text-xs text-gray-500">
                 Assign an interviewer to watch and evaluate the session in real-time.
@@ -196,14 +196,14 @@ export default function CreateSessionPage() {
 
             {/* Scheduled Date/Time */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1.5">
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
                 Scheduled Date & Time <span className="text-gray-500">(optional)</span>
               </label>
               <input
                 type="datetime-local"
                 value={scheduledAt}
                 onChange={(e) => setScheduledAt(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron [color-scheme:dark]"
+                className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron [color-scheme:dark]"
               />
               <p className="mt-1 text-xs text-gray-500">
                 Leave empty to allow the candidate to start immediately.
@@ -221,7 +221,7 @@ export default function CreateSessionPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-saffron to-india-green px-6 py-2.5 text-sm font-semibold text-white hover:from-saffron-light hover:to-india-green-light disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="inline-flex items-center gap-2 rounded-lg border border-saffron bg-transparent px-6 py-2.5 text-sm font-semibold text-saffron-dark hover:bg-saffron/10 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                 {loading ? (
                   <>
@@ -243,7 +243,7 @@ export default function CreateSessionPage() {
               </button>
               <Link
                 href={`/dashboard/interviews/${templateId}`}
-                className="rounded-lg bg-gray-800 px-5 py-2.5 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
+                className="rounded-lg bg-gray-100 px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-200 hover:text-gray-900 transition-colors"
               >
                 Cancel
               </Link>

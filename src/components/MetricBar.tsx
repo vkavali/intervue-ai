@@ -25,10 +25,10 @@ export function MetricBar({ label, value, maxValue = 10 }: MetricBarProps) {
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-gray-300">{label}</span>
+        <span className="text-sm font-medium text-gray-700">{label}</span>
         <span className={`text-sm font-bold ${textColor}`}>{value.toFixed(1)}</span>
       </div>
-      <div className="h-2.5 rounded-full bg-gray-800/80 overflow-hidden">
+      <div className="h-2.5 rounded-full bg-gray-100/80 overflow-hidden">
         <div
           className={`h-2.5 rounded-full ${barGradient} shadow-lg ${glowShadow} transition-all duration-700`}
           style={{ width: `${percentage}%` }}

@@ -60,7 +60,7 @@ function ScoreBar({ score, maxScore }: { score: number; maxScore: number }) {
           style={{ width: `${pct}%` }}
         />
       </div>
-      <span className="w-14 text-right font-mono text-sm font-semibold text-gray-300">
+      <span className="w-14 text-right font-mono text-sm font-semibold text-gray-700">
         {score}/{maxScore}
       </span>
     </div>
@@ -72,12 +72,12 @@ export default function Scorecard({ report }: ScorecardProps) {
   const confidencePct = Math.round(report.confidence * 100)
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6 text-white">
+    <div className="mx-auto max-w-3xl space-y-6 text-gray-900">
       {/* Header */}
-      <div className="rounded-lg border border-gray-700 bg-gray-800 p-6">
+      <div className="rounded-lg border border-gray-200 bg-gray-100 p-6">
         <h2 className="mb-1 text-xl font-bold">AI Audit Report</h2>
         {report.summary && (
-          <p className="text-sm text-gray-400">{report.summary}</p>
+          <p className="text-sm text-gray-500">{report.summary}</p>
         )}
       </div>
 
@@ -85,7 +85,7 @@ export default function Scorecard({ report }: ScorecardProps) {
       <div className={`rounded-lg border p-6 ${decision.bgColor}`}>
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
               Suggested Decision
             </p>
             <p className={`mt-1 text-2xl font-bold ${decision.color}`}>
@@ -93,10 +93,10 @@ export default function Scorecard({ report }: ScorecardProps) {
             </p>
           </div>
           <div className="text-right">
-            <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
               Confidence
             </p>
-            <p className="mt-1 text-2xl font-bold text-white">{confidencePct}%</p>
+            <p className="mt-1 text-2xl font-bold text-gray-900">{confidencePct}%</p>
             <div className="mt-1 h-1.5 w-24 overflow-hidden rounded-full bg-gray-700">
               <div
                 className="h-full rounded-full bg-blue-500 transition-all duration-500"
@@ -108,8 +108,8 @@ export default function Scorecard({ report }: ScorecardProps) {
       </div>
 
       {/* Dimension Scores */}
-      <div className="rounded-lg border border-gray-700 bg-gray-800 p-6">
-        <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-400">
+      <div className="rounded-lg border border-gray-200 bg-gray-100 p-6">
+        <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-500">
           Scoring Dimensions
         </h3>
         <div className="space-y-4">
@@ -129,8 +129,8 @@ export default function Scorecard({ report }: ScorecardProps) {
 
       {/* Risk Flags */}
       {report.riskFlags.length > 0 && (
-        <div className="rounded-lg border border-gray-700 bg-gray-800 p-6">
-          <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-400">
+        <div className="rounded-lg border border-gray-200 bg-gray-100 p-6">
+          <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-500">
             Risk Flags
           </h3>
           <div className="space-y-2">
@@ -146,7 +146,7 @@ export default function Scorecard({ report }: ScorecardProps) {
                     <span className={`text-xs font-semibold uppercase ${style.text}`}>
                       {flag.severity}
                     </span>
-                    <p className="text-sm text-gray-300">{flag.message}</p>
+                    <p className="text-sm text-gray-700">{flag.message}</p>
                   </div>
                 </div>
               )
@@ -157,8 +157,8 @@ export default function Scorecard({ report }: ScorecardProps) {
 
       {/* Quote Highlights */}
       {report.quoteHighlights.length > 0 && (
-        <div className="rounded-lg border border-gray-700 bg-gray-800 p-6">
-          <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-400">
+        <div className="rounded-lg border border-gray-200 bg-gray-100 p-6">
+          <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-500">
             Notable Quotes
           </h3>
           <div className="space-y-3">
@@ -167,7 +167,7 @@ export default function Scorecard({ report }: ScorecardProps) {
                 key={idx}
                 className="border-l-2 border-blue-500 pl-4"
               >
-                <p className="text-sm italic text-gray-300">
+                <p className="text-sm italic text-gray-700">
                   &ldquo;{highlight.quote}&rdquo;
                 </p>
                 {(highlight.context || highlight.timestamp) && (
@@ -185,17 +185,17 @@ export default function Scorecard({ report }: ScorecardProps) {
 
       {/* Thinking Trace */}
       {report.thinkingTrace.length > 0 && (
-        <div className="rounded-lg border border-gray-700 bg-gray-800 p-6">
-          <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-400">
+        <div className="rounded-lg border border-gray-200 bg-gray-100 p-6">
+          <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-500">
             Thinking Trace
           </h3>
           <ol className="space-y-2">
             {report.thinkingTrace.map((step, idx) => (
               <li key={idx} className="flex gap-3 text-sm">
-                <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-gray-700 text-xs font-bold text-gray-400">
+                <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-gray-700 text-xs font-bold text-gray-500">
                   {idx + 1}
                 </span>
-                <span className="text-gray-300">{step}</span>
+                <span className="text-gray-700">{step}</span>
               </li>
             ))}
           </ol>

@@ -47,23 +47,23 @@ const confidenceColors: Record<string, string> = {
 
 function SkeletonCard() {
   return (
-    <div className="animate-pulse rounded-xl border border-gray-800 bg-gray-900 p-6">
+    <div className="animate-pulse rounded-xl border border-gray-200 bg-white p-6">
       <div className="flex items-center gap-3 mb-4">
-        <div className="h-10 w-10 rounded-full bg-gray-800" />
+        <div className="h-10 w-10 rounded-full bg-gray-100" />
         <div className="space-y-2">
-          <div className="h-4 w-32 rounded bg-gray-800" />
-          <div className="h-3 w-48 rounded bg-gray-800" />
+          <div className="h-4 w-32 rounded bg-gray-100" />
+          <div className="h-3 w-48 rounded bg-gray-100" />
         </div>
       </div>
       <div className="space-y-3">
-        <div className="h-3 w-full rounded bg-gray-800" />
-        <div className="h-3 w-5/6 rounded bg-gray-800" />
-        <div className="h-3 w-4/6 rounded bg-gray-800" />
+        <div className="h-3 w-full rounded bg-gray-100" />
+        <div className="h-3 w-5/6 rounded bg-gray-100" />
+        <div className="h-3 w-4/6 rounded bg-gray-100" />
       </div>
       <div className="mt-4 flex gap-2">
-        <div className="h-6 w-20 rounded-full bg-gray-800" />
-        <div className="h-6 w-24 rounded-full bg-gray-800" />
-        <div className="h-6 w-16 rounded-full bg-gray-800" />
+        <div className="h-6 w-20 rounded-full bg-gray-100" />
+        <div className="h-6 w-24 rounded-full bg-gray-100" />
+        <div className="h-6 w-16 rounded-full bg-gray-100" />
       </div>
     </div>
   );
@@ -71,13 +71,13 @@ function SkeletonCard() {
 
 function SkeletonRecommendation() {
   return (
-    <div className="animate-pulse rounded-xl border border-gray-800 bg-gray-900 p-8">
+    <div className="animate-pulse rounded-xl border border-gray-200 bg-white p-8">
       <div className="flex items-center gap-4">
-        <div className="h-16 w-16 rounded-full bg-gray-800" />
+        <div className="h-16 w-16 rounded-full bg-gray-100" />
         <div className="flex-1 space-y-3">
-          <div className="h-6 w-64 rounded bg-gray-800" />
-          <div className="h-4 w-full rounded bg-gray-800" />
-          <div className="h-4 w-3/4 rounded bg-gray-800" />
+          <div className="h-6 w-64 rounded bg-gray-100" />
+          <div className="h-4 w-full rounded bg-gray-100" />
+          <div className="h-4 w-3/4 rounded bg-gray-100" />
         </div>
       </div>
     </div>
@@ -89,17 +89,17 @@ function getRankBadgeColor(rank: number): string {
     case 1:
       return "bg-yellow-500/20 text-yellow-400 border-yellow-500/40";
     case 2:
-      return "bg-gray-400/20 text-gray-300 border-gray-400/40";
+      return "bg-gray-400/20 text-gray-700 border-gray-400/40";
     case 3:
       return "bg-orange-500/20 text-orange-400 border-orange-500/40";
     default:
-      return "bg-gray-500/10 text-gray-400 border-gray-500/30";
+      return "bg-gray-500/10 text-gray-500 border-gray-500/30";
   }
 }
 
 export default function CandidateComparePage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center"><div className="text-gray-400">Loading...</div></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center"><div className="text-gray-500">Loading...</div></div>}>
       <CandidateCompareContent />
     </Suspense>
   );
@@ -153,7 +153,7 @@ function CandidateCompareContent() {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <div className="flex items-center gap-2 text-sm text-gray-400 mb-4">
+        <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
           <Link
             href="/dashboard/candidates"
             className="hover:text-saffron transition-colors"
@@ -173,15 +173,15 @@ function CandidateCompareContent() {
               d="M9 5l7 7-7 7"
             />
           </svg>
-          <span className="text-gray-300">Compare</span>
+          <span className="text-gray-700">Compare</span>
         </div>
 
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-white">
+            <h1 className="text-2xl font-bold text-gray-900">
               Compare Candidates
             </h1>
-            <p className="mt-1 text-sm text-gray-400">
+            <p className="mt-1 text-sm text-gray-500">
               {role ? (
                 <>
                   AI-powered comparison for{" "}
@@ -274,18 +274,18 @@ function CandidateCompareContent() {
             <SkeletonCard />
           </div>
           <div className="grid gap-6 md:grid-cols-2">
-            <div className="animate-pulse rounded-xl border border-gray-800 bg-gray-900 p-6">
-              <div className="h-4 w-40 rounded bg-gray-800 mb-3" />
+            <div className="animate-pulse rounded-xl border border-gray-200 bg-white p-6">
+              <div className="h-4 w-40 rounded bg-gray-100 mb-3" />
               <div className="space-y-2">
-                <div className="h-3 w-full rounded bg-gray-800" />
-                <div className="h-3 w-5/6 rounded bg-gray-800" />
+                <div className="h-3 w-full rounded bg-gray-100" />
+                <div className="h-3 w-5/6 rounded bg-gray-100" />
               </div>
             </div>
-            <div className="animate-pulse rounded-xl border border-gray-800 bg-gray-900 p-6">
-              <div className="h-4 w-48 rounded bg-gray-800 mb-3" />
+            <div className="animate-pulse rounded-xl border border-gray-200 bg-white p-6">
+              <div className="h-4 w-48 rounded bg-gray-100 mb-3" />
               <div className="space-y-2">
-                <div className="h-3 w-full rounded bg-gray-800" />
-                <div className="h-3 w-4/6 rounded bg-gray-800" />
+                <div className="h-3 w-full rounded bg-gray-100" />
+                <div className="h-3 w-4/6 rounded bg-gray-100" />
               </div>
             </div>
           </div>
@@ -294,7 +294,7 @@ function CandidateCompareContent() {
 
       {/* Empty State (no comparison yet, not loading) */}
       {!loading && !analysis && !error && (
-        <div className="rounded-xl border border-gray-800 bg-gray-900 px-6 py-16 text-center">
+        <div className="rounded-xl border border-gray-200 bg-white px-6 py-16 text-center">
           <svg
             className="mx-auto h-12 w-12 text-gray-600"
             fill="none"
@@ -308,10 +308,10 @@ function CandidateCompareContent() {
               d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
             />
           </svg>
-          <h3 className="mt-4 text-lg font-medium text-white">
+          <h3 className="mt-4 text-lg font-medium text-gray-900">
             Ready to Compare
           </h3>
-          <p className="mt-2 text-sm text-gray-400 max-w-md mx-auto">
+          <p className="mt-2 text-sm text-gray-500 max-w-md mx-auto">
             Click &quot;Generate AI Comparison&quot; to analyze all candidates
             for the{" "}
             <span className="text-saffron font-medium">{role}</span> role.
@@ -337,7 +337,7 @@ function CandidateCompareContent() {
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
-                  <h2 className="text-xl font-bold text-white">
+                  <h2 className="text-xl font-bold text-gray-900">
                     We recommend{" "}
                     {analysis.recommendation.selectedCandidate}
                   </h2>
@@ -350,7 +350,7 @@ function CandidateCompareContent() {
                     {analysis.recommendation.confidence.toUpperCase()} CONFIDENCE
                   </span>
                 </div>
-                <p className="text-sm text-gray-300 leading-relaxed mb-3">
+                <p className="text-sm text-gray-700 leading-relaxed mb-3">
                   {analysis.recommendation.reasoning}
                 </p>
                 {analysis.recommendation.alternateConsideration && (
@@ -359,8 +359,8 @@ function CandidateCompareContent() {
                   </p>
                 )}
                 {analysis.recommendation.tradeoffs && (
-                  <p className="mt-2 text-xs text-gray-400">
-                    <span className="font-medium text-gray-300">
+                  <p className="mt-2 text-xs text-gray-500">
+                    <span className="font-medium text-gray-700">
                       Trade-offs:{" "}
                     </span>
                     {analysis.recommendation.tradeoffs}
@@ -372,17 +372,17 @@ function CandidateCompareContent() {
 
           {/* Ranked Candidate Cards */}
           <div>
-            <h3 className="mb-4 text-lg font-semibold text-white">
+            <h3 className="mb-4 text-lg font-semibold text-gray-900">
               Candidate Rankings
             </h3>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {sortedCandidates.map((candidate) => (
                 <div
                   key={candidate.candidateId}
-                  className={`rounded-xl border bg-gray-900 p-6 transition-colors ${
+                  className={`rounded-xl border bg-white p-6 transition-colors ${
                     candidate.rank === 1
                       ? "border-saffron/40 ring-1 ring-saffron/20"
-                      : "border-gray-800 hover:border-gray-700"
+                      : "border-gray-200 hover:border-gray-200"
                   }`}
                 >
                   {/* Rank Badge + Name */}
@@ -395,14 +395,14 @@ function CandidateCompareContent() {
                       #{candidate.rank}
                     </span>
                     <div>
-                      <h4 className="text-sm font-semibold text-white">
+                      <h4 className="text-sm font-semibold text-gray-900">
                         {candidate.candidateName}
                       </h4>
                     </div>
                   </div>
 
                   {/* Overall Impression */}
-                  <p className="mb-4 text-xs text-gray-400 leading-relaxed">
+                  <p className="mb-4 text-xs text-gray-500 leading-relaxed">
                     {candidate.overallImpression}
                   </p>
 
@@ -417,12 +417,12 @@ function CandidateCompareContent() {
                           {candidate.roundsSummary.map((round, idx) => (
                             <div
                               key={idx}
-                              className="flex items-center justify-between rounded-md bg-gray-950/50 px-3 py-1.5"
+                              className="flex items-center justify-between rounded-md bg-gray-50/50 px-3 py-1.5"
                             >
-                              <span className="text-xs text-gray-300">
+                              <span className="text-xs text-gray-700">
                                 {round.round}
                               </span>
-                              <span className="text-xs font-medium text-white">
+                              <span className="text-xs font-medium text-gray-900">
                                 {round.score}/100
                               </span>
                             </div>
@@ -476,7 +476,7 @@ function CandidateCompareContent() {
                       <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-gray-500">
                         Growth
                       </p>
-                      <p className="text-xs text-gray-400">
+                      <p className="text-xs text-gray-500">
                         {candidate.growthDuringInterview}
                       </p>
                     </div>
@@ -488,7 +488,7 @@ function CandidateCompareContent() {
                       <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-gray-500">
                         Team Fit
                       </p>
-                      <p className="text-xs text-gray-400">
+                      <p className="text-xs text-gray-500">
                         {candidate.teamFitAssessment}
                       </p>
                     </div>
@@ -501,10 +501,10 @@ function CandidateCompareContent() {
           {/* Overall Observations + Interview Process Feedback */}
           <div className="grid gap-6 md:grid-cols-2">
             {/* Overall Observations */}
-            <div className="rounded-xl border border-gray-800 bg-gray-900 p-6">
+            <div className="rounded-xl border border-gray-200 bg-white p-6">
               <div className="flex items-center gap-2 mb-3">
                 <svg
-                  className="h-5 w-5 text-blue-400"
+                  className="h-5 w-5 text-india-green"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -522,17 +522,17 @@ function CandidateCompareContent() {
                     d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                   />
                 </svg>
-                <h3 className="text-sm font-semibold text-white">
+                <h3 className="text-sm font-semibold text-gray-900">
                   Overall Observations
                 </h3>
               </div>
-              <p className="text-sm text-gray-400 leading-relaxed">
+              <p className="text-sm text-gray-500 leading-relaxed">
                 {analysis.overallObservations}
               </p>
             </div>
 
             {/* Interview Process Feedback */}
-            <div className="rounded-xl border border-gray-800 bg-gray-900 p-6">
+            <div className="rounded-xl border border-gray-200 bg-white p-6">
               <div className="flex items-center gap-2 mb-3">
                 <svg
                   className="h-5 w-5 text-saffron"
@@ -547,11 +547,11 @@ function CandidateCompareContent() {
                     d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
                   />
                 </svg>
-                <h3 className="text-sm font-semibold text-white">
+                <h3 className="text-sm font-semibold text-gray-900">
                   Interview Process Feedback
                 </h3>
               </div>
-              <p className="text-sm text-gray-400 leading-relaxed">
+              <p className="text-sm text-gray-500 leading-relaxed">
                 {analysis.interviewProcessFeedback}
               </p>
             </div>

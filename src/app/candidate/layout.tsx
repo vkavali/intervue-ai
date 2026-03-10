@@ -59,15 +59,15 @@ export default async function CandidateLayout({
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)]">
+    <div className="flex min-h-[calc(100vh-4rem)] bg-gray-50">
       {/* Sidebar */}
-      <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:border-r lg:border-gray-800 lg:bg-gray-900/50">
+      <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:border-r lg:border-gray-200 lg:bg-white">
         <nav className="flex-1 space-y-1 px-3 py-6">
           {sidebarLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-400 transition-colors hover:bg-gray-800 hover:text-white"
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
             >
               {link.icon}
               {link.label}
@@ -75,13 +75,13 @@ export default async function CandidateLayout({
           ))}
         </nav>
 
-        <div className="border-t border-gray-800 p-4">
-          <div className="rounded-lg bg-gradient-to-r from-saffron/10 to-india-green/10 border border-saffron/20 p-4">
-            <p className="text-xs font-medium text-saffron-light">Practice Mode</p>
-            <p className="mt-1 text-sm text-gray-400">Sharpen your skills</p>
+        <div className="border-t border-gray-200 p-4">
+          <div className="rounded-lg border border-saffron/30 bg-saffron/5 p-4">
+            <p className="text-xs font-medium text-saffron-dark">Practice Mode</p>
+            <p className="mt-1 text-sm text-gray-500">Sharpen your skills</p>
             <Link
               href="/practice"
-              className="mt-2 block text-xs text-saffron hover:text-saffron-light"
+              className="mt-2 block text-xs text-saffron hover:text-saffron-dark"
             >
               Start practicing &rarr;
             </Link>

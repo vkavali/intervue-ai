@@ -133,17 +133,17 @@ export default async function DashboardLayout({
   );
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)]">
+    <div className="flex min-h-[calc(100vh-4rem)] bg-gray-50">
       {/* Sidebar */}
-      <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:border-r lg:border-gray-800 lg:bg-gray-900/50">
+      <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:border-r lg:border-gray-200 lg:bg-white">
         <nav className="flex-1 space-y-1 px-3 py-6">
           {/* Role Badge */}
           <div className="mb-4 px-3">
             <span
               className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${
                 isAdmin
-                  ? "bg-saffron/10 text-saffron border-saffron/20"
-                  : "bg-blue-500/10 text-blue-400 border-blue-500/20"
+                  ? "bg-saffron/10 text-saffron border-saffron/30"
+                  : "bg-india-green/10 text-india-green border-india-green/30"
               }`}
             >
               {isAdmin ? "Admin" : "Interviewer"}
@@ -154,7 +154,7 @@ export default async function DashboardLayout({
             <Link
               key={link.href}
               href={link.href}
-              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-400 transition-colors hover:bg-gray-800 hover:text-white"
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
             >
               {link.icon}
               {link.label}
@@ -162,25 +162,25 @@ export default async function DashboardLayout({
           ))}
         </nav>
 
-        <div className="border-t border-gray-800 p-4">
+        <div className="border-t border-gray-200 p-4">
           {isAdmin ? (
-            <div className="rounded-lg bg-gradient-to-r from-saffron/10 to-india-green/10 border border-saffron/20 p-4">
-              <p className="text-xs font-medium text-saffron-light">Current Plan</p>
-              <p className="mt-1 text-sm font-semibold text-white">{companyPlan}</p>
+            <div className="rounded-lg border border-saffron/30 bg-saffron/5 p-4">
+              <p className="text-xs font-medium text-saffron-dark">Current Plan</p>
+              <p className="mt-1 text-sm font-semibold text-gray-900">{companyPlan}</p>
               <Link
                 href="/dashboard/billing"
-                className="mt-2 block text-xs text-saffron hover:text-saffron-light"
+                className="mt-2 block text-xs text-saffron hover:text-saffron-dark"
               >
                 Upgrade plan &rarr;
               </Link>
             </div>
           ) : (
-            <div className="rounded-lg bg-gradient-to-r from-blue-600/10 to-cyan-600/10 border border-blue-500/20 p-4">
-              <p className="text-xs font-medium text-blue-300">Your Role</p>
-              <p className="mt-1 text-sm font-semibold text-white">Interviewer</p>
+            <div className="rounded-lg border border-india-green/30 bg-india-green/5 p-4">
+              <p className="text-xs font-medium text-india-green-dark">Your Role</p>
+              <p className="mt-1 text-sm font-semibold text-gray-900">Interviewer</p>
               <Link
                 href="/dashboard/sessions"
-                className="mt-2 block text-xs text-blue-400 hover:text-blue-300"
+                className="mt-2 block text-xs text-india-green hover:text-india-green-dark"
               >
                 View my sessions &rarr;
               </Link>

@@ -11,19 +11,12 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        // Override default grays with warm neutrals (no blue undertone)
-        gray: {
-          50:  '#fafaf9',
-          100: '#f0efed',
-          200: '#e0dfdb',
-          300: '#c5c3be',
-          400: '#a3a099',
-          500: '#84817a',
-          600: '#6b6862',
-          700: '#4a4844',
-          800: '#353330',
-          900: '#262420',
+        // Warm neutrals for non-homepage pages (dashboard, candidate, auth)
+        warm: {
           950: '#1c1b18',
+          900: '#262420',
+          800: '#353330',
+          700: '#4a4844',
         },
         // Warm dark palette for long-session focus (editor/practice)
         saffron: {
@@ -35,6 +28,11 @@ const config: Config = {
           DEFAULT: '#6b9e6b',
           light:   '#8fb88f',
           dark:    '#4d7a4d',
+        },
+        blush: {
+          DEFAULT: '#e8b4b8',
+          light:   '#f2d0d3',
+          dark:    '#d4969b',
         },
         editor: {
           DEFAULT: '#111118',   // warm deep dark (main bg)

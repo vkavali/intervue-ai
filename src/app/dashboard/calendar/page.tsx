@@ -250,23 +250,23 @@ export default function CalendarPage() {
       {/* Header */}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Calendar</h1>
-          <p className="mt-1 text-sm text-gray-400">Manage interviews and interviewer availability</p>
+          <h1 className="text-2xl font-bold text-gray-900">Calendar</h1>
+          <p className="mt-1 text-sm text-gray-500">Manage interviews and interviewer availability</p>
         </div>
       </div>
 
       {/* Stats Bar */}
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-4">
-          <p className="text-xs font-medium uppercase tracking-wider text-gray-400">Scheduled This Month</p>
-          <p className="mt-1 text-2xl font-bold text-white">{totalScheduled}</p>
+        <div className="rounded-xl border border-gray-200 bg-white p-4">
+          <p className="text-xs font-medium uppercase tracking-wider text-gray-500">Scheduled This Month</p>
+          <p className="mt-1 text-2xl font-bold text-gray-900">{totalScheduled}</p>
         </div>
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-4">
-          <p className="text-xs font-medium uppercase tracking-wider text-gray-400">Active Today</p>
+        <div className="rounded-xl border border-gray-200 bg-white p-4">
+          <p className="text-xs font-medium uppercase tracking-wider text-gray-500">Active Today</p>
           <p className="mt-1 text-2xl font-bold text-green-400">{activeToday}</p>
         </div>
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-4">
-          <p className="text-xs font-medium uppercase tracking-wider text-gray-400">Upcoming This Week</p>
+        <div className="rounded-xl border border-gray-200 bg-white p-4">
+          <p className="text-xs font-medium uppercase tracking-wider text-gray-500">Upcoming This Week</p>
           <p className="mt-1 text-2xl font-bold text-saffron">{upcomingThisWeek}</p>
         </div>
       </div>
@@ -274,13 +274,13 @@ export default function CalendarPage() {
       {/* Navigation */}
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <button onClick={goPrev} className="rounded-lg border border-gray-700 bg-gray-800 p-2 text-gray-300 hover:bg-gray-700 hover:text-white">
+          <button onClick={goPrev} className="rounded-lg border border-gray-200 bg-gray-100 p-2 text-gray-700 hover:bg-gray-200 hover:text-gray-900">
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
           </button>
-          <h2 className="min-w-[200px] text-center text-lg font-semibold text-white">
+          <h2 className="min-w-[200px] text-center text-lg font-semibold text-gray-900">
             {MONTH_NAMES[month - 1]} {year}
           </h2>
-          <button onClick={goNext} className="rounded-lg border border-gray-700 bg-gray-800 p-2 text-gray-300 hover:bg-gray-700 hover:text-white">
+          <button onClick={goNext} className="rounded-lg border border-gray-200 bg-gray-100 p-2 text-gray-700 hover:bg-gray-200 hover:text-gray-900">
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
           </button>
         </div>
@@ -292,10 +292,10 @@ export default function CalendarPage() {
       <div className="flex gap-6">
         {/* Calendar Grid */}
         <div className="flex-1">
-          <div className="overflow-hidden rounded-xl border border-gray-800 bg-gray-900">
-            <div className="grid grid-cols-7 border-b border-gray-800 bg-gray-950/50">
+          <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+            <div className="grid grid-cols-7 border-b border-gray-200 bg-gray-50/50">
               {DAY_NAMES.map((d) => (
-                <div key={d} className="px-2 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-400">{d}</div>
+                <div key={d} className="px-2 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500">{d}</div>
               ))}
             </div>
 
@@ -321,14 +321,14 @@ export default function CalendarPage() {
                     <div
                       key={i}
                       onClick={() => isValidDay && setSelectedDay(dayNum === selectedDay ? null : dayNum)}
-                      className={`min-h-[110px] border-b border-r border-gray-800/50 p-1.5 transition-colors ${
-                        isValidDay ? "cursor-pointer hover:bg-gray-800/50" : "bg-gray-950/30"
+                      className={`min-h-[110px] border-b border-r border-gray-200/50 p-1.5 transition-colors ${
+                        isValidDay ? "cursor-pointer hover:bg-gray-50" : "bg-gray-50/30"
                       } ${isSelected ? "bg-saffron/10 ring-1 ring-inset ring-saffron/40" : ""}`}
                     >
                       {isValidDay && (
                         <>
                           <div className={`mb-1 flex h-7 w-7 items-center justify-center rounded-full text-sm font-medium ${
-                            isToday ? "bg-white/10 text-white border border-saffron" : isSelected ? "text-saffron-light" : "text-gray-300"
+                            isToday ? "bg-white/10 text-gray-900 border border-saffron" : isSelected ? "text-saffron-dark" : "text-gray-700"
                           }`}>
                             {dayNum}
                           </div>
@@ -344,7 +344,7 @@ export default function CalendarPage() {
                             {daySessions.slice(0, 2).map((s) => (
                               <div key={s.id} className="flex items-center gap-1 rounded px-1 py-0.5">
                                 <div className={`h-2 w-2 flex-shrink-0 rounded-full ${statusColor[s.status] || "bg-gray-500"}`} />
-                                <span className="truncate text-[11px] text-gray-300">
+                                <span className="truncate text-[11px] text-gray-700">
                                   {s.candidate.name.split(" ")[0]}
                                 </span>
                               </div>
@@ -369,7 +369,7 @@ export default function CalendarPage() {
           </div>
 
           {/* Legend */}
-          <div className="mt-4 flex items-center gap-6 text-xs text-gray-400">
+          <div className="mt-4 flex items-center gap-6 text-xs text-gray-500">
             <div className="flex items-center gap-1.5"><div className="h-2.5 w-2.5 rounded-full bg-yellow-500" /> Pending</div>
             <div className="flex items-center gap-1.5"><div className="h-2.5 w-2.5 rounded-full bg-green-500" /> Active</div>
             <div className="flex items-center gap-1.5"><div className="h-2.5 w-2.5 rounded-full bg-blue-500" /> Completed</div>
@@ -383,31 +383,31 @@ export default function CalendarPage() {
           <div className="w-80 flex-shrink-0">
             <div className="sticky top-8 space-y-4">
               {/* Date header */}
-              <div className="rounded-xl border border-gray-800 bg-gray-900 p-4">
+              <div className="rounded-xl border border-gray-200 bg-white p-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-white">{selectedDateStr}</h3>
-                  <button onClick={() => setSelectedDay(null)} className="text-gray-500 hover:text-white">
+                  <h3 className="text-lg font-semibold text-gray-900">{selectedDateStr}</h3>
+                  <button onClick={() => setSelectedDay(null)} className="text-gray-500 hover:text-gray-900">
                     <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                   </button>
                 </div>
               </div>
 
               {/* Interviews on this day */}
-              <div className="rounded-xl border border-gray-800 bg-gray-900 p-4">
-                <h4 className="mb-3 text-sm font-semibold text-gray-300">Interviews ({selectedDaySessions.length})</h4>
+              <div className="rounded-xl border border-gray-200 bg-white p-4">
+                <h4 className="mb-3 text-sm font-semibold text-gray-700">Interviews ({selectedDaySessions.length})</h4>
                 {selectedDaySessions.length === 0 ? (
                   <p className="text-xs text-gray-500">No interviews scheduled</p>
                 ) : (
                   <div className="space-y-2">
                     {selectedDaySessions.map((s) => (
-                      <div key={s.id} className="rounded-lg border border-gray-800 p-3">
+                      <div key={s.id} className="rounded-lg border border-gray-200 p-3">
                         <div className="flex items-start justify-between">
                           <div>
                             <div className="flex items-center gap-2">
                               <div className={`h-2 w-2 rounded-full ${statusColor[s.status] || "bg-gray-500"}`} />
-                              <span className="text-sm font-medium text-white">{s.candidate.name}</span>
+                              <span className="text-sm font-medium text-gray-900">{s.candidate.name}</span>
                             </div>
-                            <p className="mt-1 text-xs text-gray-400">{s.template.title}</p>
+                            <p className="mt-1 text-xs text-gray-500">{s.template.title}</p>
                             <p className="text-xs text-gray-500">{formatTime(s.scheduledAt)}{s.interviewer ? ` · w/ ${s.interviewer.name}` : ""}</p>
                           </div>
                         </div>
@@ -417,7 +417,7 @@ export default function CalendarPage() {
                           </Link>
                           {s.status === "PENDING" && (
                             <>
-                              <button onClick={() => { setRescheduleSession(s); setRescheduleDate(`${year}-${String(month).padStart(2,"0")}-${String(selectedDay).padStart(2,"0")}`); }} className="rounded bg-blue-500/10 px-2 py-1 text-xs text-blue-400 hover:bg-india-green/10/20">
+                              <button onClick={() => { setRescheduleSession(s); setRescheduleDate(`${year}-${String(month).padStart(2,"0")}-${String(selectedDay).padStart(2,"0")}`); }} className="rounded bg-india-green/10 px-2 py-1 text-xs text-india-green hover:bg-india-green/20">
                                 Reschedule
                               </button>
                               <button onClick={() => handleCancelSession(s.id)} className="rounded bg-red-500/10 px-2 py-1 text-xs text-red-400 hover:bg-red-500/20">
@@ -433,12 +433,12 @@ export default function CalendarPage() {
               </div>
 
               {/* Availability on this day */}
-              <div className="rounded-xl border border-gray-800 bg-gray-900 p-4">
+              <div className="rounded-xl border border-gray-200 bg-white p-4">
                 <div className="mb-3 flex items-center justify-between">
-                  <h4 className="text-sm font-semibold text-gray-300">Availability ({selectedDayAvail.length})</h4>
+                  <h4 className="text-sm font-semibold text-gray-700">Availability ({selectedDayAvail.length})</h4>
                   <button
                     onClick={() => setShowAddAvail(!showAddAvail)}
-                    className="rounded bg-green-500/10 px-2 py-1 text-xs text-green-400 hover:bg-green-500/20"
+                    className="rounded bg-green-500/10 px-2 py-1 text-xs text-green-400 hover:bg-india-green/10/20"
                   >
                     {showAddAvail ? "Cancel" : "+ Add Slot"}
                   </button>
@@ -449,21 +449,21 @@ export default function CalendarPage() {
                   <div className="mb-3 rounded-lg border border-green-500/20 bg-green-500/5 p-3">
                     <div className="space-y-2">
                       <div>
-                        <label className="text-xs text-gray-400">Start Time</label>
-                        <select value={availStartTime} onChange={(e) => setAvailStartTime(e.target.value)} className="mt-1 w-full rounded border border-gray-700 bg-gray-800 px-2 py-1.5 text-sm text-white">
+                        <label className="text-xs text-gray-500">Start Time</label>
+                        <select value={availStartTime} onChange={(e) => setAvailStartTime(e.target.value)} className="mt-1 w-full rounded border border-gray-200 bg-gray-100 px-2 py-1.5 text-sm text-gray-900">
                           {TIME_OPTIONS.map((t) => <option key={t} value={t}>{formatTimeLabel(t)}</option>)}
                         </select>
                       </div>
                       <div>
-                        <label className="text-xs text-gray-400">End Time</label>
-                        <select value={availEndTime} onChange={(e) => setAvailEndTime(e.target.value)} className="mt-1 w-full rounded border border-gray-700 bg-gray-800 px-2 py-1.5 text-sm text-white">
+                        <label className="text-xs text-gray-500">End Time</label>
+                        <select value={availEndTime} onChange={(e) => setAvailEndTime(e.target.value)} className="mt-1 w-full rounded border border-gray-200 bg-gray-100 px-2 py-1.5 text-sm text-gray-900">
                           {TIME_OPTIONS.filter((t) => t > availStartTime).map((t) => <option key={t} value={t}>{formatTimeLabel(t)}</option>)}
                         </select>
                       </div>
                       <button
                         onClick={handleAddAvailability}
                         disabled={savingAvail}
-                        className="w-full rounded bg-green-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-green-700 disabled:opacity-50"
+                        className="w-full rounded border border-india-green bg-transparent px-3 py-1.5 text-sm font-medium text-gray-900 hover:bg-green-700 disabled:opacity-50"
                       >
                         {savingAvail ? "Saving..." : "Add Availability"}
                       </button>
@@ -476,10 +476,10 @@ export default function CalendarPage() {
                 ) : (
                   <div className="space-y-2">
                     {selectedDayAvail.map((a) => (
-                      <div key={a.id} className="flex items-center justify-between rounded-lg border border-gray-800 p-2">
+                      <div key={a.id} className="flex items-center justify-between rounded-lg border border-gray-200 p-2">
                         <div>
-                          <p className="text-sm text-white">{formatTimeLabel(a.startTime)} - {formatTimeLabel(a.endTime)}</p>
-                          <p className="text-xs text-gray-400">{a.interviewer.name}</p>
+                          <p className="text-sm text-gray-900">{formatTimeLabel(a.startTime)} - {formatTimeLabel(a.endTime)}</p>
+                          <p className="text-xs text-gray-500">{a.interviewer.name}</p>
                         </div>
                         <button onClick={() => handleDeleteAvailability(a.id)} className="rounded p-1 text-gray-500 hover:bg-red-500/10 hover:text-red-400">
                           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
@@ -491,14 +491,14 @@ export default function CalendarPage() {
               </div>
 
               {/* Quick actions */}
-              <div className="rounded-xl border border-gray-800 bg-gray-900 p-4">
-                <h4 className="mb-3 text-sm font-semibold text-gray-300">Quick Actions</h4>
+              <div className="rounded-xl border border-gray-200 bg-white p-4">
+                <h4 className="mb-3 text-sm font-semibold text-gray-700">Quick Actions</h4>
                 <div className="space-y-2">
-                  <Link href="/dashboard/sessions" className="flex w-full items-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">
+                  <Link href="/dashboard/sessions" className="flex w-full items-center gap-2 rounded-lg border border-gray-200 bg-gray-100 px-3 py-2 text-sm text-gray-700 hover:bg-gray-200 hover:text-gray-900">
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
                     Create New Session
                   </Link>
-                  <Link href="/dashboard/interviews" className="flex w-full items-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">
+                  <Link href="/dashboard/interviews" className="flex w-full items-center gap-2 rounded-lg border border-gray-200 bg-gray-100 px-3 py-2 text-sm text-gray-700 hover:bg-gray-200 hover:text-gray-900">
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
                     Manage Templates
                   </Link>
@@ -515,12 +515,12 @@ export default function CalendarPage() {
           <h3 className="mb-4 text-lg font-semibold text-yellow-400">Unscheduled Interviews ({unscheduledSessions.length})</h3>
           <div className="space-y-3">
             {unscheduledSessions.map((s) => (
-              <div key={s.id} className="flex items-center justify-between rounded-lg border border-gray-800 p-4">
+              <div key={s.id} className="flex items-center justify-between rounded-lg border border-gray-200 p-4">
                 <div className="flex items-center gap-4">
                   <div className={`h-3 w-3 rounded-full ${statusColor[s.status] || "bg-gray-500"}`} />
                   <div>
-                    <p className="text-sm font-medium text-white">{s.candidate.name}</p>
-                    <p className="text-xs text-gray-400">{s.template.title} &middot; {s.template.role} ({s.template.seniority})</p>
+                    <p className="text-sm font-medium text-gray-900">{s.candidate.name}</p>
+                    <p className="text-xs text-gray-500">{s.template.title} &middot; {s.template.role} ({s.template.seniority})</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -530,7 +530,7 @@ export default function CalendarPage() {
                   >
                     Schedule
                   </button>
-                  <Link href={`/dashboard/sessions/${s.id}`} className="rounded bg-gray-700 px-3 py-1.5 text-xs font-medium text-gray-300 hover:bg-gray-600">
+                  <Link href={`/dashboard/sessions/${s.id}`} className="rounded bg-gray-700 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-600">
                     View
                   </Link>
                 </div>
@@ -543,32 +543,32 @@ export default function CalendarPage() {
       {/* Reschedule Modal */}
       {rescheduleSession && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={() => setRescheduleSession(null)}>
-          <div className="w-full max-w-md rounded-xl border border-gray-700 bg-gray-900 p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <h3 className="mb-1 text-lg font-semibold text-white">
+          <div className="w-full max-w-md rounded-xl border border-gray-200 bg-white p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <h3 className="mb-1 text-lg font-semibold text-gray-900">
               {rescheduleSession.scheduledAt ? "Reschedule" : "Schedule"} Interview
             </h3>
-            <p className="mb-4 text-sm text-gray-400">
+            <p className="mb-4 text-sm text-gray-500">
               {rescheduleSession.candidate.name} &middot; {rescheduleSession.template.title}
             </p>
             <div className="space-y-3">
               <div>
-                <label className="text-sm text-gray-400">Date</label>
+                <label className="text-sm text-gray-500">Date</label>
                 <input
                   type="date"
                   value={rescheduleDate}
                   onChange={(e) => setRescheduleDate(e.target.value)}
-                  className="mt-1 w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white"
+                  className="mt-1 w-full rounded border border-gray-200 bg-gray-100 px-3 py-2 text-sm text-gray-900"
                 />
               </div>
               <div>
-                <label className="text-sm text-gray-400">Time</label>
-                <select value={rescheduleTime} onChange={(e) => setRescheduleTime(e.target.value)} className="mt-1 w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white">
+                <label className="text-sm text-gray-500">Time</label>
+                <select value={rescheduleTime} onChange={(e) => setRescheduleTime(e.target.value)} className="mt-1 w-full rounded border border-gray-200 bg-gray-100 px-3 py-2 text-sm text-gray-900">
                   {TIME_OPTIONS.map((t) => <option key={t} value={t}>{formatTimeLabel(t)}</option>)}
                 </select>
               </div>
             </div>
             <div className="mt-5 flex justify-end gap-3">
-              <button onClick={() => setRescheduleSession(null)} className="rounded-lg border border-gray-700 px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+              <button onClick={() => setRescheduleSession(null)} className="rounded-lg border border-gray-200 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                 Cancel
               </button>
               <button

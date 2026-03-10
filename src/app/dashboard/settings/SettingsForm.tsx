@@ -44,11 +44,11 @@ export function SettingsForm({
   }
 
   return (
-    <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-6">
-      <h2 className="text-lg font-semibold text-white mb-4">Company Information</h2>
+    <div className="rounded-xl border border-gray-200 bg-white p-6">
+      <h2 className="text-lg font-semibold text-gray-900 mb-4">Company Information</h2>
       <form onSubmit={handleSave} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1.5">
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">
             Company Name
           </label>
           <input
@@ -56,11 +56,11 @@ export function SettingsForm({
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+            className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1.5">
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">
             Logo URL <span className="text-gray-500">(optional)</span>
           </label>
           <input
@@ -68,7 +68,7 @@ export function SettingsForm({
             value={logo}
             onChange={(e) => setLogo(e.target.value)}
             placeholder="https://example.com/logo.png"
-            className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+            className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
           />
         </div>
 

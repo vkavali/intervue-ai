@@ -146,7 +146,7 @@ export default function AddCandidatePage() {
     <div>
       {/* Breadcrumb + Header */}
       <div className="mb-8">
-        <div className="flex items-center gap-2 text-sm text-gray-400 mb-4">
+        <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
           <Link
             href="/dashboard/candidates"
             className="hover:text-saffron transition-colors"
@@ -166,11 +166,11 @@ export default function AddCandidatePage() {
               d="M9 5l7 7-7 7"
             />
           </svg>
-          <span className="text-gray-300">Add to Pipeline</span>
+          <span className="text-gray-700">Add to Pipeline</span>
         </div>
 
-        <h1 className="text-2xl font-bold text-white">Add Candidate to Pipeline</h1>
-        <p className="mt-1 text-sm text-gray-400">
+        <h1 className="text-2xl font-bold text-gray-900">Add Candidate to Pipeline</h1>
+        <p className="mt-1 text-sm text-gray-500">
           Search for an existing candidate or add a new one to your hiring pipeline.
         </p>
       </div>
@@ -178,7 +178,7 @@ export default function AddCandidatePage() {
       <div className="mx-auto max-w-2xl">
         <form onSubmit={handleSubmit}>
           {/* Mode Tabs */}
-          <div className="mb-6 flex rounded-lg border border-gray-800 bg-gray-900 p-1">
+          <div className="mb-6 flex rounded-lg border border-gray-200 bg-white p-1">
             <button
               type="button"
               onClick={() => {
@@ -187,8 +187,8 @@ export default function AddCandidatePage() {
               }}
               className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
                 mode === "search"
-                  ? "bg-white/10 text-white border border-saffron"
-                  : "text-gray-400 hover:text-white"
+                  ? "bg-white/10 text-gray-900 border border-saffron"
+                  : "text-gray-500 hover:text-gray-900"
               }`}
             >
               Search Existing Candidate
@@ -201,8 +201,8 @@ export default function AddCandidatePage() {
               }}
               className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
                 mode === "new"
-                  ? "bg-white/10 text-white border border-saffron"
-                  : "text-gray-400 hover:text-white"
+                  ? "bg-white/10 text-gray-900 border border-saffron"
+                  : "text-gray-500 hover:text-gray-900"
               }`}
             >
               New Candidate
@@ -211,8 +211,8 @@ export default function AddCandidatePage() {
 
           {/* Search Mode */}
           {mode === "search" && (
-            <div className="mb-6 rounded-xl border border-gray-800 bg-gray-900 p-6">
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+            <div className="mb-6 rounded-xl border border-gray-200 bg-white p-6">
+              <label className="mb-2 block text-sm font-medium text-gray-700">
                 Search by Email
               </label>
               <div className="flex gap-3">
@@ -221,7 +221,7 @@ export default function AddCandidatePage() {
                   value={searchEmail}
                   onChange={(e) => setSearchEmail(e.target.value)}
                   placeholder="candidate@example.com"
-                  className="flex-1 rounded-lg border border-gray-700 bg-gray-950 px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                  className="flex-1 rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       e.preventDefault();
@@ -233,7 +233,7 @@ export default function AddCandidatePage() {
                   type="button"
                   onClick={handleSearch}
                   disabled={searchLoading || !searchEmail.trim()}
-                  className="inline-flex items-center gap-2 rounded-lg bg-gray-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-gray-600 disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-lg bg-gray-700 px-4 py-2.5 text-sm font-medium text-gray-900 transition-colors hover:bg-gray-600 disabled:opacity-50"
                 >
                   {searchLoading ? (
                     <svg
@@ -286,10 +286,10 @@ export default function AddCandidatePage() {
                       .slice(0, 2)}
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-white">
+                    <p className="text-sm font-medium text-gray-900">
                       {searchResult.name}
                     </p>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-gray-500">
                       {searchResult.email}
                     </p>
                   </div>
@@ -318,9 +318,9 @@ export default function AddCandidatePage() {
 
           {/* New Candidate Mode */}
           {mode === "new" && (
-            <div className="mb-6 rounded-xl border border-gray-800 bg-gray-900 p-6 space-y-4">
+            <div className="mb-6 rounded-xl border border-gray-200 bg-white p-6 space-y-4">
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-300">
+                <label className="mb-2 block text-sm font-medium text-gray-700">
                   Full Name
                 </label>
                 <input
@@ -328,11 +328,11 @@ export default function AddCandidatePage() {
                   value={candidateName}
                   onChange={(e) => setCandidateName(e.target.value)}
                   placeholder="Jane Smith"
-                  className="w-full rounded-lg border border-gray-700 bg-gray-950 px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                  className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                 />
               </div>
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-300">
+                <label className="mb-2 block text-sm font-medium text-gray-700">
                   Email
                 </label>
                 <input
@@ -340,20 +340,20 @@ export default function AddCandidatePage() {
                   value={candidateEmail}
                   onChange={(e) => setCandidateEmail(e.target.value)}
                   placeholder="jane@example.com"
-                  className="w-full rounded-lg border border-gray-700 bg-gray-950 px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                  className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                 />
               </div>
             </div>
           )}
 
           {/* Pipeline Details */}
-          <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 space-y-4">
-            <h3 className="text-sm font-semibold text-white mb-4">
+          <div className="rounded-xl border border-gray-200 bg-white p-6 space-y-4">
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">
               Pipeline Details
             </h3>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-gray-700">
                 Role
               </label>
               <input
@@ -361,18 +361,18 @@ export default function AddCandidatePage() {
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
                 placeholder="e.g. Frontend Engineer, Backend Engineer, Full Stack Developer"
-                className="w-full rounded-lg border border-gray-700 bg-gray-950 px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               />
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-gray-700">
                 Seniority
               </label>
               <select
                 value={seniority}
                 onChange={(e) => setSeniority(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-950 px-4 py-2.5 text-sm text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               >
                 {SENIORITY_OPTIONS.map((s) => (
                   <option key={s} value={s}>
@@ -383,13 +383,13 @@ export default function AddCandidatePage() {
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-gray-700">
                 Initial Stage
               </label>
               <select
                 value={stage}
                 onChange={(e) => setStage(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-950 px-4 py-2.5 text-sm text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               >
                 {STAGE_OPTIONS.map((s) => (
                   <option key={s} value={s}>
@@ -411,7 +411,7 @@ export default function AddCandidatePage() {
           <div className="mt-6 flex items-center justify-end gap-3">
             <Link
               href="/dashboard/candidates"
-              className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-700"
+              className="rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200"
             >
               Cancel
             </Link>

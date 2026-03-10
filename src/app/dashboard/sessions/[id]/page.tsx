@@ -10,7 +10,7 @@ import { GenerateThinkingButton } from "./GenerateThinkingButton";
 const statusColors: Record<string, string> = {
   PENDING: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30",
   ACTIVE: "bg-green-500/10 text-green-400 border-green-500/30",
-  COMPLETED: "bg-blue-500/10 text-blue-400 border-blue-500/30",
+  COMPLETED: "bg-india-green/10 text-india-green border-india-green/30",
   CANCELLED: "bg-red-500/10 text-red-400 border-red-500/30",
 };
 
@@ -25,8 +25,8 @@ const aiLevelLabels: Record<number, string> = {
 const logActionLabels: Record<string, { label: string; color: string }> = {
   JOIN: { label: "Joined", color: "text-green-400" },
   LEAVE: { label: "Left", color: "text-red-400" },
-  CODE_CHANGE: { label: "Code Change", color: "text-blue-400" },
-  LANGUAGE_CHANGE: { label: "Language Change", color: "text-cyan-400" },
+  CODE_CHANGE: { label: "Code Change", color: "text-india-green" },
+  LANGUAGE_CHANGE: { label: "Language Change", color: "text-india-green" },
   AI_REQUEST: { label: "AI Request", color: "text-saffron" },
   NOTE_ADDED: { label: "Note Added", color: "text-yellow-400" },
   OVERRIDE: { label: "AI Override", color: "text-orange-400" },
@@ -105,28 +105,28 @@ export default async function SessionDetailPage({
   const violationCount = s.violations.length;
 
   return (
-    <div className="min-h-screen bg-gray-950">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="mb-8">
         <Link
           href="/dashboard/sessions"
-          className="text-sm text-gray-400 hover:text-gray-300 transition-colors"
+          className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
         >
           &larr; Back to Sessions
         </Link>
         <div className="mt-2 flex items-center gap-4">
-          <h1 className="text-2xl font-bold text-white">
+          <h1 className="text-2xl font-bold text-gray-900">
             {s.template.title}
           </h1>
           <span
             className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium ${
-              statusColors[s.status] || "bg-gray-500/10 text-gray-400 border-gray-500/30"
+              statusColors[s.status] || "bg-gray-500/10 text-gray-500 border-gray-500/30"
             }`}
           >
             {s.status}
           </span>
         </div>
-        <p className="mt-1 text-sm text-gray-400">
+        <p className="mt-1 text-sm text-gray-500">
           {s.template.role} &middot; {s.template.seniority} &middot;{" "}
           {s.template.roundType}
         </p>
@@ -134,56 +134,56 @@ export default async function SessionDetailPage({
 
       {/* Session Info Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
+        <div className="rounded-xl border border-gray-200 bg-white p-5">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">
             Candidate
           </h3>
-          <p className="text-sm font-medium text-white">{s.candidate.name}</p>
-          <p className="text-xs text-gray-400">{s.candidate.email}</p>
+          <p className="text-sm font-medium text-gray-900">{s.candidate.name}</p>
+          <p className="text-xs text-gray-500">{s.candidate.email}</p>
         </div>
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
+        <div className="rounded-xl border border-gray-200 bg-white p-5">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">
             Interviewer
           </h3>
           {s.interviewer ? (
             <>
-              <p className="text-sm font-medium text-white">
+              <p className="text-sm font-medium text-gray-900">
                 {s.interviewer.name}
               </p>
-              <p className="text-xs text-gray-400">{s.interviewer.email}</p>
+              <p className="text-xs text-gray-500">{s.interviewer.email}</p>
             </>
           ) : (
             <p className="text-sm text-gray-500">Not assigned</p>
           )}
         </div>
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
+        <div className="rounded-xl border border-gray-200 bg-white p-5">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">
             AI Level
           </h3>
           <p className="text-sm font-medium text-saffron">
             {aiLevelLabels[s.aiLevel] || `L${s.aiLevel}`}
           </p>
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-xs text-gray-500 mt-1">
             {s.aiInteractions.length} interaction{s.aiInteractions.length !== 1 ? "s" : ""}
           </p>
         </div>
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
+        <div className="rounded-xl border border-gray-200 bg-white p-5">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">
             Timing
           </h3>
           <div className="space-y-1 text-sm">
             {s.scheduledAt && (
-              <p className="text-gray-300">
+              <p className="text-gray-700">
                 Scheduled: {new Date(s.scheduledAt).toLocaleString()}
               </p>
             )}
             {s.startedAt && (
-              <p className="text-gray-300">
+              <p className="text-gray-700">
                 Started: {new Date(s.startedAt).toLocaleString()}
               </p>
             )}
             {s.endedAt && (
-              <p className="text-gray-300">
+              <p className="text-gray-700">
                 Ended: {new Date(s.endedAt).toLocaleString()}
               </p>
             )}
@@ -195,8 +195,8 @@ export default async function SessionDetailPage({
       </div>
 
       {/* Interviewer Reassignment */}
-      <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 mb-8">
-        <h2 className="text-lg font-semibold text-white mb-4">
+      <div className="rounded-xl border border-gray-200 bg-white p-6 mb-8">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">
           Interviewer Assignment
         </h2>
         <ReassignInterviewerForm
@@ -208,8 +208,8 @@ export default async function SessionDetailPage({
 
       {/* Reschedule (PENDING sessions only) */}
       {s.status === "PENDING" && (
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 mb-8">
-          <h2 className="text-lg font-semibold text-white mb-4">
+        <div className="rounded-xl border border-gray-200 bg-white p-6 mb-8">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
             Schedule / Reschedule
           </h2>
           <RescheduleForm
@@ -220,8 +220,8 @@ export default async function SessionDetailPage({
       )}
 
       {/* Violation Summary */}
-      <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 mb-8">
-        <h2 className="text-lg font-semibold text-white mb-4">
+      <div className="rounded-xl border border-gray-200 bg-white p-6 mb-8">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">
           Violations ({violationCount})
         </h2>
         {violationCount === 0 ? (
@@ -255,7 +255,7 @@ export default async function SessionDetailPage({
               {s.violations.map((v) => (
                 <div
                   key={v.id}
-                  className="flex items-center gap-4 rounded-lg border border-gray-700 bg-gray-800 p-3"
+                  className="flex items-center gap-4 rounded-lg border border-gray-200 bg-gray-100 p-3"
                 >
                   <span className="text-xs text-gray-500">
                     {new Date(v.timestamp).toLocaleTimeString()}
@@ -263,7 +263,7 @@ export default async function SessionDetailPage({
                   <span className="text-xs font-medium text-red-400">
                     {v.type.replace(/_/g, " ")}
                   </span>
-                  <span className="text-xs text-gray-400">{v.user.name}</span>
+                  <span className="text-xs text-gray-500">{v.user.name}</span>
                   {v.details && (
                     <span className="text-xs text-gray-500 italic truncate">
                       {v.details}
@@ -278,17 +278,17 @@ export default async function SessionDetailPage({
 
       {/* Audit Report Summary */}
       {s.auditReport && (
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 mb-8">
-          <h2 className="text-lg font-semibold text-white mb-6">
+        <div className="rounded-xl border border-gray-200 bg-white p-6 mb-8">
+          <h2 className="text-lg font-semibold text-gray-900 mb-6">
             AI Audit Scorecard
           </h2>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <div className="text-center">
-              <div className="text-3xl font-bold text-white">
+              <div className="text-3xl font-bold text-gray-900">
                 {s.auditReport.overallScore.toFixed(1)}
               </div>
-              <p className="text-xs text-gray-400 mt-1">Overall Score</p>
+              <p className="text-xs text-gray-500 mt-1">Overall Score</p>
             </div>
             <div className="text-center">
               <div
@@ -302,19 +302,19 @@ export default async function SessionDetailPage({
               >
                 {s.auditReport.suggestedDecision.replace("_", " ")}
               </div>
-              <p className="text-xs text-gray-400 mt-1">Decision</p>
+              <p className="text-xs text-gray-500 mt-1">Decision</p>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-white">
+              <div className="text-2xl font-bold text-gray-900">
                 {(s.auditReport.confidence * 100).toFixed(0)}%
               </div>
-              <p className="text-xs text-gray-400 mt-1">Confidence</p>
+              <p className="text-xs text-gray-500 mt-1">Confidence</p>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-white">
+              <div className="text-2xl font-bold text-gray-900">
                 {s.aiInteractions.length}
               </div>
-              <p className="text-xs text-gray-400 mt-1">AI Interactions</p>
+              <p className="text-xs text-gray-500 mt-1">AI Interactions</p>
             </div>
           </div>
 
@@ -330,17 +330,17 @@ export default async function SessionDetailPage({
             ].map((score) => (
               <div
                 key={score.label}
-                className="rounded-lg border border-gray-700 bg-gray-800 p-3"
+                className="rounded-lg border border-gray-200 bg-gray-100 p-3"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-gray-400">{score.label}</span>
-                  <span className="text-sm font-semibold text-white">
+                  <span className="text-xs text-gray-500">{score.label}</span>
+                  <span className="text-sm font-semibold text-gray-900">
                     {score.value.toFixed(1)}/10
                   </span>
                 </div>
                 <div className="h-1.5 w-full rounded-full bg-gray-700">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-saffron-light to-india-green-light"
+                    className="h-full rounded-full bg-gradient-to-r from-saffron to-india-green"
                     style={{ width: `${(score.value / 10) * 100}%` }}
                   />
                 </div>
@@ -349,11 +349,11 @@ export default async function SessionDetailPage({
           </div>
 
           {/* Reasoning */}
-          <div className="rounded-lg border border-gray-700 bg-gray-800 p-4">
+          <div className="rounded-lg border border-gray-200 bg-gray-100 p-4">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
               AI Reasoning
             </h4>
-            <p className="text-sm text-gray-300 whitespace-pre-wrap">
+            <p className="text-sm text-gray-700 whitespace-pre-wrap">
               {s.auditReport.reasoning}
             </p>
           </div>
@@ -362,9 +362,9 @@ export default async function SessionDetailPage({
 
       {/* Thinking Analysis */}
       {s.thinkingAnalysis ? (
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 mb-8">
+        <div className="rounded-xl border border-gray-200 bg-white p-6 mb-8">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-white">
+            <h2 className="text-lg font-semibold text-gray-900">
               Thinking Analysis
             </h2>
             <div className="flex items-center gap-3">
@@ -374,7 +374,7 @@ export default async function SessionDetailPage({
                     ? "bg-green-500/10 text-green-400 border-green-500/30"
                     : s.thinkingAnalysis.confidenceLevel === "medium"
                       ? "bg-yellow-500/10 text-yellow-400 border-yellow-500/30"
-                      : "bg-gray-500/10 text-gray-400 border-gray-500/30"
+                      : "bg-gray-500/10 text-gray-500 border-gray-500/30"
                 }`}
               >
                 {s.thinkingAnalysis.confidenceLevel} confidence
@@ -384,18 +384,18 @@ export default async function SessionDetailPage({
           </div>
 
           {/* Overall Approach */}
-          <div className="rounded-lg border border-gray-700 bg-gray-800 p-4 mb-4">
+          <div className="rounded-lg border border-gray-200 bg-gray-100 p-4 mb-4">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
               Overall Approach
             </h4>
-            <p className="text-sm text-gray-300">
+            <p className="text-sm text-gray-700">
               {s.thinkingAnalysis.overallApproach}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             {/* Problem Solving Stage */}
-            <div className="rounded-lg border border-gray-700 bg-gray-800 p-4">
+            <div className="rounded-lg border border-gray-200 bg-gray-100 p-4">
               <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
                 Problem Solving Stage
               </h4>
@@ -405,11 +405,11 @@ export default async function SessionDetailPage({
             </div>
 
             {/* AI Usage Pattern */}
-            <div className="rounded-lg border border-gray-700 bg-gray-800 p-4">
+            <div className="rounded-lg border border-gray-200 bg-gray-100 p-4">
               <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
                 AI Usage Pattern
               </h4>
-              <p className="text-sm text-gray-300">
+              <p className="text-sm text-gray-700">
                 {s.thinkingAnalysis.aiUsagePattern}
               </p>
             </div>
@@ -431,7 +431,7 @@ export default async function SessionDetailPage({
                   {patterns.map((p, i) => (
                     <div
                       key={i}
-                      className="rounded-lg border border-gray-700 bg-gray-800 p-3"
+                      className="rounded-lg border border-gray-200 bg-gray-100 p-3"
                     >
                       <div className="flex items-center gap-2 mb-1">
                         <span
@@ -443,11 +443,11 @@ export default async function SessionDetailPage({
                                 : "bg-gray-400"
                           }`}
                         />
-                        <span className="text-sm font-medium text-white">
+                        <span className="text-sm font-medium text-gray-900">
                           {p.pattern}
                         </span>
                       </div>
-                      <p className="text-xs text-gray-400 pl-4">{p.evidence}</p>
+                      <p className="text-xs text-gray-500 pl-4">{p.evidence}</p>
                     </div>
                   ))}
                 </div>
@@ -466,7 +466,7 @@ export default async function SessionDetailPage({
                   </h4>
                   <ul className="space-y-1">
                     {strengths.map((s, i) => (
-                      <li key={i} className="text-sm text-gray-300 flex items-start gap-2">
+                      <li key={i} className="text-sm text-gray-700 flex items-start gap-2">
                         <span className="text-green-400 mt-0.5">+</span>
                         {s}
                       </li>
@@ -486,7 +486,7 @@ export default async function SessionDetailPage({
                   </h4>
                   <ul className="space-y-1">
                     {concerns.map((c, i) => (
-                      <li key={i} className="text-sm text-gray-300 flex items-start gap-2">
+                      <li key={i} className="text-sm text-gray-700 flex items-start gap-2">
                         <span className="text-red-400 mt-0.5">!</span>
                         {c}
                       </li>
@@ -501,14 +501,14 @@ export default async function SessionDetailPage({
           {(() => {
             const followUps = JSON.parse(s.thinkingAnalysis.suggestedFollowUp) as string[];
             return followUps.length > 0 ? (
-              <div className="rounded-lg border border-blue-500/20 bg-blue-500/5 p-4">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-blue-400 mb-2">
+              <div className="rounded-lg border border-india-green/20 bg-blue-500/5 p-4">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-india-green mb-2">
                   Suggested Follow-Up Questions
                 </h4>
                 <ul className="space-y-1">
                   {followUps.map((q, i) => (
-                    <li key={i} className="text-sm text-gray-300 flex items-start gap-2">
-                      <span className="text-blue-400 mt-0.5">{i + 1}.</span>
+                    <li key={i} className="text-sm text-gray-700 flex items-start gap-2">
+                      <span className="text-india-green mt-0.5">{i + 1}.</span>
                       {q}
                     </li>
                   ))}
@@ -519,13 +519,13 @@ export default async function SessionDetailPage({
         </div>
       ) : (
         (s.status === "COMPLETED" || s.status === "ACTIVE") && s.aiInteractions.length > 0 && (
-          <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 mb-8">
+          <div className="rounded-xl border border-gray-200 bg-white p-6 mb-8">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-semibold text-white">
+                <h2 className="text-lg font-semibold text-gray-900">
                   Thinking Analysis
                 </h2>
-                <p className="text-sm text-gray-400 mt-1">
+                <p className="text-sm text-gray-500 mt-1">
                   No thinking analysis generated yet for this session.
                 </p>
               </div>
@@ -536,8 +536,8 @@ export default async function SessionDetailPage({
       )}
 
       {/* Session Timeline / Logs */}
-      <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 mb-8">
-        <h2 className="text-lg font-semibold text-white mb-4">
+      <div className="rounded-xl border border-gray-200 bg-white p-6 mb-8">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">
           Session Timeline ({s.sessionLogs.length})
         </h2>
 
@@ -554,15 +554,15 @@ export default async function SessionDetailPage({
               {s.sessionLogs.map((log) => {
                 const actionInfo = logActionLabels[log.action] || {
                   label: log.action,
-                  color: "text-gray-400",
+                  color: "text-gray-500",
                 };
 
                 return (
                   <div key={log.id} className="relative">
                     {/* Timeline dot */}
-                    <div className="absolute -left-[26px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-gray-700 bg-gray-900" />
+                    <div className="absolute -left-[26px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-gray-200 bg-white" />
 
-                    <div className="rounded-lg border border-gray-700 bg-gray-800 p-3">
+                    <div className="rounded-lg border border-gray-200 bg-gray-100 p-3">
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-3">
                           <span className={`text-xs font-medium ${actionInfo.color}`}>
@@ -577,7 +577,7 @@ export default async function SessionDetailPage({
                         </span>
                       </div>
                       {log.details && (
-                        <p className="text-xs text-gray-400 mt-1">{log.details}</p>
+                        <p className="text-xs text-gray-500 mt-1">{log.details}</p>
                       )}
                     </div>
                   </div>
@@ -589,8 +589,8 @@ export default async function SessionDetailPage({
       </div>
 
       {/* AI Interaction Log */}
-      <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 mb-8">
-        <h2 className="text-lg font-semibold text-white mb-4">
+      <div className="rounded-xl border border-gray-200 bg-white p-6 mb-8">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">
           AI Interaction Log ({s.aiInteractions.length})
         </h2>
 
@@ -603,7 +603,7 @@ export default async function SessionDetailPage({
             {s.aiInteractions.map((interaction) => (
               <div
                 key={interaction.id}
-                className="rounded-lg border border-gray-700 bg-gray-800 p-4"
+                className="rounded-lg border border-gray-200 bg-gray-100 p-4"
               >
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs font-medium text-saffron">
@@ -616,11 +616,11 @@ export default async function SessionDetailPage({
                 <div className="space-y-2">
                   <div>
                     <p className="text-xs text-gray-500 mb-1">Candidate asked:</p>
-                    <p className="text-sm text-gray-300">{interaction.prompt}</p>
+                    <p className="text-sm text-gray-700">{interaction.prompt}</p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 mb-1">AI responded:</p>
-                    <p className="text-sm text-gray-300 whitespace-pre-wrap">
+                    <p className="text-sm text-gray-700 whitespace-pre-wrap">
                       {interaction.response}
                     </p>
                   </div>
@@ -633,21 +633,21 @@ export default async function SessionDetailPage({
 
       {/* AI Level Overrides Timeline */}
       {s.aiLevelOverrides.length > 0 && (
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 mb-8">
-          <h2 className="text-lg font-semibold text-white mb-4">
+        <div className="rounded-xl border border-gray-200 bg-white p-6 mb-8">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
             AI Level Overrides
           </h2>
           <div className="space-y-3">
             {s.aiLevelOverrides.map((override) => (
               <div
                 key={override.id}
-                className="flex items-center gap-4 rounded-lg border border-gray-700 bg-gray-800 p-3"
+                className="flex items-center gap-4 rounded-lg border border-gray-200 bg-gray-100 p-3"
               >
                 <span className="text-xs text-gray-500">
                   {new Date(override.timestamp).toLocaleTimeString()}
                 </span>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-400">
+                  <span className="text-sm text-gray-500">
                     {aiLevelLabels[override.previousLevel]}
                   </span>
                   <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -660,7 +660,7 @@ export default async function SessionDetailPage({
                 <span className="text-xs text-gray-500">
                   by {override.overriddenBy.name}
                 </span>
-                <span className="text-xs text-gray-400 italic">
+                <span className="text-xs text-gray-500 italic">
                   &quot;{override.reason}&quot;
                 </span>
               </div>
@@ -670,8 +670,8 @@ export default async function SessionDetailPage({
       )}
 
       {/* Interviewer Notes */}
-      <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 mb-8">
-        <h2 className="text-lg font-semibold text-white mb-4">
+      <div className="rounded-xl border border-gray-200 bg-white p-6 mb-8">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">
           Interviewer Notes ({s.interviewerNotes.length})
         </h2>
 
@@ -684,17 +684,17 @@ export default async function SessionDetailPage({
             {s.interviewerNotes.map((note) => (
               <div
                 key={note.id}
-                className="rounded-lg border border-gray-700 bg-gray-800 p-4"
+                className="rounded-lg border border-gray-200 bg-gray-100 p-4"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-medium text-gray-400">
+                  <span className="text-xs font-medium text-gray-500">
                     {note.interviewer.name}
                   </span>
                   <span className="text-xs text-gray-500">
                     {new Date(note.timestamp).toLocaleTimeString()}
                   </span>
                 </div>
-                <p className="text-sm text-gray-300">{note.content}</p>
+                <p className="text-sm text-gray-700">{note.content}</p>
               </div>
             ))}
           </div>
@@ -702,28 +702,28 @@ export default async function SessionDetailPage({
       </div>
 
       {/* Questions from Template */}
-      <div className="rounded-xl border border-gray-800 bg-gray-900 p-6">
-        <h2 className="text-lg font-semibold text-white mb-4">
+      <div className="rounded-xl border border-gray-200 bg-white p-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">
           Questions ({s.template.questions.length})
         </h2>
         <div className="space-y-3">
           {s.template.questions.map((q, idx) => (
             <div
               key={q.id}
-              className="rounded-lg border border-gray-700 bg-gray-800 p-4"
+              className="rounded-lg border border-gray-200 bg-gray-100 p-4"
             >
               <div className="flex items-center gap-3 mb-2">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-gray-700 text-xs font-bold text-gray-300">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-gray-700 text-xs font-bold text-gray-700">
                   {idx + 1}
                 </span>
-                <h4 className="text-sm font-medium text-white">{q.title}</h4>
+                <h4 className="text-sm font-medium text-gray-900">{q.title}</h4>
                 <span className="text-xs text-gray-500">{q.difficulty}</span>
                 <span className="text-xs text-saffron">
                   {aiLevelLabels[q.aiLevel] || `L${q.aiLevel}`}
                 </span>
                 <span className="text-xs text-gray-500">{q.timeLimit} min</span>
               </div>
-              <p className="text-xs text-gray-400 line-clamp-2">{q.description}</p>
+              <p className="text-xs text-gray-500 line-clamp-2">{q.description}</p>
             </div>
           ))}
         </div>

@@ -8,8 +8,8 @@ import Link from "next/link";
 const statusColors: Record<string, { bg: string; text: string; dot: string }> = {
   PENDING: { bg: "bg-yellow-500/10", text: "text-yellow-400", dot: "bg-yellow-400" },
   ACTIVE: { bg: "bg-green-500/10", text: "text-green-400", dot: "bg-green-400" },
-  COMPLETED: { bg: "bg-blue-500/10", text: "text-blue-400", dot: "bg-blue-400" },
-  CANCELLED: { bg: "bg-gray-500/10", text: "text-gray-400", dot: "bg-gray-400" },
+  COMPLETED: { bg: "bg-india-green/10", text: "text-india-green", dot: "bg-blue-400" },
+  CANCELLED: { bg: "bg-gray-500/10", text: "text-gray-500", dot: "bg-gray-400" },
 };
 
 export default async function CandidateDashboard() {
@@ -89,32 +89,32 @@ export default async function CandidateDashboard() {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white">
+        <h1 className="text-2xl font-bold text-gray-900">
           Welcome back, {session.user.name || "Candidate"}
         </h1>
-        <p className="mt-1 text-gray-400">
+        <p className="mt-1 text-gray-500">
           Track your interviews and practice to improve your skills.
         </p>
       </div>
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-5">
+        <div className="rounded-xl border border-gray-200 bg-white p-5">
           <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Upcoming</p>
           <p className="mt-2 text-3xl font-bold text-yellow-400">{upcomingSessions.length}</p>
           <p className="mt-1 text-xs text-gray-500">Scheduled interviews</p>
         </div>
-        <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-5">
+        <div className="rounded-xl border border-gray-200 bg-white p-5">
           <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Active</p>
           <p className="mt-2 text-3xl font-bold text-green-400">{activeSessions.length}</p>
           <p className="mt-1 text-xs text-gray-500">In progress</p>
         </div>
-        <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-5">
+        <div className="rounded-xl border border-gray-200 bg-white p-5">
           <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Completed</p>
-          <p className="mt-2 text-3xl font-bold text-blue-400">{completedSessions.length}</p>
+          <p className="mt-2 text-3xl font-bold text-india-green">{completedSessions.length}</p>
           <p className="mt-1 text-xs text-gray-500">Finished interviews</p>
         </div>
-        <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-5">
+        <div className="rounded-xl border border-gray-200 bg-white p-5">
           <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Avg Score</p>
           <p className="mt-2 text-3xl font-bold text-saffron">
             {completedSessions.length > 0
@@ -134,7 +134,7 @@ export default async function CandidateDashboard() {
       <div className="mb-8">
         <Link
           href="/practice"
-          className="group block rounded-xl border border-saffron/20 bg-gradient-to-r from-saffron/10 via-gray-900/50 to-india-green/10 p-6 transition-all hover:border-saffron/40 hover:from-saffron/20 hover:to-india-green/20"
+          className="group block rounded-xl border border-saffron/20 bg-gradient-to-r from-saffron/10 via-white to-india-green/10 p-6 transition-all hover:border-saffron/40 hover:from-saffron/20 hover:to-india-green/20"
         >
           <div className="flex items-center justify-between">
             <div>
@@ -142,9 +142,9 @@ export default async function CandidateDashboard() {
                 <svg className="w-5 h-5 text-saffron" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                 </svg>
-                <h3 className="text-lg font-semibold text-white">Practice Mode</h3>
+                <h3 className="text-lg font-semibold text-gray-900">Practice Mode</h3>
               </div>
-              <p className="text-sm text-gray-400 max-w-md">
+              <p className="text-sm text-gray-500 max-w-md">
                 Sharpen your coding skills with curated problems. Choose your AI assistance level and practice at your own pace.
               </p>
             </div>
@@ -159,32 +159,32 @@ export default async function CandidateDashboard() {
       {practiceTotal > 0 && (
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-white">Practice Progress</h2>
-            <Link href="/practice/analytics" className="text-xs text-saffron hover:text-saffron-light transition-colors">
+            <h2 className="text-lg font-semibold text-gray-900">Practice Progress</h2>
+            <Link href="/practice/analytics" className="text-xs text-saffron hover:text-saffron-dark transition-colors">
               View Practice Analytics &rarr;
             </Link>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div className="rounded-xl border border-green-500/20 bg-gray-900/50 p-5">
+            <div className="rounded-xl border border-green-500/20 bg-white p-5">
               <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Problems Solved</p>
               <p className="mt-2 text-3xl font-bold text-green-400">{practiceSolved}</p>
               <p className="mt-1 text-xs text-gray-500">Completed</p>
             </div>
-            <div className="rounded-xl border border-yellow-500/20 bg-gray-900/50 p-5">
+            <div className="rounded-xl border border-yellow-500/20 bg-white p-5">
               <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">In Progress</p>
               <p className="mt-2 text-3xl font-bold text-yellow-400">{practiceInProgress}</p>
               <p className="mt-1 text-xs text-gray-500">Working on</p>
             </div>
-            <div className="rounded-xl border border-blue-500/20 bg-gray-900/50 p-5">
+            <div className="rounded-xl border border-india-green/20 bg-white p-5">
               <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Practice Time</p>
-              <p className="mt-2 text-3xl font-bold text-blue-400">
+              <p className="mt-2 text-3xl font-bold text-india-green">
                 {practiceTotalTime >= 3600
                   ? `${Math.floor(practiceTotalTime / 3600)}h ${Math.floor((practiceTotalTime % 3600) / 60)}m`
                   : `${Math.floor(practiceTotalTime / 60)}m`}
               </p>
               <p className="mt-1 text-xs text-gray-500">Total time spent</p>
             </div>
-            <div className="rounded-xl border border-saffron/20 bg-gray-900/50 p-5">
+            <div className="rounded-xl border border-saffron/20 bg-white p-5">
               <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Attempted</p>
               <p className="mt-2 text-3xl font-bold text-saffron">{practiceTotal}</p>
               <p className="mt-1 text-xs text-gray-500">Problems started</p>
@@ -194,14 +194,14 @@ export default async function CandidateDashboard() {
           {/* Recent Practice */}
           {recentPractice.length > 0 && (
             <div className="space-y-2">
-              <h3 className="text-sm font-medium text-gray-400">Recent Practice</h3>
+              <h3 className="text-sm font-medium text-gray-500">Recent Practice</h3>
               {recentPractice.map((p) => {
                 const problemData = resolveProblem(p.bankProblemId || p.problemId || "");
                 const title = problemData?.title || p.bankProblemId || p.problemId || "Unknown Problem";
                 const practiceStatusColors: Record<string, { bg: string; text: string }> = {
                   COMPLETED: { bg: "bg-green-500/10", text: "text-green-400" },
                   IN_PROGRESS: { bg: "bg-yellow-500/10", text: "text-yellow-400" },
-                  ABANDONED: { bg: "bg-gray-500/10", text: "text-gray-400" },
+                  ABANDONED: { bg: "bg-gray-500/10", text: "text-gray-500" },
                 };
                 const style = practiceStatusColors[p.status] || practiceStatusColors.IN_PROGRESS;
                 const timeStr = p.timeSpentSeconds >= 3600
@@ -211,7 +211,7 @@ export default async function CandidateDashboard() {
                   <Link
                     key={p.id}
                     href={`/practice/${p.bankProblemId || p.problemId}`}
-                    className="flex items-center justify-between rounded-lg border border-gray-800 bg-gray-900/50 p-3 hover:border-gray-700 transition-colors"
+                    className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-3 hover:border-gray-200 transition-colors"
                   >
                     <div className="flex items-center gap-3">
                       <div className="flex items-center gap-2">
@@ -219,7 +219,7 @@ export default async function CandidateDashboard() {
                           {p.status === "COMPLETED" ? "Solved" : p.status === "IN_PROGRESS" ? "In Progress" : "Abandoned"}
                         </span>
                       </div>
-                      <span className="text-sm text-gray-300">{title}</span>
+                      <span className="text-sm text-gray-700">{title}</span>
                     </div>
                     <div className="flex items-center gap-3 text-[10px] text-gray-500">
                       <span>{timeStr}</span>
@@ -236,7 +236,7 @@ export default async function CandidateDashboard() {
       {/* Active Interviews */}
       {activeSessions.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
             Active Interviews
           </h2>
@@ -246,7 +246,7 @@ export default async function CandidateDashboard() {
               return (
                 <div
                   key={s.id}
-                  className="flex items-center justify-between rounded-xl border border-green-500/20 bg-gray-900/50 p-5"
+                  className="flex items-center justify-between rounded-xl border border-green-500/20 bg-white p-5"
                 >
                   <div className="flex items-center gap-4">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-500/10 text-green-400">
@@ -255,8 +255,8 @@ export default async function CandidateDashboard() {
                       </svg>
                     </div>
                     <div>
-                      <h3 className="text-sm font-semibold text-white">{s.template.title}</h3>
-                      <p className="text-xs text-gray-400">
+                      <h3 className="text-sm font-semibold text-gray-900">{s.template.title}</h3>
+                      <p className="text-xs text-gray-500">
                         {s.company.name} &middot; {s.template.role} &middot; {s.template.seniority}
                       </p>
                     </div>
@@ -268,7 +268,7 @@ export default async function CandidateDashboard() {
                     </span>
                     <Link
                       href={`/session/${s.id}`}
-                      className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-500 transition-colors"
+                      className="rounded-lg border border-india-green bg-transparent px-4 py-2 text-sm font-medium text-gray-900 hover:bg-india-green/10 transition-colors"
                     >
                       Join Now
                     </Link>
@@ -283,14 +283,14 @@ export default async function CandidateDashboard() {
       {/* Upcoming Interviews */}
       {upcomingSessions.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-lg font-semibold text-white mb-4">Upcoming Interviews</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Upcoming Interviews</h2>
           <div className="space-y-3">
             {upcomingSessions.map((s) => {
               const statusStyle = statusColors[s.status];
               return (
                 <div
                   key={s.id}
-                  className="flex items-center justify-between rounded-xl border border-gray-800 bg-gray-900/50 p-5"
+                  className="flex items-center justify-between rounded-xl border border-gray-200 bg-white p-5"
                 >
                   <div className="flex items-center gap-4">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-yellow-500/10 text-yellow-400">
@@ -299,8 +299,8 @@ export default async function CandidateDashboard() {
                       </svg>
                     </div>
                     <div>
-                      <h3 className="text-sm font-semibold text-white">{s.template.title}</h3>
-                      <p className="text-xs text-gray-400">
+                      <h3 className="text-sm font-semibold text-gray-900">{s.template.title}</h3>
+                      <p className="text-xs text-gray-500">
                         {s.company.name} &middot; {s.template.role} &middot; {s.template.seniority}
                       </p>
                       {s.scheduledAt && (
@@ -323,7 +323,7 @@ export default async function CandidateDashboard() {
                     </span>
                     <Link
                       href={`/session/${s.id}`}
-                      className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-500 transition-colors"
+                      className="rounded-lg border border-india-green bg-transparent px-4 py-2 text-sm font-medium text-gray-900 hover:bg-india-green/10 transition-colors"
                     >
                       Join
                     </Link>
@@ -338,7 +338,7 @@ export default async function CandidateDashboard() {
       {/* Previous / Missed Interviews */}
       {pastDueSessions.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <svg className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -348,7 +348,7 @@ export default async function CandidateDashboard() {
             {pastDueSessions.map((s) => (
               <div
                 key={s.id}
-                className="flex items-center justify-between rounded-xl border border-gray-700/50 bg-gray-900/30 p-5 opacity-75"
+                className="flex items-center justify-between rounded-xl border border-gray-200 bg-gray-50 p-5 opacity-75"
               >
                 <div className="flex items-center gap-4">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-500/10 text-gray-500">
@@ -357,7 +357,7 @@ export default async function CandidateDashboard() {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-300">{s.template.title}</h3>
+                    <h3 className="text-sm font-semibold text-gray-700">{s.template.title}</h3>
                     <p className="text-xs text-gray-500">
                       {s.company.name} &middot; {s.template.role} &middot; {s.template.seniority}
                     </p>
@@ -373,12 +373,12 @@ export default async function CandidateDashboard() {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium bg-gray-500/10 text-gray-400">
+                  <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium bg-gray-500/10 text-gray-500">
                     Expired
                   </span>
                   <a
                     href={`mailto:?subject=Interview Reschedule Request - ${s.template.title}&body=Hi, I would like to request a reschedule for my interview: ${s.template.title} (${s.template.role}).`}
-                    className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-xs font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
+                    className="rounded-lg border border-gray-200 bg-gray-100 px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-200 hover:text-gray-900 transition-colors"
                   >
                     Contact Recruiter
                   </a>
@@ -392,7 +392,7 @@ export default async function CandidateDashboard() {
       {/* Completed Interviews */}
       {completedSessions.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-lg font-semibold text-white mb-4">Completed Interviews</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Completed Interviews</h2>
           <div className="space-y-3">
             {completedSessions.map((s) => {
               const report = s.auditReport;
@@ -405,18 +405,18 @@ export default async function CandidateDashboard() {
               return (
                 <div
                   key={s.id}
-                  className="rounded-xl border border-gray-800 bg-gray-900/50 p-5"
+                  className="rounded-xl border border-gray-200 bg-white p-5"
                 >
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-4">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10 text-blue-400">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-india-green/10 text-india-green">
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                       </div>
                       <div>
-                        <h3 className="text-sm font-semibold text-white">{s.template.title}</h3>
-                        <p className="text-xs text-gray-400">
+                        <h3 className="text-sm font-semibold text-gray-900">{s.template.title}</h3>
+                        <p className="text-xs text-gray-500">
                           {s.company.name} &middot; {s.template.role} &middot; {s.template.seniority}
                         </p>
                         {s.endedAt && (
@@ -434,13 +434,13 @@ export default async function CandidateDashboard() {
                     {report && (
                       <div className="flex items-center gap-3">
                         <div className="text-right">
-                          <p className="text-2xl font-bold text-white">
+                          <p className="text-2xl font-bold text-gray-900">
                             {report.overallScore.toFixed(1)}
                           </p>
                           <p className="text-xs text-gray-500">Overall Score</p>
                         </div>
                         {report.suggestedDecision && (
-                          <span className={`rounded-full border px-3 py-1 text-xs font-medium ${decisionColors[report.suggestedDecision] || "text-gray-400"}`}>
+                          <span className={`rounded-full border px-3 py-1 text-xs font-medium ${decisionColors[report.suggestedDecision] || "text-gray-500"}`}>
                             {report.suggestedDecision.replace("_", " ")}
                           </span>
                         )}
@@ -459,7 +459,7 @@ export default async function CandidateDashboard() {
                         { label: "AI Usage", value: report.aiUsageQuality },
                         { label: "Time Management", value: report.timeManagement },
                       ].map((metric) => (
-                        <div key={metric.label} className="rounded-lg bg-gray-800/50 p-3">
+                        <div key={metric.label} className="rounded-lg bg-gray-50 p-3">
                           <p className="text-xs text-gray-500 truncate">{metric.label}</p>
                           <p className={`mt-1 text-lg font-semibold ${
                             metric.value >= 8 ? "text-green-400" :
@@ -477,7 +477,7 @@ export default async function CandidateDashboard() {
                     <div className="mt-4 flex justify-end">
                       <Link
                         href={`/candidate/report/${s.id}`}
-                        className="inline-flex items-center gap-1.5 text-sm text-saffron hover:text-saffron-light transition-colors"
+                        className="inline-flex items-center gap-1.5 text-sm text-saffron hover:text-saffron-dark transition-colors"
                       >
                         View Full Report
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -488,7 +488,7 @@ export default async function CandidateDashboard() {
                   )}
 
                   {!report && (
-                    <div className="rounded-lg bg-gray-800/30 border border-gray-800 p-4 text-center">
+                    <div className="rounded-lg bg-gray-50 border border-gray-200 p-4 text-center">
                       <p className="text-sm text-gray-500">
                         Audit report is being generated. Check back soon.
                       </p>
@@ -503,12 +503,12 @@ export default async function CandidateDashboard() {
 
       {/* Empty State */}
       {sessions.length === 0 && (
-        <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-12 text-center">
+        <div className="rounded-xl border border-gray-200 bg-white p-12 text-center">
           <svg className="mx-auto h-12 w-12 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
           </svg>
-          <h3 className="mt-4 text-lg font-semibold text-white">No interviews yet</h3>
-          <p className="mt-2 text-sm text-gray-400 max-w-sm mx-auto">
+          <h3 className="mt-4 text-lg font-semibold text-gray-900">No interviews yet</h3>
+          <p className="mt-2 text-sm text-gray-500 max-w-sm mx-auto">
             You have not been invited to any interviews yet. In the meantime, try sharpening your skills with practice mode.
           </p>
           <Link
