@@ -28,6 +28,7 @@ model User {
   activeSessionToken String?  // Current active session token for single-device enforcement
   lastLoginAt        DateTime? // Track last login time
   lastLoginIp        String?  // Track last login IP
+  profilePublic      Boolean  @default(true)
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
@@ -185,6 +186,7 @@ model AuditReport {
   suggestedDecision     String   // HIRE | NO_HIRE | FURTHER_ROUND
   confidence            Float
   reasoning             String
+  shareToken            String?  @unique
   createdAt             DateTime @default(now())
 
   session InterviewSession @relation(fields: [sessionId], references: [id])

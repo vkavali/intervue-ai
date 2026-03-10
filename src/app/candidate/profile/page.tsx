@@ -1,6 +1,9 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { ProfileVisibilityToggle } from "@/components/ProfileVisibilityToggle";
+import Link from "next/link";
 
 export default async function CandidateProfilePage() {
   const session = await getServerSession(authOptions);
@@ -8,6 +11,11 @@ export default async function CandidateProfilePage() {
   if (!session?.user) {
     redirect("/auth/signin?callbackUrl=/candidate/profile");
   }
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { id: true, profilePublic: true },
+  });
 
   return (
     <div>
@@ -79,6 +87,34 @@ export default async function CandidateProfilePage() {
               </div>
             </a>
           </div>
+        </div>
+      </div>
+
+      {/* Public Profile Section */}
+      <div className="mt-6 rounded-xl border border-gray-800 bg-gray-900/50 p-6">
+        <h2 className="text-lg font-semibold text-white mb-4">Public Profile</h2>
+        <div className="space-y-4">
+          <ProfileVisibilityToggle initialValue={user?.profilePublic ?? true} />
+
+          {user && (
+            <Link
+              href={`/talent/${user.id}`}
+              className="flex items-center gap-3 rounded-lg border border-gray-800 p-3 hover:border-purple-500/30 hover:bg-gray-800/50 transition-colors"
+            >
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10">
+                <svg className="w-4 h-4 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-white">View My Public Profile</p>
+                <p className="text-xs text-gray-500">See how others see your talent profile</p>
+              </div>
+              <svg className="w-4 h-4 text-gray-500 ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </Link>
+          )}
         </div>
       </div>
     </div>

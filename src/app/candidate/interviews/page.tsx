@@ -141,6 +141,15 @@ export default async function CandidateInterviewsPage() {
                       </Link>
                     )}
 
+                    {interview.status === "COMPLETED" && interview.auditReport && (
+                      <Link
+                        href={`/candidate/report/${interview.id}`}
+                        className="rounded-lg border border-purple-500/30 bg-purple-500/10 px-3 py-2 text-xs font-medium text-purple-400 hover:bg-purple-500/20 transition-colors"
+                      >
+                        View Report
+                      </Link>
+                    )}
+
                     {isPastDue && (
                       <a
                         href={`mailto:?subject=Interview Reschedule Request - ${interview.template.title}&body=Hi, I would like to request a reschedule for my interview: ${interview.template.title} (${interview.template.role}).`}

@@ -473,6 +473,20 @@ export default async function CandidateDashboard() {
                     </div>
                   )}
 
+                  {report && (
+                    <div className="mt-4 flex justify-end">
+                      <Link
+                        href={`/candidate/report/${s.id}`}
+                        className="inline-flex items-center gap-1.5 text-sm text-purple-400 hover:text-purple-300 transition-colors"
+                      >
+                        View Full Report
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                    </div>
+                  )}
+
                   {!report && (
                     <div className="rounded-lg bg-gray-800/30 border border-gray-800 p-4 text-center">
                       <p className="text-sm text-gray-500">
