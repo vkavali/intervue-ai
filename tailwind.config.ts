@@ -20,10 +20,10 @@ const config: Config = {
           400: '#a3a099',
           500: '#84817a',
           600: '#6b6862',
-          700: '#53514c',
-          800: '#2c2b28',
-          900: '#1a1917',
-          950: '#0e0e0c',
+          700: '#4a4844',
+          800: '#353330',
+          900: '#262420',
+          950: '#1c1b18',
         },
         // Warm dark palette for long-session focus (editor/practice)
         saffron: {
