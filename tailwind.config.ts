@@ -13,14 +13,14 @@ const config: Config = {
         foreground: "var(--foreground)",
         // Warm dark palette for long-session focus (editor/practice)
         saffron: {
-          DEFAULT: '#FF9933',
-          light:   '#ffb366',
-          dark:    '#e0872d',
+          DEFAULT: '#d4a574',
+          light:   '#e0c4a8',
+          dark:    '#b8906a',
         },
         'india-green': {
-          DEFAULT: '#138808',
-          light:   '#1aab0a',
-          dark:    '#0e6606',
+          DEFAULT: '#6b9e6b',
+          light:   '#8fb88f',
+          dark:    '#4d7a4d',
         },
         editor: {
           DEFAULT: '#111118',   // warm deep dark (main bg)
