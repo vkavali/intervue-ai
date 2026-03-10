@@ -71,8 +71,8 @@ const platformFeatures = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
       </svg>
     ),
-    gradient: "from-saffron/20 to-india-green/10",
-    border: "border-saffron/20",
+    gradient: "from-saffron/10 to-india-green/5",
+    border: "border-white/10",
     iconColor: "text-saffron",
   },
   {
@@ -168,7 +168,7 @@ const platformFeatures = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
       </svg>
     ),
-    gradient: "from-india-green/20 to-saffron/10",
+    gradient: "from-india-green/10 to-saffron/5",
     border: "border-violet-500/20",
     iconColor: "text-violet-400",
   },
@@ -258,7 +258,7 @@ const pricingPlans = [
 function Scene3DFallback() {
   return (
     <div className="w-full h-full flex items-center justify-center">
-      <div className="w-8 h-8 border-2 border-saffron/30 border-t-saffron rounded-full animate-spin" />
+      <div className="w-8 h-8 border-2 border-white/20 border-t-white/60 rounded-full animate-spin" />
     </div>
   );
 }
@@ -269,7 +269,7 @@ const flowCards = [
     title: "Create Position & Template",
     desc: "Define your open role, configure interview questions, set AI levels per question, and customize difficulty.",
     color: "from-saffron to-saffron-dark",
-    borderColor: "border-saffron/30",
+    borderColor: "border-white/10",
     mockup: (
       <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5 space-y-1.5">
         <div className="flex items-center justify-between">
@@ -421,8 +421,8 @@ export default function Home() {
 
         {/* Gradient overlays */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-br from-saffron-dark/20 via-transparent to-india-green-dark/20" />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-b from-saffron/10 to-transparent rounded-full blur-3xl" />
+          <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-white/5" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-b from-white/5 to-transparent rounded-full blur-3xl" />
         </div>
 
         {/* Grid overlay */}
@@ -438,7 +438,7 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left: Copy */}
             <ScrollReveal>
-              <div className="inline-flex items-center gap-2 rounded-full border border-saffron/30 bg-saffron/10 px-4 py-1.5 text-sm text-saffron-light mb-8 backdrop-blur-sm">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-sm text-gray-300 mb-8 backdrop-blur-sm">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-saffron opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-saffron" />
@@ -451,7 +451,7 @@ export default function Home() {
                   Interview
                 </span>
                 <br />
-                <span className="bg-gradient-to-r from-saffron via-india-green to-cyan-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-saffron via-white to-india-green bg-clip-text text-transparent">
                   Reimagined.
                 </span>
               </h1>
@@ -464,7 +464,7 @@ export default function Home() {
               <div className="mt-10 flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/auth/signup?role=company"
-                  className="group inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-saffron to-india-green px-8 py-4 text-base font-semibold text-white shadow-2xl shadow-saffron/25 transition-all hover:shadow-saffron/40 hover:scale-[1.02] active:scale-[0.98]"
+                  className="group inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/10 backdrop-blur-sm px-8 py-4 text-base font-semibold text-white shadow-2xl shadow-white/5 transition-all hover:bg-white/20 hover:border-white/30 hover:scale-[1.02] active:scale-[0.98]"
                 >
                   Start Hiring Smarter
                   <svg className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -485,7 +485,7 @@ export default function Home() {
               {/* Trust bar with stats */}
               <div className="mt-12 flex flex-wrap items-center gap-6 text-sm text-gray-500">
                 <div className="flex items-center gap-2">
-                  <span className="text-saffron font-bold text-lg">4,000+</span>
+                  <span className="text-white font-bold text-lg">4,000+</span>
                   <span>Problems</span>
                 </div>
                 <div className="w-px h-4 bg-gray-700" />
@@ -513,7 +513,7 @@ export default function Home() {
               <div style={{ perspective: "1200px" }}>
                 {/* Main dashboard mockup - rotated in 3D */}
                 <div
-                  className="relative rounded-2xl border border-gray-700/50 bg-gray-900/90 backdrop-blur-xl shadow-2xl shadow-saffron-dark/20 overflow-hidden"
+                  className="relative rounded-2xl border border-gray-700/50 bg-gray-900/90 backdrop-blur-xl shadow-2xl shadow-black/40 overflow-hidden"
                   style={{ transform: "rotateY(-8deg) rotateX(4deg) rotateZ(1deg)" }}
                 >
                   {/* Browser chrome */}
@@ -556,13 +556,13 @@ export default function Home() {
                       {/* AI Chat */}
                       <div className="rounded-lg border border-gray-800 bg-gray-950 p-3">
                         <div className="flex items-center gap-2 mb-2">
-                          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-saffron-light to-india-green-light flex items-center justify-center">
+                          <div className="w-5 h-5 rounded-full bg-white/20 border border-white/30 flex items-center justify-center">
                             <span className="text-[8px] font-bold text-white">AI</span>
                           </div>
                           <span className="text-[10px] font-medium text-gray-400">AI Assist (L2)</span>
                         </div>
-                        <div className="rounded-lg bg-saffron/10 border border-saffron/20 p-2">
-                          <p className="text-[10px] text-saffron-light leading-relaxed">
+                        <div className="rounded-lg bg-white/5 border border-white/10 p-2">
+                          <p className="text-[10px] text-gray-300 leading-relaxed">
                             Consider using a HashMap to achieve O(n) time complexity. Think about what complement you need for each element...
                           </p>
                         </div>
@@ -572,7 +572,7 @@ export default function Home() {
                       <div className="rounded-lg border border-gray-800 bg-gray-950 p-2">
                         <div className="grid grid-cols-2 gap-1.5">
                           <div className="aspect-video rounded bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                            <div className="w-8 h-8 rounded-full bg-saffron/30 flex items-center justify-center text-[10px] text-saffron-light font-semibold">JD</div>
+                            <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-[10px] text-white font-semibold">JD</div>
                           </div>
                           <div className="aspect-video rounded bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
                             <div className="w-8 h-8 rounded-full bg-blue-500/30 flex items-center justify-center text-[10px] text-blue-300 font-semibold">MK</div>
@@ -631,7 +631,7 @@ export default function Home() {
 
                 {/* Floating card: AI Level indicator */}
                 <div
-                  className="absolute -top-4 -right-8 w-44 rounded-xl border border-saffron/30 bg-gray-900/95 backdrop-blur-xl p-3 shadow-2xl shadow-saffron-dark/20"
+                  className="absolute -top-4 -right-8 w-44 rounded-xl border border-white/20 bg-gray-900/95 backdrop-blur-xl p-3 shadow-2xl shadow-black/30"
                   style={{ transform: "rotateY(-12deg) rotateX(6deg) translateZ(60px)" }}
                 >
                   <p className="text-[10px] font-medium text-gray-400 mb-2">AI Level Control</p>
@@ -666,7 +666,7 @@ export default function Home() {
 
       {/* ===== 2. VISUAL INTERVIEW FLOW ===== */}
       <section className="relative py-32 bg-gray-950">
-        <div className="absolute inset-0 bg-gradient-to-b from-saffron-dark/5 via-transparent to-india-green-dark/5" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] via-transparent to-white/[0.02]" />
 
         {/* Floating geometric shapes between sections */}
         <div className="absolute inset-0 pointer-events-none opacity-40 hidden lg:block">
@@ -677,10 +677,10 @@ export default function Home() {
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-20">
-            <p className="text-sm font-semibold uppercase tracking-widest text-saffron mb-4">The Complete Flow</p>
+            <p className="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">The Complete Flow</p>
             <h2 className="text-4xl sm:text-5xl font-bold text-white leading-tight">
               From Job Posting to
-              <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent"> Hire Decision</span>
+              <span className="bg-gradient-to-r from-saffron via-white to-india-green bg-clip-text text-transparent"> Hire Decision</span>
             </h2>
             <p className="mt-6 text-lg text-gray-400 max-w-3xl mx-auto">
               Watch how Intervue.AI transforms every step of the hiring process with intelligent automation and transparent AI auditing.
@@ -711,7 +711,7 @@ export default function Home() {
 
       {/* ===== 3. FEATURES GRID ===== */}
       <section id="features" className="relative py-32 bg-gray-900/50">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-saffron-dark/5 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.02] to-transparent" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
             <p className="text-sm font-semibold uppercase tracking-widest text-blue-400 mb-4">Everything You Need</p>
@@ -745,7 +745,7 @@ export default function Home() {
       <section className="py-32 bg-gray-950">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
-            <p className="text-sm font-semibold uppercase tracking-widest text-saffron mb-4">The Core Differentiator</p>
+            <p className="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">The Core Differentiator</p>
             <h2 className="text-4xl sm:text-5xl font-bold text-white">
               5 Levels of AI Control
             </h2>
@@ -796,7 +796,7 @@ export default function Home() {
               <h2 className="text-4xl sm:text-5xl font-bold text-white leading-tight">
                 4,000+ Problems.
                 <br />
-                <span className="bg-gradient-to-r from-pink-400 via-saffron to-india-green bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-saffron via-white to-india-green bg-clip-text text-transparent">
                   7 Languages. 15 Patterns.
                 </span>
               </h2>
@@ -823,7 +823,7 @@ export default function Home() {
                   { title: "AI Coaching & Editorial", desc: "Get AI-powered coaching feedback, editorials, and weakness profiling after each attempt" },
                 ].map((item) => (
                   <div key={item.title} className="flex items-start gap-3">
-                    <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-saffron to-india-green flex items-center justify-center">
+                    <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
                       <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                       </svg>
@@ -838,7 +838,7 @@ export default function Home() {
 
               <Link
                 href="/practice"
-                className="mt-10 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-saffron to-india-green px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-pink-600/20 transition-all hover:shadow-pink-600/40 hover:scale-[1.02]"
+                className="mt-10 inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-8 py-3.5 text-base font-semibold text-white transition-all hover:bg-white/20 hover:scale-[1.02]"
               >
                 Start Practicing Free
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -882,7 +882,7 @@ export default function Home() {
                   { title: "AI Coaching & Analytics", desc: "Get AI coaching, weakness profiling, editorial walkthroughs, and progress analytics" },
                 ].map((item) => (
                   <div key={item.title} className="flex items-start gap-3">
-                    <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center">
+                    <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
                       <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                       </svg>
@@ -897,7 +897,7 @@ export default function Home() {
 
               <Link
                 href="/auth/signup?role=candidate"
-                className="mt-10 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-cyan-600/20 transition-all hover:shadow-cyan-600/40 hover:scale-[1.02]"
+                className="mt-10 inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-8 py-3.5 text-base font-semibold text-white transition-all hover:bg-white/20 hover:scale-[1.02]"
               >
                 Start Practicing Free
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -930,13 +930,13 @@ export default function Home() {
           </ScrollReveal>
 
           <ScrollReveal>
-            <div className="overflow-x-auto rounded-2xl border border-gray-800 shadow-2xl shadow-saffron-dark/10">
+            <div className="overflow-x-auto rounded-2xl border border-gray-800 shadow-2xl shadow-black/20">
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-gray-800 bg-gray-900">
                     <th className="px-6 py-5 text-left text-sm font-semibold text-gray-300">Feature</th>
                     <th className="px-6 py-5 text-center">
-                      <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent text-sm font-bold">Intervue.AI</span>
+                      <span className="bg-gradient-to-r from-saffron via-white to-india-green bg-clip-text text-transparent text-sm font-bold">Intervue.AI</span>
                     </th>
                     <th className="px-6 py-5 text-center text-sm font-semibold text-gray-500">HackerRank</th>
                     <th className="px-6 py-5 text-center text-sm font-semibold text-gray-500">CoderPad</th>
@@ -996,13 +996,13 @@ export default function Home() {
                 <div
                   className={`relative rounded-2xl border p-8 transition-all duration-300 hover:scale-105 hover:-translate-y-1 h-full ${
                     plan.highlighted
-                      ? "border-saffron bg-gradient-to-b from-saffron-dark/30 to-gray-900 shadow-2xl shadow-saffron/10"
+                      ? "border-white/30 bg-gradient-to-b from-white/10 to-gray-900 shadow-2xl shadow-white/5"
                       : "border-gray-800 bg-gray-900 hover:border-gray-700"
                   }`}
                 >
                   {plan.highlighted && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                      <span className="rounded-full bg-gradient-to-r from-saffron to-india-green px-4 py-1 text-xs font-semibold text-white shadow-lg">
+                      <span className="rounded-full bg-white/20 border border-white/30 px-4 py-1 text-xs font-semibold text-white shadow-lg">
                         Most Popular
                       </span>
                     </div>
@@ -1019,7 +1019,7 @@ export default function Home() {
                   <ul className="mt-8 space-y-3">
                     {plan.features.map((feature) => (
                       <li key={feature} className="flex items-center gap-3 text-sm text-gray-300">
-                        <svg className="h-4 w-4 shrink-0 text-saffron" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg className="h-4 w-4 shrink-0 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
                         {feature}
@@ -1031,7 +1031,7 @@ export default function Home() {
                     href="/auth/signup?role=company"
                     className={`mt-8 block w-full rounded-xl py-3 text-center text-sm font-semibold transition-all ${
                       plan.highlighted
-                        ? "bg-gradient-to-r from-saffron to-india-green text-white hover:from-saffron-light hover:to-india-green-light shadow-lg shadow-saffron/20"
+                        ? "bg-white/15 text-white border border-white/30 hover:bg-white/25 shadow-lg shadow-white/5"
                         : "border border-gray-700 bg-gray-800 text-gray-200 hover:bg-gray-700"
                     }`}
                   >
@@ -1050,13 +1050,13 @@ export default function Home() {
         <Suspense fallback={null}>
           <FluidSimulation />
         </Suspense>
-        <div className="absolute inset-0 bg-gradient-to-r from-saffron-dark/30 via-transparent to-india-green-dark/30" />
+        <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-transparent to-white/5" />
 
         <ScrollReveal className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
             Ready to Transform
             <br />
-            <span className="bg-gradient-to-r from-saffron via-india-green to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-saffron via-white to-india-green bg-clip-text text-transparent">
               Your Hiring?
             </span>
           </h2>
@@ -1066,7 +1066,7 @@ export default function Home() {
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/auth/signup?role=company"
-              className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-saffron to-india-green px-10 py-4 text-lg font-semibold text-white shadow-2xl shadow-saffron/25 transition-all hover:shadow-saffron/40 hover:scale-[1.02]"
+              className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/10 px-10 py-4 text-lg font-semibold text-white shadow-2xl shadow-white/5 transition-all hover:bg-white/20 hover:scale-[1.02]"
             >
               Get Started Free
             </Link>
@@ -1086,7 +1086,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
             <div>
               <span className="text-2xl font-bold tracking-tight text-white">
-                Intervue<span className="text-blue-400">.AI</span>
+                Intervue<span className="text-saffron">.AI</span>
               </span>
               <p className="mt-3 text-sm text-gray-500 leading-relaxed">
                 The AI-controlled interview platform for modern engineering teams.
