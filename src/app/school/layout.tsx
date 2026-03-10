@@ -77,10 +77,15 @@ export default async function SchoolLayout({
   }
 
   // Fetch school info
-  const school = await prisma.school.findFirst({
-    where: { adminId: session.user.id },
-    select: { name: true, plan: true, enrollmentCode: true },
-  });
+  let school: { name: string; plan: string; enrollmentCode: string } | null = null;
+  try {
+    school = await prisma.school.findFirst({
+      where: { adminId: session.user.id },
+      select: { name: true, plan: true, enrollmentCode: true },
+    });
+  } catch {
+    // School table may not exist yet
+  }
 
   return (
     <div className="flex min-h-[calc(100vh-4rem)] bg-gray-50">

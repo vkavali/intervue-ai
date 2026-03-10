@@ -9,27 +9,55 @@ export default async function SchoolAnalyticsPage() {
     redirect("/auth/redirect");
   }
 
-  const school = await prisma.school.findFirst({
-    where: { adminId: session.user.id },
-    include: {
-      students: {
-        select: {
-          id: true,
-          name: true,
-          xp: true,
-          level: true,
-          currentStreak: true,
-          longestStreak: true,
-          practiceProgress: {
-            select: { status: true, timeSpentSeconds: true },
-          },
-          practiceSubmissions: {
-            select: { status: true, submittedAt: true },
+  let school: {
+    students: {
+      id: string;
+      name: string | null;
+      xp: number;
+      level: number;
+      currentStreak: number;
+      longestStreak: number;
+      practiceProgress: { status: string; timeSpentSeconds: number }[];
+      practiceSubmissions: { status: string; submittedAt: Date }[];
+    }[];
+  } | null = null;
+
+  try {
+    school = await prisma.school.findFirst({
+      where: { adminId: session.user.id },
+      include: {
+        students: {
+          select: {
+            id: true,
+            name: true,
+            xp: true,
+            level: true,
+            currentStreak: true,
+            longestStreak: true,
+            practiceProgress: {
+              select: { status: true, timeSpentSeconds: true },
+            },
+            practiceSubmissions: {
+              select: { status: true, submittedAt: true },
+            },
           },
         },
       },
-    },
-  });
+    });
+  } catch {
+    // Gamification columns may not exist yet — fall back to empty
+    try {
+      const basicSchool = await prisma.school.findFirst({
+        where: { adminId: session.user.id },
+        select: { id: true },
+      });
+      if (basicSchool) {
+        school = { students: [] };
+      }
+    } catch {
+      // School table itself may not exist
+    }
+  }
 
   if (!school) {
     return <div className="text-center py-16"><p className="text-gray-500">School not found.</p></div>;

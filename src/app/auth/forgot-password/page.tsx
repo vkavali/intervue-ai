@@ -1,44 +1,14 @@
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
-import { signIn, useSession } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 import Link from "next/link";
 
-export default function SignInPage() {
-  return (
-    <Suspense>
-      <SignInForm />
-    </Suspense>
-  );
-}
-
-function SignInForm() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/auth/redirect";
-  const { data: session, status } = useSession();
-
+export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
-  // Redirect if already logged in
-  useEffect(() => {
-    if (status === "authenticated" && session) {
-      router.push(callbackUrl);
-    }
-  }, [status, session, router, callbackUrl]);
-
-  // Show nothing while checking session
-  if (status === "loading" || status === "authenticated") {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
-        <div className="animate-spin h-8 w-8 border-2 border-saffron border-t-transparent rounded-full" />
-      </div>
-    );
-  }
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
+  const [resetUrl, setResetUrl] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -46,17 +16,24 @@ function SignInForm() {
     setLoading(true);
 
     try {
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
+      const res = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
       });
 
-      if (result?.error) {
-        setError(result.error);
-      } else {
-        router.push(callbackUrl);
-        router.refresh();
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Something went wrong");
+        setLoading(false);
+        return;
+      }
+
+      setSent(true);
+      // In non-production, the API returns the reset URL directly
+      if (data.resetUrl) {
+        setResetUrl(data.resetUrl);
       }
     } catch {
       setError("An unexpected error occurred. Please try again.");
@@ -65,14 +42,53 @@ function SignInForm() {
     }
   }
 
+  if (sent) {
+    return (
+      <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-gray-50 px-4">
+        <div className="w-full max-w-md">
+          <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm text-center">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-india-green/10">
+              <svg className="h-6 w-6 text-india-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h1 className="text-xl font-bold text-gray-900">Check Your Email</h1>
+            <p className="mt-2 text-sm text-gray-500">
+              If an account with <strong>{email}</strong> exists, we&apos;ve sent a password reset link.
+            </p>
+
+            {resetUrl && (
+              <div className="mt-4 rounded-lg border border-saffron/30 bg-saffron/5 p-4">
+                <p className="text-xs text-gray-500 mb-2">Dev mode — reset link:</p>
+                <Link
+                  href={resetUrl.replace(/^https?:\/\/[^/]+/, "")}
+                  className="text-sm text-saffron hover:text-saffron-dark break-all"
+                >
+                  Click here to reset your password
+                </Link>
+              </div>
+            )}
+
+            <Link
+              href="/auth/signin"
+              className="mt-6 inline-block text-sm font-medium text-saffron hover:text-saffron-dark transition-colors"
+            >
+              Back to Sign In
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md">
         <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
           <div className="mb-8 text-center">
-            <h1 className="text-2xl font-bold text-gray-900">Welcome Back</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Reset Password</h1>
             <p className="mt-2 text-sm text-gray-500">
-              Sign in to your Intervue.AI account
+              Enter your email address and we&apos;ll send you a reset link.
             </p>
           </div>
 
@@ -101,33 +117,6 @@ function SignInForm() {
               />
             </div>
 
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-1.5"
-              >
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors"
-                placeholder="Enter your password"
-              />
-            </div>
-
-            <div className="flex justify-end">
-              <Link
-                href="/auth/forgot-password"
-                className="text-xs text-gray-500 hover:text-saffron transition-colors"
-              >
-                Forgot password?
-              </Link>
-            </div>
-
             <button
               type="submit"
               disabled={loading}
@@ -139,21 +128,21 @@ function SignInForm() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
-                  Signing in...
+                  Sending...
                 </span>
               ) : (
-                "Sign In"
+                "Send Reset Link"
               )}
             </button>
           </form>
 
           <p className="mt-6 text-center text-sm text-gray-500">
-            Don&apos;t have an account?{" "}
+            Remember your password?{" "}
             <Link
-              href="/auth/signup"
+              href="/auth/signin"
               className="font-medium text-saffron hover:text-saffron-dark transition-colors"
             >
-              Sign up
+              Sign in
             </Link>
           </p>
         </div>

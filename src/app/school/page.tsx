@@ -10,25 +10,55 @@ export default async function SchoolDashboard() {
     redirect("/auth/redirect");
   }
 
-  const school = await prisma.school.findFirst({
-    where: { adminId: session.user.id },
-    include: {
-      students: {
-        select: {
-          id: true,
-          name: true,
-          xp: true,
-          level: true,
-          currentStreak: true,
-          lastActiveDate: true,
-          _count: {
-            select: { practiceProgress: { where: { status: "COMPLETED" } } },
+  let school: {
+    name: string;
+    enrollmentCode: string;
+    maxStudents: number;
+    students: {
+      id: string;
+      name: string | null;
+      xp: number;
+      level: number;
+      currentStreak: number;
+      lastActiveDate: Date | null;
+      _count: { practiceProgress: number };
+    }[];
+  } | null = null;
+
+  try {
+    school = await prisma.school.findFirst({
+      where: { adminId: session.user.id },
+      include: {
+        students: {
+          select: {
+            id: true,
+            name: true,
+            xp: true,
+            level: true,
+            currentStreak: true,
+            lastActiveDate: true,
+            _count: {
+              select: { practiceProgress: { where: { status: "COMPLETED" } } },
+            },
           },
+          orderBy: { xp: "desc" },
         },
-        orderBy: { xp: "desc" },
       },
-    },
-  });
+    });
+  } catch {
+    // Gamification columns may not exist yet — fall back to basic query
+    try {
+      const basicSchool = await prisma.school.findFirst({
+        where: { adminId: session.user.id },
+        select: { name: true, enrollmentCode: true, maxStudents: true },
+      });
+      if (basicSchool) {
+        school = { ...basicSchool, students: [] };
+      }
+    } catch {
+      // School table itself may not exist
+    }
+  }
 
   if (!school) {
     return (
