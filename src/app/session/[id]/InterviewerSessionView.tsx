@@ -269,7 +269,7 @@ export default function InterviewerSessionView({
     : 0;
 
   return (
-    <div className="flex h-screen flex-col bg-gray-950 overflow-hidden">
+    <div className="flex h-screen flex-col bg-editor overflow-hidden">
       {/* Violation Alert Toast */}
       {violationAlert && (
         <div className="fixed top-4 right-4 z-50 animate-in fade-in slide-in-from-right">
@@ -283,7 +283,7 @@ export default function InterviewerSessionView({
       )}
 
       {/* Top Bar */}
-      <div className="flex items-center justify-between border-b border-gray-800 bg-gray-900 px-4 py-2 shrink-0">
+      <div className="flex items-center justify-between border-b border-editor-border bg-editor-panel px-4 py-2 shrink-0">
         <div className="flex items-center gap-4">
           <span className="text-sm font-bold text-white">
             Intervue<span className="text-blue-400">.AI</span>
@@ -309,7 +309,7 @@ export default function InterviewerSessionView({
 
           {/* Elapsed Timer */}
           {sessionData.startedAt && (
-            <div className="flex items-center gap-2 rounded-lg bg-gray-800 px-3 py-1">
+            <div className="flex items-center gap-2 rounded-lg bg-editor-surface px-3 py-1">
               <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -356,8 +356,8 @@ export default function InterviewerSessionView({
       {/* Main Content */}
       <div className="flex flex-1 overflow-hidden">
         {/* Left: Code Editor (read-only) */}
-        <div className="flex-1 flex flex-col overflow-hidden border-r border-gray-800">
-          <div className="flex items-center justify-between border-b border-gray-800 bg-gray-900/50 px-4 py-2">
+        <div className="flex-1 flex flex-col overflow-hidden border-r border-editor-border">
+          <div className="flex items-center justify-between border-b border-editor-border bg-editor-panel/50 px-4 py-2">
             <div className="flex items-center gap-2">
               <span className="text-xs font-medium text-gray-400">Candidate&apos;s Code</span>
               <span className="text-xs text-gray-600">(read-only)</span>
@@ -388,14 +388,14 @@ export default function InterviewerSessionView({
         {/* Right: Tabbed Panel */}
         <div className="w-96 shrink-0 flex flex-col overflow-hidden">
           {/* Tab Buttons */}
-          <div className="flex border-b border-gray-800 bg-gray-900/50 shrink-0 overflow-x-auto">
+          <div className="flex border-b border-editor-border bg-editor-panel/50 shrink-0 overflow-x-auto">
             {(["interactions", "violations", "notes", "thinking", "chat"] as TabType[]).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`relative px-3 py-2 text-xs font-semibold uppercase tracking-wider transition-colors whitespace-nowrap ${
                   activeTab === tab
-                    ? "text-purple-400 border-b-2 border-purple-500 bg-gray-900/80"
+                    ? "text-purple-400 border-b-2 border-purple-500 bg-editor-panel/80"
                     : "text-gray-500 hover:text-gray-300"
                 }`}
               >
@@ -425,7 +425,7 @@ export default function InterviewerSessionView({
                   <p className="text-xs text-gray-600 text-center py-8">No AI interactions yet.</p>
                 ) : (
                   sessionData.aiInteractions.map((interaction) => (
-                    <div key={interaction.id} className="rounded-lg border border-gray-800 bg-gray-900 p-3">
+                    <div key={interaction.id} className="rounded-lg border border-editor-border bg-editor-panel p-3">
                       <div className="flex items-center justify-between mb-2">
                         <span className={`text-[10px] font-medium ${aiLevelLabels[interaction.aiLevel]?.color || "text-gray-400"}`}>
                           {aiLevelLabels[interaction.aiLevel]?.label}
@@ -480,7 +480,7 @@ export default function InterviewerSessionView({
                     <p className="text-xs text-gray-600 text-center py-4">No notes yet. Add observations below.</p>
                   ) : (
                     sessionData.interviewerNotes.map((note) => (
-                      <div key={note.id} className="rounded bg-gray-800 px-3 py-2">
+                      <div key={note.id} className="rounded bg-editor-surface px-3 py-2">
                         <div className="flex items-center justify-between mb-1">
                           <span className="text-[10px] text-gray-500">{note.interviewer.name}</span>
                           <span className="text-[10px] text-gray-600">{new Date(note.timestamp).toLocaleTimeString()}</span>
@@ -490,19 +490,19 @@ export default function InterviewerSessionView({
                     ))
                   )}
                 </div>
-                <form onSubmit={handleNoteSubmit} className="border-t border-gray-800 p-2">
+                <form onSubmit={handleNoteSubmit} className="border-t border-editor-border p-2">
                   <div className="flex gap-2">
                     <input
                       type="text"
                       value={noteContent}
                       onChange={(e) => setNoteContent(e.target.value)}
                       placeholder="Add a note..."
-                      className="flex-1 rounded border border-gray-700 bg-gray-800 px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none"
+                      className="flex-1 rounded border border-editor-border bg-editor-surface px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none"
                     />
                     <button
                       type="submit"
                       disabled={submittingNote || !noteContent.trim()}
-                      className="rounded bg-gray-700 px-3 py-1.5 text-xs font-medium text-gray-300 hover:bg-gray-600 disabled:opacity-50 transition-colors"
+                      className="rounded bg-editor-hover px-3 py-1.5 text-xs font-medium text-gray-300 hover:bg-editor-muted disabled:opacity-50 transition-colors"
                     >
                       Add
                     </button>
@@ -544,13 +544,13 @@ export default function InterviewerSessionView({
 
                 {thinkingAnalysis && (
                   <div className="space-y-3">
-                    <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
+                    <div className="rounded-lg border border-editor-border bg-editor-panel p-3">
                       <h4 className="text-[10px] font-semibold uppercase tracking-wider text-purple-400 mb-1.5">Overall Approach</h4>
                       <p className="text-xs text-gray-300 leading-relaxed">{thinkingAnalysis.overallApproach}</p>
                     </div>
 
                     {thinkingAnalysis.thinkingPatterns.length > 0 && (
-                      <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
+                      <div className="rounded-lg border border-editor-border bg-editor-panel p-3">
                         <h4 className="text-[10px] font-semibold uppercase tracking-wider text-purple-400 mb-2">Thinking Patterns</h4>
                         <div className="space-y-2">
                           {thinkingAnalysis.thinkingPatterns.map((tp, i) => (
@@ -567,7 +567,7 @@ export default function InterviewerSessionView({
                     )}
 
                     {thinkingAnalysis.strengths.length > 0 && (
-                      <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
+                      <div className="rounded-lg border border-editor-border bg-editor-panel p-3">
                         <h4 className="text-[10px] font-semibold uppercase tracking-wider text-green-400 mb-2">Strengths</h4>
                         <ul className="space-y-1">
                           {thinkingAnalysis.strengths.map((s, i) => (
@@ -581,7 +581,7 @@ export default function InterviewerSessionView({
                     )}
 
                     {thinkingAnalysis.concerns.length > 0 && (
-                      <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
+                      <div className="rounded-lg border border-editor-border bg-editor-panel p-3">
                         <h4 className="text-[10px] font-semibold uppercase tracking-wider text-red-400 mb-2">Concerns</h4>
                         <ul className="space-y-1">
                           {thinkingAnalysis.concerns.map((c, i) => (
@@ -595,7 +595,7 @@ export default function InterviewerSessionView({
                     )}
 
                     {thinkingAnalysis.suggestedFollowUp.length > 0 && (
-                      <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
+                      <div className="rounded-lg border border-editor-border bg-editor-panel p-3">
                         <h4 className="text-[10px] font-semibold uppercase tracking-wider text-purple-400 mb-2">Follow-Up Questions</h4>
                         <ol className="space-y-1.5">
                           {thinkingAnalysis.suggestedFollowUp.map((q, i) => (
@@ -622,7 +622,7 @@ export default function InterviewerSessionView({
       </div>
 
       {/* Bottom Bar: AI Assist Control */}
-      <div className="border-t border-gray-800 bg-gray-900 px-6 py-3 shrink-0">
+      <div className="border-t border-editor-border bg-editor-panel px-6 py-3 shrink-0">
         <div className="flex items-center gap-6">
           <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-400 shrink-0">AI Assist Control</h4>
           <div className="flex-1 flex items-center gap-4">
@@ -651,7 +651,7 @@ export default function InterviewerSessionView({
                   value={aiSliderReason}
                   onChange={(e) => setAiSliderReason(e.target.value)}
                   placeholder="Reason for change..."
-                  className="w-48 rounded border border-gray-700 bg-gray-800 px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none"
+                  className="w-48 rounded border border-editor-border bg-editor-surface px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none"
                   autoFocus
                 />
                 <button
@@ -663,7 +663,7 @@ export default function InterviewerSessionView({
                 </button>
                 <button
                   onClick={() => { setShowReasonInput(false); setAiSliderReason(""); setPendingLevel(aiSliderValue); }}
-                  className="rounded bg-gray-700 px-3 py-1.5 text-xs font-medium text-gray-300 hover:bg-gray-600 transition-colors"
+                  className="rounded bg-editor-hover px-3 py-1.5 text-xs font-medium text-gray-300 hover:bg-editor-muted transition-colors"
                 >
                   Cancel
                 </button>

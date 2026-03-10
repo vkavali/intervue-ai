@@ -488,13 +488,13 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
   }, [testResults]);
 
   return (
-    <div className="flex h-screen flex-col bg-gray-950 overflow-hidden">
+    <div className="flex h-screen flex-col bg-editor overflow-hidden">
       <SessionProtections sessionId={sessionId} />
 
       {/* Reset Code Confirmation Modal */}
       {showResetConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="rounded-xl border border-gray-700 bg-gray-900 p-6 text-center max-w-sm">
+          <div className="rounded-xl border border-editor-border bg-editor-panelp-6 text-center max-w-sm">
             <h3 className="text-lg font-semibold text-white mb-2">Reset Code?</h3>
             <p className="text-sm text-gray-400 mb-5">
               This will replace your current code with the starter template. This cannot be undone.
@@ -502,7 +502,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
             <div className="flex justify-center gap-3">
               <button
                 onClick={() => setShowResetConfirm(false)}
-                className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 transition-colors"
+                className="rounded-lg border border-editor-border bg-editor-surface px-4 py-2 text-sm text-gray-300 hover:bg-editor-hover transition-colors"
               >
                 Cancel
               </button>
@@ -520,7 +520,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
       {/* Time Expired Overlay */}
       {timeExpired && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-          <div className="rounded-2xl border border-red-500/30 bg-gray-900 p-8 text-center max-w-md">
+          <div className="rounded-2xl border border-red-500/30 bg-editor-panelp-8 text-center max-w-md">
             <svg className="mx-auto h-16 w-16 text-red-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -536,7 +536,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
       )}
 
       {/* Top Bar */}
-      <div className="flex items-center justify-between border-b border-gray-800 bg-gray-900 px-4 py-2 shrink-0">
+      <div className="flex items-center justify-between border-b border-editor-border bg-editor-panel px-4 py-2 shrink-0">
         <div className="flex items-center gap-4">
           <span className="text-sm font-bold text-white">
             Intervue<span className="text-blue-400">.AI</span>
@@ -558,7 +558,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
                 className={`flex h-7 w-7 items-center justify-center rounded text-xs font-medium transition-colors ${
                   idx === currentQuestionIndex
                     ? "bg-purple-600 text-white"
-                    : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                    : "bg-editor-surface text-gray-400 hover:bg-editor-hover"
                 }`}
               >
                 {idx + 1}
@@ -572,7 +572,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
               value={isSql ? "sql" : language}
               onChange={(e) => setLanguage(e.target.value)}
               disabled={isSql}
-              className="rounded border border-gray-700 bg-gray-800 px-2 py-1 text-xs text-gray-300 focus:border-purple-500 focus:outline-none"
+              className="rounded border border-editor-border bg-editor-surface px-2 py-1 text-xs text-gray-300 focus:border-purple-500 focus:outline-none"
             >
               {isSql ? (
                 <option value="sql">SQL</option>
@@ -586,7 +586,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
 
           {/* Timer */}
           <div className={`flex items-center gap-2 rounded-lg px-3 py-1 ${
-            isLowTime ? "bg-red-900/50 border border-red-500/30" : "bg-gray-800"
+            isLowTime ? "bg-red-900/50 border border-red-500/30" : "bg-editor-surface"
           }`}>
             <svg className={`w-4 h-4 ${isLowTime ? "text-red-400" : "text-gray-400"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -600,7 +600,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
           </div>
 
           {/* AI Level Badge */}
-          <span className={`rounded-full border border-gray-700 px-3 py-1 text-xs font-medium ${
+          <span className={`rounded-full border border-editor-border px-3 py-1 text-xs font-medium ${
             aiLevelLabels[currentAiLevel]?.color || "text-gray-400"
           }`}>
             {aiLevelLabels[currentAiLevel]?.label || `L${currentAiLevel}`}
@@ -610,7 +610,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
           <button
             onClick={() => setShowChat(!showChat)}
             className={`relative rounded-lg px-2 py-1.5 text-xs font-medium transition-colors ${
-              showChat ? "bg-blue-600 text-white" : "bg-gray-800 text-gray-400 hover:text-white"
+              showChat ? "bg-blue-600 text-white" : "bg-editor-surface text-gray-400 hover:text-white"
             }`}
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -623,7 +623,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
             <button
               onClick={() => setShowResetConfirm(true)}
               disabled={timeExpired}
-              className="inline-flex items-center gap-1 rounded-lg border border-gray-700 bg-gray-800 px-2.5 py-1.5 text-xs text-gray-400 hover:text-white hover:bg-gray-700 disabled:opacity-50 transition-colors"
+              className="inline-flex items-center gap-1 rounded-lg border border-editor-border bg-editor-surface px-2.5 py-1.5 text-xs text-gray-400 hover:text-white hover:bg-editor-hover disabled:opacity-50 transition-colors"
               title="Reset to starter code"
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -638,7 +638,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
             <button
               onClick={runCode}
               disabled={running || runningTests || timeExpired}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-gray-700 px-3 py-1.5 text-xs font-medium text-gray-200 hover:bg-gray-600 disabled:opacity-50 transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-editor-hover px-3 py-1.5 text-xs font-medium text-gray-200 hover:bg-editor-muted disabled:opacity-50 transition-colors"
             >
               {running ? (
                 <svg className="animate-spin w-3.5 h-3.5" viewBox="0 0 24 24">
@@ -682,7 +682,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
       {/* Main Content */}
       <div className="flex flex-1 overflow-hidden">
         {/* Left Panel: Question */}
-        <div className="w-80 shrink-0 overflow-y-auto border-r border-gray-800 bg-gray-900/50 p-5">
+        <div className="w-80 shrink-0 overflow-y-auto border-r border-editor-border bg-editor-panel/80 p-5">
           {currentQuestion ? (
             <div>
               <div className="flex items-center gap-2 mb-3">
@@ -711,7 +711,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
                     <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Examples</h4>
                     <div className="space-y-3">
                       {parsedExamples.map((ex, i) => (
-                        <div key={i} className="rounded-lg bg-gray-800/70 border border-gray-700/50 p-3 space-y-1.5">
+                        <div key={i} className="rounded-lg bg-editor-surface/70 border border-editor-border/50 p-3 space-y-1.5">
                           {ex.input && (
                             <div>
                               <span className="text-[10px] font-semibold uppercase text-gray-500">Input: </span>
@@ -739,7 +739,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
                 {parsedExamples.length === 0 && currentQuestion.examples && (
                   <div>
                     <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Examples</h4>
-                    <pre className="whitespace-pre-wrap font-mono text-xs bg-gray-800 rounded-lg p-3 text-gray-300">
+                    <pre className="whitespace-pre-wrap font-mono text-xs bg-editor-surface rounded-lg p-3 text-gray-300">
                       {currentQuestion.examples}
                     </pre>
                   </div>
@@ -753,7 +753,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
                       {constraintItems.map((item, i) => (
                         <li key={i} className="flex items-start gap-2 text-xs text-gray-300">
                           <span className="text-gray-600 mt-0.5 shrink-0">&bull;</span>
-                          <code className="font-mono text-gray-300 bg-gray-800/50 px-1 rounded">{item}</code>
+                          <code className="font-mono text-gray-300 bg-editor-surface/50 px-1 rounded">{item}</code>
                         </li>
                       ))}
                     </ul>
@@ -774,7 +774,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
                 disabled={timeExpired}
-                className="w-full h-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-3 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none resize-none font-mono text-sm"
+                className="w-full h-full rounded-lg border border-editor-border bg-editor-surface px-4 py-3 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none resize-none font-mono text-sm"
                 placeholder={isSystemDesign ? "Describe your system design here..." : "Type your answer here..."}
               />
             </div>
@@ -807,16 +807,16 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
               </div>
 
               {/* Bottom Panel - 3 tabs */}
-              <div className={`border-t border-gray-800 bg-gray-900 flex flex-col shrink-0 transition-all ${bottomPanelOpen ? "h-[280px]" : "h-[36px]"}`}>
+              <div className={`border-t border-editor-border bg-editor-panelflex flex-col shrink-0 transition-all ${bottomPanelOpen ? "h-[280px]" : "h-[36px]"}`}>
                 {/* Tab bar */}
-                <div className="flex items-center justify-between px-3 py-1 border-b border-gray-800 shrink-0">
+                <div className="flex items-center justify-between px-3 py-1 border-b border-editor-border shrink-0">
                   <div className="flex items-center gap-1">
                     {testCases.length > 0 && (
                       <button
                         onClick={() => { setBottomTab("testcases"); setBottomPanelOpen(true); }}
                         className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
                           bottomTab === "testcases" && bottomPanelOpen
-                            ? "bg-gray-800 text-white"
+                            ? "bg-editor-surface text-white"
                             : "text-gray-500 hover:text-gray-300"
                         }`}
                       >
@@ -828,7 +828,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
                         onClick={() => { setBottomTab("results"); setBottomPanelOpen(true); }}
                         className={`px-3 py-1 text-xs font-medium rounded transition-colors flex items-center gap-1.5 ${
                           bottomTab === "results" && bottomPanelOpen
-                            ? "bg-gray-800 text-white"
+                            ? "bg-editor-surface text-white"
                             : "text-gray-500 hover:text-gray-300"
                         }`}
                       >
@@ -848,7 +848,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
                       onClick={() => { setBottomTab("console"); setBottomPanelOpen(true); }}
                       className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
                         bottomTab === "console" && bottomPanelOpen
-                          ? "bg-gray-800 text-white"
+                          ? "bg-editor-surface text-white"
                           : "text-gray-500 hover:text-gray-300"
                       }`}
                     >
@@ -880,8 +880,8 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
                               onClick={() => setActiveTestCaseIndex(i)}
                               className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
                                 i === activeTestCaseIndex
-                                  ? "bg-gray-700 text-white"
-                                  : "bg-gray-800/50 text-gray-500 hover:text-gray-300"
+                                  ? "bg-editor-hover text-white"
+                                  : "bg-editor-surface/50 text-gray-500 hover:text-gray-300"
                               }`}
                             >
                               Case {i + 1}
@@ -893,13 +893,13 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
                           <div className="space-y-2">
                             <div>
                               <span className="text-[10px] font-semibold uppercase text-gray-500 block mb-1">Input</span>
-                              <div className="rounded bg-gray-800 px-3 py-2 font-mono text-xs text-gray-300">
+                              <div className="rounded bg-editor-surface px-3 py-2 font-mono text-xs text-gray-300">
                                 {testCases[activeTestCaseIndex].input}
                               </div>
                             </div>
                             <div>
                               <span className="text-[10px] font-semibold uppercase text-gray-500 block mb-1">Expected Output</span>
-                              <div className="rounded bg-gray-800 px-3 py-2 font-mono text-xs text-gray-300">
+                              <div className="rounded bg-editor-surface px-3 py-2 font-mono text-xs text-gray-300">
                                 {testCases[activeTestCaseIndex].expected}
                               </div>
                             </div>
@@ -1018,14 +1018,14 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
 
         {/* Chat Panel (collapsible) */}
         {showChat && (
-          <div className="w-72 shrink-0 border-l border-gray-800">
+          <div className="w-72 shrink-0 border-l border-editor-border">
             <SessionChat sessionId={sessionId} userId={userId} />
           </div>
         )}
 
         {/* Right Panel: AI Sidebar */}
-        <div className="w-80 shrink-0 flex flex-col border-l border-gray-800 bg-gray-900/50">
-          <div className="border-b border-gray-800 px-4 py-3">
+        <div className="w-80 shrink-0 flex flex-col border-l border-editor-border bg-editor-panel/80">
+          <div className="border-b border-editor-border px-4 py-3">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-white">AI Assistant</h3>
               <span className={`text-xs font-medium ${aiLevelLabels[currentAiLevel]?.color || "text-gray-400"}`}>
@@ -1053,7 +1053,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
                 <div className={`max-w-[90%] rounded-lg px-3 py-2 text-sm ${
                   msg.role === "user"
                     ? "bg-purple-600/20 text-purple-200 border border-purple-500/30"
-                    : "bg-gray-800 text-gray-300 border border-gray-700"
+                    : "bg-editor-surface text-gray-300 border border-editor-border"
                 }`}>
                   <p className="whitespace-pre-wrap">{msg.content}</p>
                   <span className="block mt-1 text-[10px] text-gray-500">
@@ -1065,7 +1065,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
 
             {aiLoading && (
               <div className="flex justify-start">
-                <div className="rounded-lg bg-gray-800 border border-gray-700 px-3 py-2">
+                <div className="rounded-lg bg-editor-surface border border-editor-border px-3 py-2">
                   <div className="flex items-center gap-1">
                     <div className="w-2 h-2 rounded-full bg-gray-500 animate-bounce" style={{ animationDelay: "0ms" }} />
                     <div className="w-2 h-2 rounded-full bg-gray-500 animate-bounce" style={{ animationDelay: "150ms" }} />
@@ -1077,7 +1077,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
           </div>
 
           {/* Chat Input */}
-          <form onSubmit={handleAiSubmit} className="border-t border-gray-800 p-3">
+          <form onSubmit={handleAiSubmit} className="border-t border-editor-border p-3">
             <div className="flex gap-2">
               <input
                 type="text"
@@ -1089,7 +1089,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
                     : currentAiLevel === 0 ? "AI disabled for this question"
                     : "Ask the AI for help..."
                 }
-                className="flex-1 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 disabled:opacity-50"
+                className="flex-1 rounded-lg border border-editor-border bg-editor-surface px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 disabled:opacity-50"
               />
               <button
                 type="submit"

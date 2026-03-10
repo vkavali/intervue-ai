@@ -118,7 +118,7 @@ const SHORTCUTS = [
 
 export default function PracticeProblemPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center"><div className="text-gray-400">Loading...</div></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-editor flex items-center justify-center"><div className="text-gray-400">Loading...</div></div>}>
       <PracticeProblemContent />
     </Suspense>
   );
@@ -923,7 +923,7 @@ function PracticeProblemContent() {
   // 404 for unknown problem
   if (!problem) {
     return (
-      <div className="flex h-screen items-center justify-center bg-gray-950">
+      <div className="flex h-screen items-center justify-center bg-editor">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-white mb-2">Problem Not Found</h2>
           <p className="text-gray-400 mb-6">
@@ -941,7 +941,7 @@ function PracticeProblemContent() {
   }
 
   return (
-    <div className="flex h-screen flex-col bg-gray-950 overflow-hidden">
+    <div className="flex h-screen flex-col bg-editor overflow-hidden">
       {/* ─── Submit Result Banner ──────────────────────────────────────────── */}
       {submitResult && (
         <div className={`px-4 py-2 text-center text-sm font-bold shrink-0 animate-pulse ${
@@ -954,7 +954,7 @@ function PracticeProblemContent() {
       )}
 
       {/* ─── Top Bar ──────────────────────────────────────────────────────── */}
-      <div className="flex items-center justify-between border-b border-gray-800 bg-gray-900 px-4 py-2 shrink-0">
+      <div className="flex items-center justify-between border-b border-editor-border bg-editor-panel px-4 py-2 shrink-0">
         <div className="flex items-center gap-4">
           <Link href="/practice" className="text-sm text-gray-400 hover:text-white transition-colors">
             <svg className="w-4 h-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -974,7 +974,7 @@ function PracticeProblemContent() {
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            className="rounded border border-gray-700 bg-gray-800 px-2 py-1 text-xs text-gray-300 focus:border-purple-500 focus:outline-none"
+            className="rounded border border-editor-border bg-editor-surface px-2 py-1 text-xs text-gray-300 focus:border-purple-500 focus:outline-none"
           >
             {languages.map((lang) => (
               <option key={lang.value} value={lang.value}>
@@ -987,7 +987,7 @@ function PracticeProblemContent() {
           <select
             value={aiLevel}
             onChange={(e) => setAiLevel(parseInt(e.target.value, 10))}
-            className={`rounded border border-gray-700 bg-gray-800 px-2 py-1 text-xs focus:border-purple-500 focus:outline-none ${
+            className={`rounded border border-editor-border bg-editor-surface px-2 py-1 text-xs focus:border-purple-500 focus:outline-none ${
               aiLevelLabels[aiLevel]?.color || "text-gray-300"
             }`}
           >
@@ -999,7 +999,7 @@ function PracticeProblemContent() {
           </select>
 
           {/* Timer */}
-          <div className="flex items-center gap-1.5 rounded bg-gray-800 px-2 py-1">
+          <div className="flex items-center gap-1.5 rounded bg-editor-surface px-2 py-1">
             <svg className="w-3.5 h-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -1007,12 +1007,12 @@ function PracticeProblemContent() {
           </div>
 
           {/* Font Size */}
-          <div className="flex items-center rounded bg-gray-800 overflow-hidden">
-            <button onClick={() => setFontSize(prev => Math.max(prev - 2, 10))} className="px-1.5 py-1 text-xs text-gray-400 hover:text-white hover:bg-gray-700 transition-colors" title="Decrease font">
+          <div className="flex items-center rounded bg-editor-surface overflow-hidden">
+            <button onClick={() => setFontSize(prev => Math.max(prev - 2, 10))} className="px-1.5 py-1 text-xs text-gray-400 hover:text-white hover:bg-editor-hover transition-colors" title="Decrease font">
               A-
             </button>
-            <span className="px-1 py-1 text-[10px] text-gray-500 border-x border-gray-700">{fontSize}</span>
-            <button onClick={() => setFontSize(prev => Math.min(prev + 2, 24))} className="px-1.5 py-1 text-xs text-gray-400 hover:text-white hover:bg-gray-700 transition-colors" title="Increase font">
+            <span className="px-1 py-1 text-[10px] text-gray-500 border-x border-editor-border">{fontSize}</span>
+            <button onClick={() => setFontSize(prev => Math.min(prev + 2, 24))} className="px-1.5 py-1 text-xs text-gray-400 hover:text-white hover:bg-editor-hover transition-colors" title="Increase font">
               A+
             </button>
           </div>
@@ -1021,7 +1021,7 @@ function PracticeProblemContent() {
           <div className="relative" ref={settingsRef}>
             <button
               onClick={() => setShowSettings(!showSettings)}
-              className="rounded bg-gray-800 p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 transition-colors"
+              className="rounded bg-editor-surface p-1.5 text-gray-400 hover:text-white hover:bg-editor-hover transition-colors"
               title="Editor settings"
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1030,12 +1030,12 @@ function PracticeProblemContent() {
               </svg>
             </button>
             {showSettings && (
-              <div className="absolute right-0 top-full mt-1 w-52 rounded-lg border border-gray-700 bg-gray-800 shadow-xl z-50 py-2">
+              <div className="absolute right-0 top-full mt-1 w-52 rounded-lg border border-editor-border bg-editor-surface shadow-xl z-50 py-2">
                 <div className="px-3 py-1.5">
                   <label className="text-[10px] uppercase text-gray-500 font-semibold">Tab Size</label>
                   <div className="flex gap-1 mt-1">
                     {[2, 4].map(s => (
-                      <button key={s} onClick={() => setTabSize(s)} className={`px-2 py-0.5 rounded text-xs ${tabSize === s ? "bg-purple-600 text-white" : "bg-gray-700 text-gray-400 hover:text-white"}`}>
+                      <button key={s} onClick={() => setTabSize(s)} className={`px-2 py-0.5 rounded text-xs ${tabSize === s ? "bg-purple-600 text-white" : "bg-editor-hover text-gray-400 hover:text-white"}`}>
                         {s}
                       </button>
                     ))}
@@ -1045,13 +1045,13 @@ function PracticeProblemContent() {
                   <label className="text-[10px] uppercase text-gray-500 font-semibold">Word Wrap</label>
                   <div className="flex gap-1 mt-1">
                     {(["on", "off"] as const).map(w => (
-                      <button key={w} onClick={() => setWordWrap(w)} className={`px-2 py-0.5 rounded text-xs capitalize ${wordWrap === w ? "bg-purple-600 text-white" : "bg-gray-700 text-gray-400 hover:text-white"}`}>
+                      <button key={w} onClick={() => setWordWrap(w)} className={`px-2 py-0.5 rounded text-xs capitalize ${wordWrap === w ? "bg-purple-600 text-white" : "bg-editor-hover text-gray-400 hover:text-white"}`}>
                         {w}
                       </button>
                     ))}
                   </div>
                 </div>
-                <div className="border-t border-gray-700 mt-2 pt-2 px-3 py-1">
+                <div className="border-t border-editor-border mt-2 pt-2 px-3 py-1">
                   <button onClick={() => { setShowShortcuts(true); setShowSettings(false); }} className="text-xs text-gray-400 hover:text-white flex items-center gap-1.5 w-full">
                     <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                     Keyboard Shortcuts
@@ -1065,7 +1065,7 @@ function PracticeProblemContent() {
           {progressId && (
             <button
               onClick={() => setShowClearConfirm(true)}
-              className="rounded bg-gray-800 p-1.5 text-gray-500 hover:text-red-400 hover:bg-gray-700 transition-colors"
+              className="rounded bg-editor-surface p-1.5 text-gray-500 hover:text-red-400 hover:bg-editor-hover transition-colors"
               title="Clear all progress"
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1077,7 +1077,7 @@ function PracticeProblemContent() {
           {/* Reset Code */}
           <button
             onClick={handleResetCode}
-            className="rounded bg-gray-800 p-1.5 text-gray-400 hover:text-yellow-400 hover:bg-gray-700 transition-colors"
+            className="rounded bg-editor-surface p-1.5 text-gray-400 hover:text-yellow-400 hover:bg-editor-hover transition-colors"
             title="Reset code (Ctrl+Shift+R)"
           >
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1085,13 +1085,13 @@ function PracticeProblemContent() {
             </svg>
           </button>
 
-          <div className="w-px h-5 bg-gray-700" />
+          <div className="w-px h-5 bg-editor-hover" />
 
           {/* Run Button */}
           <button
             onClick={handleRunCode}
             disabled={executing}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-gray-700 px-3 py-1.5 text-xs font-medium text-white hover:bg-gray-600 disabled:opacity-50 transition-colors"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-editor-hover px-3 py-1.5 text-xs font-medium text-white hover:bg-editor-muted disabled:opacity-50 transition-colors"
           >
             {executing ? (
               <svg className="animate-spin w-3.5 h-3.5" viewBox="0 0 24 24">
@@ -1159,15 +1159,15 @@ function PracticeProblemContent() {
       <div className="flex flex-1 overflow-hidden">
         {/* Left Panel: Problem Description */}
         <div
-          className="shrink-0 overflow-y-auto border-r border-gray-800 bg-gray-900/50 flex flex-col"
+          className="shrink-0 overflow-y-auto border-r border-editor-border bg-editor-panel/80 flex flex-col"
           style={{ width: leftPanelWidth }}
         >
           {/* Problem tabs */}
-          <div className="flex border-b border-gray-800 px-4 pt-2 shrink-0 overflow-x-auto">
+          <div className="flex border-b border-editor-border px-4 pt-2 shrink-0 overflow-x-auto">
             <button
               onClick={() => setProblemTab("description")}
               className={`px-2.5 py-1.5 text-xs font-medium rounded-t transition-colors whitespace-nowrap ${
-                problemTab === "description" ? "bg-gray-800 text-white border-b-2 border-purple-500" : "text-gray-500 hover:text-gray-300"
+                problemTab === "description" ? "bg-editor-surface text-white border-b-2 border-purple-500" : "text-gray-500 hover:text-gray-300"
               }`}
             >
               Description
@@ -1175,7 +1175,7 @@ function PracticeProblemContent() {
             <button
               onClick={() => { setProblemTab("hints"); if (hints.length === 0) fetchHints(); }}
               className={`px-2.5 py-1.5 text-xs font-medium rounded-t transition-colors whitespace-nowrap ${
-                problemTab === "hints" ? "bg-gray-800 text-white border-b-2 border-yellow-500" : "text-gray-500 hover:text-gray-300"
+                problemTab === "hints" ? "bg-editor-surface text-white border-b-2 border-yellow-500" : "text-gray-500 hover:text-gray-300"
               }`}
             >
               Hints
@@ -1183,7 +1183,7 @@ function PracticeProblemContent() {
             <button
               onClick={() => { setProblemTab("editorial"); if (!editorial && !editorialError) fetchEditorial(); }}
               className={`px-2.5 py-1.5 text-xs font-medium rounded-t transition-colors whitespace-nowrap ${
-                problemTab === "editorial" ? "bg-gray-800 text-white border-b-2 border-green-500" : "text-gray-500 hover:text-gray-300"
+                problemTab === "editorial" ? "bg-editor-surface text-white border-b-2 border-green-500" : "text-gray-500 hover:text-gray-300"
               }`}
             >
               Editorial
@@ -1191,7 +1191,7 @@ function PracticeProblemContent() {
             <button
               onClick={() => setProblemTab("notes")}
               className={`px-2.5 py-1.5 text-xs font-medium rounded-t transition-colors whitespace-nowrap ${
-                problemTab === "notes" ? "bg-gray-800 text-white border-b-2 border-cyan-500" : "text-gray-500 hover:text-gray-300"
+                problemTab === "notes" ? "bg-editor-surface text-white border-b-2 border-cyan-500" : "text-gray-500 hover:text-gray-300"
               }`}
             >
               Notes
@@ -1199,7 +1199,7 @@ function PracticeProblemContent() {
             <button
               onClick={() => { setProblemTab("history"); if (progressId && submissions.length === 0) fetchSubmissions(); }}
               className={`px-2.5 py-1.5 text-xs font-medium rounded-t transition-colors whitespace-nowrap ${
-                problemTab === "history" ? "bg-gray-800 text-white border-b-2 border-orange-500" : "text-gray-500 hover:text-gray-300"
+                problemTab === "history" ? "bg-editor-surface text-white border-b-2 border-orange-500" : "text-gray-500 hover:text-gray-300"
               }`}
             >
               History
@@ -1208,7 +1208,7 @@ function PracticeProblemContent() {
               <button
                 onClick={() => { setProblemTab("solutions"); if (communitySolutions.length === 0) fetchCommunity(); }}
                 className={`px-2.5 py-1.5 text-xs font-medium rounded-t transition-colors whitespace-nowrap ${
-                  problemTab === "solutions" ? "bg-gray-800 text-white border-b-2 border-teal-500" : "text-gray-500 hover:text-gray-300"
+                  problemTab === "solutions" ? "bg-editor-surface text-white border-b-2 border-teal-500" : "text-gray-500 hover:text-gray-300"
                 }`}
               >
                 Solutions
@@ -1239,7 +1239,7 @@ function PracticeProblemContent() {
                 {problem.tags && problem.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mb-4">
                     {problem.tags.map((tag) => (
-                      <span key={tag} className="rounded-full bg-gray-800 border border-gray-700 px-2 py-0.5 text-[10px] text-gray-400">
+                      <span key={tag} className="rounded-full bg-editor-surface border border-editor-border px-2 py-0.5 text-[10px] text-gray-400">
                         {tag}
                       </span>
                     ))}
@@ -1269,11 +1269,11 @@ function PracticeProblemContent() {
                     </h4>
                     {enriching && !problem.constraints ? (
                       <div className="space-y-2">
-                        <div className="h-3 bg-gray-800 rounded animate-pulse w-3/4" />
-                        <div className="h-3 bg-gray-800 rounded animate-pulse w-1/2" />
+                        <div className="h-3 bg-editor-surface rounded animate-pulse w-3/4" />
+                        <div className="h-3 bg-editor-surface rounded animate-pulse w-1/2" />
                       </div>
                     ) : (
-                      <pre className="whitespace-pre-wrap font-mono text-xs bg-gray-800 rounded-lg p-3 text-gray-300">
+                      <pre className="whitespace-pre-wrap font-mono text-xs bg-editor-surface rounded-lg p-3 text-gray-300">
                         {problem.constraints || "See the problem description above for constraints."}
                       </pre>
                     )}
@@ -1285,12 +1285,12 @@ function PracticeProblemContent() {
                     </h4>
                     {enriching && !problem.examples ? (
                       <div className="space-y-2">
-                        <div className="h-3 bg-gray-800 rounded animate-pulse w-full" />
-                        <div className="h-3 bg-gray-800 rounded animate-pulse w-2/3" />
-                        <div className="h-3 bg-gray-800 rounded animate-pulse w-4/5" />
+                        <div className="h-3 bg-editor-surface rounded animate-pulse w-full" />
+                        <div className="h-3 bg-editor-surface rounded animate-pulse w-2/3" />
+                        <div className="h-3 bg-editor-surface rounded animate-pulse w-4/5" />
                       </div>
                     ) : (
-                      <pre className="whitespace-pre-wrap font-mono text-xs bg-gray-800 rounded-lg p-3 text-gray-300">
+                      <pre className="whitespace-pre-wrap font-mono text-xs bg-editor-surface rounded-lg p-3 text-gray-300">
                         {problem.examples || "Try solving with sample inputs from the description."}
                       </pre>
                     )}
@@ -1333,7 +1333,7 @@ function PracticeProblemContent() {
                           ) : i === hintsRevealed ? (
                             <button
                               onClick={() => setHintsRevealed(prev => prev + 1)}
-                              className="w-full rounded-lg border border-gray-700 bg-gray-800 p-3 text-xs text-gray-400 hover:text-yellow-400 hover:border-yellow-500/30 transition-colors flex items-center gap-2"
+                              className="w-full rounded-lg border border-editor-border bg-editor-surface p-3 text-xs text-gray-400 hover:text-yellow-400 hover:border-yellow-500/30 transition-colors flex items-center gap-2"
                             >
                               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -1342,7 +1342,7 @@ function PracticeProblemContent() {
                               Reveal {hintLabels[i] || `Hint ${i + 1}`}
                             </button>
                           ) : (
-                            <div className="rounded-lg border border-gray-800 bg-gray-900 p-3 text-xs text-gray-600 flex items-center gap-2">
+                            <div className="rounded-lg border border-editor-border bg-editor-panel p-3 text-xs text-gray-600 flex items-center gap-2">
                               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                               </svg>
@@ -1436,7 +1436,7 @@ function PracticeProblemContent() {
                     value={notes}
                     onChange={(e) => handleNotesChange(e.target.value)}
                     placeholder="Write your notes here... approach ideas, edge cases, key insights..."
-                    className="w-full h-64 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-300 placeholder-gray-600 focus:border-cyan-500 focus:outline-none resize-none font-mono"
+                    className="w-full h-64 rounded-lg border border-editor-border bg-editor-surface px-3 py-2 text-sm text-gray-300 placeholder-gray-600 focus:border-cyan-500 focus:outline-none resize-none font-mono"
                   />
                 )}
               </div>
@@ -1476,7 +1476,7 @@ function PracticeProblemContent() {
                         PARTIAL: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30",
                       };
                       return (
-                        <div key={sub.id} className="rounded-lg border border-gray-700 bg-gray-800/50 p-3">
+                        <div key={sub.id} className="rounded-lg border border-editor-border bg-editor-surface/50 p-3">
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold ${statusColors[sub.status] || "text-gray-400"}`}>
@@ -1538,11 +1538,11 @@ function PracticeProblemContent() {
                 ) : (
                   <div className="space-y-3">
                     {communitySolutions.map((sol) => (
-                      <div key={sol.id} className="rounded-lg border border-gray-700 bg-gray-800/50 overflow-hidden">
-                        <div className="flex items-center justify-between px-3 py-2 border-b border-gray-700">
+                      <div key={sol.id} className="rounded-lg border border-editor-border bg-editor-surface/50 overflow-hidden">
+                        <div className="flex items-center justify-between px-3 py-2 border-b border-editor-border">
                           <div className="flex items-center gap-2">
                             <span className="text-xs text-gray-300 font-medium">{sol.username}</span>
-                            <span className="text-[10px] text-gray-500 rounded bg-gray-700 px-1.5 py-0.5">{sol.language}</span>
+                            <span className="text-[10px] text-gray-500 rounded bg-editor-hover px-1.5 py-0.5">{sol.language}</span>
                           </div>
                           <span className="text-[10px] text-gray-600">
                             {new Date(sol.submittedAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
@@ -1562,7 +1562,7 @@ function PracticeProblemContent() {
 
         {/* Left Panel Resize Handle */}
         <div
-          className="w-1 cursor-col-resize bg-gray-800 hover:bg-purple-500/50 active:bg-purple-500 transition-colors shrink-0"
+          className="w-1 cursor-col-resize bg-editor-surface hover:bg-purple-500/50 active:bg-purple-500 transition-colors shrink-0"
           onMouseDown={(e) => {
             e.preventDefault();
             isDraggingLeft.current = true;
@@ -1601,7 +1601,7 @@ function PracticeProblemContent() {
           {/* Bottom Panel Resize Handle */}
           {bottomPanelOpen && (
             <div
-              className="h-1 cursor-row-resize bg-gray-800 hover:bg-purple-500/50 active:bg-purple-500 transition-colors shrink-0"
+              className="h-1 cursor-row-resize bg-editor-surface hover:bg-purple-500/50 active:bg-purple-500 transition-colors shrink-0"
               onMouseDown={(e) => {
                 e.preventDefault();
                 isDraggingBottom.current = true;
@@ -1612,16 +1612,16 @@ function PracticeProblemContent() {
           )}
 
           {/* Bottom Panel - 3 tabs */}
-          <div className={`border-t border-gray-800 bg-gray-900 flex flex-col shrink-0 transition-all ${bottomPanelOpen ? "" : "h-[36px]"}`} style={bottomPanelOpen ? { height: bottomPanelHeight } : undefined}>
+          <div className={`border-t border-editor-border bg-editor-panel flex flex-col shrink-0 transition-all ${bottomPanelOpen ? "" : "h-[36px]"}`} style={bottomPanelOpen ? { height: bottomPanelHeight } : undefined}>
             {/* Tab bar */}
-            <div className="flex items-center justify-between px-3 py-1 border-b border-gray-800 shrink-0">
+            <div className="flex items-center justify-between px-3 py-1 border-b border-editor-border shrink-0">
               <div className="flex items-center gap-1">
                 {allTestCases.length > 0 && (
                   <button
                     onClick={() => { setBottomTab("testcases"); setBottomPanelOpen(true); }}
                     className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
                       bottomTab === "testcases" && bottomPanelOpen
-                        ? "bg-gray-800 text-white"
+                        ? "bg-editor-surface text-white"
                         : "text-gray-500 hover:text-gray-300"
                     }`}
                   >
@@ -1634,7 +1634,7 @@ function PracticeProblemContent() {
                     onClick={() => { setBottomTab("results"); setBottomPanelOpen(true); }}
                     className={`px-3 py-1 text-xs font-medium rounded transition-colors flex items-center gap-1.5 ${
                       bottomTab === "results" && bottomPanelOpen
-                        ? "bg-gray-800 text-white"
+                        ? "bg-editor-surface text-white"
                         : "text-gray-500 hover:text-gray-300"
                     }`}
                   >
@@ -1654,7 +1654,7 @@ function PracticeProblemContent() {
                   onClick={() => { setBottomTab("console"); setBottomPanelOpen(true); }}
                   className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
                     bottomTab === "console" && bottomPanelOpen
-                      ? "bg-gray-800 text-white"
+                      ? "bg-editor-surface text-white"
                       : "text-gray-500 hover:text-gray-300"
                   }`}
                 >
@@ -1688,10 +1688,10 @@ function PracticeProblemContent() {
                             onClick={() => setActiveTestCaseIndex(i)}
                             className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
                               i === activeTestCaseIndex
-                                ? "bg-gray-700 text-white"
+                                ? "bg-editor-hover text-white"
                                 : isHidden
-                                ? "bg-gray-800/30 text-gray-600"
-                                : "bg-gray-800/50 text-gray-500 hover:text-gray-300"
+                                ? "bg-editor-surface/30 text-gray-600"
+                                : "bg-editor-surface/50 text-gray-500 hover:text-gray-300"
                             }`}
                           >
                             {tc.custom ? `Custom ${i - (problem?.testCases?.length || 0) + 1}` : `Case ${i + 1}`}
@@ -1701,7 +1701,7 @@ function PracticeProblemContent() {
                       {/* Add custom test case button */}
                       <button
                         onClick={() => setAddingCustomTC(true)}
-                        className="px-2 py-1 rounded text-xs text-gray-600 hover:text-green-400 hover:bg-gray-800 transition-colors"
+                        className="px-2 py-1 rounded text-xs text-gray-600 hover:text-green-400 hover:bg-editor-surface transition-colors"
                         title="Add custom test case"
                       >
                         + Add
@@ -1710,7 +1710,7 @@ function PracticeProblemContent() {
 
                     {/* Add custom test case form */}
                     {addingCustomTC && (
-                      <div className="rounded-lg border border-gray-700 bg-gray-800/50 p-3 mb-3 space-y-2">
+                      <div className="rounded-lg border border-editor-border bg-editor-surface/50 p-3 mb-3 space-y-2">
                         <div>
                           <span className="text-[10px] font-semibold uppercase text-gray-500 block mb-1">Input Expression</span>
                           <input
@@ -1718,7 +1718,7 @@ function PracticeProblemContent() {
                             value={customInput}
                             onChange={(e) => setCustomInput(e.target.value)}
                             placeholder="e.g. twoSum([2,7,11], 9)"
-                            className="w-full rounded bg-gray-900 border border-gray-700 px-2 py-1.5 text-xs font-mono text-gray-300 focus:border-purple-500 focus:outline-none"
+                            className="w-full rounded bg-editor-panel border border-editor-border px-2 py-1.5 text-xs font-mono text-gray-300 focus:border-purple-500 focus:outline-none"
                           />
                         </div>
                         <div>
@@ -1728,7 +1728,7 @@ function PracticeProblemContent() {
                             value={customExpected}
                             onChange={(e) => setCustomExpected(e.target.value)}
                             placeholder='e.g. [0,1]'
-                            className="w-full rounded bg-gray-900 border border-gray-700 px-2 py-1.5 text-xs font-mono text-gray-300 focus:border-purple-500 focus:outline-none"
+                            className="w-full rounded bg-editor-panel border border-editor-border px-2 py-1.5 text-xs font-mono text-gray-300 focus:border-purple-500 focus:outline-none"
                           />
                         </div>
                         <div className="flex gap-2 justify-end">
@@ -1781,12 +1781,12 @@ function PracticeProblemContent() {
                               </button>
                             )}
                           </div>
-                          <div className="rounded bg-gray-800 px-3 py-2 font-mono text-xs text-gray-300">
+                          <div className="rounded bg-editor-surface px-3 py-2 font-mono text-xs text-gray-300">
                             {allTestCases[activeTestCaseIndex].input}
                           </div>
                           <div>
                             <span className="text-[10px] font-semibold uppercase text-gray-500 block mb-1">Expected Output</span>
-                            <div className="rounded bg-gray-800 px-3 py-2 font-mono text-xs text-gray-300">
+                            <div className="rounded bg-editor-surface px-3 py-2 font-mono text-xs text-gray-300">
                               {allTestCases[activeTestCaseIndex].expected}
                             </div>
                           </div>
@@ -1946,7 +1946,7 @@ function PracticeProblemContent() {
                           </div>
                         </div>
 
-                        <div className="rounded-lg border border-gray-700 bg-gray-800/50 p-2.5">
+                        <div className="rounded-lg border border-editor-border bg-editor-surface/50 p-2.5">
                           <h5 className="text-[10px] font-bold uppercase text-gray-500 mb-1.5">Complexity</h5>
                           <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
                             <div className="text-gray-400">Your Time: <span className="text-gray-300">{coaching.complexityAnalysis.yourTime}</span></div>
@@ -2008,7 +2008,7 @@ function PracticeProblemContent() {
           </div>
 
           {/* Status Bar */}
-          <div className="flex items-center justify-between px-3 py-0.5 border-t border-gray-800 bg-gray-900/80 text-[10px] text-gray-500 shrink-0">
+          <div className="flex items-center justify-between px-3 py-0.5 border-t border-editor-border bg-editor-panel/80 text-[10px] text-gray-500 shrink-0">
             <div className="flex items-center gap-3">
               <span>Ln {cursorInfo.line}, Col {cursorInfo.column}</span>
               {cursorInfo.selected > 0 && <span>{cursorInfo.selected} selected</span>}
@@ -2022,8 +2022,8 @@ function PracticeProblemContent() {
         </div>
 
         {/* Right Panel: AI Sidebar */}
-        <div className="w-80 shrink-0 flex flex-col border-l border-gray-800 bg-gray-900/50">
-          <div className="border-b border-gray-800 px-4 py-3">
+        <div className="w-80 shrink-0 flex flex-col border-l border-editor-border bg-editor-panel/80">
+          <div className="border-b border-editor-border px-4 py-3">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-white">AI Assistant</h3>
               <span
@@ -2080,7 +2080,7 @@ function PracticeProblemContent() {
                   className={`max-w-[90%] rounded-lg px-3 py-2 text-sm ${
                     msg.role === "user"
                       ? "bg-purple-600/20 text-purple-200 border border-purple-500/30"
-                      : "bg-gray-800 text-gray-300 border border-gray-700"
+                      : "bg-editor-surface text-gray-300 border border-editor-border"
                   }`}
                 >
                   <p className="whitespace-pre-wrap">{msg.content}</p>
@@ -2093,7 +2093,7 @@ function PracticeProblemContent() {
 
             {aiLoading && (
               <div className="flex justify-start">
-                <div className="rounded-lg bg-gray-800 border border-gray-700 px-3 py-2">
+                <div className="rounded-lg bg-editor-surface border border-editor-border px-3 py-2">
                   <div className="flex items-center gap-1">
                     <div className="w-2 h-2 rounded-full bg-gray-500 animate-bounce" style={{ animationDelay: "0ms" }} />
                     <div className="w-2 h-2 rounded-full bg-gray-500 animate-bounce" style={{ animationDelay: "150ms" }} />
@@ -2105,7 +2105,7 @@ function PracticeProblemContent() {
           </div>
 
           {/* Chat Input */}
-          <form onSubmit={handleAiSubmit} className="border-t border-gray-800 p-3">
+          <form onSubmit={handleAiSubmit} className="border-t border-editor-border p-3">
             <div className="flex gap-2">
               <input
                 type="text"
@@ -2117,7 +2117,7 @@ function PracticeProblemContent() {
                     ? "AI disabled -- change level above"
                     : "Ask the AI for help..."
                 }
-                className="flex-1 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 disabled:opacity-50"
+                className="flex-1 rounded-lg border border-editor-border bg-editor-surface px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 disabled:opacity-50"
               />
               <button
                 type="submit"
@@ -2136,8 +2136,8 @@ function PracticeProblemContent() {
       {/* ─── Clear Progress Confirmation ───────────────────────────────────── */}
       {showClearConfirm && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center" onClick={() => setShowClearConfirm(false)}>
-          <div className="bg-gray-900 border border-gray-700 rounded-xl shadow-2xl w-96 max-w-[90vw]" onClick={(e) => e.stopPropagation()}>
-            <div className="px-5 py-4 border-b border-gray-800">
+          <div className="bg-editor-panel border border-editor-border rounded-xl shadow-2xl w-96 max-w-[90vw]" onClick={(e) => e.stopPropagation()}>
+            <div className="px-5 py-4 border-b border-editor-border">
               <h3 className="text-sm font-bold text-white">Clear Progress</h3>
             </div>
             <div className="p-5">
@@ -2147,7 +2147,7 @@ function PracticeProblemContent() {
               <div className="flex justify-end gap-2">
                 <button
                   onClick={() => setShowClearConfirm(false)}
-                  className="px-3 py-1.5 rounded-lg text-xs text-gray-400 hover:text-white bg-gray-800 hover:bg-gray-700 transition-colors"
+                  className="px-3 py-1.5 rounded-lg text-xs text-gray-400 hover:text-white bg-editor-surface hover:bg-editor-hover transition-colors"
                 >
                   Cancel
                 </button>
@@ -2166,8 +2166,8 @@ function PracticeProblemContent() {
       {/* ─── Keyboard Shortcuts Modal ─────────────────────────────────────── */}
       {showShortcuts && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center" onClick={() => setShowShortcuts(false)}>
-          <div className="bg-gray-900 border border-gray-700 rounded-xl shadow-2xl w-96 max-w-[90vw]" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-800">
+          <div className="bg-editor-panel border border-editor-border rounded-xl shadow-2xl w-96 max-w-[90vw]" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-editor-border">
               <h3 className="text-sm font-bold text-white">Keyboard Shortcuts</h3>
               <button onClick={() => setShowShortcuts(false)} className="text-gray-500 hover:text-white">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -2179,7 +2179,7 @@ function PracticeProblemContent() {
               {SHORTCUTS.map((s) => (
                 <div key={s.keys} className="flex items-center justify-between">
                   <span className="text-sm text-gray-300">{s.action}</span>
-                  <kbd className="px-2 py-0.5 rounded bg-gray-800 border border-gray-700 text-xs text-gray-400 font-mono">{s.keys}</kbd>
+                  <kbd className="px-2 py-0.5 rounded bg-editor-surface border border-editor-border text-xs text-gray-400 font-mono">{s.keys}</kbd>
                 </div>
               ))}
             </div>

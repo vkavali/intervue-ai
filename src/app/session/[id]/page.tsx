@@ -147,7 +147,7 @@ export default function SessionPage() {
   // Loading state
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-gray-950">
+      <div className="flex h-screen items-center justify-center bg-editor">
         <div className="text-center">
           <svg
             className="animate-spin h-8 w-8 text-purple-500 mx-auto mb-4"
@@ -177,7 +177,7 @@ export default function SessionPage() {
   // Error state
   if (error || !sessionData) {
     return (
-      <div className="flex h-screen items-center justify-center bg-gray-950">
+      <div className="flex h-screen items-center justify-center bg-editor">
         <div className="text-center max-w-md">
           <svg
             className="mx-auto h-12 w-12 text-red-400 mb-4"
@@ -208,7 +208,7 @@ export default function SessionPage() {
 
   if (!currentUser) {
     return (
-      <div className="flex h-screen items-center justify-center bg-gray-950">
+      <div className="flex h-screen items-center justify-center bg-editor">
         <div className="text-center">
           <p className="text-red-400 text-lg mb-2">Not authenticated</p>
           <a
@@ -233,7 +233,7 @@ export default function SessionPage() {
   // Access denied
   if (!isParticipant) {
     return (
-      <div className="flex h-screen items-center justify-center bg-gray-950">
+      <div className="flex h-screen items-center justify-center bg-editor">
         <div className="text-center max-w-md">
           <svg
             className="mx-auto h-16 w-16 text-red-400 mb-4"
@@ -266,7 +266,7 @@ export default function SessionPage() {
   // Session expired
   if (sessionData.status === "COMPLETED" || sessionData.status === "CANCELLED") {
     return (
-      <div className="flex h-screen items-center justify-center bg-gray-950">
+      <div className="flex h-screen items-center justify-center bg-editor">
         <div className="text-center max-w-md">
           <svg
             className="mx-auto h-16 w-16 text-gray-400 mb-4"
@@ -301,7 +301,7 @@ export default function SessionPage() {
   // Candidate on PENDING session - show waiting/start screen
   if (isCandidate && sessionData.status === "PENDING") {
     return (
-      <div className="flex h-screen items-center justify-center bg-gray-950">
+      <div className="flex h-screen items-center justify-center bg-editor">
         <div className="text-center max-w-lg">
           <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-600 to-blue-600 mx-auto mb-6">
             <svg
@@ -386,7 +386,7 @@ export default function SessionPage() {
   // Interviewer / Admin on PENDING session - show waiting screen
   if ((isInterviewer || isAdmin) && sessionData.status === "PENDING") {
     return (
-      <div className="flex h-screen items-center justify-center bg-gray-950">
+      <div className="flex h-screen items-center justify-center bg-editor">
         <div className="text-center max-w-lg">
           <svg
             className="mx-auto h-16 w-16 text-yellow-400 mb-4"
@@ -410,7 +410,7 @@ export default function SessionPage() {
           <p className="text-sm text-gray-500">
             {sessionData.template.title}
           </p>
-          <div className="mt-6 inline-flex items-center gap-2 rounded-lg bg-gray-800 px-4 py-2">
+          <div className="mt-6 inline-flex items-center gap-2 rounded-lg bg-editor-surface px-4 py-2">
             <span className="animate-pulse h-2 w-2 rounded-full bg-yellow-400" />
             <span className="text-sm text-gray-400">
               Session is pending...
@@ -431,7 +431,7 @@ export default function SessionPage() {
 
   if (isCandidate && isExpired && sessionData.status === "ACTIVE") {
     return (
-      <div className="flex h-screen items-center justify-center bg-gray-950">
+      <div className="flex h-screen items-center justify-center bg-editor">
         <div className="text-center max-w-md">
           <svg
             className="mx-auto h-16 w-16 text-red-400 mb-4"
