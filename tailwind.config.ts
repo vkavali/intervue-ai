@@ -13,12 +13,12 @@ const config: Config = {
         foreground: "var(--foreground)",
         // Warm dark palette for long-session focus (editor/practice)
         editor: {
-          DEFAULT: '#0e0e16',   // warm deep dark (main bg)
-          panel:   '#151520',   // warm panel bg (sidebars, top bar)
-          surface: '#1c1c2a',   // interactive surfaces (buttons, inputs)
-          border:  '#252538',   // soft warm border
-          hover:   '#2c2c40',   // hover state
-          muted:   '#3a3a52',   // muted elements
+          DEFAULT: '#111118',   // warm deep dark (main bg)
+          panel:   '#18181f',   // warm panel bg (sidebars, top bar)
+          surface: '#222230',   // interactive surfaces (buttons, inputs)
+          border:  '#2e2e42',   // soft warm border
+          hover:   '#363650',   // hover state
+          muted:   '#45455e',   // muted elements
         },
       },
     },

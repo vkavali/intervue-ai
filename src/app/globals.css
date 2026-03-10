@@ -15,10 +15,10 @@ body {
 
 /* Warm-dark focus theme for editor/practice long sessions */
 .focus-env {
-  --focus-bg: #0e0e16;
-  --focus-panel: #151520;
-  --focus-surface: #1c1c2a;
-  --focus-border: #252538;
+  --focus-bg: #111118;
+  --focus-panel: #18181f;
+  --focus-surface: #222230;
+  --focus-border: #2e2e42;
   background: var(--focus-bg);
 }
 
