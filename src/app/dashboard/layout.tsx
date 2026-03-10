@@ -8,6 +8,7 @@ const sidebarLinks = [
   {
     href: "/dashboard",
     label: "Dashboard",
+    adminOnly: false,
     icon: (
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -17,6 +18,7 @@ const sidebarLinks = [
   {
     href: "/dashboard/interviews",
     label: "Interviews",
+    adminOnly: true,
     icon: (
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
@@ -26,6 +28,7 @@ const sidebarLinks = [
   {
     href: "/dashboard/sessions",
     label: "Sessions",
+    adminOnly: false,
     icon: (
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -35,6 +38,7 @@ const sidebarLinks = [
   {
     href: "/dashboard/calendar",
     label: "Calendar",
+    adminOnly: false,
     icon: (
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" />
@@ -44,6 +48,7 @@ const sidebarLinks = [
   {
     href: "/dashboard/candidates",
     label: "Candidates",
+    adminOnly: false,
     icon: (
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -53,6 +58,7 @@ const sidebarLinks = [
   {
     href: "/dashboard/positions",
     label: "Positions",
+    adminOnly: true,
     icon: (
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
@@ -62,6 +68,7 @@ const sidebarLinks = [
   {
     href: "/dashboard/interviewers",
     label: "Interviewers",
+    adminOnly: true,
     icon: (
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -71,6 +78,7 @@ const sidebarLinks = [
   {
     href: "/dashboard/analytics",
     label: "Analytics",
+    adminOnly: false,
     icon: (
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -80,6 +88,7 @@ const sidebarLinks = [
   {
     href: "/dashboard/settings",
     label: "Settings",
+    adminOnly: true,
     icon: (
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -105,6 +114,8 @@ export default async function DashboardLayout({
     redirect("/candidate");
   }
 
+  const isAdmin = session.user.role === "COMPANY_ADMIN";
+
   // Fetch company plan for sidebar
   let companyPlan = "Starter";
   if (session.user.id) {
@@ -117,12 +128,29 @@ export default async function DashboardLayout({
     }
   }
 
+  const visibleLinks = sidebarLinks.filter(
+    (link) => !link.adminOnly || isAdmin
+  );
+
   return (
     <div className="flex min-h-[calc(100vh-4rem)]">
       {/* Sidebar */}
       <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:border-r lg:border-gray-800 lg:bg-gray-900/50">
         <nav className="flex-1 space-y-1 px-3 py-6">
-          {sidebarLinks.map((link) => (
+          {/* Role Badge */}
+          <div className="mb-4 px-3">
+            <span
+              className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${
+                isAdmin
+                  ? "bg-purple-500/10 text-purple-400 border-purple-500/20"
+                  : "bg-blue-500/10 text-blue-400 border-blue-500/20"
+              }`}
+            >
+              {isAdmin ? "Admin" : "Interviewer"}
+            </span>
+          </div>
+
+          {visibleLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -135,16 +163,29 @@ export default async function DashboardLayout({
         </nav>
 
         <div className="border-t border-gray-800 p-4">
-          <div className="rounded-lg bg-gradient-to-r from-purple-600/10 to-blue-600/10 border border-purple-500/20 p-4">
-            <p className="text-xs font-medium text-purple-300">Current Plan</p>
-            <p className="mt-1 text-sm font-semibold text-white">{companyPlan}</p>
-            <Link
-              href="/dashboard/billing"
-              className="mt-2 block text-xs text-purple-400 hover:text-purple-300"
-            >
-              Upgrade plan &rarr;
-            </Link>
-          </div>
+          {isAdmin ? (
+            <div className="rounded-lg bg-gradient-to-r from-purple-600/10 to-blue-600/10 border border-purple-500/20 p-4">
+              <p className="text-xs font-medium text-purple-300">Current Plan</p>
+              <p className="mt-1 text-sm font-semibold text-white">{companyPlan}</p>
+              <Link
+                href="/dashboard/billing"
+                className="mt-2 block text-xs text-purple-400 hover:text-purple-300"
+              >
+                Upgrade plan &rarr;
+              </Link>
+            </div>
+          ) : (
+            <div className="rounded-lg bg-gradient-to-r from-blue-600/10 to-cyan-600/10 border border-blue-500/20 p-4">
+              <p className="text-xs font-medium text-blue-300">Your Role</p>
+              <p className="mt-1 text-sm font-semibold text-white">Interviewer</p>
+              <Link
+                href="/dashboard/sessions"
+                className="mt-2 block text-xs text-blue-400 hover:text-blue-300"
+              >
+                View my sessions &rarr;
+              </Link>
+            </div>
+          )}
         </div>
       </aside>
 

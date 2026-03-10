@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 interface Position {
@@ -28,6 +30,15 @@ const statusConfig: Record<string, { label: string; bg: string; text: string; bo
 };
 
 export default function PositionsPage() {
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === "authenticated" && session?.user?.role !== "COMPANY_ADMIN") {
+      router.replace("/dashboard");
+    }
+  }, [status, session, router]);
+
   const [positions, setPositions] = useState<Position[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);

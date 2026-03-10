@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { INTERVIEW_TYPES, INDUSTRIES } from "@/data/interview-types";
 
 const NON_CODING_TYPES = ["BEHAVIORAL", "BUSINESS_ANALYST", "PROJECT_MANAGEMENT"];
@@ -68,6 +69,13 @@ const aiLevelLabels: Record<number, string> = {
 
 export default function NewInterviewPage() {
   const router = useRouter();
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === "authenticated" && session?.user?.role !== "COMPANY_ADMIN") {
+      router.replace("/dashboard");
+    }
+  }, [status, session, router]);
 
   const [title, setTitle] = useState("");
   const [role, setRole] = useState("");
