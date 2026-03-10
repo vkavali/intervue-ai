@@ -11,6 +11,20 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        // Override default grays with warm neutrals (no blue undertone)
+        gray: {
+          50:  '#fafaf9',
+          100: '#f0efed',
+          200: '#e0dfdb',
+          300: '#c5c3be',
+          400: '#a3a099',
+          500: '#84817a',
+          600: '#6b6862',
+          700: '#53514c',
+          800: '#2c2b28',
+          900: '#1a1917',
+          950: '#0e0e0c',
+        },
         // Warm dark palette for long-session focus (editor/practice)
         saffron: {
           DEFAULT: '#d4a574',
