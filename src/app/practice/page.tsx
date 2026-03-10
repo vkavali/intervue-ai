@@ -23,7 +23,7 @@ const AI_LEVEL_OPTIONS = [
   { value: 0, label: "L0 No AI", description: "Solve independently", color: "text-red-400", border: "border-red-500/30", bg: "bg-red-500/10" },
   { value: 1, label: "L1 Hint", description: "Socratic questions only", color: "text-yellow-400", border: "border-yellow-500/30", bg: "bg-yellow-500/10" },
   { value: 2, label: "L2 Scaffold", description: "Solution skeletons", color: "text-blue-400", border: "border-blue-500/30", bg: "bg-blue-500/10" },
-  { value: 3, label: "L3 Guide", description: "Concept explanations", color: "text-purple-400", border: "border-purple-500/30", bg: "bg-purple-500/10" },
+  { value: 3, label: "L3 Guide", description: "Concept explanations", color: "text-saffron", border: "border-saffron/30", bg: "bg-saffron/10" },
   { value: 4, label: "L4 Copilot", description: "Full AI assistance", color: "text-green-400", border: "border-green-500/30", bg: "bg-green-500/10" },
 ];
 
@@ -213,7 +213,7 @@ function PracticeModeContent() {
     return (
       <div
         key={problem.id}
-        className="group rounded-xl border border-gray-800 bg-gray-900/50 p-5 transition-all hover:border-purple-500/30 hover:bg-gray-900"
+        className="group rounded-xl border border-gray-800 bg-gray-900/50 p-5 transition-all hover:border-saffron/30 hover:bg-gray-900"
       >
         <div className="flex items-center justify-between mb-3">
           <span
@@ -238,7 +238,7 @@ function PracticeModeContent() {
               </span>
             )}
             {(isGenerated || isSaved) && (
-              <span className="inline-flex items-center rounded-full bg-purple-500/10 border border-purple-500/30 px-2 py-0.5 text-[10px] text-purple-400">
+              <span className="inline-flex items-center rounded-full bg-saffron/10 border border-saffron/30 px-2 py-0.5 text-[10px] text-saffron">
                 AI Generated
               </span>
             )}
@@ -254,7 +254,7 @@ function PracticeModeContent() {
           </div>
         </div>
 
-        <h3 className="text-base font-semibold text-white mb-2 group-hover:text-purple-300 transition-colors">
+        <h3 className="text-base font-semibold text-white mb-2 group-hover:text-saffron-light transition-colors">
           {problem.title}
         </h3>
 
@@ -264,7 +264,7 @@ function PracticeModeContent() {
 
         <div className="flex flex-wrap gap-1.5 mb-4">
           {problem.pattern && (
-            <span className="rounded bg-purple-900/30 border border-purple-500/20 px-2 py-0.5 text-[10px] text-purple-300">
+            <span className="rounded bg-saffron-dark/30 border border-saffron/20 px-2 py-0.5 text-[10px] text-saffron-light">
               {PATTERN_LABELS[problem.pattern] || problem.pattern}
             </span>
           )}
@@ -280,7 +280,7 @@ function PracticeModeContent() {
 
         <Link
           href={href}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-purple-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-purple-500"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-saffron px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-saffron"
         >
           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
             <path d="M8 5v14l11-7z" />
@@ -303,7 +303,7 @@ function PracticeModeContent() {
             <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
-            <span className="text-sm text-purple-400">Practice Mode</span>
+            <span className="text-sm text-saffron">Practice Mode</span>
           </div>
           <h1 className="text-3xl font-bold text-white">
             Practice Mode
@@ -328,13 +328,13 @@ function PracticeModeContent() {
                 onClick={() => setSelectedAiLevel(option.value)}
                 className={`relative rounded-lg border p-4 text-left transition-all ${
                   selectedAiLevel === option.value
-                    ? `${option.border} ${option.bg} ring-1 ring-purple-500/50`
+                    ? `${option.border} ${option.bg} ring-1 ring-saffron/50`
                     : "border-gray-800 bg-gray-900/50 hover:border-gray-700 hover:bg-gray-900"
                 }`}
               >
                 {selectedAiLevel === option.value && (
                   <div className="absolute top-2 right-2">
-                    <svg className="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-4 h-4 text-saffron" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                   </div>
@@ -356,7 +356,7 @@ function PracticeModeContent() {
             onClick={() => setActiveTab("studyplans")}
             className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${
               activeTab === "studyplans"
-                ? "border-purple-500 text-purple-400"
+                ? "border-saffron text-saffron"
                 : "border-transparent text-gray-500 hover:text-gray-300"
             }`}
           >
@@ -369,7 +369,7 @@ function PracticeModeContent() {
             onClick={() => setActiveTab("problems")}
             className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
               activeTab === "problems"
-                ? "border-purple-500 text-purple-400"
+                ? "border-saffron text-saffron"
                 : "border-transparent text-gray-500 hover:text-gray-300"
             }`}
           >
@@ -379,7 +379,7 @@ function PracticeModeContent() {
             onClick={() => setActiveTab("generate")}
             className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${
               activeTab === "generate"
-                ? "border-purple-500 text-purple-400"
+                ? "border-saffron text-saffron"
                 : "border-transparent text-gray-500 hover:text-gray-300"
             }`}
           >
@@ -418,7 +418,7 @@ function PracticeModeContent() {
                 return (
                   <div
                     key={pattern.id}
-                    className="rounded-xl border border-gray-800 bg-gray-900/50 p-5 hover:border-purple-500/30 hover:bg-gray-900 transition-all"
+                    className="rounded-xl border border-gray-800 bg-gray-900/50 p-5 hover:border-saffron/30 hover:bg-gray-900 transition-all"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <h3 className="text-base font-semibold text-white">{pattern.name}</h3>
@@ -447,7 +447,7 @@ function PracticeModeContent() {
                       </div>
                       <div className="h-1.5 bg-gray-800 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-purple-500 rounded-full transition-all"
+                          className="h-full bg-saffron rounded-full transition-all"
                           style={{ width: `${progress}%` }}
                         />
                       </div>
@@ -455,7 +455,7 @@ function PracticeModeContent() {
 
                     <button
                       onClick={() => { setPatternFilter(pattern.id); setActiveTab("problems"); setCurrentPage(1); }}
-                      className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-purple-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-purple-500"
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-saffron px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-saffron"
                     >
                       {progress > 0 ? "Continue Pattern" : "Start Pattern"}
                     </button>
@@ -476,19 +476,19 @@ function PracticeModeContent() {
                 value={searchQuery}
                 onChange={(e) => updateFilter(setSearchQuery, e.target.value)}
                 placeholder="Search problems by title, description, or tag..."
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               />
               <div className="flex flex-wrap gap-2">
-                <select value={companyFilter} onChange={(e) => updateFilter(setCompanyFilter, e.target.value)} className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white focus:border-purple-500 focus:outline-none">
+                <select value={companyFilter} onChange={(e) => updateFilter(setCompanyFilter, e.target.value)} className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white focus:border-saffron focus:outline-none">
                   {COMPANY_FILTERS.map(c => <option key={c} value={c}>{c === "All" ? "All Companies" : c}</option>)}
                 </select>
-                <select value={difficultyFilter} onChange={(e) => updateFilter(setDifficultyFilter, e.target.value)} className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white focus:border-purple-500 focus:outline-none">
+                <select value={difficultyFilter} onChange={(e) => updateFilter(setDifficultyFilter, e.target.value)} className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white focus:border-saffron focus:outline-none">
                   {DIFFICULTY_FILTERS.map(d => <option key={d} value={d}>{d === "All" ? "All Difficulties" : d}</option>)}
                 </select>
-                <select value={categoryFilter} onChange={(e) => updateFilter(setCategoryFilter, e.target.value)} className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white focus:border-purple-500 focus:outline-none">
+                <select value={categoryFilter} onChange={(e) => updateFilter(setCategoryFilter, e.target.value)} className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white focus:border-saffron focus:outline-none">
                   {CATEGORY_FILTERS.map(c => <option key={c} value={c}>{c === "All" ? "All Categories" : c}</option>)}
                 </select>
-                <select value={patternFilter} onChange={(e) => updateFilter(setPatternFilter, e.target.value)} className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white focus:border-purple-500 focus:outline-none">
+                <select value={patternFilter} onChange={(e) => updateFilter(setPatternFilter, e.target.value)} className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white focus:border-saffron focus:outline-none">
                   {PATTERN_FILTERS.map(p => <option key={p} value={p}>{p === "All" ? "All Patterns" : PATTERN_LABELS[p] || p}</option>)}
                 </select>
                 <span className="flex items-center text-xs text-gray-500 ml-auto">
@@ -513,7 +513,7 @@ function PracticeModeContent() {
                   else if (currentPage >= totalPages - 3) page = totalPages - 6 + i;
                   else page = currentPage - 3 + i;
                   return (
-                    <button key={page} onClick={() => setCurrentPage(page)} className={`rounded-lg px-3 py-1.5 text-sm ${currentPage === page ? "bg-purple-600 text-white" : "bg-gray-800 text-gray-300 hover:bg-gray-700"}`}>{page}</button>
+                    <button key={page} onClick={() => setCurrentPage(page)} className={`rounded-lg px-3 py-1.5 text-sm ${currentPage === page ? "bg-saffron text-white" : "bg-gray-800 text-gray-300 hover:bg-gray-700"}`}>{page}</button>
                   );
                 })}
                 <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="rounded-lg bg-gray-800 px-3 py-1.5 text-sm text-gray-300 hover:bg-gray-700 disabled:opacity-30">Next</button>
@@ -528,7 +528,7 @@ function PracticeModeContent() {
             {/* Saved Practice Problems */}
             {loadingSaved ? (
               <div className="text-center py-8 mb-8">
-                <svg className="animate-spin h-6 w-6 text-purple-500 mx-auto mb-2" viewBox="0 0 24 24">
+                <svg className="animate-spin h-6 w-6 text-saffron mx-auto mb-2" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                 </svg>
@@ -549,9 +549,9 @@ function PracticeModeContent() {
             ) : null}
 
             {/* Generator Form */}
-            <div className="rounded-xl border border-purple-500/20 bg-gradient-to-r from-purple-600/5 via-gray-900/50 to-blue-600/5 p-6 mb-8">
+            <div className="rounded-xl border border-saffron/20 bg-gradient-to-r from-saffron/5 via-gray-900/50 to-india-green/5 p-6 mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <svg className="w-5 h-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-5 h-5 text-saffron" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
                 <h2 className="text-lg font-semibold text-white">Generate Company-Specific Practice</h2>
@@ -571,7 +571,7 @@ function PracticeModeContent() {
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
                       placeholder="e.g., Stripe, Airbnb, Spotify"
-                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-colors"
+                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors"
                     />
                   </div>
                   <div>
@@ -584,7 +584,7 @@ function PracticeModeContent() {
                       onChange={(e) => setRole(e.target.value)}
                       required
                       placeholder="e.g., Senior Backend Engineer, Frontend Developer"
-                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-colors"
+                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors"
                     />
                   </div>
                 </div>
@@ -598,7 +598,7 @@ function PracticeModeContent() {
                     onChange={(e) => setJobDescription(e.target.value)}
                     rows={3}
                     placeholder="Paste a job description or describe specific skills: e.g., 'Must know distributed systems, API design, and SQL optimization. Team works on payment processing infrastructure.'"
-                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-colors resize-none"
+                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors resize-none"
                   />
                 </div>
 
@@ -610,7 +610,7 @@ function PracticeModeContent() {
                     <select
                       value={difficulty}
                       onChange={(e) => setDifficulty(e.target.value)}
-                      className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-purple-500 focus:outline-none"
+                      className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-saffron focus:outline-none"
                     >
                       <option value="">Mixed</option>
                       <option value="EASY">Easy</option>
@@ -622,7 +622,7 @@ function PracticeModeContent() {
                   <button
                     type="submit"
                     disabled={generating || !role.trim()}
-                    className="rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:from-purple-500 hover:to-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2"
+                    className="rounded-lg bg-gradient-to-r from-saffron to-india-green px-6 py-2.5 text-sm font-semibold text-white hover:from-saffron-light hover:to-india-green-light disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2"
                   >
                     {generating ? (
                       <>
@@ -668,7 +668,7 @@ function PracticeModeContent() {
 
             {generating && (
               <div className="text-center py-12">
-                <svg className="animate-spin h-8 w-8 text-purple-500 mx-auto mb-4" viewBox="0 0 24 24">
+                <svg className="animate-spin h-8 w-8 text-saffron mx-auto mb-4" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                 </svg>

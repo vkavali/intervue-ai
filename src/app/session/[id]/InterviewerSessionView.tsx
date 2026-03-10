@@ -81,7 +81,7 @@ const aiLevelLabels: Record<number, { label: string; color: string }> = {
   0: { label: "L0 No AI", color: "text-red-400" },
   1: { label: "L1 Hint", color: "text-yellow-400" },
   2: { label: "L2 Scaffold", color: "text-blue-400" },
-  3: { label: "L3 Guide", color: "text-purple-400" },
+  3: { label: "L3 Guide", color: "text-india-green-light" },
   4: { label: "L4 Copilot", color: "text-green-400" },
 };
 
@@ -395,7 +395,7 @@ export default function InterviewerSessionView({
                 onClick={() => setActiveTab(tab)}
                 className={`relative px-3 py-2 text-xs font-semibold uppercase tracking-wider transition-colors whitespace-nowrap ${
                   activeTab === tab
-                    ? "text-purple-400 border-b-2 border-purple-500 bg-editor-panel/80"
+                    ? "text-saffron border-b-2 border-saffron bg-editor-panel/80"
                     : "text-gray-500 hover:text-gray-300"
                 }`}
               >
@@ -497,7 +497,7 @@ export default function InterviewerSessionView({
                       value={noteContent}
                       onChange={(e) => setNoteContent(e.target.value)}
                       placeholder="Add a note..."
-                      className="flex-1 rounded border border-editor-border bg-editor-surface px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none"
+                      className="flex-1 rounded border border-editor-border bg-editor-surface px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:border-saffron focus:outline-none"
                     />
                     <button
                       type="submit"
@@ -516,11 +516,11 @@ export default function InterviewerSessionView({
                 <button
                   onClick={fetchThinkingAnalysis}
                   disabled={thinkingLoading}
-                  className="w-full rounded-lg border border-purple-800 bg-purple-950 px-4 py-2 text-xs font-medium text-purple-300 hover:bg-purple-900 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+                  className="w-full rounded-lg border border-saffron-dark bg-editor-surface px-4 py-2 text-xs font-medium text-saffron-light hover:bg-editor-hover disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
                 >
                   {thinkingLoading ? (
                     <>
-                      <svg className="animate-spin h-3 w-3 text-purple-400" viewBox="0 0 24 24">
+                      <svg className="animate-spin h-3 w-3 text-saffron" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                       </svg>
@@ -545,13 +545,13 @@ export default function InterviewerSessionView({
                 {thinkingAnalysis && (
                   <div className="space-y-3">
                     <div className="rounded-lg border border-editor-border bg-editor-panel p-3">
-                      <h4 className="text-[10px] font-semibold uppercase tracking-wider text-purple-400 mb-1.5">Overall Approach</h4>
+                      <h4 className="text-[10px] font-semibold uppercase tracking-wider text-saffron mb-1.5">Overall Approach</h4>
                       <p className="text-xs text-gray-300 leading-relaxed">{thinkingAnalysis.overallApproach}</p>
                     </div>
 
                     {thinkingAnalysis.thinkingPatterns.length > 0 && (
                       <div className="rounded-lg border border-editor-border bg-editor-panel p-3">
-                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-purple-400 mb-2">Thinking Patterns</h4>
+                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-saffron mb-2">Thinking Patterns</h4>
                         <div className="space-y-2">
                           {thinkingAnalysis.thinkingPatterns.map((tp, i) => (
                             <div key={i} className={`rounded border p-2 ${strengthColors[tp.strength]}`}>
@@ -596,11 +596,11 @@ export default function InterviewerSessionView({
 
                     {thinkingAnalysis.suggestedFollowUp.length > 0 && (
                       <div className="rounded-lg border border-editor-border bg-editor-panel p-3">
-                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-purple-400 mb-2">Follow-Up Questions</h4>
+                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-saffron mb-2">Follow-Up Questions</h4>
                         <ol className="space-y-1.5">
                           {thinkingAnalysis.suggestedFollowUp.map((q, i) => (
                             <li key={i} className="flex items-start gap-2">
-                              <span className="text-[10px] text-purple-500 font-mono font-bold shrink-0 mt-px">{i + 1}.</span>
+                              <span className="text-[10px] text-saffron font-mono font-bold shrink-0 mt-px">{i + 1}.</span>
                               <span className="text-xs text-gray-300">{q}</span>
                             </li>
                           ))}
@@ -633,11 +633,11 @@ export default function InterviewerSessionView({
                 max="4"
                 value={showReasonInput ? pendingLevel : aiSliderValue}
                 onChange={(e) => handleSliderChange(parseInt(e.target.value))}
-                className="w-full accent-purple-500"
+                className="w-full accent-saffron"
               />
               <div className="flex justify-between mt-1">
                 {[0, 1, 2, 3, 4].map((level) => (
-                  <span key={level} className={`text-[10px] ${level === aiSliderValue ? "text-purple-400 font-medium" : "text-gray-600"}`}>
+                  <span key={level} className={`text-[10px] ${level === aiSliderValue ? "text-saffron font-medium" : "text-gray-600"}`}>
                     {aiLevelLabels[level]?.label}
                   </span>
                 ))}
@@ -651,13 +651,13 @@ export default function InterviewerSessionView({
                   value={aiSliderReason}
                   onChange={(e) => setAiSliderReason(e.target.value)}
                   placeholder="Reason for change..."
-                  className="w-48 rounded border border-editor-border bg-editor-surface px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none"
+                  className="w-48 rounded border border-editor-border bg-editor-surface px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:border-saffron focus:outline-none"
                   autoFocus
                 />
                 <button
                   onClick={submitAiLevelChange}
                   disabled={!aiSliderReason.trim() || updatingAiLevel}
-                  className="rounded bg-purple-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-purple-500 disabled:opacity-50 transition-colors"
+                  className="rounded bg-saffron px-3 py-1.5 text-xs font-medium text-white hover:bg-saffron-light disabled:opacity-50 transition-colors"
                 >
                   {updatingAiLevel ? "..." : "Apply"}
                 </button>

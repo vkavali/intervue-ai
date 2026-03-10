@@ -140,7 +140,7 @@ export default function PositionsPage() {
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="inline-flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-purple-700"
+          className="inline-flex items-center gap-2 rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-saffron-dark"
         >
           {showForm ? (
             "Cancel"
@@ -185,7 +185,7 @@ export default function PositionsPage() {
                   value={form.title}
                   onChange={(e) => setForm({ ...form, title: e.target.value })}
                   placeholder="e.g. Senior Frontend Engineer"
-                  className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                  className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                 />
               </div>
               <div>
@@ -196,7 +196,7 @@ export default function PositionsPage() {
                   value={form.role}
                   onChange={(e) => setForm({ ...form, role: e.target.value })}
                   placeholder="e.g. Frontend Engineer"
-                  className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                  className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                 />
               </div>
               <div>
@@ -204,7 +204,7 @@ export default function PositionsPage() {
                 <select
                   value={form.seniority}
                   onChange={(e) => setForm({ ...form, seniority: e.target.value })}
-                  className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                  className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                 >
                   {SENIORITY_OPTIONS.map((s) => (
                     <option key={s} value={s}>{s}</option>
@@ -218,7 +218,7 @@ export default function PositionsPage() {
                   min={1}
                   value={form.headcount}
                   onChange={(e) => setForm({ ...form, headcount: e.target.value })}
-                  className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                  className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                 />
               </div>
               <div>
@@ -228,7 +228,7 @@ export default function PositionsPage() {
                   value={form.department}
                   onChange={(e) => setForm({ ...form, department: e.target.value })}
                   placeholder="e.g. Engineering"
-                  className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                  className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                 />
               </div>
               <div>
@@ -238,7 +238,7 @@ export default function PositionsPage() {
                   value={form.location}
                   onChange={(e) => setForm({ ...form, location: e.target.value })}
                   placeholder="e.g. Remote, NYC"
-                  className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                  className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                 />
               </div>
             </div>
@@ -249,7 +249,7 @@ export default function PositionsPage() {
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
                 placeholder="Job description and requirements..."
                 rows={3}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               />
             </div>
 
@@ -262,7 +262,7 @@ export default function PositionsPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-purple-700 disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-saffron-dark disabled:cursor-not-allowed disabled:opacity-50"
             >
               {submitting ? "Creating..." : "Create Position"}
             </button>
@@ -273,7 +273,7 @@ export default function PositionsPage() {
       {/* Positions List */}
       {loading ? (
         <div className="flex items-center justify-center py-20">
-          <svg className="h-8 w-8 animate-spin text-purple-500" viewBox="0 0 24 24" fill="none">
+          <svg className="h-8 w-8 animate-spin text-saffron" viewBox="0 0 24 24" fill="none">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
@@ -330,7 +330,7 @@ export default function PositionsPage() {
                   </span>
                   <Link
                     href={`/dashboard/candidates?role=${encodeURIComponent(p.role)}`}
-                    className="flex items-center gap-1 text-purple-400 hover:text-purple-300"
+                    className="flex items-center gap-1 text-saffron hover:text-saffron-light"
                   >
                     <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -343,7 +343,7 @@ export default function PositionsPage() {
                   <select
                     value={p.status}
                     onChange={(e) => handleStatusChange(p.id, e.target.value)}
-                    className="rounded-lg border border-gray-700 bg-gray-800 px-2 py-1 text-xs text-white focus:border-purple-500 focus:outline-none"
+                    className="rounded-lg border border-gray-700 bg-gray-800 px-2 py-1 text-xs text-white focus:border-saffron focus:outline-none"
                   >
                     {STATUS_OPTIONS.map((s) => (
                       <option key={s} value={s}>{s}</option>

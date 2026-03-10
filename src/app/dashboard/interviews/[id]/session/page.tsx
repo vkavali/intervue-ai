@@ -98,7 +98,7 @@ export default function CreateSessionPage() {
             <span className="text-sm text-gray-400">{template.role}</span>
             <span className="text-xs text-gray-500">{template.seniority}</span>
             <span className="text-xs text-gray-500">{template.roundType}</span>
-            <span className="inline-flex items-center rounded-full bg-purple-500/10 border border-purple-500/30 px-2 py-0.5 text-xs text-purple-400">
+            <span className="inline-flex items-center rounded-full bg-saffron/10 border border-saffron/30 px-2 py-0.5 text-xs text-saffron">
               L{template.defaultAiLevel}
             </span>
           </div>
@@ -119,7 +119,7 @@ export default function CreateSessionPage() {
           <div className="rounded-lg bg-gray-800 border border-gray-700 p-4 mb-6 max-w-lg mx-auto">
             <label className="block text-xs font-medium text-gray-400 mb-1">Session Link</label>
             <div className="flex items-center gap-2">
-              <code className="flex-1 text-sm text-purple-300 break-all">
+              <code className="flex-1 text-sm text-saffron-light break-all">
                 {typeof window !== "undefined" ? window.location.origin : ""}{success.sessionLink}
               </code>
               <button
@@ -128,7 +128,7 @@ export default function CreateSessionPage() {
                     `${window.location.origin}${success.sessionLink}`
                   );
                 }}
-                className="shrink-0 rounded bg-purple-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-purple-500"
+                className="shrink-0 rounded bg-saffron px-3 py-1.5 text-xs font-medium text-white hover:bg-saffron"
               >
                 Copy
               </button>
@@ -149,7 +149,7 @@ export default function CreateSessionPage() {
                 setInterviewerEmail("");
                 setScheduledAt("");
               }}
-              className="rounded-lg bg-purple-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-purple-500 transition-colors"
+              className="rounded-lg bg-saffron px-5 py-2.5 text-sm font-medium text-white hover:bg-saffron transition-colors"
             >
               Create Another
             </button>
@@ -170,7 +170,7 @@ export default function CreateSessionPage() {
                 onChange={(e) => setCandidateEmail(e.target.value)}
                 required
                 placeholder="candidate@example.com"
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               />
               <p className="mt-1 text-xs text-gray-500">
                 If the candidate doesn&apos;t have an account, one will be created automatically.
@@ -187,7 +187,7 @@ export default function CreateSessionPage() {
                 value={interviewerEmail}
                 onChange={(e) => setInterviewerEmail(e.target.value)}
                 placeholder="interviewer@yourcompany.com"
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               />
               <p className="mt-1 text-xs text-gray-500">
                 Assign an interviewer to watch and evaluate the session in real-time.
@@ -203,7 +203,7 @@ export default function CreateSessionPage() {
                 type="datetime-local"
                 value={scheduledAt}
                 onChange={(e) => setScheduledAt(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 [color-scheme:dark]"
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron [color-scheme:dark]"
               />
               <p className="mt-1 text-xs text-gray-500">
                 Leave empty to allow the candidate to start immediately.
@@ -221,7 +221,7 @@ export default function CreateSessionPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:from-purple-500 hover:to-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-saffron to-india-green px-6 py-2.5 text-sm font-semibold text-white hover:from-saffron-light hover:to-india-green-light disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                 {loading ? (
                   <>

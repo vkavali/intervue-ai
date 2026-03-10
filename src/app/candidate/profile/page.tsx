@@ -60,10 +60,10 @@ export default async function CandidateProfilePage() {
           <div className="space-y-3">
             <a
               href="/practice"
-              className="flex items-center gap-3 rounded-lg border border-gray-800 p-3 hover:border-purple-500/30 hover:bg-gray-800/50 transition-colors"
+              className="flex items-center gap-3 rounded-lg border border-gray-800 p-3 hover:border-saffron/30 hover:bg-gray-800/50 transition-colors"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10">
-                <svg className="w-4 h-4 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-saffron/10">
+                <svg className="w-4 h-4 text-saffron" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                 </svg>
               </div>
@@ -99,10 +99,10 @@ export default async function CandidateProfilePage() {
           {user && (
             <Link
               href={`/talent/${user.id}`}
-              className="flex items-center gap-3 rounded-lg border border-gray-800 p-3 hover:border-purple-500/30 hover:bg-gray-800/50 transition-colors"
+              className="flex items-center gap-3 rounded-lg border border-gray-800 p-3 hover:border-saffron/30 hover:bg-gray-800/50 transition-colors"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10">
-                <svg className="w-4 h-4 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-saffron/10">
+                <svg className="w-4 h-4 text-saffron" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </div>

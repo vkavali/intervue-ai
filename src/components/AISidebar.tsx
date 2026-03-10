@@ -16,7 +16,7 @@ const AI_LEVEL_CONFIG: Record<
   0: { label: "L0 - Off", description: "AI assistance disabled", color: "bg-red-600" },
   1: { label: "L1 - Clarify", description: "Clarifying questions only", color: "bg-yellow-600" },
   2: { label: "L2 - Guided", description: "Hints and guidance", color: "bg-blue-600" },
-  3: { label: "L3 - Assisted", description: "Partial solutions and explanations", color: "bg-purple-600" },
+  3: { label: "L3 - Assisted", description: "Partial solutions and explanations", color: "bg-saffron" },
   4: { label: "L4 - Full", description: "Full code generation allowed", color: "bg-green-600" },
 }
 

@@ -142,7 +142,7 @@ export default async function DashboardLayout({
             <span
               className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${
                 isAdmin
-                  ? "bg-purple-500/10 text-purple-400 border-purple-500/20"
+                  ? "bg-saffron/10 text-saffron border-saffron/20"
                   : "bg-blue-500/10 text-blue-400 border-blue-500/20"
               }`}
             >
@@ -164,12 +164,12 @@ export default async function DashboardLayout({
 
         <div className="border-t border-gray-800 p-4">
           {isAdmin ? (
-            <div className="rounded-lg bg-gradient-to-r from-purple-600/10 to-blue-600/10 border border-purple-500/20 p-4">
-              <p className="text-xs font-medium text-purple-300">Current Plan</p>
+            <div className="rounded-lg bg-gradient-to-r from-saffron/10 to-india-green/10 border border-saffron/20 p-4">
+              <p className="text-xs font-medium text-saffron-light">Current Plan</p>
               <p className="mt-1 text-sm font-semibold text-white">{companyPlan}</p>
               <Link
                 href="/dashboard/billing"
-                className="mt-2 block text-xs text-purple-400 hover:text-purple-300"
+                className="mt-2 block text-xs text-saffron hover:text-saffron-light"
               >
                 Upgrade plan &rarr;
               </Link>

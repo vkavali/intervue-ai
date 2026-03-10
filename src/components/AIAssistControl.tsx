@@ -28,8 +28,8 @@ const AI_LEVELS = [
     level: 3,
     label: "L3 - Assisted",
     description: "AI provides partial solutions and explanations.",
-    color: "bg-purple-500",
-    textColor: "text-purple-400",
+    color: "bg-saffron",
+    textColor: "text-saffron",
   },
   {
     level: 4,

@@ -58,7 +58,7 @@ const aiLevelLabels: Record<number, { label: string; color: string }> = {
   0: { label: "L0 No AI", color: "text-red-400" },
   1: { label: "L1 Hint", color: "text-yellow-400" },
   2: { label: "L2 Scaffold", color: "text-blue-400" },
-  3: { label: "L3 Guide", color: "text-purple-400" },
+  3: { label: "L3 Guide", color: "text-saffron" },
   4: { label: "L4 Copilot", color: "text-green-400" },
 };
 
@@ -501,7 +501,7 @@ function CustomPracticeContent() {
         <div className="text-center">
           <h2 className="text-2xl font-bold text-white mb-2">No Problem Loaded</h2>
           <p className="text-gray-400 mb-6">Generate problems from the Practice Mode page first.</p>
-          <Link href="/practice" className="rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-500 transition-colors">
+          <Link href="/practice" className="rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white hover:bg-saffron transition-colors">
             Back to Practice
           </Link>
         </div>
@@ -536,7 +536,7 @@ function CustomPracticeContent() {
           <span className={`text-xs font-medium ${difficultyColors[problem.difficulty] || "text-gray-400"}`}>
             {problem.difficulty}
           </span>
-          <span className="inline-flex items-center rounded-full bg-purple-500/10 border border-purple-500/30 px-2 py-0.5 text-[10px] text-purple-400">
+          <span className="inline-flex items-center rounded-full bg-saffron/10 border border-saffron/30 px-2 py-0.5 text-[10px] text-saffron">
             AI Generated
           </span>
         </div>
@@ -545,7 +545,7 @@ function CustomPracticeContent() {
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            className="rounded border border-gray-700 bg-gray-800 px-2 py-1 text-xs text-gray-300 focus:border-purple-500 focus:outline-none"
+            className="rounded border border-gray-700 bg-gray-800 px-2 py-1 text-xs text-gray-300 focus:border-saffron focus:outline-none"
           >
             {languages.map((lang) => (
               <option key={lang.value} value={lang.value}>
@@ -557,7 +557,7 @@ function CustomPracticeContent() {
           <select
             value={aiLevel}
             onChange={(e) => setAiLevel(parseInt(e.target.value, 10))}
-            className={`rounded border border-gray-700 bg-gray-800 px-2 py-1 text-xs focus:border-purple-500 focus:outline-none ${aiLevelLabels[aiLevel]?.color || "text-gray-300"}`}
+            className={`rounded border border-gray-700 bg-gray-800 px-2 py-1 text-xs focus:border-saffron focus:outline-none ${aiLevelLabels[aiLevel]?.color || "text-gray-300"}`}
           >
             {[0, 1, 2, 3, 4].map((level) => (
               <option key={level} value={level}>{aiLevelLabels[level].label}</option>
@@ -592,7 +592,7 @@ function CustomPracticeContent() {
                   <label className="text-[10px] uppercase text-gray-500 font-semibold">Tab Size</label>
                   <div className="flex gap-1 mt-1">
                     {[2, 4].map(s => (
-                      <button key={s} onClick={() => setTabSize(s)} className={`px-2 py-0.5 rounded text-xs ${tabSize === s ? "bg-purple-600 text-white" : "bg-gray-700 text-gray-400 hover:text-white"}`}>{s}</button>
+                      <button key={s} onClick={() => setTabSize(s)} className={`px-2 py-0.5 rounded text-xs ${tabSize === s ? "bg-saffron text-white" : "bg-gray-700 text-gray-400 hover:text-white"}`}>{s}</button>
                     ))}
                   </div>
                 </div>
@@ -600,7 +600,7 @@ function CustomPracticeContent() {
                   <label className="text-[10px] uppercase text-gray-500 font-semibold">Word Wrap</label>
                   <div className="flex gap-1 mt-1">
                     {(["on", "off"] as const).map(w => (
-                      <button key={w} onClick={() => setWordWrap(w)} className={`px-2 py-0.5 rounded text-xs capitalize ${wordWrap === w ? "bg-purple-600 text-white" : "bg-gray-700 text-gray-400 hover:text-white"}`}>{w}</button>
+                      <button key={w} onClick={() => setWordWrap(w)} className={`px-2 py-0.5 rounded text-xs capitalize ${wordWrap === w ? "bg-saffron text-white" : "bg-gray-700 text-gray-400 hover:text-white"}`}>{w}</button>
                     ))}
                   </div>
                 </div>
@@ -658,7 +658,7 @@ function CustomPracticeContent() {
         <div className="shrink-0 overflow-y-auto border-r border-gray-800 bg-gray-900/50 p-5" style={{ width: leftPanelWidth }}>
           <div className="flex items-center gap-2 mb-3">
             <span className={`text-xs font-medium ${difficultyColors[problem.difficulty] || "text-gray-400"}`}>{problem.difficulty}</span>
-            <span className="rounded bg-purple-500/10 border border-purple-500/30 px-2 py-0.5 text-xs text-purple-400">AI Generated</span>
+            <span className="rounded bg-saffron/10 border border-saffron/30 px-2 py-0.5 text-xs text-saffron">AI Generated</span>
           </div>
           <h2 className="text-lg font-bold text-white mb-3">{problem.title}</h2>
 
@@ -690,7 +690,7 @@ function CustomPracticeContent() {
 
         {/* Left Panel Resize Handle */}
         <div
-          className="w-1 cursor-col-resize bg-gray-800 hover:bg-purple-500/50 active:bg-purple-500 transition-colors shrink-0"
+          className="w-1 cursor-col-resize bg-gray-800 hover:bg-saffron/50 active:bg-saffron transition-colors shrink-0"
           onMouseDown={(e) => {
             e.preventDefault();
             isDraggingLeft.current = true;
@@ -728,7 +728,7 @@ function CustomPracticeContent() {
           {/* Bottom Panel Resize Handle */}
           {bottomPanelOpen && (
             <div
-              className="h-1 cursor-row-resize bg-gray-800 hover:bg-purple-500/50 active:bg-purple-500 transition-colors shrink-0"
+              className="h-1 cursor-row-resize bg-gray-800 hover:bg-saffron/50 active:bg-saffron transition-colors shrink-0"
               onMouseDown={(e) => {
                 e.preventDefault();
                 isDraggingBottom.current = true;
@@ -792,11 +792,11 @@ function CustomPracticeContent() {
                       <div className="rounded-lg border border-gray-700 bg-gray-800/50 p-3 mb-3 space-y-2">
                         <div>
                           <span className="text-[10px] font-semibold uppercase text-gray-500 block mb-1">Input Expression</span>
-                          <input type="text" value={customInput} onChange={(e) => setCustomInput(e.target.value)} placeholder="e.g. twoSum([2,7,11], 9)" className="w-full rounded bg-gray-900 border border-gray-700 px-2 py-1.5 text-xs font-mono text-gray-300 focus:border-purple-500 focus:outline-none" />
+                          <input type="text" value={customInput} onChange={(e) => setCustomInput(e.target.value)} placeholder="e.g. twoSum([2,7,11], 9)" className="w-full rounded bg-gray-900 border border-gray-700 px-2 py-1.5 text-xs font-mono text-gray-300 focus:border-saffron focus:outline-none" />
                         </div>
                         <div>
                           <span className="text-[10px] font-semibold uppercase text-gray-500 block mb-1">Expected Output</span>
-                          <input type="text" value={customExpected} onChange={(e) => setCustomExpected(e.target.value)} placeholder='e.g. [0,1]' className="w-full rounded bg-gray-900 border border-gray-700 px-2 py-1.5 text-xs font-mono text-gray-300 focus:border-purple-500 focus:outline-none" />
+                          <input type="text" value={customExpected} onChange={(e) => setCustomExpected(e.target.value)} placeholder='e.g. [0,1]' className="w-full rounded bg-gray-900 border border-gray-700 px-2 py-1.5 text-xs font-mono text-gray-300 focus:border-saffron focus:outline-none" />
                         </div>
                         <div className="flex gap-2 justify-end">
                           <button onClick={() => { setAddingCustomTC(false); setCustomInput(""); setCustomExpected(""); }} className="px-2 py-1 rounded text-xs text-gray-500 hover:text-white">Cancel</button>
@@ -945,7 +945,7 @@ function CustomPracticeContent() {
             )}
             {aiMessages.map((msg, idx) => (
               <div key={idx} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[90%] rounded-lg px-3 py-2 text-sm ${msg.role === "user" ? "bg-purple-600/20 text-purple-200 border border-purple-500/30" : "bg-gray-800 text-gray-300 border border-gray-700"}`}>
+                <div className={`max-w-[90%] rounded-lg px-3 py-2 text-sm ${msg.role === "user" ? "bg-saffron/20 text-saffron-light border border-saffron/30" : "bg-gray-800 text-gray-300 border border-gray-700"}`}>
                   <p className="whitespace-pre-wrap">{msg.content}</p>
                   <span className="block mt-1 text-[10px] text-gray-500">{new Date(msg.timestamp).toLocaleTimeString()}</span>
                 </div>
@@ -966,8 +966,8 @@ function CustomPracticeContent() {
 
           <form onSubmit={handleAiSubmit} className="border-t border-gray-800 p-3">
             <div className="flex gap-2">
-              <input type="text" value={aiPrompt} onChange={(e) => setAiPrompt(e.target.value)} disabled={aiLevel === 0} placeholder={aiLevel === 0 ? "AI disabled" : "Ask the AI for help..."} className="flex-1 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 disabled:opacity-50" />
-              <button type="submit" disabled={aiLevel === 0 || aiLoading || !aiPrompt.trim()} className="rounded-lg bg-purple-600 px-3 py-2 text-sm font-medium text-white hover:bg-purple-500 disabled:opacity-50 transition-colors">
+              <input type="text" value={aiPrompt} onChange={(e) => setAiPrompt(e.target.value)} disabled={aiLevel === 0} placeholder={aiLevel === 0 ? "AI disabled" : "Ask the AI for help..."} className="flex-1 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron disabled:opacity-50" />
+              <button type="submit" disabled={aiLevel === 0 || aiLoading || !aiPrompt.trim()} className="rounded-lg bg-saffron px-3 py-2 text-sm font-medium text-white hover:bg-saffron disabled:opacity-50 transition-colors">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
               </button>
             </div>
@@ -1005,7 +1005,7 @@ export default function CustomPracticePage() {
     <Suspense fallback={
       <div className="flex h-screen items-center justify-center bg-gray-950">
         <div className="text-center">
-          <svg className="animate-spin h-8 w-8 text-purple-500 mx-auto mb-4" viewBox="0 0 24 24">
+          <svg className="animate-spin h-8 w-8 text-saffron mx-auto mb-4" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>

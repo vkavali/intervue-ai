@@ -150,7 +150,7 @@ export default function SessionPage() {
       <div className="flex h-screen items-center justify-center bg-editor">
         <div className="text-center">
           <svg
-            className="animate-spin h-8 w-8 text-purple-500 mx-auto mb-4"
+            className="animate-spin h-8 w-8 text-saffron mx-auto mb-4"
             viewBox="0 0 24 24"
           >
             <circle
@@ -197,7 +197,7 @@ export default function SessionPage() {
           </p>
           <a
             href="/dashboard"
-            className="text-sm text-purple-400 hover:text-purple-300 transition-colors"
+            className="text-sm text-saffron hover:text-saffron-light transition-colors"
           >
             Return to Dashboard
           </a>
@@ -213,7 +213,7 @@ export default function SessionPage() {
           <p className="text-red-400 text-lg mb-2">Not authenticated</p>
           <a
             href="/auth/signin"
-            className="text-sm text-purple-400 hover:text-purple-300 transition-colors"
+            className="text-sm text-saffron hover:text-saffron-light transition-colors"
           >
             Sign in
           </a>
@@ -254,7 +254,7 @@ export default function SessionPage() {
           </p>
           <a
             href="/dashboard"
-            className="rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-500 transition-colors"
+            className="rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white hover:bg-saffron-light transition-colors"
           >
             Return to Dashboard
           </a>
@@ -289,7 +289,7 @@ export default function SessionPage() {
           </p>
           <a
             href="/dashboard"
-            className="rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-500 transition-colors"
+            className="rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white hover:bg-saffron-light transition-colors"
           >
             Return to Dashboard
           </a>
@@ -303,7 +303,7 @@ export default function SessionPage() {
     return (
       <div className="flex h-screen items-center justify-center bg-editor">
         <div className="text-center max-w-lg">
-          <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-600 to-blue-600 mx-auto mb-6">
+          <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-saffron via-white to-india-green mx-auto mb-6">
             <svg
               className="h-10 w-10 text-white"
               fill="none"
@@ -335,7 +335,7 @@ export default function SessionPage() {
           <button
             onClick={handleStartSession}
             disabled={starting}
-            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-3.5 text-lg font-semibold text-white transition-all hover:from-purple-500 hover:to-blue-500 disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-saffron via-white to-india-green px-8 py-3.5 text-lg font-semibold text-white transition-all hover:from-saffron-light hover:to-india-green-light disabled:opacity-50"
           >
             {starting ? (
               <>
@@ -454,7 +454,7 @@ export default function SessionPage() {
           </p>
           <a
             href="/dashboard"
-            className="rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-500 transition-colors"
+            className="rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white hover:bg-saffron-light transition-colors"
           >
             Return to Dashboard
           </a>

@@ -84,7 +84,7 @@ export default async function InterviewersPage() {
         </div>
         <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
           <p className="text-sm text-gray-400">Total Sessions Conducted</p>
-          <p className="mt-1 text-2xl font-bold text-purple-400">
+          <p className="mt-1 text-2xl font-bold text-saffron">
             {interviewers.reduce((sum, i) => sum + i.interviewerSessions.length, 0)}
           </p>
         </div>
@@ -131,7 +131,7 @@ export default async function InterviewersPage() {
                 <tr key={interviewer.id} className="transition-colors hover:bg-gray-800/30">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-purple-500/10 text-xs font-medium text-purple-400">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-saffron/10 text-xs font-medium text-saffron">
                         {getInitials(interviewer.name)}
                       </div>
                       <span className="text-sm font-medium text-white">{interviewer.name}</span>

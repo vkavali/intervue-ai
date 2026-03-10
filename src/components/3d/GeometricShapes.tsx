@@ -29,7 +29,7 @@ function Shapes() {
 
   return (
     <>
-      {/* Icosahedron - purple */}
+      {/* Icosahedron - saffron */}
       <Float speed={2} rotationIntensity={0.5} floatIntensity={0.8}>
         <mesh ref={group1} position={[-2, 0.5, 0]}>
           <icosahedronGeometry args={[0.5, 0]} />

@@ -48,7 +48,7 @@ export function InviteInterviewerForm() {
     return (
       <button
         onClick={() => setShowForm(true)}
-        className="inline-flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-purple-500"
+        className="inline-flex items-center gap-2 rounded-lg bg-saffron px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-saffron"
       >
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
@@ -59,7 +59,7 @@ export function InviteInterviewerForm() {
   }
 
   return (
-    <div className="rounded-xl border border-purple-500/20 bg-purple-500/5 p-5">
+    <div className="rounded-xl border border-saffron/20 bg-saffron/5 p-5">
       <h3 className="text-sm font-semibold text-white mb-3">Invite New Interviewer</h3>
       <form onSubmit={handleInvite} className="flex items-end gap-3">
         <div className="flex-1">
@@ -70,7 +70,7 @@ export function InviteInterviewerForm() {
             onChange={(e) => setName(e.target.value)}
             required
             placeholder="John Smith"
-            className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none"
+            className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none"
           />
         </div>
         <div className="flex-1">
@@ -81,13 +81,13 @@ export function InviteInterviewerForm() {
             onChange={(e) => setEmail(e.target.value)}
             required
             placeholder="interviewer@company.com"
-            className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none"
+            className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none"
           />
         </div>
         <button
           type="submit"
           disabled={loading}
-          className="rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-500 disabled:opacity-50"
+          className="rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white hover:bg-saffron disabled:opacity-50"
         >
           {loading ? "Adding..." : "Add"}
         </button>

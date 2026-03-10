@@ -52,8 +52,8 @@ export default async function CandidateReportPage({
     return (
       <div className="max-w-3xl mx-auto">
         <div className="rounded-2xl border border-gray-800 bg-gradient-to-b from-gray-900/80 to-gray-950 p-12 text-center shadow-2xl">
-          <div className="mx-auto h-16 w-16 rounded-2xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center mb-6">
-            <svg className="h-8 w-8 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="mx-auto h-16 w-16 rounded-2xl bg-gradient-to-br from-saffron/20 to-india-green/20 flex items-center justify-center mb-6">
+            <svg className="h-8 w-8 text-saffron" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           </div>
@@ -63,7 +63,7 @@ export default async function CandidateReportPage({
           </p>
           <Link
             href="/candidate"
-            className="mt-8 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-purple-600/20 transition-all hover:shadow-purple-600/40 hover:scale-[1.02]"
+            className="mt-8 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-saffron to-india-green px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-saffron/20 transition-all hover:shadow-saffron/40 hover:scale-[1.02]"
           >
             Back to Dashboard
           </Link>
@@ -95,13 +95,13 @@ export default async function CandidateReportPage({
   return (
     <div className="max-w-3xl mx-auto space-y-8 relative">
       {/* Background decorations */}
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-b from-purple-600/5 to-transparent rounded-full blur-3xl pointer-events-none" />
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-b from-saffron/5 to-transparent rounded-full blur-3xl pointer-events-none" />
       <div className="fixed top-40 right-0 w-[300px] h-[300px] bg-blue-600/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Back nav */}
       <Link
         href="/candidate"
-        className="relative inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-purple-400 transition-colors group"
+        className="relative inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-saffron transition-colors group"
       >
         <svg className="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -110,10 +110,10 @@ export default async function CandidateReportPage({
       </Link>
 
       {/* 1. Header */}
-      <div className="relative rounded-2xl border border-purple-500/20 bg-gradient-to-br from-purple-900/20 via-gray-900/80 to-blue-900/20 p-8 shadow-2xl shadow-purple-900/10 overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-purple-500/10 to-transparent rounded-full blur-2xl" />
+      <div className="relative rounded-2xl border border-saffron/20 bg-gradient-to-br from-saffron-dark/20 via-gray-900/80 to-india-green-dark/20 p-8 shadow-2xl shadow-saffron-dark/10 overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-saffron/10 to-transparent rounded-full blur-2xl" />
         <div className="relative">
-          <p className="text-xs font-semibold uppercase tracking-widest text-purple-400 mb-3">Performance Report</p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-saffron mb-3">Performance Report</p>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent">
             {interviewSession.template.title}
           </h1>
@@ -124,7 +124,7 @@ export default async function CandidateReportPage({
             <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-500/20 bg-blue-500/10 px-3 py-1 text-xs text-blue-400">
               {interviewSession.template.role}
             </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-purple-500/20 bg-purple-500/10 px-3 py-1 text-xs text-purple-400">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-saffron/20 bg-saffron/10 px-3 py-1 text-xs text-saffron">
               {interviewSession.template.seniority}
             </span>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs text-cyan-400">
@@ -145,7 +145,7 @@ export default async function CandidateReportPage({
 
       {/* 2. Score Overview */}
       <div className="relative rounded-2xl border border-gray-800 bg-gradient-to-br from-gray-900/90 to-gray-950 p-8 shadow-2xl overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-blue-500/5" />
+        <div className="absolute inset-0 bg-gradient-to-br from-saffron/5 via-transparent to-india-green/5" />
         <div className="relative flex items-center justify-between flex-wrap gap-8">
           <div className="flex items-center gap-8">
             <ScoreRing score={report.overallScore} size={140} strokeWidth={10} />
@@ -156,7 +156,7 @@ export default async function CandidateReportPage({
                 </span>
               )}
               <p className="text-sm text-gray-400">
-                Confidence: <span className="font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">{(report.confidence * 100).toFixed(0)}%</span>
+                Confidence: <span className="font-bold bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">{(report.confidence * 100).toFixed(0)}%</span>
               </p>
             </div>
           </div>
@@ -267,9 +267,9 @@ export default async function CandidateReportPage({
 
       {/* 7. Thinking Trace */}
       {report.thinkingTrace && (
-        <div className="rounded-2xl border border-purple-500/20 bg-gradient-to-br from-purple-900/10 via-gray-900/80 to-gray-950 p-8 shadow-xl shadow-purple-900/5">
+        <div className="rounded-2xl border border-saffron/20 bg-gradient-to-br from-saffron-dark/10 via-gray-900/80 to-gray-950 p-8 shadow-xl shadow-saffron-dark/5">
           <div className="flex items-center gap-3 mb-6">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-purple-500 to-violet-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
+            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-saffron to-india-green flex items-center justify-center shadow-lg shadow-saffron/20">
               <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
               </svg>
@@ -283,11 +283,11 @@ export default async function CandidateReportPage({
       )}
 
       {/* 8. Share Button */}
-      <div className="rounded-2xl border border-purple-500/20 bg-gradient-to-r from-purple-900/20 via-gray-900/80 to-blue-900/20 p-8 shadow-2xl shadow-purple-900/10 overflow-hidden relative">
+      <div className="rounded-2xl border border-saffron/20 bg-gradient-to-r from-saffron-dark/20 via-gray-900/80 to-india-green-dark/20 p-8 shadow-2xl shadow-saffron-dark/10 overflow-hidden relative">
         <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-blue-500/10 to-transparent rounded-full blur-2xl" />
         <div className="relative">
           <div className="flex items-center gap-3 mb-2">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
+            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-saffron-light to-india-green-light flex items-center justify-center shadow-lg shadow-saffron/20">
               <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
               </svg>

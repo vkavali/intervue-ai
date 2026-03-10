@@ -149,7 +149,7 @@ export default function AddCandidatePage() {
         <div className="flex items-center gap-2 text-sm text-gray-400 mb-4">
           <Link
             href="/dashboard/candidates"
-            className="hover:text-purple-400 transition-colors"
+            className="hover:text-saffron transition-colors"
           >
             Candidates
           </Link>
@@ -187,7 +187,7 @@ export default function AddCandidatePage() {
               }}
               className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
                 mode === "search"
-                  ? "bg-purple-600 text-white"
+                  ? "bg-saffron text-white"
                   : "text-gray-400 hover:text-white"
               }`}
             >
@@ -201,7 +201,7 @@ export default function AddCandidatePage() {
               }}
               className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
                 mode === "new"
-                  ? "bg-purple-600 text-white"
+                  ? "bg-saffron text-white"
                   : "text-gray-400 hover:text-white"
               }`}
             >
@@ -221,7 +221,7 @@ export default function AddCandidatePage() {
                   value={searchEmail}
                   onChange={(e) => setSearchEmail(e.target.value)}
                   placeholder="candidate@example.com"
-                  className="flex-1 rounded-lg border border-gray-700 bg-gray-950 px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                  className="flex-1 rounded-lg border border-gray-700 bg-gray-950 px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       e.preventDefault();
@@ -328,7 +328,7 @@ export default function AddCandidatePage() {
                   value={candidateName}
                   onChange={(e) => setCandidateName(e.target.value)}
                   placeholder="Jane Smith"
-                  className="w-full rounded-lg border border-gray-700 bg-gray-950 px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                  className="w-full rounded-lg border border-gray-700 bg-gray-950 px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                 />
               </div>
               <div>
@@ -340,7 +340,7 @@ export default function AddCandidatePage() {
                   value={candidateEmail}
                   onChange={(e) => setCandidateEmail(e.target.value)}
                   placeholder="jane@example.com"
-                  className="w-full rounded-lg border border-gray-700 bg-gray-950 px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                  className="w-full rounded-lg border border-gray-700 bg-gray-950 px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                 />
               </div>
             </div>
@@ -361,7 +361,7 @@ export default function AddCandidatePage() {
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
                 placeholder="e.g. Frontend Engineer, Backend Engineer, Full Stack Developer"
-                className="w-full rounded-lg border border-gray-700 bg-gray-950 px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                className="w-full rounded-lg border border-gray-700 bg-gray-950 px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               />
             </div>
 
@@ -372,7 +372,7 @@ export default function AddCandidatePage() {
               <select
                 value={seniority}
                 onChange={(e) => setSeniority(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-950 px-4 py-2.5 text-sm text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                className="w-full rounded-lg border border-gray-700 bg-gray-950 px-4 py-2.5 text-sm text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               >
                 {SENIORITY_OPTIONS.map((s) => (
                   <option key={s} value={s}>
@@ -389,7 +389,7 @@ export default function AddCandidatePage() {
               <select
                 value={stage}
                 onChange={(e) => setStage(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-950 px-4 py-2.5 text-sm text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                className="w-full rounded-lg border border-gray-700 bg-gray-950 px-4 py-2.5 text-sm text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               >
                 {STAGE_OPTIONS.map((s) => (
                   <option key={s} value={s}>
@@ -418,7 +418,7 @@ export default function AddCandidatePage() {
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex items-center gap-2 rounded-lg bg-purple-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 rounded-lg bg-saffron px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-saffron disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {submitting ? (
                 <>

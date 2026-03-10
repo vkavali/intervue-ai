@@ -113,7 +113,7 @@ export default function SessionChat({ sessionId, userId }: SessionChatProps) {
               <div
                 className={`max-w-[85%] rounded-lg px-3 py-2 ${
                   isMine
-                    ? "bg-purple-600/20 text-purple-200 border border-purple-500/30"
+                    ? "bg-saffron/20 text-saffron-light border border-saffron/30"
                     : "bg-blue-600/10 text-blue-200 border border-blue-500/30"
                 }`}
               >
@@ -141,12 +141,12 @@ export default function SessionChat({ sessionId, userId }: SessionChatProps) {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type a message..."
-            className="flex-1 rounded border border-gray-700 bg-gray-800 px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none"
+            className="flex-1 rounded border border-gray-700 bg-gray-800 px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:border-saffron focus:outline-none"
           />
           <button
             type="submit"
             disabled={sending || !input.trim()}
-            className="rounded bg-purple-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-purple-500 disabled:opacity-50 transition-colors"
+            className="rounded bg-saffron px-3 py-1.5 text-xs font-medium text-white hover:bg-saffron disabled:opacity-50 transition-colors"
           >
             Send
           </button>

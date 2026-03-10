@@ -416,7 +416,7 @@ export default function VideoCall({ sessionId, userId, isInterviewer = false }: 
                 setIsCameraOn(false);
               }
             }}
-            className={`rounded p-1.5 transition-colors ${isAudioOnly ? "bg-purple-600 text-white" : "bg-gray-700 text-white hover:bg-gray-600"}`}
+            className={`rounded p-1.5 transition-colors ${isAudioOnly ? "bg-saffron text-white" : "bg-gray-700 text-white hover:bg-gray-600"}`}
             title={isAudioOnly ? "Switch to video" : "Audio only"}
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

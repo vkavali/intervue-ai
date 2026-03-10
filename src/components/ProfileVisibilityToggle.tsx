@@ -38,7 +38,7 @@ export function ProfileVisibilityToggle({ initialValue }: ProfileVisibilityToggl
         onClick={handleToggle}
         disabled={loading}
         className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out disabled:opacity-50 ${
-          isPublic ? "bg-purple-600" : "bg-gray-700"
+          isPublic ? "bg-saffron" : "bg-gray-700"
         }`}
       >
         <span

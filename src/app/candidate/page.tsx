@@ -116,7 +116,7 @@ export default async function CandidateDashboard() {
         </div>
         <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-5">
           <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Avg Score</p>
-          <p className="mt-2 text-3xl font-bold text-purple-400">
+          <p className="mt-2 text-3xl font-bold text-saffron">
             {completedSessions.length > 0
               ? (
                   completedSessions.reduce(
@@ -134,12 +134,12 @@ export default async function CandidateDashboard() {
       <div className="mb-8">
         <Link
           href="/practice"
-          className="group block rounded-xl border border-purple-500/20 bg-gradient-to-r from-purple-600/10 via-gray-900/50 to-blue-600/10 p-6 transition-all hover:border-purple-500/40 hover:from-purple-600/20 hover:to-blue-600/20"
+          className="group block rounded-xl border border-saffron/20 bg-gradient-to-r from-saffron/10 via-gray-900/50 to-india-green/10 p-6 transition-all hover:border-saffron/40 hover:from-saffron/20 hover:to-india-green/20"
         >
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <svg className="w-5 h-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-5 h-5 text-saffron" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                 </svg>
                 <h3 className="text-lg font-semibold text-white">Practice Mode</h3>
@@ -148,7 +148,7 @@ export default async function CandidateDashboard() {
                 Sharpen your coding skills with curated problems. Choose your AI assistance level and practice at your own pace.
               </p>
             </div>
-            <svg className="w-6 h-6 text-purple-400 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-6 h-6 text-saffron group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </div>
@@ -160,7 +160,7 @@ export default async function CandidateDashboard() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-white">Practice Progress</h2>
-            <Link href="/practice/analytics" className="text-xs text-purple-400 hover:text-purple-300 transition-colors">
+            <Link href="/practice/analytics" className="text-xs text-saffron hover:text-saffron-light transition-colors">
               View Practice Analytics &rarr;
             </Link>
           </div>
@@ -184,9 +184,9 @@ export default async function CandidateDashboard() {
               </p>
               <p className="mt-1 text-xs text-gray-500">Total time spent</p>
             </div>
-            <div className="rounded-xl border border-purple-500/20 bg-gray-900/50 p-5">
+            <div className="rounded-xl border border-saffron/20 bg-gray-900/50 p-5">
               <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Attempted</p>
-              <p className="mt-2 text-3xl font-bold text-purple-400">{practiceTotal}</p>
+              <p className="mt-2 text-3xl font-bold text-saffron">{practiceTotal}</p>
               <p className="mt-1 text-xs text-gray-500">Problems started</p>
             </div>
           </div>
@@ -477,7 +477,7 @@ export default async function CandidateDashboard() {
                     <div className="mt-4 flex justify-end">
                       <Link
                         href={`/candidate/report/${s.id}`}
-                        className="inline-flex items-center gap-1.5 text-sm text-purple-400 hover:text-purple-300 transition-colors"
+                        className="inline-flex items-center gap-1.5 text-sm text-saffron hover:text-saffron-light transition-colors"
                       >
                         View Full Report
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -513,7 +513,7 @@ export default async function CandidateDashboard() {
           </p>
           <Link
             href="/practice"
-            className="mt-6 inline-flex items-center gap-2 rounded-lg bg-purple-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-purple-500 transition-colors"
+            className="mt-6 inline-flex items-center gap-2 rounded-lg bg-saffron px-5 py-2.5 text-sm font-medium text-white hover:bg-saffron transition-colors"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />

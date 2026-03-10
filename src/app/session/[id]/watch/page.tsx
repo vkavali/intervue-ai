@@ -68,7 +68,7 @@ const aiLevelLabels: Record<number, { label: string; color: string }> = {
   0: { label: "L0 No AI", color: "text-red-400" },
   1: { label: "L1 Hint", color: "text-yellow-400" },
   2: { label: "L2 Scaffold", color: "text-blue-400" },
-  3: { label: "L3 Guide", color: "text-purple-400" },
+  3: { label: "L3 Guide", color: "text-saffron" },
   4: { label: "L4 Copilot", color: "text-green-400" },
 };
 
@@ -92,7 +92,7 @@ const confidenceColors: Record<string, string> = {
 
 const stageBadgeColors: Record<string, string> = {
   understanding: "text-blue-300 bg-blue-950 border-blue-800",
-  planning: "text-purple-300 bg-purple-950 border-purple-800",
+  planning: "text-saffron-light bg-editor-surface border-saffron-dark",
   implementing: "text-green-300 bg-green-950 border-green-800",
   debugging: "text-orange-300 bg-orange-950 border-orange-800",
   optimizing: "text-cyan-300 bg-cyan-950 border-cyan-800",
@@ -247,7 +247,7 @@ export default function WatchSessionPage() {
     return (
       <div className="flex h-screen items-center justify-center bg-gray-950">
         <div className="text-center">
-          <svg className="animate-spin h-8 w-8 text-purple-500 mx-auto mb-4" viewBox="0 0 24 24">
+          <svg className="animate-spin h-8 w-8 text-saffron mx-auto mb-4" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
@@ -375,7 +375,7 @@ export default function WatchSessionPage() {
                 onClick={() => setActiveTab('interactions')}
                 className={`flex-1 px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-colors ${
                   activeTab === 'interactions'
-                    ? 'text-purple-400 border-b-2 border-purple-500 bg-gray-900/80'
+                    ? 'text-saffron border-b-2 border-saffron bg-gray-900/80'
                     : 'text-gray-500 hover:text-gray-300'
                 }`}
               >
@@ -385,7 +385,7 @@ export default function WatchSessionPage() {
                 onClick={() => setActiveTab('thinking')}
                 className={`flex-1 px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-colors ${
                   activeTab === 'thinking'
-                    ? 'text-purple-400 border-b-2 border-purple-500 bg-gray-900/80'
+                    ? 'text-saffron border-b-2 border-saffron bg-gray-900/80'
                     : 'text-gray-500 hover:text-gray-300'
                 }`}
               >
@@ -395,7 +395,7 @@ export default function WatchSessionPage() {
                 onClick={() => setActiveTab('chat')}
                 className={`flex-1 px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-colors ${
                   activeTab === 'chat'
-                    ? 'text-purple-400 border-b-2 border-purple-500 bg-gray-900/80'
+                    ? 'text-saffron border-b-2 border-saffron bg-gray-900/80'
                     : 'text-gray-500 hover:text-gray-300'
                 }`}
               >
@@ -471,11 +471,11 @@ export default function WatchSessionPage() {
                 <button
                   onClick={fetchThinkingAnalysis}
                   disabled={thinkingLoading}
-                  className="w-full rounded-lg border border-purple-800 bg-purple-950 px-4 py-2 text-xs font-medium text-purple-300 hover:bg-purple-900 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+                  className="w-full rounded-lg border border-saffron-dark bg-editor-surface px-4 py-2 text-xs font-medium text-saffron-light hover:bg-saffron-dark disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
                 >
                   {thinkingLoading ? (
                     <>
-                      <svg className="animate-spin h-3 w-3 text-purple-400" viewBox="0 0 24 24">
+                      <svg className="animate-spin h-3 w-3 text-saffron" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                       </svg>
@@ -501,7 +501,7 @@ export default function WatchSessionPage() {
                   <div className="space-y-3">
                     {/* Overall Approach */}
                     <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
-                      <h4 className="text-[10px] font-semibold uppercase tracking-wider text-purple-400 mb-1.5">
+                      <h4 className="text-[10px] font-semibold uppercase tracking-wider text-saffron mb-1.5">
                         Overall Approach
                       </h4>
                       <p className="text-xs text-gray-300 leading-relaxed">
@@ -528,7 +528,7 @@ export default function WatchSessionPage() {
                     {/* Thinking Patterns */}
                     {thinkingAnalysis.thinkingPatterns.length > 0 && (
                       <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
-                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-purple-400 mb-2">
+                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-saffron mb-2">
                           Thinking Patterns
                         </h4>
                         <div className="space-y-2">
@@ -588,7 +588,7 @@ export default function WatchSessionPage() {
 
                     {/* AI Usage Pattern */}
                     <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
-                      <h4 className="text-[10px] font-semibold uppercase tracking-wider text-purple-400 mb-1.5">
+                      <h4 className="text-[10px] font-semibold uppercase tracking-wider text-saffron mb-1.5">
                         AI Usage Pattern
                       </h4>
                       <p className="text-xs text-gray-300 leading-relaxed">
@@ -599,13 +599,13 @@ export default function WatchSessionPage() {
                     {/* Suggested Follow-Up Questions */}
                     {thinkingAnalysis.suggestedFollowUp.length > 0 && (
                       <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
-                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-purple-400 mb-2">
+                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-saffron mb-2">
                           Suggested Follow-Up Questions
                         </h4>
                         <ol className="space-y-1.5">
                           {thinkingAnalysis.suggestedFollowUp.map((q, i) => (
                             <li key={i} className="flex items-start gap-2">
-                              <span className="text-[10px] text-purple-500 font-mono font-bold shrink-0 mt-px">
+                              <span className="text-[10px] text-saffron font-mono font-bold shrink-0 mt-px">
                                 {i + 1}.
                               </span>
                               <span className="text-xs text-gray-300">{q}</span>
@@ -665,7 +665,7 @@ export default function WatchSessionPage() {
                   value={noteContent}
                   onChange={(e) => setNoteContent(e.target.value)}
                   placeholder="Add a note..."
-                  className="flex-1 rounded border border-gray-700 bg-gray-800 px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none"
+                  className="flex-1 rounded border border-gray-700 bg-gray-800 px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:border-saffron focus:outline-none"
                 />
                 <button
                   type="submit"
@@ -695,14 +695,14 @@ export default function WatchSessionPage() {
                 max="4"
                 value={showReasonInput ? pendingLevel : aiSliderValue}
                 onChange={(e) => handleSliderChange(parseInt(e.target.value))}
-                className="w-full accent-purple-500"
+                className="w-full accent-saffron"
               />
               <div className="flex justify-between mt-1">
                 {[0, 1, 2, 3, 4].map((level) => (
                   <span
                     key={level}
                     className={`text-[10px] ${
-                      level === aiSliderValue ? "text-purple-400 font-medium" : "text-gray-600"
+                      level === aiSliderValue ? "text-saffron font-medium" : "text-gray-600"
                     }`}
                   >
                     {aiLevelLabels[level]?.label}
@@ -718,13 +718,13 @@ export default function WatchSessionPage() {
                   value={aiSliderReason}
                   onChange={(e) => setAiSliderReason(e.target.value)}
                   placeholder="Reason for change..."
-                  className="w-48 rounded border border-gray-700 bg-gray-800 px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none"
+                  className="w-48 rounded border border-gray-700 bg-gray-800 px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:border-saffron focus:outline-none"
                   autoFocus
                 />
                 <button
                   onClick={submitAiLevelChange}
                   disabled={!aiSliderReason.trim() || updatingAiLevel}
-                  className="rounded bg-purple-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-purple-500 disabled:opacity-50 transition-colors"
+                  className="rounded bg-saffron px-3 py-1.5 text-xs font-medium text-white hover:bg-saffron disabled:opacity-50 transition-colors"
                 >
                   {updatingAiLevel ? "..." : "Apply"}
                 </button>

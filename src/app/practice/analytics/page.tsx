@@ -178,7 +178,7 @@ export default function PracticeAnalyticsPage() {
             <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
-            <span className="text-sm text-purple-400">Analytics</span>
+            <span className="text-sm text-saffron">Analytics</span>
           </div>
           <h1 className="text-3xl font-bold text-white">Practice Analytics</h1>
           <p className="mt-2 text-gray-400">Track your progress, identify weaknesses, and get personalized recommendations.</p>
@@ -193,7 +193,7 @@ export default function PracticeAnalyticsPage() {
             </svg>
             <h2 className="text-lg font-semibold text-white mb-2">No Data Yet</h2>
             <p className="text-gray-500 mb-6">Start practicing problems to see your analytics and get personalized recommendations.</p>
-            <Link href="/practice" className="rounded-lg bg-purple-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-purple-500 transition-colors">
+            <Link href="/practice" className="rounded-lg bg-saffron px-6 py-2.5 text-sm font-medium text-white hover:bg-saffron transition-colors">
               Start Practicing
             </Link>
           </div>
@@ -204,7 +204,7 @@ export default function PracticeAnalyticsPage() {
               {[
                 { label: "Problems Attempted", value: profile.overallStats.totalAttempted, color: "text-blue-400" },
                 { label: "Completed", value: profile.overallStats.totalCompleted, color: "text-green-400" },
-                { label: "Completion Rate", value: `${Math.round(profile.overallStats.overallCompletionRate * 100)}%`, color: "text-purple-400" },
+                { label: "Completion Rate", value: `${Math.round(profile.overallStats.overallCompletionRate * 100)}%`, color: "text-saffron" },
                 { label: "Avg Time", value: formatTime(profile.overallStats.avgTimeSeconds), color: "text-yellow-400" },
               ].map((stat) => (
                 <div key={stat.label} className="rounded-xl border border-gray-800 bg-gray-900/50 p-5">
@@ -324,13 +324,13 @@ export default function PracticeAnalyticsPage() {
               ) : recommendations.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {recommendations.map((rec) => (
-                    <div key={rec.id} className="rounded-lg border border-gray-700 bg-gray-800/50 p-4 hover:border-purple-500/30 transition-colors">
+                    <div key={rec.id} className="rounded-lg border border-gray-700 bg-gray-800/50 p-4 hover:border-saffron/30 transition-colors">
                       <div className="flex items-center justify-between mb-2">
                         <span className={`text-xs font-medium ${diffColors[rec.difficulty] || "text-gray-400"}`}>
                           {rec.difficulty}
                         </span>
                         {rec.pattern && (
-                          <span className="text-[10px] text-purple-400 bg-purple-500/10 border border-purple-500/20 rounded px-1.5 py-0.5">
+                          <span className="text-[10px] text-saffron bg-saffron/10 border border-saffron/20 rounded px-1.5 py-0.5">
                             {rec.pattern}
                           </span>
                         )}
@@ -339,13 +339,13 @@ export default function PracticeAnalyticsPage() {
                       <div className="space-y-1 mb-3">
                         {rec.reasons.map((reason, i) => (
                           <p key={i} className="text-[11px] text-gray-500 flex items-start gap-1">
-                            <span className="text-purple-400 mt-px shrink-0">*</span> {reason}
+                            <span className="text-saffron mt-px shrink-0">*</span> {reason}
                           </p>
                         ))}
                       </div>
                       <Link
                         href={`/practice/${rec.id}?aiLevel=2`}
-                        className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-purple-600 px-3 py-2 text-xs font-medium text-white hover:bg-purple-500 transition-colors"
+                        className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-saffron px-3 py-2 text-xs font-medium text-white hover:bg-saffron transition-colors"
                       >
                         Start Practice
                       </Link>

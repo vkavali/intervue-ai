@@ -5,7 +5,7 @@ import { useSession, signOut } from "next-auth/react"
 import NotificationBell from "./NotificationBell"
 
 const roleBadgeColors: Record<string, string> = {
-  COMPANY_ADMIN: "bg-purple-600",
+  COMPANY_ADMIN: "bg-saffron",
   INTERVIEWER: "bg-blue-600",
   CANDIDATE: "bg-green-600",
 }

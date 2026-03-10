@@ -6,7 +6,7 @@ import { StageDropdown } from "./StageDropdown";
 
 const stageColors: Record<string, string> = {
   SCREENING: "bg-blue-500/10 text-blue-400 border-blue-500/30",
-  TECHNICAL: "bg-purple-500/10 text-purple-400 border-purple-500/30",
+  TECHNICAL: "bg-saffron/10 text-saffron border-saffron/30",
   SYSTEM_DESIGN: "bg-orange-500/10 text-orange-400 border-orange-500/30",
   BEHAVIORAL: "bg-teal-500/10 text-teal-400 border-teal-500/30",
   FINAL: "bg-indigo-500/10 text-indigo-400 border-indigo-500/30",
@@ -122,7 +122,7 @@ export default async function CandidatePipelinePage() {
         </div>
         <Link
           href="/dashboard/candidates/add"
-          className="inline-flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-purple-500"
+          className="inline-flex items-center gap-2 rounded-lg bg-saffron px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-saffron"
         >
           <svg
             className="h-4 w-4"
@@ -193,7 +193,7 @@ export default async function CandidatePipelinePage() {
           </p>
           <Link
             href="/dashboard/candidates/add"
-            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-500"
+            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white hover:bg-saffron"
           >
             <svg
               className="h-4 w-4"
@@ -223,9 +223,9 @@ export default async function CandidatePipelinePage() {
                 {/* Role Header */}
                 <div className="flex items-center justify-between border-b border-gray-800 px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-500/10">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-saffron/10">
                       <svg
-                        className="h-5 w-5 text-purple-400"
+                        className="h-5 w-5 text-saffron"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -251,7 +251,7 @@ export default async function CandidatePipelinePage() {
                   </div>
                   <Link
                     href={`/dashboard/candidates/compare?role=${encodeURIComponent(group.role)}`}
-                    className="inline-flex items-center gap-2 rounded-lg border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 text-xs font-medium text-purple-400 transition-colors hover:bg-purple-500/20 hover:text-purple-300"
+                    className="inline-flex items-center gap-2 rounded-lg border border-saffron/30 bg-saffron/10 px-3 py-1.5 text-xs font-medium text-saffron transition-colors hover:bg-saffron/20 hover:text-saffron-light"
                   >
                     <svg
                       className="h-3.5 w-3.5"
@@ -394,7 +394,7 @@ export default async function CandidatePipelinePage() {
                               <div className="flex items-center justify-end gap-3">
                                 <Link
                                   href={`/dashboard/sessions?candidate=${entry.candidate.id}`}
-                                  className="text-xs font-medium text-purple-400 transition-colors hover:text-purple-300"
+                                  className="text-xs font-medium text-saffron transition-colors hover:text-saffron-light"
                                 >
                                   View Details
                                 </Link>

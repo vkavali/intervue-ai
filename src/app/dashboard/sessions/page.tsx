@@ -215,7 +215,7 @@ export default async function SessionsPage() {
                       )}
                       <Link
                         href={`/dashboard/sessions/${s.id}`}
-                        className="text-xs font-medium text-purple-400 hover:text-purple-300 transition-colors"
+                        className="text-xs font-medium text-saffron hover:text-saffron-light transition-colors"
                       >
                         Details &rarr;
                       </Link>

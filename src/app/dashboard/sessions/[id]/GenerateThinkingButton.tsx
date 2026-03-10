@@ -45,7 +45,7 @@ export function GenerateThinkingButton({
       <button
         onClick={handleGenerate}
         disabled={loading}
-        className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-sm font-semibold text-white transition-all hover:from-purple-500 hover:to-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-saffron to-india-green px-4 py-2 text-sm font-semibold text-white transition-all hover:from-saffron-light hover:to-india-green-light disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {loading ? (
           <>

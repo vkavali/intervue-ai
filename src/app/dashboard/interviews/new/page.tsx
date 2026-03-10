@@ -512,9 +512,9 @@ export default function NewInterviewPage() {
       )}
 
       {/* AI Generate Interview Section */}
-      <div className="mb-8 rounded-xl border border-purple-500/30 bg-gradient-to-br from-purple-500/5 to-blue-500/5 p-6">
+      <div className="mb-8 rounded-xl border border-saffron/30 bg-gradient-to-br from-saffron/5 to-india-green/5 p-6">
         <div className="flex items-center gap-3 mb-4">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-saffron to-india-green">
             <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
@@ -533,7 +533,7 @@ export default function NewInterviewPage() {
           rows={4}
           value={aiInterviewPrompt}
           onChange={(e) => setAiInterviewPrompt(e.target.value)}
-          className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-3 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 resize-none"
+          className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-3 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron resize-none"
           placeholder="e.g., I need a 45-minute React interview for a senior developer. Focus on hooks, performance optimization, and state management. Test problem-solving ability and code quality. Use moderate AI assistance."
         />
 
@@ -543,7 +543,7 @@ export default function NewInterviewPage() {
             disabled={aiInterviewLoading || !aiInterviewPrompt.trim() || !role.trim() || !interviewType || !industry}
             onClick={handleGenerateInterview}
             title={!role.trim() || !interviewType || !industry ? "Fill in Role, Interview Type, and Industry first" : ""}
-            className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:from-purple-500 hover:to-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-saffron to-india-green px-5 py-2.5 text-sm font-semibold text-white transition-all hover:from-saffron-light hover:to-india-green-light disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {aiInterviewLoading ? (
               <>
@@ -619,7 +619,7 @@ export default function NewInterviewPage() {
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                 placeholder="e.g., Senior Backend Engineer - System Design"
               />
             </div>
@@ -633,7 +633,7 @@ export default function NewInterviewPage() {
                 required
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                 placeholder="e.g., Backend Engineer"
               />
             </div>
@@ -645,7 +645,7 @@ export default function NewInterviewPage() {
               <select
                 value={seniority}
                 onChange={(e) => setSeniority(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               >
                 <option value="JUNIOR">Junior</option>
                 <option value="MID">Mid</option>
@@ -662,7 +662,7 @@ export default function NewInterviewPage() {
               <select
                 value={roundType}
                 onChange={(e) => setRoundType(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               >
                 <option value="Technical">Technical</option>
                 <option value="System Design">System Design</option>
@@ -683,7 +683,7 @@ export default function NewInterviewPage() {
               <select
                 value={industry}
                 onChange={(e) => setIndustry(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               >
                 <option value="">Select industry (optional)</option>
                 {INDUSTRIES.map((ind) => (
@@ -701,7 +701,7 @@ export default function NewInterviewPage() {
               <select
                 value={interviewType}
                 onChange={(e) => setInterviewType(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               >
                 {INTERVIEW_TYPES.map((t) => (
                   <option key={t.value} value={t.value}>
@@ -734,7 +734,7 @@ export default function NewInterviewPage() {
                   onChange={(e) =>
                     setDefaultAiLevel(parseInt(e.target.value))
                   }
-                  className="w-full accent-purple-500"
+                  className="w-full accent-saffron"
                 />
                 <div className="flex justify-between text-xs text-gray-500">
                   <span>L0</span>
@@ -743,7 +743,7 @@ export default function NewInterviewPage() {
                   <span>L3</span>
                   <span>L4</span>
                 </div>
-                <p className="text-sm font-medium text-purple-400">
+                <p className="text-sm font-medium text-saffron">
                   {aiLevelLabels[defaultAiLevel]}
                 </p>
               </div>
@@ -775,7 +775,7 @@ export default function NewInterviewPage() {
               <button
                 type="button"
                 onClick={() => setShowAiQuestionsModal(true)}
-                className="inline-flex items-center gap-2 rounded-lg border border-purple-500/30 bg-purple-500/10 px-4 py-2 text-sm font-medium text-purple-400 transition-colors hover:bg-purple-500/20 hover:text-purple-300"
+                className="inline-flex items-center gap-2 rounded-lg border border-saffron/30 bg-saffron/10 px-4 py-2 text-sm font-medium text-saffron transition-colors hover:bg-saffron/20 hover:text-saffron-light"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -797,9 +797,9 @@ export default function NewInterviewPage() {
 
           {/* AI Generate Questions Modal */}
           {showAiQuestionsModal && (
-            <div className="rounded-xl border border-purple-500/30 bg-purple-500/5 p-6">
+            <div className="rounded-xl border border-saffron/30 bg-saffron/5 p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-semibold text-purple-400">
+                <h3 className="text-sm font-semibold text-saffron">
                   AI Question Generator
                 </h3>
                 <button
@@ -828,7 +828,7 @@ export default function NewInterviewPage() {
                         Math.min(Math.max(parseInt(e.target.value) || 1, 1), 10)
                       )
                     }
-                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                   />
                 </div>
 
@@ -839,7 +839,7 @@ export default function NewInterviewPage() {
                   <select
                     value={aiQDifficulty}
                     onChange={(e) => setAiQDifficulty(e.target.value)}
-                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                   >
                     <option value="MIX">Mix of difficulties</option>
                     <option value="EASY">Easy</option>
@@ -856,7 +856,7 @@ export default function NewInterviewPage() {
                     type="text"
                     value={aiQTopics}
                     onChange={(e) => setAiQTopics(e.target.value)}
-                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                     placeholder="e.g., arrays, trees, dynamic programming"
                   />
                 </div>
@@ -880,7 +880,7 @@ export default function NewInterviewPage() {
                   type="button"
                   disabled={aiQuestionsLoading || !role || !roundType}
                   onClick={handleGenerateQuestions}
-                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-5 py-2 text-sm font-semibold text-white transition-all hover:from-purple-500 hover:to-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-saffron to-india-green px-5 py-2 text-sm font-semibold text-white transition-all hover:from-saffron-light hover:to-india-green-light disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {aiQuestionsLoading ? (
                     <>
@@ -1161,7 +1161,7 @@ export default function NewInterviewPage() {
                     onChange={(e) =>
                       updateQuestion(question.id, { title: e.target.value })
                     }
-                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                     placeholder="e.g., Two Sum"
                   />
                 </div>
@@ -1179,7 +1179,7 @@ export default function NewInterviewPage() {
                         description: e.target.value,
                       })
                     }
-                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 resize-none"
+                    className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron resize-none"
                     placeholder="Describe the problem statement..."
                   />
                 </div>
@@ -1197,7 +1197,7 @@ export default function NewInterviewPage() {
                           constraints: e.target.value,
                         })
                       }
-                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 resize-none"
+                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron resize-none"
                       placeholder="e.g., 1 <= nums.length <= 10^4"
                     />
                   </div>
@@ -1214,7 +1214,7 @@ export default function NewInterviewPage() {
                           examples: e.target.value,
                         })
                       }
-                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 resize-none"
+                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron resize-none"
                       placeholder="Input: nums = [2,7,11,15], target = 9&#10;Output: [0,1]"
                     />
                   </div>
@@ -1232,7 +1232,7 @@ export default function NewInterviewPage() {
                           difficulty: e.target.value,
                         })
                       }
-                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                     >
                       <option value="EASY">Easy</option>
                       <option value="MEDIUM">Medium</option>
@@ -1251,7 +1251,7 @@ export default function NewInterviewPage() {
                           aiLevel: parseInt(e.target.value),
                         })
                       }
-                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                     >
                       <option value={-1}>Use template default (L{defaultAiLevel})</option>
                       <option value={0}>L0 - No AI</option>
@@ -1277,7 +1277,7 @@ export default function NewInterviewPage() {
                           timeLimit: parseInt(e.target.value) || 30,
                         })
                       }
-                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
                     />
                   </div>
                 </div>
@@ -1288,7 +1288,7 @@ export default function NewInterviewPage() {
           <button
             type="button"
             onClick={addQuestion}
-            className="w-full rounded-xl border-2 border-dashed border-gray-700 py-6 text-sm font-medium text-gray-400 transition-colors hover:border-purple-500/50 hover:text-purple-400"
+            className="w-full rounded-xl border-2 border-dashed border-gray-700 py-6 text-sm font-medium text-gray-400 transition-colors hover:border-saffron/50 hover:text-saffron"
           >
             + Add Another Question
           </button>
@@ -1306,7 +1306,7 @@ export default function NewInterviewPage() {
           <button
             type="submit"
             disabled={loading}
-            className="rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-2.5 text-sm font-semibold text-white transition-all hover:from-purple-500 hover:to-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-lg bg-gradient-to-r from-saffron to-india-green px-6 py-2.5 text-sm font-semibold text-white transition-all hover:from-saffron-light hover:to-india-green-light disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? (
               <span className="flex items-center gap-2">

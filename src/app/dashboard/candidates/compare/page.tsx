@@ -156,7 +156,7 @@ function CandidateCompareContent() {
         <div className="flex items-center gap-2 text-sm text-gray-400 mb-4">
           <Link
             href="/dashboard/candidates"
-            className="hover:text-purple-400 transition-colors"
+            className="hover:text-saffron transition-colors"
           >
             Candidates
           </Link>
@@ -185,7 +185,7 @@ function CandidateCompareContent() {
               {role ? (
                 <>
                   AI-powered comparison for{" "}
-                  <span className="text-purple-400 font-medium">{role}</span>
+                  <span className="text-saffron font-medium">{role}</span>
                 </>
               ) : (
                 "Select a role to compare candidates"
@@ -195,7 +195,7 @@ function CandidateCompareContent() {
           <button
             onClick={generateComparison}
             disabled={loading || !role}
-            className="inline-flex items-center gap-2 rounded-lg bg-purple-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 rounded-lg bg-saffron px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-saffron disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? (
               <>
@@ -314,7 +314,7 @@ function CandidateCompareContent() {
           <p className="mt-2 text-sm text-gray-400 max-w-md mx-auto">
             Click &quot;Generate AI Comparison&quot; to analyze all candidates
             for the{" "}
-            <span className="text-purple-400 font-medium">{role}</span> role.
+            <span className="text-saffron font-medium">{role}</span> role.
             The AI will evaluate their interview performance and provide a hiring
             recommendation.
           </p>
@@ -325,9 +325,9 @@ function CandidateCompareContent() {
       {analysis && (
         <div className="space-y-8">
           {/* Recommendation Banner */}
-          <div className="rounded-xl border border-purple-500/30 bg-gradient-to-r from-purple-500/5 to-indigo-500/5 p-8">
+          <div className="rounded-xl border border-saffron/30 bg-gradient-to-r from-saffron/5 to-india-green/5 p-8">
             <div className="flex items-start gap-5">
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-purple-500/20 text-2xl font-bold text-purple-400">
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-saffron/20 text-2xl font-bold text-saffron">
                 {analysis.recommendation.selectedCandidate
                   .split(" ")
                   .map((n) => n[0])
@@ -381,7 +381,7 @@ function CandidateCompareContent() {
                   key={candidate.candidateId}
                   className={`rounded-xl border bg-gray-900 p-6 transition-colors ${
                     candidate.rank === 1
-                      ? "border-purple-500/40 ring-1 ring-purple-500/20"
+                      ? "border-saffron/40 ring-1 ring-saffron/20"
                       : "border-gray-800 hover:border-gray-700"
                   }`}
                 >
@@ -535,7 +535,7 @@ function CandidateCompareContent() {
             <div className="rounded-xl border border-gray-800 bg-gray-900 p-6">
               <div className="flex items-center gap-2 mb-3">
                 <svg
-                  className="h-5 w-5 text-purple-400"
+                  className="h-5 w-5 text-saffron"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"

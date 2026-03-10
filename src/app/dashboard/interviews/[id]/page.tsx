@@ -8,7 +8,7 @@ const aiLevelLabels: Record<number, { label: string; color: string }> = {
   0: { label: "L0 No AI", color: "text-red-400 bg-red-500/10 border-red-500/30" },
   1: { label: "L1 Hint", color: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30" },
   2: { label: "L2 Scaffold", color: "text-blue-400 bg-blue-500/10 border-blue-500/30" },
-  3: { label: "L3 Guide", color: "text-purple-400 bg-purple-500/10 border-purple-500/30" },
+  3: { label: "L3 Guide", color: "text-saffron bg-saffron/10 border-saffron/30" },
   4: { label: "L4 Copilot", color: "text-green-400 bg-green-500/10 border-green-500/30" },
 };
 
@@ -73,7 +73,7 @@ export default async function InterviewDetailPage({
 
         <Link
           href={`/dashboard/interviews/${template.id}/session`}
-          className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:from-purple-500 hover:to-blue-500"
+          className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-saffron to-india-green px-5 py-2.5 text-sm font-semibold text-white transition-all hover:from-saffron-light hover:to-india-green-light"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />

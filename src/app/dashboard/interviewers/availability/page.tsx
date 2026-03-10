@@ -214,7 +214,7 @@ export default function AvailabilityPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
-            <button onClick={thisWeek} className="rounded px-2 py-0.5 text-xs text-purple-400 hover:bg-purple-500/10">
+            <button onClick={thisWeek} className="rounded px-2 py-0.5 text-xs text-saffron hover:bg-saffron/10">
               This Week
             </button>
             <button onClick={nextWeek} className="rounded p-1 text-gray-400 hover:bg-gray-800 hover:text-white">
@@ -233,11 +233,11 @@ export default function AvailabilityPage() {
               <div
                 key={key}
                 className={`rounded-lg border p-2 text-center ${
-                  isToday ? "border-purple-500/50 bg-purple-500/10" : "border-gray-800 bg-gray-950/30"
+                  isToday ? "border-saffron/50 bg-saffron/10" : "border-gray-800 bg-gray-950/30"
                 }`}
               >
                 <p className="text-[10px] font-medium uppercase text-gray-500">{DAY_NAMES[d.getDay()]}</p>
-                <p className={`text-sm font-semibold ${isToday ? "text-purple-400" : "text-white"}`}>
+                <p className={`text-sm font-semibold ${isToday ? "text-saffron" : "text-white"}`}>
                   {d.getDate()}
                 </p>
                 {daySlots.length > 0 ? (
@@ -278,7 +278,7 @@ export default function AvailabilityPage() {
                 required
                 value={formDate}
                 onChange={(e) => setFormDate(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               />
             </div>
             <div>
@@ -291,7 +291,7 @@ export default function AvailabilityPage() {
                 required
                 value={formStartTime}
                 onChange={(e) => setFormStartTime(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               />
             </div>
             <div>
@@ -304,7 +304,7 @@ export default function AvailabilityPage() {
                 required
                 value={formEndTime}
                 onChange={(e) => setFormEndTime(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               />
             </div>
           </div>
@@ -316,7 +316,7 @@ export default function AvailabilityPage() {
                 type="checkbox"
                 checked={recurring}
                 onChange={(e) => setRecurring(e.target.checked)}
-                className="rounded border-gray-600 bg-gray-800 text-purple-600 focus:ring-purple-500"
+                className="rounded border-gray-600 bg-gray-800 text-saffron focus:ring-saffron"
               />
               Repeat weekly
             </label>
@@ -329,7 +329,7 @@ export default function AvailabilityPage() {
                   max={12}
                   value={recurringWeeks}
                   onChange={(e) => setRecurringWeeks(e.target.value)}
-                  className="w-16 rounded-lg border border-gray-700 bg-gray-800 px-2 py-1 text-sm text-white focus:border-purple-500 focus:outline-none"
+                  className="w-16 rounded-lg border border-gray-700 bg-gray-800 px-2 py-1 text-sm text-white focus:border-saffron focus:outline-none"
                 />
                 <span className="text-sm text-gray-400">weeks</span>
               </div>
@@ -351,7 +351,7 @@ export default function AvailabilityPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="inline-flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-saffron-dark focus:outline-none focus:ring-2 focus:ring-saffron focus:ring-offset-2 focus:ring-offset-gray-900 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {submitting ? (
               <>
@@ -379,7 +379,7 @@ export default function AvailabilityPage() {
             type="date"
             value={filterDate}
             onChange={(e) => setFilterDate(e.target.value)}
-            className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+            className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
           />
         </div>
         {interviewers.length > 0 && (
@@ -391,7 +391,7 @@ export default function AvailabilityPage() {
               id="filter-interviewer"
               value={filterInterviewer}
               onChange={(e) => setFilterInterviewer(e.target.value)}
-              className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+              className="rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
             >
               <option value="">All Interviewers</option>
               {interviewers.map((i) => (
@@ -418,7 +418,7 @@ export default function AvailabilityPage() {
           <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400">
             Availability Slots
             {!loading && (
-              <span className="ml-2 text-purple-400">({slots.length})</span>
+              <span className="ml-2 text-saffron">({slots.length})</span>
             )}
           </h2>
         </div>
@@ -426,7 +426,7 @@ export default function AvailabilityPage() {
         {loading ? (
           <div className="flex items-center justify-center px-6 py-16">
             <div className="flex flex-col items-center gap-3">
-              <svg className="h-8 w-8 animate-spin text-purple-500" viewBox="0 0 24 24" fill="none">
+              <svg className="h-8 w-8 animate-spin text-saffron" viewBox="0 0 24 24" fill="none">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
@@ -442,7 +442,7 @@ export default function AvailabilityPage() {
             <p className="mt-2 text-sm text-red-400">{error}</p>
             <button
               onClick={fetchSlots}
-              className="mt-4 inline-flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-purple-700"
+              className="mt-4 inline-flex items-center gap-2 rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-saffron-dark"
             >
               Try Again
             </button>

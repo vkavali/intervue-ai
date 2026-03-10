@@ -27,7 +27,7 @@ const logActionLabels: Record<string, { label: string; color: string }> = {
   LEAVE: { label: "Left", color: "text-red-400" },
   CODE_CHANGE: { label: "Code Change", color: "text-blue-400" },
   LANGUAGE_CHANGE: { label: "Language Change", color: "text-cyan-400" },
-  AI_REQUEST: { label: "AI Request", color: "text-purple-400" },
+  AI_REQUEST: { label: "AI Request", color: "text-saffron" },
   NOTE_ADDED: { label: "Note Added", color: "text-yellow-400" },
   OVERRIDE: { label: "AI Override", color: "text-orange-400" },
   VIOLATION: { label: "Violation", color: "text-red-500" },
@@ -160,7 +160,7 @@ export default async function SessionDetailPage({
           <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">
             AI Level
           </h3>
-          <p className="text-sm font-medium text-purple-400">
+          <p className="text-sm font-medium text-saffron">
             {aiLevelLabels[s.aiLevel] || `L${s.aiLevel}`}
           </p>
           <p className="text-xs text-gray-400 mt-1">
@@ -340,7 +340,7 @@ export default async function SessionDetailPage({
                 </div>
                 <div className="h-1.5 w-full rounded-full bg-gray-700">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-purple-500 to-blue-500"
+                    className="h-full rounded-full bg-gradient-to-r from-saffron-light to-india-green-light"
                     style={{ width: `${(score.value / 10) * 100}%` }}
                   />
                 </div>
@@ -399,7 +399,7 @@ export default async function SessionDetailPage({
               <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
                 Problem Solving Stage
               </h4>
-              <p className="text-sm font-medium text-purple-400 capitalize">
+              <p className="text-sm font-medium text-saffron capitalize">
                 {s.thinkingAnalysis.problemSolvingStage}
               </p>
             </div>
@@ -606,7 +606,7 @@ export default async function SessionDetailPage({
                 className="rounded-lg border border-gray-700 bg-gray-800 p-4"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-medium text-purple-400">
+                  <span className="text-xs font-medium text-saffron">
                     {aiLevelLabels[interaction.aiLevel] || `L${interaction.aiLevel}`}
                   </span>
                   <span className="text-xs text-gray-500">
@@ -653,7 +653,7 @@ export default async function SessionDetailPage({
                   <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
-                  <span className="text-sm font-medium text-purple-400">
+                  <span className="text-sm font-medium text-saffron">
                     {aiLevelLabels[override.newLevel]}
                   </span>
                 </div>
@@ -718,7 +718,7 @@ export default async function SessionDetailPage({
                 </span>
                 <h4 className="text-sm font-medium text-white">{q.title}</h4>
                 <span className="text-xs text-gray-500">{q.difficulty}</span>
-                <span className="text-xs text-purple-400">
+                <span className="text-xs text-saffron">
                   {aiLevelLabels[q.aiLevel] || `L${q.aiLevel}`}
                 </span>
                 <span className="text-xs text-gray-500">{q.timeLimit} min</span>

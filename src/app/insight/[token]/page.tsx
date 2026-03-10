@@ -93,7 +93,7 @@ export default async function InsightPage({
   return (
     <div className="min-h-screen bg-gray-950 relative overflow-hidden">
       {/* Background decorations */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-b from-purple-600/8 to-transparent rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-b from-saffron/8 to-transparent rounded-full blur-3xl pointer-events-none" />
       <div className="absolute top-60 right-0 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-40 left-0 w-[300px] h-[300px] bg-cyan-600/5 rounded-full blur-3xl pointer-events-none" />
 
@@ -109,10 +109,10 @@ export default async function InsightPage({
       <div className="relative max-w-3xl mx-auto px-4 py-16 space-y-10">
         {/* Header */}
         <div className="text-center space-y-4">
-          <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-4 py-1.5 text-sm text-purple-300 backdrop-blur-sm">
+          <div className="inline-flex items-center gap-2 rounded-full border border-saffron/30 bg-saffron/10 px-4 py-1.5 text-sm text-saffron-light backdrop-blur-sm">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-saffron opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-saffron" />
             </span>
             Verified Interview Report
           </div>
@@ -123,7 +123,7 @@ export default async function InsightPage({
             <span className="inline-flex items-center rounded-full border border-blue-500/20 bg-blue-500/10 px-3 py-1 text-sm text-blue-400">
               {role}
             </span>
-            <span className="inline-flex items-center rounded-full border border-purple-500/20 bg-purple-500/10 px-3 py-1 text-sm text-purple-400">
+            <span className="inline-flex items-center rounded-full border border-saffron/20 bg-saffron/10 px-3 py-1 text-sm text-saffron">
               {seniority}
             </span>
           </div>
@@ -132,7 +132,7 @@ export default async function InsightPage({
         {/* Score Overview */}
         <div className="flex justify-center">
           <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 to-transparent rounded-full blur-2xl scale-150" />
+            <div className="absolute inset-0 bg-gradient-to-b from-saffron/10 to-transparent rounded-full blur-2xl scale-150" />
             <ScoreRing score={audit.overallScore} size={180} strokeWidth={12} />
           </div>
         </div>
@@ -204,7 +204,7 @@ export default async function InsightPage({
         <div className="text-center">
           <Link
             href={`/talent/${candidateId}`}
-            className="inline-flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300 transition-colors group"
+            className="inline-flex items-center gap-2 text-sm text-saffron hover:text-saffron-light transition-colors group"
           >
             View full talent profile
             <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -214,9 +214,9 @@ export default async function InsightPage({
         </div>
 
         {/* CTA Footer */}
-        <div className="relative rounded-2xl border border-purple-500/20 bg-gradient-to-r from-purple-900/30 via-gray-900/80 to-blue-900/30 p-10 text-center shadow-2xl shadow-purple-900/10 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-blue-500/5" />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-gradient-to-b from-purple-600/10 to-transparent rounded-full blur-3xl" />
+        <div className="relative rounded-2xl border border-saffron/20 bg-gradient-to-r from-saffron-dark/30 via-gray-900/80 to-india-green-dark/30 p-10 text-center shadow-2xl shadow-saffron-dark/10 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-saffron/5 via-transparent to-india-green/5" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-gradient-to-b from-saffron/10 to-transparent rounded-full blur-3xl" />
           <div className="relative">
             <span className="text-2xl font-bold tracking-tight text-white">
               Intervue<span className="text-blue-400">.AI</span>
@@ -226,7 +226,7 @@ export default async function InsightPage({
             </p>
             <Link
               href="/auth/signup?role=candidate"
-              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-3.5 text-base font-semibold text-white shadow-2xl shadow-purple-600/25 transition-all hover:shadow-purple-600/40 hover:scale-[1.02] active:scale-[0.98]"
+              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-saffron to-india-green px-8 py-3.5 text-base font-semibold text-white shadow-2xl shadow-saffron/25 transition-all hover:shadow-saffron/40 hover:scale-[1.02] active:scale-[0.98]"
             >
               Get Your Own Report
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

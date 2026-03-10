@@ -64,7 +64,7 @@ export function ReassignInterviewerForm({
         <select
           value={selectedId}
           onChange={(e) => setSelectedId(e.target.value)}
-          className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white focus:border-purple-500 focus:outline-none"
+          className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-white focus:border-saffron focus:outline-none"
         >
           <option value="">Select an interviewer</option>
           {interviewers.map((i) => (
@@ -77,7 +77,7 @@ export function ReassignInterviewerForm({
       <button
         type="submit"
         disabled={loading || !selectedId || selectedId === currentInterviewerId}
-        className="rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white hover:bg-saffron disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {loading ? "Saving..." : "Reassign"}
       </button>

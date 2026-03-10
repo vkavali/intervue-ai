@@ -54,7 +54,7 @@ export default async function CandidateInterviewsPage() {
           </p>
           <Link
             href="/practice"
-            className="mt-6 inline-flex items-center gap-2 rounded-lg bg-purple-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-purple-500 transition-colors"
+            className="mt-6 inline-flex items-center gap-2 rounded-lg bg-saffron px-5 py-2.5 text-sm font-medium text-white hover:bg-saffron transition-colors"
           >
             Start Practicing
           </Link>
@@ -144,7 +144,7 @@ export default async function CandidateInterviewsPage() {
                     {interview.status === "COMPLETED" && interview.auditReport && (
                       <Link
                         href={`/candidate/report/${interview.id}`}
-                        className="rounded-lg border border-purple-500/30 bg-purple-500/10 px-3 py-2 text-xs font-medium text-purple-400 hover:bg-purple-500/20 transition-colors"
+                        className="rounded-lg border border-saffron/30 bg-saffron/10 px-3 py-2 text-xs font-medium text-saffron hover:bg-saffron/20 transition-colors"
                       >
                         View Report
                       </Link>

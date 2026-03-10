@@ -44,7 +44,7 @@ export default function ParticleField() {
         const seed2 = Math.sin(i * 269.5 + 183.3) * 43758.5453;
         const left = ((seed1 - Math.floor(seed1)) * 96 + 2);
         const top = ((seed2 - Math.floor(seed2)) * 96 + 2);
-        const colors = ["bg-purple-400", "bg-blue-400", "bg-cyan-400", "bg-violet-400", "bg-indigo-400"];
+        const colors = ["bg-saffron", "bg-blue-400", "bg-cyan-400", "bg-violet-400", "bg-indigo-400"];
         return (
           <div
             key={i}

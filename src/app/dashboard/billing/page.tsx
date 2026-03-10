@@ -203,16 +203,16 @@ export default function BillingPage() {
               key={planKey}
               className={`relative rounded-xl border bg-gray-900 p-6 transition-all ${
                 current
-                  ? "border-purple-500 ring-1 ring-purple-500/20"
+                  ? "border-saffron ring-1 ring-saffron/20"
                   : recommended
-                  ? "border-purple-500/50"
+                  ? "border-saffron/50"
                   : "border-gray-800 hover:border-gray-700"
               }`}
             >
               {/* Recommended badge */}
               {recommended && !current && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="inline-flex items-center rounded-full bg-purple-600 px-3 py-1 text-xs font-semibold text-white">
+                  <span className="inline-flex items-center rounded-full bg-saffron px-3 py-1 text-xs font-semibold text-white">
                     Recommended
                   </span>
                 </div>
@@ -247,7 +247,7 @@ export default function BillingPage() {
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-3">
                     <svg
-                      className="mt-0.5 h-5 w-5 shrink-0 text-purple-400"
+                      className="mt-0.5 h-5 w-5 shrink-0 text-saffron"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -276,7 +276,7 @@ export default function BillingPage() {
                 <button
                   onClick={() => handleCheckout(planKey)}
                   disabled={loading === planKey || !plan.priceId}
-                  className="w-full rounded-lg bg-purple-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full rounded-lg bg-saffron px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-saffron disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading === planKey ? (
                     <span className="inline-flex items-center gap-2">

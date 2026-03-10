@@ -125,10 +125,10 @@ export default async function SettingsPage() {
         {/* Right: Plan & Usage */}
         <div className="space-y-6">
           {/* Current Plan */}
-          <div className="rounded-xl border border-purple-500/20 bg-gradient-to-b from-purple-600/5 to-gray-900/50 p-6">
+          <div className="rounded-xl border border-saffron/20 bg-gradient-to-b from-saffron/5 to-gray-900/50 p-6">
             <h2 className="text-lg font-semibold text-white mb-3">Current Plan</h2>
             <div className="flex items-center gap-2 mb-4">
-              <span className="text-2xl font-bold text-purple-400">{user.company.plan}</span>
+              <span className="text-2xl font-bold text-saffron">{user.company.plan}</span>
             </div>
             <div className="space-y-2 text-sm text-gray-400">
               {user.company.plan === "STARTER" && (
@@ -162,7 +162,7 @@ export default async function SettingsPage() {
             </div>
             <a
               href="/dashboard/billing"
-              className="mt-4 block w-full rounded-lg bg-purple-600 px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-500 transition-colors"
+              className="mt-4 block w-full rounded-lg bg-saffron px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-saffron transition-colors"
             >
               Manage Billing
             </a>
@@ -179,7 +179,7 @@ export default async function SettingsPage() {
                 </div>
                 <div className="h-1.5 rounded-full bg-gray-800">
                   <div
-                    className="h-1.5 rounded-full bg-purple-500"
+                    className="h-1.5 rounded-full bg-saffron"
                     style={{ width: `${Math.min(teamSize * 10, 100)}%` }}
                   />
                 </div>

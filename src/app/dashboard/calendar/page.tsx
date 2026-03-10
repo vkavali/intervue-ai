@@ -267,7 +267,7 @@ export default function CalendarPage() {
         </div>
         <div className="rounded-xl border border-gray-800 bg-gray-900 p-4">
           <p className="text-xs font-medium uppercase tracking-wider text-gray-400">Upcoming This Week</p>
-          <p className="mt-1 text-2xl font-bold text-purple-400">{upcomingThisWeek}</p>
+          <p className="mt-1 text-2xl font-bold text-saffron">{upcomingThisWeek}</p>
         </div>
       </div>
 
@@ -284,7 +284,7 @@ export default function CalendarPage() {
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
           </button>
         </div>
-        <button onClick={goToday} className="rounded-lg border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 text-sm font-medium text-purple-400 hover:bg-purple-500/20">
+        <button onClick={goToday} className="rounded-lg border border-saffron/30 bg-saffron/10 px-3 py-1.5 text-sm font-medium text-saffron hover:bg-saffron/20">
           Today
         </button>
       </div>
@@ -301,7 +301,7 @@ export default function CalendarPage() {
 
             {loading ? (
               <div className="flex items-center justify-center py-32">
-                <svg className="h-8 w-8 animate-spin text-purple-500" viewBox="0 0 24 24" fill="none">
+                <svg className="h-8 w-8 animate-spin text-saffron" viewBox="0 0 24 24" fill="none">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                 </svg>
@@ -323,12 +323,12 @@ export default function CalendarPage() {
                       onClick={() => isValidDay && setSelectedDay(dayNum === selectedDay ? null : dayNum)}
                       className={`min-h-[110px] border-b border-r border-gray-800/50 p-1.5 transition-colors ${
                         isValidDay ? "cursor-pointer hover:bg-gray-800/50" : "bg-gray-950/30"
-                      } ${isSelected ? "bg-purple-500/10 ring-1 ring-inset ring-purple-500/40" : ""}`}
+                      } ${isSelected ? "bg-saffron/10 ring-1 ring-inset ring-saffron/40" : ""}`}
                     >
                       {isValidDay && (
                         <>
                           <div className={`mb-1 flex h-7 w-7 items-center justify-center rounded-full text-sm font-medium ${
-                            isToday ? "bg-purple-600 text-white" : isSelected ? "text-purple-300" : "text-gray-300"
+                            isToday ? "bg-saffron text-white" : isSelected ? "text-saffron-light" : "text-gray-300"
                           }`}>
                             {dayNum}
                           </div>
@@ -412,7 +412,7 @@ export default function CalendarPage() {
                           </div>
                         </div>
                         <div className="mt-2 flex gap-2">
-                          <Link href={`/dashboard/sessions/${s.id}`} className="rounded bg-purple-500/10 px-2 py-1 text-xs text-purple-400 hover:bg-purple-500/20">
+                          <Link href={`/dashboard/sessions/${s.id}`} className="rounded bg-saffron/10 px-2 py-1 text-xs text-saffron hover:bg-saffron/20">
                             View
                           </Link>
                           {s.status === "PENDING" && (
@@ -526,7 +526,7 @@ export default function CalendarPage() {
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => { setRescheduleSession(s); setRescheduleDate(""); }}
-                    className="rounded bg-purple-500/10 px-3 py-1.5 text-xs font-medium text-purple-400 hover:bg-purple-500/20"
+                    className="rounded bg-saffron/10 px-3 py-1.5 text-xs font-medium text-saffron hover:bg-saffron/20"
                   >
                     Schedule
                   </button>
@@ -574,7 +574,7 @@ export default function CalendarPage() {
               <button
                 onClick={handleReschedule}
                 disabled={!rescheduleDate || savingReschedule}
-                className="rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-700 disabled:opacity-50"
+                className="rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white hover:bg-saffron-dark disabled:opacity-50"
               >
                 {savingReschedule ? "Saving..." : "Confirm"}
               </button>

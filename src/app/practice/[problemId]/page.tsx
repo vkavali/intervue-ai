@@ -93,7 +93,7 @@ const aiLevelLabels: Record<number, { label: string; color: string }> = {
   0: { label: "L0 No AI", color: "text-red-400" },
   1: { label: "L1 Hint", color: "text-yellow-400" },
   2: { label: "L2 Scaffold", color: "text-blue-400" },
-  3: { label: "L3 Guide", color: "text-purple-400" },
+  3: { label: "L3 Guide", color: "text-india-green-light" },
   4: { label: "L4 Copilot", color: "text-green-400" },
 };
 
@@ -931,7 +931,7 @@ function PracticeProblemContent() {
           </p>
           <Link
             href="/practice"
-            className="rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-500 transition-colors"
+            className="rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white hover:bg-saffron-light transition-colors"
           >
             Back to Practice
           </Link>
@@ -974,7 +974,7 @@ function PracticeProblemContent() {
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            className="rounded border border-editor-border bg-editor-surface px-2 py-1 text-xs text-gray-300 focus:border-purple-500 focus:outline-none"
+            className="rounded border border-editor-border bg-editor-surface px-2 py-1 text-xs text-gray-300 focus:border-saffron focus:outline-none"
           >
             {languages.map((lang) => (
               <option key={lang.value} value={lang.value}>
@@ -987,7 +987,7 @@ function PracticeProblemContent() {
           <select
             value={aiLevel}
             onChange={(e) => setAiLevel(parseInt(e.target.value, 10))}
-            className={`rounded border border-editor-border bg-editor-surface px-2 py-1 text-xs focus:border-purple-500 focus:outline-none ${
+            className={`rounded border border-editor-border bg-editor-surface px-2 py-1 text-xs focus:border-saffron focus:outline-none ${
               aiLevelLabels[aiLevel]?.color || "text-gray-300"
             }`}
           >
@@ -1035,7 +1035,7 @@ function PracticeProblemContent() {
                   <label className="text-[10px] uppercase text-gray-500 font-semibold">Tab Size</label>
                   <div className="flex gap-1 mt-1">
                     {[2, 4].map(s => (
-                      <button key={s} onClick={() => setTabSize(s)} className={`px-2 py-0.5 rounded text-xs ${tabSize === s ? "bg-purple-600 text-white" : "bg-editor-hover text-gray-400 hover:text-white"}`}>
+                      <button key={s} onClick={() => setTabSize(s)} className={`px-2 py-0.5 rounded text-xs ${tabSize === s ? "bg-saffron text-white" : "bg-editor-hover text-gray-400 hover:text-white"}`}>
                         {s}
                       </button>
                     ))}
@@ -1045,7 +1045,7 @@ function PracticeProblemContent() {
                   <label className="text-[10px] uppercase text-gray-500 font-semibold">Word Wrap</label>
                   <div className="flex gap-1 mt-1">
                     {(["on", "off"] as const).map(w => (
-                      <button key={w} onClick={() => setWordWrap(w)} className={`px-2 py-0.5 rounded text-xs capitalize ${wordWrap === w ? "bg-purple-600 text-white" : "bg-editor-hover text-gray-400 hover:text-white"}`}>
+                      <button key={w} onClick={() => setWordWrap(w)} className={`px-2 py-0.5 rounded text-xs capitalize ${wordWrap === w ? "bg-saffron text-white" : "bg-editor-hover text-gray-400 hover:text-white"}`}>
                         {w}
                       </button>
                     ))}
@@ -1167,7 +1167,7 @@ function PracticeProblemContent() {
             <button
               onClick={() => setProblemTab("description")}
               className={`px-2.5 py-1.5 text-xs font-medium rounded-t transition-colors whitespace-nowrap ${
-                problemTab === "description" ? "bg-editor-surface text-white border-b-2 border-purple-500" : "text-gray-500 hover:text-gray-300"
+                problemTab === "description" ? "bg-editor-surface text-white border-b-2 border-saffron" : "text-gray-500 hover:text-gray-300"
               }`}
             >
               Description
@@ -1223,7 +1223,7 @@ function PracticeProblemContent() {
                   <span className={`text-xs font-medium ${difficultyColors[problem.difficulty]}`}>
                     {problem.difficulty}
                   </span>
-                  <span className="rounded bg-purple-500/10 border border-purple-500/30 px-2 py-0.5 text-xs text-purple-400">
+                  <span className="rounded bg-saffron/10 border border-saffron/30 px-2 py-0.5 text-xs text-saffron">
                     Practice
                   </span>
                   {problem.pattern && (
@@ -1252,8 +1252,8 @@ function PracticeProblemContent() {
                   </div>
 
                   {enriching && (
-                    <div className="rounded-lg border border-purple-500/20 bg-purple-500/5 p-3">
-                      <div className="flex items-center gap-2 text-xs text-purple-400">
+                    <div className="rounded-lg border border-saffron/20 bg-saffron/5 p-3">
+                      <div className="flex items-center gap-2 text-xs text-saffron">
                         <svg className="animate-spin w-3.5 h-3.5" viewBox="0 0 24 24">
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
@@ -1310,7 +1310,7 @@ function PracticeProblemContent() {
                 <p className="text-xs text-gray-500">Hints go from vague to specific. Reveal only what you need.</p>
 
                 {loadingHints ? (
-                  <div className="flex items-center gap-2 text-xs text-purple-400 py-4">
+                  <div className="flex items-center gap-2 text-xs text-saffron py-4">
                     <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
@@ -1354,7 +1354,7 @@ function PracticeProblemContent() {
                     })}
                   </div>
                 ) : (
-                  <button onClick={fetchHints} className="text-xs text-purple-400 hover:text-purple-300 underline">
+                  <button onClick={fetchHints} className="text-xs text-saffron hover:text-saffron-light underline">
                     Load hints
                   </button>
                 )}
@@ -1383,7 +1383,7 @@ function PracticeProblemContent() {
                     <p className="text-sm text-yellow-400">{editorialError}</p>
                     <button
                       onClick={() => { setEditorialError(""); fetchEditorial(); }}
-                      className="mt-2 text-xs text-purple-400 hover:text-purple-300 underline"
+                      className="mt-2 text-xs text-saffron hover:text-saffron-light underline"
                     >
                       Try again
                     </button>
@@ -1394,7 +1394,7 @@ function PracticeProblemContent() {
                       { title: "Intuition", content: editorial.intuition, color: "border-green-500/20 bg-green-500/5" },
                       { title: "Brute Force", content: editorial.bruteForce, color: "border-orange-500/20 bg-orange-500/5" },
                       { title: "Optimized Solution", content: editorial.optimized, color: "border-blue-500/20 bg-blue-500/5" },
-                      { title: "Complexity", content: editorial.complexity, color: "border-purple-500/20 bg-purple-500/5" },
+                      { title: "Complexity", content: editorial.complexity, color: "border-saffron/20 bg-saffron/5" },
                       { title: "Code Walkthrough", content: editorial.codeWalkthrough, color: "border-cyan-500/20 bg-cyan-500/5" },
                     ].map((section) => (
                       <div key={section.title} className={`rounded-lg border ${section.color} p-3`}>
@@ -1499,7 +1499,7 @@ function PracticeProblemContent() {
                                 setCode(sub.code);
                                 setLanguage(sub.language);
                               }}
-                              className="text-[10px] text-purple-400 hover:text-purple-300 font-medium"
+                              className="text-[10px] text-saffron hover:text-saffron-light font-medium"
                             >
                               Load Code
                             </button>
@@ -1562,7 +1562,7 @@ function PracticeProblemContent() {
 
         {/* Left Panel Resize Handle */}
         <div
-          className="w-1 cursor-col-resize bg-editor-surface hover:bg-purple-500/50 active:bg-purple-500 transition-colors shrink-0"
+          className="w-1 cursor-col-resize bg-editor-surface hover:bg-saffron/50 active:bg-saffron transition-colors shrink-0"
           onMouseDown={(e) => {
             e.preventDefault();
             isDraggingLeft.current = true;
@@ -1601,7 +1601,7 @@ function PracticeProblemContent() {
           {/* Bottom Panel Resize Handle */}
           {bottomPanelOpen && (
             <div
-              className="h-1 cursor-row-resize bg-editor-surface hover:bg-purple-500/50 active:bg-purple-500 transition-colors shrink-0"
+              className="h-1 cursor-row-resize bg-editor-surface hover:bg-saffron/50 active:bg-saffron transition-colors shrink-0"
               onMouseDown={(e) => {
                 e.preventDefault();
                 isDraggingBottom.current = true;
@@ -1718,7 +1718,7 @@ function PracticeProblemContent() {
                             value={customInput}
                             onChange={(e) => setCustomInput(e.target.value)}
                             placeholder="e.g. twoSum([2,7,11], 9)"
-                            className="w-full rounded bg-editor-panel border border-editor-border px-2 py-1.5 text-xs font-mono text-gray-300 focus:border-purple-500 focus:outline-none"
+                            className="w-full rounded bg-editor-panel border border-editor-border px-2 py-1.5 text-xs font-mono text-gray-300 focus:border-saffron focus:outline-none"
                           />
                         </div>
                         <div>
@@ -1728,7 +1728,7 @@ function PracticeProblemContent() {
                             value={customExpected}
                             onChange={(e) => setCustomExpected(e.target.value)}
                             placeholder='e.g. [0,1]'
-                            className="w-full rounded bg-editor-panel border border-editor-border px-2 py-1.5 text-xs font-mono text-gray-300 focus:border-purple-500 focus:outline-none"
+                            className="w-full rounded bg-editor-panel border border-editor-border px-2 py-1.5 text-xs font-mono text-gray-300 focus:border-saffron focus:outline-none"
                           />
                         </div>
                         <div className="flex gap-2 justify-end">
@@ -1894,7 +1894,7 @@ function PracticeProblemContent() {
                     {!coaching && !loadingCoaching && (
                       <button
                         onClick={fetchCoaching}
-                        className="w-full mt-2 rounded-lg border border-purple-500/30 bg-purple-500/10 px-4 py-2.5 text-sm font-medium text-purple-400 hover:bg-purple-500/20 transition-colors flex items-center justify-center gap-2"
+                        className="w-full mt-2 rounded-lg border border-saffron/30 bg-saffron/10 px-4 py-2.5 text-sm font-medium text-saffron hover:bg-saffron/20 transition-colors flex items-center justify-center gap-2"
                       >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -1903,7 +1903,7 @@ function PracticeProblemContent() {
                       </button>
                     )}
                     {loadingCoaching && (
-                      <div className="flex items-center justify-center gap-2 text-xs text-purple-400 py-3">
+                      <div className="flex items-center justify-center gap-2 text-xs text-saffron py-3">
                         <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
@@ -1913,9 +1913,9 @@ function PracticeProblemContent() {
                     )}
                     {coaching && (
                       <div className="mt-3 space-y-3">
-                        <div className="rounded-lg border border-purple-500/20 bg-purple-500/5 p-3">
+                        <div className="rounded-lg border border-saffron/20 bg-saffron/5 p-3">
                           <div className="flex items-center justify-between mb-2">
-                            <h4 className="text-xs font-bold uppercase text-purple-400">AI Coach</h4>
+                            <h4 className="text-xs font-bold uppercase text-saffron">AI Coach</h4>
                             <span className={`text-sm font-bold ${coaching.score >= 80 ? "text-green-400" : coaching.score >= 60 ? "text-yellow-400" : "text-red-400"}`}>
                               {coaching.score}/100
                             </span>
@@ -2079,7 +2079,7 @@ function PracticeProblemContent() {
                 <div
                   className={`max-w-[90%] rounded-lg px-3 py-2 text-sm ${
                     msg.role === "user"
-                      ? "bg-purple-600/20 text-purple-200 border border-purple-500/30"
+                      ? "bg-saffron/20 text-saffron-light border border-saffron/30"
                       : "bg-editor-surface text-gray-300 border border-editor-border"
                   }`}
                 >
@@ -2117,12 +2117,12 @@ function PracticeProblemContent() {
                     ? "AI disabled -- change level above"
                     : "Ask the AI for help..."
                 }
-                className="flex-1 rounded-lg border border-editor-border bg-editor-surface px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 disabled:opacity-50"
+                className="flex-1 rounded-lg border border-editor-border bg-editor-surface px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron disabled:opacity-50"
               />
               <button
                 type="submit"
                 disabled={aiLevel === 0 || aiLoading || !aiPrompt.trim()}
-                className="rounded-lg bg-purple-600 px-3 py-2 text-sm font-medium text-white hover:bg-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="rounded-lg bg-saffron px-3 py-2 text-sm font-medium text-white hover:bg-saffron-light disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

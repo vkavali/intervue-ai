@@ -78,7 +78,7 @@ const aiLevelLabels: Record<number, { label: string; color: string }> = {
   0: { label: "L0 No AI", color: "text-red-400" },
   1: { label: "L1 Hint", color: "text-yellow-400" },
   2: { label: "L2 Scaffold", color: "text-blue-400" },
-  3: { label: "L3 Guide", color: "text-purple-400" },
+  3: { label: "L3 Guide", color: "text-india-green-light" },
   4: { label: "L4 Copilot", color: "text-green-400" },
 };
 
@@ -557,7 +557,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
                 onClick={() => setCurrentQuestionIndex(idx)}
                 className={`flex h-7 w-7 items-center justify-center rounded text-xs font-medium transition-colors ${
                   idx === currentQuestionIndex
-                    ? "bg-purple-600 text-white"
+                    ? "bg-saffron text-white"
                     : "bg-editor-surface text-gray-400 hover:bg-editor-hover"
                 }`}
               >
@@ -572,7 +572,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
               value={isSql ? "sql" : language}
               onChange={(e) => setLanguage(e.target.value)}
               disabled={isSql}
-              className="rounded border border-editor-border bg-editor-surface px-2 py-1 text-xs text-gray-300 focus:border-purple-500 focus:outline-none"
+              className="rounded border border-editor-border bg-editor-surface px-2 py-1 text-xs text-gray-300 focus:border-saffron focus:outline-none"
             >
               {isSql ? (
                 <option value="sql">SQL</option>
@@ -774,7 +774,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
                 disabled={timeExpired}
-                className="w-full h-full rounded-lg border border-editor-border bg-editor-surface px-4 py-3 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none resize-none font-mono text-sm"
+                className="w-full h-full rounded-lg border border-editor-border bg-editor-surface px-4 py-3 text-white placeholder-gray-500 focus:border-saffron focus:outline-none resize-none font-mono text-sm"
                 placeholder={isSystemDesign ? "Describe your system design here..." : "Type your answer here..."}
               />
             </div>
@@ -1052,7 +1052,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
               <div key={idx} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div className={`max-w-[90%] rounded-lg px-3 py-2 text-sm ${
                   msg.role === "user"
-                    ? "bg-purple-600/20 text-purple-200 border border-purple-500/30"
+                    ? "bg-saffron/20 text-saffron-light border border-saffron/30"
                     : "bg-editor-surface text-gray-300 border border-editor-border"
                 }`}>
                   <p className="whitespace-pre-wrap">{msg.content}</p>
@@ -1089,12 +1089,12 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
                     : currentAiLevel === 0 ? "AI disabled for this question"
                     : "Ask the AI for help..."
                 }
-                className="flex-1 rounded-lg border border-editor-border bg-editor-surface px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 disabled:opacity-50"
+                className="flex-1 rounded-lg border border-editor-border bg-editor-surface px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron disabled:opacity-50"
               />
               <button
                 type="submit"
                 disabled={currentAiLevel === 0 || aiLoading || !aiPrompt.trim() || timeExpired}
-                className="rounded-lg bg-purple-600 px-3 py-2 text-sm font-medium text-white hover:bg-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="rounded-lg bg-saffron px-3 py-2 text-sm font-medium text-white hover:bg-saffron-light disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

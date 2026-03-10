@@ -288,7 +288,7 @@ export default async function AnalyticsPage() {
               <p className="text-sm text-gray-400">Total Interviews</p>
               <p className="mt-2 text-3xl font-bold text-white">{totalInterviews}</p>
             </div>
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 text-white">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-saffron to-india-green text-white">
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
               </svg>
@@ -364,7 +364,7 @@ export default async function AnalyticsPage() {
                 </span>
                 <div className="flex-1 h-8 bg-gray-800 rounded-lg overflow-hidden relative">
                   <div
-                    className="h-full bg-gradient-to-r from-purple-600 to-blue-500 rounded-lg transition-all duration-500"
+                    className="h-full bg-gradient-to-r from-saffron to-india-green rounded-lg transition-all duration-500"
                     style={{
                       width: `${maxScoreCount > 0 ? (range.count / maxScoreCount) * 100 : 0}%`,
                       minWidth: range.count > 0 ? '2rem' : '0',
@@ -424,7 +424,7 @@ export default async function AnalyticsPage() {
                 'from-gray-600 to-gray-500',
                 'from-blue-700 to-blue-500',
                 'from-indigo-600 to-indigo-400',
-                'from-purple-600 to-purple-400',
+                'from-saffron to-india-green',
                 'from-violet-600 to-fuchsia-500',
               ]
               return (
@@ -467,7 +467,7 @@ export default async function AnalyticsPage() {
                   className="flex items-center justify-between rounded-lg border border-gray-800 bg-gray-800/50 px-4 py-3"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-purple-500/20 text-xs font-bold text-purple-400">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-saffron/20 text-xs font-bold text-saffron">
                       {i + 1}
                     </span>
                     <div>
@@ -591,7 +591,7 @@ export default async function AnalyticsPage() {
                     style={{ height: '110px' }}
                   >
                     <div
-                      className="absolute bottom-0 w-full rounded-t-lg bg-gradient-to-t from-purple-600 to-blue-500 transition-all duration-500"
+                      className="absolute bottom-0 w-full rounded-t-lg bg-gradient-to-t from-saffron to-india-green transition-all duration-500"
                       style={{
                         height: `${heightPercent}%`,
                         minHeight: m.count > 0 ? '6px' : '0',
@@ -669,7 +669,7 @@ export default async function AnalyticsPage() {
               >
                 <p className="text-sm text-gray-300">
                   Candidates with{' '}
-                  <span className="font-semibold text-purple-400">L3+ AI</span> scored{' '}
+                  <span className="font-semibold text-saffron">L3+ AI</span> scored{' '}
                   <span
                     className={`font-bold ${
                       parseFloat(aiDiffPercent) >= 0 ? 'text-green-400' : 'text-red-400'
@@ -702,7 +702,7 @@ export default async function AnalyticsPage() {
               </div>
             </div>
             <div className="mt-4 flex items-center justify-center gap-2">
-              <div className="h-2 w-2 rounded-full bg-purple-500 animate-pulse" />
+              <div className="h-2 w-2 rounded-full bg-saffron animate-pulse" />
               <p className="text-xs text-gray-400">
                 {sessionsWithAi} of {sessions.length} sessions used AI assist
               </p>

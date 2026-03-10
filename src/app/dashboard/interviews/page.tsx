@@ -8,14 +8,14 @@ const aiLevelLabels: Record<number, { label: string; color: string }> = {
   0: { label: "L0 No AI", color: "text-red-400" },
   1: { label: "L1 Hint", color: "text-yellow-400" },
   2: { label: "L2 Scaffold", color: "text-blue-400" },
-  3: { label: "L3 Guide", color: "text-purple-400" },
+  3: { label: "L3 Guide", color: "text-saffron" },
   4: { label: "L4 Copilot", color: "text-green-400" },
 };
 
 const seniorityColors: Record<string, string> = {
   JUNIOR: "bg-green-500/10 text-green-400 border-green-500/30",
   MID: "bg-blue-500/10 text-blue-400 border-blue-500/30",
-  SENIOR: "bg-purple-500/10 text-purple-400 border-purple-500/30",
+  SENIOR: "bg-saffron/10 text-saffron border-saffron/30",
   STAFF: "bg-orange-500/10 text-orange-400 border-orange-500/30",
   PRINCIPAL: "bg-red-500/10 text-red-400 border-red-500/30",
 };
@@ -62,7 +62,7 @@ export default async function InterviewsPage() {
         </div>
         <Link
           href="/dashboard/interviews/new"
-          className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition-all hover:from-purple-500 hover:to-blue-500"
+          className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-saffron to-india-green px-4 py-2.5 text-sm font-semibold text-white transition-all hover:from-saffron-light hover:to-india-green-light"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -85,7 +85,7 @@ export default async function InterviewsPage() {
           </p>
           <Link
             href="/dashboard/interviews/new"
-            className="mt-6 inline-flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-500"
+            className="mt-6 inline-flex items-center gap-2 rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white hover:bg-saffron"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -127,7 +127,7 @@ export default async function InterviewsPage() {
                   <td className="px-6 py-4">
                     <Link
                       href={`/dashboard/interviews/${template.id}`}
-                      className="text-sm font-medium text-white hover:text-purple-400 transition-colors"
+                      className="text-sm font-medium text-white hover:text-saffron transition-colors"
                     >
                       {template.title}
                     </Link>
@@ -163,7 +163,7 @@ export default async function InterviewsPage() {
                   <td className="px-6 py-4 text-right">
                     <Link
                       href={`/dashboard/interviews/${template.id}`}
-                      className="text-sm text-purple-400 hover:text-purple-300 transition-colors"
+                      className="text-sm text-saffron hover:text-saffron-light transition-colors"
                     >
                       View &rarr;
                     </Link>

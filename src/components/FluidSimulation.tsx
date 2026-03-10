@@ -9,11 +9,11 @@ import { useEffect, useRef, useCallback } from "react";
 
 // Brand palette for splats
 const SPLAT_COLORS = [
-  [0.45, 0.15, 0.95], // purple
+  [0.45, 0.15, 0.95], // saffron
   [0.23, 0.51, 0.96], // blue
   [0.02, 0.71, 0.83], // cyan
   [0.55, 0.25, 0.92], // violet
-  [0.65, 0.18, 0.85], // magenta-purple
+  [0.65, 0.18, 0.85], // magenta-saffron
   [0.10, 0.55, 0.90], // royal blue
 ];
 

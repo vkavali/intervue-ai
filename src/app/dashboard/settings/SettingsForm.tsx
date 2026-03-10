@@ -56,7 +56,7 @@ export function SettingsForm({
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+            className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
           />
         </div>
         <div>
@@ -68,7 +68,7 @@ export function SettingsForm({
             value={logo}
             onChange={(e) => setLogo(e.target.value)}
             placeholder="https://example.com/logo.png"
-            className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+            className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
           />
         </div>
 
@@ -81,7 +81,7 @@ export function SettingsForm({
         <button
           type="submit"
           disabled={saving}
-          className="rounded-lg bg-purple-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-purple-500 disabled:opacity-50 transition-colors"
+          className="rounded-lg bg-saffron px-5 py-2.5 text-sm font-medium text-white hover:bg-saffron disabled:opacity-50 transition-colors"
         >
           {saving ? "Saving..." : "Save Changes"}
         </button>

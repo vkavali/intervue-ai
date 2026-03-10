@@ -17,7 +17,7 @@ const STAGES = [
 
 const stageColors: Record<string, string> = {
   SCREENING: "text-blue-400",
-  TECHNICAL: "text-purple-400",
+  TECHNICAL: "text-saffron",
   SYSTEM_DESIGN: "text-orange-400",
   BEHAVIORAL: "text-teal-400",
   FINAL: "text-indigo-400",

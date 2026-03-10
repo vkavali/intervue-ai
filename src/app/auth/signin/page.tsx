@@ -35,7 +35,7 @@ function SignInForm() {
   if (status === "loading" || status === "authenticated") {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-950">
-        <div className="animate-spin h-8 w-8 border-2 border-purple-500 border-t-transparent rounded-full" />
+        <div className="animate-spin h-8 w-8 border-2 border-saffron border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -96,7 +96,7 @@ function SignInForm() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-colors"
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors"
                 placeholder="you@example.com"
               />
             </div>
@@ -114,7 +114,7 @@ function SignInForm() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-colors"
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors"
                 placeholder="Enter your password"
               />
             </div>
@@ -122,7 +122,7 @@ function SignInForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 py-2.5 text-sm font-semibold text-white transition-all hover:from-purple-500 hover:to-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full rounded-lg bg-gradient-to-r from-saffron to-india-green py-2.5 text-sm font-semibold text-white transition-all hover:from-saffron-light hover:to-india-green-light disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -142,7 +142,7 @@ function SignInForm() {
             Don&apos;t have an account?{" "}
             <Link
               href="/auth/signup"
-              className="font-medium text-purple-400 hover:text-purple-300 transition-colors"
+              className="font-medium text-saffron hover:text-saffron-light transition-colors"
             >
               Sign up
             </Link>

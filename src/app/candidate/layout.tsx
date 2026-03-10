@@ -76,12 +76,12 @@ export default async function CandidateLayout({
         </nav>
 
         <div className="border-t border-gray-800 p-4">
-          <div className="rounded-lg bg-gradient-to-r from-purple-600/10 to-blue-600/10 border border-purple-500/20 p-4">
-            <p className="text-xs font-medium text-purple-300">Practice Mode</p>
+          <div className="rounded-lg bg-gradient-to-r from-saffron/10 to-india-green/10 border border-saffron/20 p-4">
+            <p className="text-xs font-medium text-saffron-light">Practice Mode</p>
             <p className="mt-1 text-sm text-gray-400">Sharpen your skills</p>
             <Link
               href="/practice"
-              className="mt-2 block text-xs text-purple-400 hover:text-purple-300"
+              className="mt-2 block text-xs text-saffron hover:text-saffron-light"
             >
               Start practicing &rarr;
             </Link>

@@ -83,7 +83,7 @@ export default async function DashboardPage() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
         </svg>
       ),
-      color: "from-purple-500 to-purple-600",
+      color: "from-saffron to-india-green",
     },
     {
       label: "Active Sessions",
@@ -202,9 +202,9 @@ export default async function DashboardPage() {
           <>
             <Link
               href="/dashboard/interviews/new"
-              className="flex items-center gap-4 rounded-xl border border-gray-800 bg-gray-900 p-6 transition-all hover:border-purple-500/50 hover:bg-gray-900/80 group"
+              className="flex items-center gap-4 rounded-xl border border-gray-800 bg-gray-900 p-6 transition-all hover:border-saffron/50 hover:bg-gray-900/80 group"
             >
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-purple-500/10 text-purple-400 group-hover:bg-purple-500/20">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-saffron/10 text-saffron group-hover:bg-saffron/20">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
                 </svg>
@@ -296,7 +296,7 @@ export default async function DashboardPage() {
             {isAdmin && (
               <Link
                 href="/dashboard/interviews/new"
-                className="mt-4 inline-flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-500"
+                className="mt-4 inline-flex items-center gap-2 rounded-lg bg-saffron px-4 py-2 text-sm font-medium text-white hover:bg-saffron"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

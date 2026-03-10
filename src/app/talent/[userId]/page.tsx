@@ -107,7 +107,7 @@ export default async function TalentProfilePage({
   return (
     <div className="min-h-screen bg-gray-950 relative overflow-hidden">
       {/* Background decorations */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-b from-purple-600/8 to-transparent rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-b from-saffron/8 to-transparent rounded-full blur-3xl pointer-events-none" />
       <div className="absolute top-80 right-0 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-20 left-0 w-[300px] h-[300px] bg-cyan-600/5 rounded-full blur-3xl pointer-events-none" />
 
@@ -153,13 +153,13 @@ export default async function TalentProfilePage({
             <p className="text-3xl font-bold text-blue-400">{sessions.length}</p>
             <p className="mt-1 text-xs text-gray-500 uppercase tracking-wider">Verified Interviews</p>
           </div>
-          <div className="group rounded-2xl border border-purple-500/20 bg-gradient-to-b from-purple-500/10 to-gray-900/80 p-6 text-center shadow-xl transition-all hover:scale-[1.03] hover:-translate-y-1 hover:shadow-purple-900/20">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mx-auto mb-3 shadow-lg shadow-purple-500/20">
+          <div className="group rounded-2xl border border-saffron/20 bg-gradient-to-b from-saffron/10 to-gray-900/80 p-6 text-center shadow-xl transition-all hover:scale-[1.03] hover:-translate-y-1 hover:shadow-saffron-dark/20">
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-saffron to-india-green flex items-center justify-center mx-auto mb-3 shadow-lg shadow-saffron/20">
               <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
               </svg>
             </div>
-            <p className="text-3xl font-bold text-purple-400">{avgScore > 0 ? avgScore.toFixed(1) : "--"}</p>
+            <p className="text-3xl font-bold text-saffron">{avgScore > 0 ? avgScore.toFixed(1) : "--"}</p>
             <p className="mt-1 text-xs text-gray-500 uppercase tracking-wider">Average Score</p>
           </div>
           <div className="group rounded-2xl border border-green-500/20 bg-gradient-to-b from-green-500/10 to-gray-900/80 p-6 text-center shadow-xl transition-all hover:scale-[1.03] hover:-translate-y-1 hover:shadow-green-900/20">
@@ -177,7 +177,7 @@ export default async function TalentProfilePage({
         {sessions.length > 0 ? (
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
+              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-saffron-light to-india-green-light flex items-center justify-center shadow-lg shadow-saffron/20">
                 <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                 </svg>
@@ -207,7 +207,7 @@ export default async function TalentProfilePage({
                   >
                     <div className="flex items-center justify-between mb-4">
                       <div>
-                        <p className="text-base font-semibold text-white group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-blue-400 group-hover:bg-clip-text group-hover:text-transparent transition-all">
+                        <p className="text-base font-semibold text-white group-hover:bg-gradient-to-r group-hover:from-saffron group-hover:to-india-green group-hover:bg-clip-text group-hover:text-transparent transition-all">
                           {s.template.role}
                         </p>
                         <p className="text-xs text-gray-500 mt-0.5">{s.template.seniority}</p>
@@ -219,7 +219,7 @@ export default async function TalentProfilePage({
                         <p className="text-xs text-gray-500">
                           {new Date(s.endedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                         </p>
-                        <svg className="w-4 h-4 text-gray-600 group-hover:text-purple-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg className="w-4 h-4 text-gray-600 group-hover:text-saffron transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
                       </div>
@@ -241,9 +241,9 @@ export default async function TalentProfilePage({
         )}
 
         {/* CTA Footer */}
-        <div className="relative rounded-2xl border border-purple-500/20 bg-gradient-to-r from-purple-900/30 via-gray-900/80 to-blue-900/30 p-10 text-center shadow-2xl shadow-purple-900/10 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-blue-500/5" />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-gradient-to-b from-purple-600/10 to-transparent rounded-full blur-3xl" />
+        <div className="relative rounded-2xl border border-saffron/20 bg-gradient-to-r from-saffron-dark/30 via-gray-900/80 to-india-green-dark/30 p-10 text-center shadow-2xl shadow-saffron-dark/10 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-saffron/5 via-transparent to-india-green/5" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-gradient-to-b from-saffron/10 to-transparent rounded-full blur-3xl" />
           <div className="relative">
             <p className="text-2xl font-bold text-white">Build Your Own Talent Profile</p>
             <p className="mt-3 text-gray-400 max-w-md mx-auto">
@@ -251,7 +251,7 @@ export default async function TalentProfilePage({
             </p>
             <Link
               href="/auth/signup"
-              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-3.5 text-base font-semibold text-white shadow-2xl shadow-purple-600/25 transition-all hover:shadow-purple-600/40 hover:scale-[1.02] active:scale-[0.98]"
+              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-saffron to-india-green px-8 py-3.5 text-base font-semibold text-white shadow-2xl shadow-saffron/25 transition-all hover:shadow-saffron/40 hover:scale-[1.02] active:scale-[0.98]"
             >
               Sign Up Free
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

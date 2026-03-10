@@ -67,7 +67,7 @@ function SignUpForm() {
   if (status === "loading" || status === "authenticated") {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-950">
-        <div className="animate-spin h-8 w-8 border-2 border-purple-500 border-t-transparent rounded-full" />
+        <div className="animate-spin h-8 w-8 border-2 border-saffron border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -154,7 +154,7 @@ function SignUpForm() {
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-colors"
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors"
                 placeholder="John Doe"
               />
             </div>
@@ -172,7 +172,7 @@ function SignUpForm() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-colors"
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors"
                 placeholder="you@example.com"
               />
             </div>
@@ -191,7 +191,7 @@ function SignUpForm() {
                 minLength={8}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-colors"
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors"
                 placeholder="Minimum 8 characters"
               />
             </div>
@@ -206,7 +206,7 @@ function SignUpForm() {
                     key={option.value}
                     className={`flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition-all ${
                       role === option.value
-                        ? "border-purple-500 bg-purple-500/10"
+                        ? "border-saffron bg-saffron/10"
                         : "border-gray-700 bg-gray-800 hover:border-gray-600"
                     }`}
                   >
@@ -216,7 +216,7 @@ function SignUpForm() {
                       value={option.value}
                       checked={role === option.value}
                       onChange={() => setRole(option.value)}
-                      className="mt-1 accent-purple-500"
+                      className="mt-1 accent-saffron"
                     />
                     <div>
                       <span className="block text-sm font-medium text-white">
@@ -245,7 +245,7 @@ function SignUpForm() {
                   required
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
-                  className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-colors"
+                  className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-500 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron transition-colors"
                   placeholder="Acme Inc."
                 />
               </div>
@@ -254,7 +254,7 @@ function SignUpForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 py-2.5 text-sm font-semibold text-white transition-all hover:from-purple-500 hover:to-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full rounded-lg bg-gradient-to-r from-saffron to-india-green py-2.5 text-sm font-semibold text-white transition-all hover:from-saffron-light hover:to-india-green-light disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -274,7 +274,7 @@ function SignUpForm() {
             Already have an account?{" "}
             <Link
               href="/auth/signin"
-              className="font-medium text-purple-400 hover:text-purple-300 transition-colors"
+              className="font-medium text-saffron hover:text-saffron-light transition-colors"
             >
               Sign in
             </Link>
