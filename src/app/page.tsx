@@ -417,9 +417,9 @@ const faangCompanies = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white overflow-hidden">
+    <div className="min-h-screen bg-[#FAFAF8] overflow-hidden">
       {/* ===== 1. HERO ===== */}
-      <section className="relative min-h-[90vh] flex items-center bg-white">
+      <section className="relative min-h-[90vh] flex items-center bg-[#FAFAF8]">
         {/* Subtle gradient background */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-b from-saffron/5 via-india-green/5 to-transparent rounded-full blur-3xl" />
@@ -650,7 +650,7 @@ export default function Home() {
       </section>
 
       {/* ===== 2. WHO IT'S FOR ===== */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 bg-gradient-to-b from-[#FAFAF8] via-gray-50 to-[#FAFAF8]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
             <p className="text-sm font-semibold uppercase tracking-widest text-saffron mb-4">Built For Everyone</p>
@@ -736,7 +736,7 @@ export default function Home() {
       </section>
 
       {/* ===== 3. HOW IT WORKS ===== */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-[#FAFAF8]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-20">
             <p className="text-sm font-semibold uppercase tracking-widest text-india-green mb-4">The Complete Flow</p>
@@ -771,7 +771,7 @@ export default function Home() {
       </section>
 
       {/* ===== 4. GAMIFICATION SHOWCASE ===== */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 bg-gradient-to-b from-[#FAFAF8] via-saffron/[0.03] to-[#FAFAF8]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left: Gamification Mockup */}
@@ -883,7 +883,7 @@ export default function Home() {
       </section>
 
       {/* ===== 5. SCHOOL/UNIVERSITY PARTNERSHIP ===== */}
-      <section id="schools" className="py-24 bg-white">
+      <section id="schools" className="py-24 bg-gradient-to-b from-[#FAFAF8] via-pink-50/50 to-[#FAFAF8]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
             <p className="text-sm font-semibold uppercase tracking-widest text-pink-500 mb-4">For Educators</p>
@@ -1016,7 +1016,7 @@ export default function Home() {
       </section>
 
       {/* ===== 6. AI LEVELS ===== */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 bg-gradient-to-b from-[#FAFAF8] via-gray-50 to-[#FAFAF8]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
             <p className="text-sm font-semibold uppercase tracking-widest text-saffron mb-4">The Core Differentiator</p>
@@ -1086,7 +1086,7 @@ export default function Home() {
       </section>
 
       {/* ===== 7. FEATURES GRID ===== */}
-      <section id="features" className="py-24 bg-white">
+      <section id="features" className="py-24 bg-[#FAFAF8]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
             <p className="text-sm font-semibold uppercase tracking-widest text-india-green mb-4">Everything You Need</p>
@@ -1117,7 +1117,7 @@ export default function Home() {
       </section>
 
       {/* ===== 8. FOR CANDIDATES ===== */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 bg-gradient-to-b from-[#FAFAF8] via-india-green/[0.03] to-[#FAFAF8]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <ScrollReveal>
@@ -1226,7 +1226,7 @@ export default function Home() {
       </section>
 
       {/* ===== 9. COMPARISON TABLE ===== */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-[#FAFAF8]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
             <p className="text-sm font-semibold uppercase tracking-widest text-india-green mb-4">The Honest Comparison</p>
@@ -1287,7 +1287,7 @@ export default function Home() {
       </section>
 
       {/* ===== 10. PRICING ===== */}
-      <section id="pricing" className="py-24 bg-gray-50">
+      <section id="pricing" className="py-24 bg-gradient-to-b from-[#FAFAF8] via-gray-50 to-[#FAFAF8]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
             <p className="text-sm font-semibold uppercase tracking-widest text-saffron mb-4">Pricing</p>
@@ -1358,7 +1358,7 @@ export default function Home() {
       </section>
 
       {/* ===== 11. CTA BANNER ===== */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-[#FAFAF8]">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
             <div className="rounded-3xl bg-gradient-to-r from-saffron/10 to-india-green/10 border border-gray-200 p-12 sm:p-16 text-center">
@@ -1398,7 +1398,7 @@ export default function Home() {
       </section>
 
       {/* ===== 12. FOOTER ===== */}
-      <footer className="border-t border-gray-200 bg-gray-50 py-16">
+      <footer className="bg-gray-50/80 border-t border-gray-200 py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
             <div>
