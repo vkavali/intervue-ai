@@ -29,6 +29,9 @@ body {
   .glass-card {
     @apply bg-white/60 backdrop-blur-xl border border-white/20 shadow-lg;
   }
+  .glass-card-dark {
+    @apply bg-white/[0.05] backdrop-blur-xl border border-white/[0.08] shadow-lg;
+  }
   .gradient-orb {
     @apply absolute rounded-full blur-3xl opacity-20 pointer-events-none;
   }
