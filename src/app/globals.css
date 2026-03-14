@@ -10,7 +10,7 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
 }
 
 /* Warm-dark focus theme for editor/practice long sessions */
@@ -25,5 +25,23 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  .glass-card {
+    @apply bg-white/60 backdrop-blur-xl border border-white/20 shadow-lg;
+  }
+  .gradient-orb {
+    @apply absolute rounded-full blur-3xl opacity-20 pointer-events-none;
+  }
+}
+
+@layer components {
+  .pill-cta-primary {
+    @apply inline-flex items-center justify-center rounded-full bg-gray-900 px-8 py-4 text-base font-semibold text-white transition-all hover:bg-gray-800 hover:shadow-xl;
+  }
+  .pill-cta-secondary {
+    @apply inline-flex items-center justify-center rounded-full border border-gray-200 bg-white px-8 py-4 text-base font-semibold text-gray-900 transition-all hover:bg-gray-50 hover:shadow-lg;
+  }
+  .floating-chip {
+    @apply inline-flex items-center gap-2 rounded-full bg-white/80 backdrop-blur-sm border border-gray-100 px-4 py-1.5 text-sm text-gray-600 shadow-sm;
   }
 }

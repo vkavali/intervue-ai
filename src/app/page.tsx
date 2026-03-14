@@ -418,226 +418,206 @@ const faangCompanies = [
 export default function Home() {
   return (
     <div className="min-h-screen bg-[#FAFAF8] overflow-hidden">
-      {/* ===== 1. HERO ===== */}
-      <section className="relative min-h-[90vh] flex items-center bg-[#FAFAF8]">
-        {/* Subtle gradient background */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-b from-saffron/5 via-india-green/5 to-transparent rounded-full blur-3xl" />
-        </div>
+      {/* ===== 1. HERO -- Centered Layout ===== */}
+      <section className="relative min-h-screen flex items-center justify-center bg-[#FAFAF8]">
+        {/* Gradient orbs */}
+        <div className="gradient-orb w-[600px] h-[600px] bg-saffron/30 -top-40 right-0" />
+        <div className="gradient-orb w-[500px] h-[500px] bg-india-green/30 -bottom-20 -left-20" />
 
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-32 w-full">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left: Copy */}
-            <ScrollReveal>
-              <div className="inline-flex items-center gap-2 rounded-full border border-india-green/30 bg-india-green/10 px-4 py-1.5 text-sm text-india-green mb-8">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-india-green opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-india-green" />
-                </span>
-                AI-Powered Interview + Practice Platform
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-24 pb-20 w-full">
+          <ScrollReveal className="text-center max-w-4xl mx-auto">
+            {/* Floating announcement chip */}
+            <div className="inline-flex items-center gap-2 floating-chip mb-8">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-india-green opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-india-green" />
+              </span>
+              AI-Powered Interview + Practice Platform
+            </div>
+
+            <h1 className="text-6xl sm:text-7xl lg:text-[5.5rem] font-semibold tracking-tight leading-[1.08]">
+              <span className="text-gray-900">
+                Interview
+              </span>
+              <br />
+              <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">
+                Reimagined.
+              </span>
+            </h1>
+
+            <p className="mt-8 text-lg sm:text-xl text-gray-400 leading-relaxed max-w-2xl mx-auto">
+              The platform where AI assistance is company-controlled, every session is
+              auto-audited, and candidates earn XP, unlock badges, and compete on leaderboards.
+            </p>
+
+            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/auth/signup?role=company"
+                className="pill-cta-primary group"
+              >
+                Start Hiring Smarter
+                <svg className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+              <Link
+                href="/auth/signup?role=candidate"
+                className="pill-cta-secondary group"
+              >
+                Practice for Free
+                <svg className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </div>
+
+            {/* Trust bar */}
+            <div className="mt-14 flex flex-wrap items-center justify-center gap-8 text-sm text-gray-400">
+              <div className="flex items-center gap-2">
+                <span className="text-gray-900 font-semibold text-lg">4,000+</span>
+                <span>Problems</span>
+              </div>
+              <div className="w-px h-4 bg-gray-200" />
+              <div className="flex items-center gap-2">
+                <span className="text-gray-900 font-semibold text-lg">7</span>
+                <span>Languages</span>
+              </div>
+              <div className="w-px h-4 bg-gray-200" />
+              <div className="flex items-center gap-2">
+                <span className="text-gray-900 font-semibold text-lg">17</span>
+                <span>Badges</span>
+              </div>
+              <div className="w-px h-4 bg-gray-200" />
+              <div className="flex items-center gap-2">
+                <span className="text-gray-900 font-semibold text-lg">15</span>
+                <span>Patterns</span>
+              </div>
+            </div>
+          </ScrollReveal>
+
+          {/* Browser mockup below text -- flat, no 3D transforms */}
+          <ScrollReveal delay={0.3} className="mt-16 max-w-5xl mx-auto relative">
+            <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm shadow-2xl shadow-gray-200/50 overflow-hidden">
+              {/* Browser chrome */}
+              <div className="flex items-center gap-2 border-b border-gray-100 bg-gray-50/80 px-4 py-3">
+                <div className="flex gap-1.5">
+                  <div className="w-3 h-3 rounded-full bg-red-400" />
+                  <div className="w-3 h-3 rounded-full bg-yellow-400" />
+                  <div className="w-3 h-3 rounded-full bg-green-400" />
+                </div>
+                <div className="flex-1 flex justify-center">
+                  <div className="rounded-full bg-gray-100 px-4 py-1 text-xs text-gray-400 font-mono">
+                    intervue.ai/session/live
+                  </div>
+                </div>
               </div>
 
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1]">
-                <span className="text-gray-900">
-                  Interview
-                </span>
-                <br />
-                <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">
-                  Reimagined.
-                </span>
-              </h1>
+              {/* Mock interview UI */}
+              <div className="p-4 grid grid-cols-5 gap-3 bg-white/80" style={{ minHeight: "320px" }}>
+                {/* Code editor area */}
+                <div className="col-span-3 rounded-lg border border-gray-100 bg-gray-50/80 p-3">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-mono text-gray-600">JavaScript</div>
+                    <div className="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-mono text-gray-500">Medium</div>
+                  </div>
+                  <div className="space-y-1.5 font-mono text-[11px]">
+                    <p><span className="text-purple-600">function</span> <span className="text-blue-600">twoSum</span><span className="text-gray-400">(</span><span className="text-orange-500">nums</span><span className="text-gray-400">,</span> <span className="text-orange-500">target</span><span className="text-gray-400">)</span> <span className="text-gray-400">&#123;</span></p>
+                    <p className="pl-4"><span className="text-purple-600">const</span> <span className="text-blue-600">map</span> <span className="text-gray-400">=</span> <span className="text-purple-600">new</span> <span className="text-yellow-600">Map</span><span className="text-gray-400">();</span></p>
+                    <p className="pl-4"><span className="text-purple-600">for</span> <span className="text-gray-400">(</span><span className="text-purple-600">let</span> <span className="text-blue-600">i</span> <span className="text-gray-400">=</span> <span className="text-green-600">0</span><span className="text-gray-400">;</span> <span className="text-blue-600">i</span> <span className="text-gray-400">&lt;</span> <span className="text-orange-500">nums</span><span className="text-gray-400">.</span><span className="text-blue-600">length</span><span className="text-gray-400">;</span> <span className="text-blue-600">i</span><span className="text-gray-400">++)</span> <span className="text-gray-400">&#123;</span></p>
+                    <p className="pl-8"><span className="text-purple-600">const</span> <span className="text-blue-600">comp</span> <span className="text-gray-400">=</span> <span className="text-orange-500">target</span> <span className="text-gray-400">-</span> <span className="text-orange-500">nums</span><span className="text-gray-400">[</span><span className="text-blue-600">i</span><span className="text-gray-400">];</span></p>
+                    <p className="pl-8"><span className="text-purple-600">if</span> <span className="text-gray-400">(</span><span className="text-blue-600">map</span><span className="text-gray-400">.</span><span className="text-yellow-600">has</span><span className="text-gray-400">(</span><span className="text-blue-600">comp</span><span className="text-gray-400">))</span></p>
+                    <p className="pl-12"><span className="text-purple-600">return</span> <span className="text-gray-400">[</span><span className="text-blue-600">map</span><span className="text-gray-400">.</span><span className="text-yellow-600">get</span><span className="text-gray-400">(</span><span className="text-blue-600">comp</span><span className="text-gray-400">),</span> <span className="text-blue-600">i</span><span className="text-gray-400">];</span></p>
+                    <p className="pl-8"><span className="text-blue-600">map</span><span className="text-gray-400">.</span><span className="text-yellow-600">set</span><span className="text-gray-400">(</span><span className="text-orange-500">nums</span><span className="text-gray-400">[</span><span className="text-blue-600">i</span><span className="text-gray-400">],</span> <span className="text-blue-600">i</span><span className="text-gray-400">);</span></p>
+                    <p className="pl-4"><span className="text-gray-400">&#125;</span></p>
+                    <p><span className="text-gray-400">&#125;</span><span className="animate-pulse text-gray-900">|</span></p>
+                  </div>
+                </div>
 
-              <p className="mt-8 text-lg sm:text-xl text-gray-500 leading-relaxed max-w-xl">
-                The platform where AI assistance is company-controlled, every session is
-                auto-audited, and candidates earn XP, unlock badges, and compete on leaderboards. Schools can enroll entire classrooms with a single code.
-              </p>
+                {/* Side panel */}
+                <div className="col-span-2 space-y-3">
+                  <div className="rounded-lg border border-gray-100 bg-white/70 backdrop-blur-sm p-3">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-5 h-5 rounded-full bg-gradient-to-br from-saffron to-india-green flex items-center justify-center">
+                        <span className="text-[8px] font-bold text-white">AI</span>
+                      </div>
+                      <span className="text-[10px] font-medium text-gray-500">AI Assist (L2)</span>
+                    </div>
+                    <div className="rounded-lg bg-gray-50 border border-gray-100 p-2">
+                      <p className="text-[10px] text-gray-500 leading-relaxed">
+                        Consider using a HashMap to achieve O(n) time complexity. Think about what complement you need...
+                      </p>
+                    </div>
+                  </div>
 
-              <div className="mt-10 flex flex-col sm:flex-row gap-4">
-                <Link
-                  href="/auth/signup?role=company"
-                  className="group inline-flex items-center justify-center rounded-xl bg-saffron px-8 py-4 text-base font-semibold text-white shadow-lg shadow-saffron/20 transition-all hover:shadow-saffron/40 hover:scale-[1.02] active:scale-[0.98]"
-                >
-                  Start Hiring Smarter
-                  <svg className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  <div className="rounded-lg border border-gray-100 bg-white/70 p-2">
+                    <div className="grid grid-cols-2 gap-1.5">
+                      <div className="aspect-video rounded bg-gray-50 flex items-center justify-center">
+                        <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-[10px] text-gray-500 font-semibold">JD</div>
+                      </div>
+                      <div className="aspect-video rounded bg-gray-50 flex items-center justify-center">
+                        <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-[10px] text-gray-500 font-semibold">MK</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="rounded-lg border border-gray-100 bg-white/70 backdrop-blur-sm p-3">
+                    <p className="text-[10px] font-medium text-gray-500 mb-2">Live Assessment</p>
+                    <div className="space-y-1.5">
+                      {[
+                        { label: "Comprehension", w: "w-[85%]", c: "bg-gray-900" },
+                        { label: "Code Quality", w: "w-[72%]", c: "bg-gray-700" },
+                        { label: "AI Usage", w: "w-[60%]", c: "bg-gray-500" },
+                      ].map((s) => (
+                        <div key={s.label} className="flex items-center justify-between">
+                          <span className="text-[9px] text-gray-400">{s.label}</span>
+                          <div className="w-16 h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                            <div className={`${s.w} h-full rounded-full ${s.c}`} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Floating: Audit result -- glass-card, no 3D transforms */}
+            <div className="absolute -bottom-6 -left-4 sm:left-4 w-52 rounded-2xl glass-card p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                </Link>
-                <Link
-                  href="/auth/signup?role=candidate"
-                  className="group inline-flex items-center justify-center rounded-xl bg-india-green px-8 py-4 text-base font-semibold text-white shadow-lg shadow-india-green/20 transition-all hover:shadow-india-green/40 hover:scale-[1.02] active:scale-[0.98]"
-                >
-                  Practice for Free
-                  <svg className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </Link>
-                <Link
-                  href="#schools"
-                  className="group inline-flex items-center justify-center rounded-xl bg-pink-500 px-8 py-4 text-base font-semibold text-white shadow-lg shadow-pink-500/20 transition-all hover:shadow-pink-500/40 hover:scale-[1.02] active:scale-[0.98]"
-                >
-                  For Schools
-                </Link>
-              </div>
-
-              {/* Trust bar */}
-              <div className="mt-12 flex flex-wrap items-center gap-6 text-sm text-gray-400">
-                <div className="flex items-center gap-2">
-                  <span className="text-saffron font-bold text-lg">4,000+</span>
-                  <span>Problems</span>
                 </div>
-                <div className="w-px h-4 bg-gray-200" />
-                <div className="flex items-center gap-2">
-                  <span className="text-india-green font-bold text-lg">7</span>
-                  <span>Languages</span>
-                </div>
-                <div className="w-px h-4 bg-gray-200" />
-                <div className="flex items-center gap-2">
-                  <span className="text-saffron font-bold text-lg">17</span>
-                  <span>Badges</span>
-                </div>
-                <div className="w-px h-4 bg-gray-200" />
-                <div className="flex items-center gap-2">
-                  <span className="text-india-green font-bold text-lg">15</span>
-                  <span>Patterns</span>
+                <div>
+                  <p className="text-xs font-semibold text-gray-900">Audit Complete</p>
+                  <p className="text-[10px] text-gray-400">Score: 87/100</p>
                 </div>
               </div>
-            </ScrollReveal>
-
-            {/* Right: Mockup */}
-            <ScrollReveal delay={0.3} direction="right" className="relative hidden lg:block">
-              <div style={{ perspective: "1200px" }}>
-                <div
-                  className="relative rounded-2xl border border-gray-200 bg-white shadow-2xl shadow-gray-200/50 overflow-hidden"
-                  style={{ transform: "rotateY(-8deg) rotateX(4deg) rotateZ(1deg)" }}
-                >
-                  {/* Browser chrome */}
-                  <div className="flex items-center gap-2 border-b border-gray-100 bg-gray-50 px-4 py-3">
-                    <div className="flex gap-1.5">
-                      <div className="w-3 h-3 rounded-full bg-red-400" />
-                      <div className="w-3 h-3 rounded-full bg-yellow-400" />
-                      <div className="w-3 h-3 rounded-full bg-green-400" />
-                    </div>
-                    <div className="flex-1 flex justify-center">
-                      <div className="rounded-lg bg-gray-100 px-4 py-1 text-xs text-gray-400 font-mono">
-                        intervue.ai/session/live
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Mock interview UI */}
-                  <div className="p-4 grid grid-cols-5 gap-3 bg-white" style={{ minHeight: "320px" }}>
-                    {/* Code editor area */}
-                    <div className="col-span-3 rounded-lg border border-gray-200 bg-gray-50 p-3">
-                      <div className="flex items-center gap-2 mb-3">
-                        <div className="rounded bg-blue-50 px-2 py-0.5 text-[10px] font-mono text-blue-600">JavaScript</div>
-                        <div className="rounded bg-yellow-50 px-2 py-0.5 text-[10px] font-mono text-yellow-600">Medium</div>
-                      </div>
-                      <div className="space-y-1.5 font-mono text-[11px]">
-                        <p><span className="text-purple-600">function</span> <span className="text-blue-600">twoSum</span><span className="text-gray-400">(</span><span className="text-orange-500">nums</span><span className="text-gray-400">,</span> <span className="text-orange-500">target</span><span className="text-gray-400">)</span> <span className="text-gray-400">&#123;</span></p>
-                        <p className="pl-4"><span className="text-purple-600">const</span> <span className="text-blue-600">map</span> <span className="text-gray-400">=</span> <span className="text-purple-600">new</span> <span className="text-yellow-600">Map</span><span className="text-gray-400">();</span></p>
-                        <p className="pl-4"><span className="text-purple-600">for</span> <span className="text-gray-400">(</span><span className="text-purple-600">let</span> <span className="text-blue-600">i</span> <span className="text-gray-400">=</span> <span className="text-green-600">0</span><span className="text-gray-400">;</span> <span className="text-blue-600">i</span> <span className="text-gray-400">&lt;</span> <span className="text-orange-500">nums</span><span className="text-gray-400">.</span><span className="text-blue-600">length</span><span className="text-gray-400">;</span> <span className="text-blue-600">i</span><span className="text-gray-400">++)</span> <span className="text-gray-400">&#123;</span></p>
-                        <p className="pl-8"><span className="text-purple-600">const</span> <span className="text-blue-600">comp</span> <span className="text-gray-400">=</span> <span className="text-orange-500">target</span> <span className="text-gray-400">-</span> <span className="text-orange-500">nums</span><span className="text-gray-400">[</span><span className="text-blue-600">i</span><span className="text-gray-400">];</span></p>
-                        <p className="pl-8"><span className="text-purple-600">if</span> <span className="text-gray-400">(</span><span className="text-blue-600">map</span><span className="text-gray-400">.</span><span className="text-yellow-600">has</span><span className="text-gray-400">(</span><span className="text-blue-600">comp</span><span className="text-gray-400">))</span></p>
-                        <p className="pl-12"><span className="text-purple-600">return</span> <span className="text-gray-400">[</span><span className="text-blue-600">map</span><span className="text-gray-400">.</span><span className="text-yellow-600">get</span><span className="text-gray-400">(</span><span className="text-blue-600">comp</span><span className="text-gray-400">),</span> <span className="text-blue-600">i</span><span className="text-gray-400">];</span></p>
-                        <p className="pl-8"><span className="text-blue-600">map</span><span className="text-gray-400">.</span><span className="text-yellow-600">set</span><span className="text-gray-400">(</span><span className="text-orange-500">nums</span><span className="text-gray-400">[</span><span className="text-blue-600">i</span><span className="text-gray-400">],</span> <span className="text-blue-600">i</span><span className="text-gray-400">);</span></p>
-                        <p className="pl-4"><span className="text-gray-400">&#125;</span></p>
-                        <p><span className="text-gray-400">&#125;</span><span className="animate-pulse text-gray-900">|</span></p>
-                      </div>
-                    </div>
-
-                    {/* Side panel */}
-                    <div className="col-span-2 space-y-3">
-                      <div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
-                        <div className="flex items-center gap-2 mb-2">
-                          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-saffron to-india-green flex items-center justify-center">
-                            <span className="text-[8px] font-bold text-white">AI</span>
-                          </div>
-                          <span className="text-[10px] font-medium text-gray-500">AI Assist (L2)</span>
-                        </div>
-                        <div className="rounded-lg bg-saffron/10 border border-saffron/20 p-2">
-                          <p className="text-[10px] text-saffron leading-relaxed">
-                            Consider using a HashMap to achieve O(n) time complexity. Think about what complement you need...
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="rounded-lg border border-gray-200 bg-gray-50 p-2">
-                        <div className="grid grid-cols-2 gap-1.5">
-                          <div className="aspect-video rounded bg-gray-100 flex items-center justify-center">
-                            <div className="w-8 h-8 rounded-full bg-saffron/20 flex items-center justify-center text-[10px] text-saffron font-semibold">JD</div>
-                          </div>
-                          <div className="aspect-video rounded bg-gray-100 flex items-center justify-center">
-                            <div className="w-8 h-8 rounded-full bg-india-green/20 flex items-center justify-center text-[10px] text-india-green font-semibold">MK</div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
-                        <p className="text-[10px] font-medium text-gray-500 mb-2">Live Assessment</p>
-                        <div className="space-y-1.5">
-                          {[
-                            { label: "Comprehension", w: "w-[85%]", c: "bg-green-500" },
-                            { label: "Code Quality", w: "w-[72%]", c: "bg-blue-500" },
-                            { label: "AI Usage", w: "w-[60%]", c: "bg-saffron" },
-                          ].map((s) => (
-                            <div key={s.label} className="flex items-center justify-between">
-                              <span className="text-[9px] text-gray-400">{s.label}</span>
-                              <div className="w-16 h-1.5 rounded-full bg-gray-200 overflow-hidden">
-                                <div className={`${s.w} h-full rounded-full ${s.c}`} />
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Floating: Audit result */}
-                <div
-                  className="absolute -bottom-8 -left-12 w-56 rounded-xl border border-green-200 bg-white shadow-xl p-4"
-                  style={{ transform: "rotateY(8deg) rotateX(-2deg) translateZ(40px)" }}
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center">
-                      <svg className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="text-xs font-semibold text-gray-900">Audit Complete</p>
-                      <p className="text-[10px] text-gray-400">Score: 87/100</p>
-                    </div>
-                  </div>
-                  <div className="rounded-lg bg-green-50 border border-green-200 px-3 py-1.5">
-                    <p className="text-[10px] text-green-700 font-medium">Recommendation: HIRE</p>
-                  </div>
-                </div>
-
-                {/* Floating: AI Level indicator */}
-                <div
-                  className="absolute -top-4 -right-8 w-44 rounded-xl border border-saffron/30 bg-white shadow-xl p-3"
-                  style={{ transform: "rotateY(-12deg) rotateX(6deg) translateZ(60px)" }}
-                >
-                  <p className="text-[10px] font-medium text-gray-500 mb-2">AI Level Control</p>
-                  <div className="flex gap-1">
-                    {["L0", "L1", "L2", "L3", "L4"].map((l, i) => (
-                      <div
-                        key={l}
-                        className={`flex-1 rounded py-1 text-center text-[9px] font-bold ${
-                          i === 2
-                            ? "bg-blue-500 text-white"
-                            : "bg-gray-100 text-gray-400"
-                        }`}
-                      >
-                        {l}
-                      </div>
-                    ))}
-                  </div>
-                </div>
+              <div className="rounded-lg bg-gray-50 border border-gray-100 px-3 py-1.5">
+                <p className="text-[10px] text-gray-600 font-medium">Recommendation: HIRE</p>
               </div>
-            </ScrollReveal>
-          </div>
+            </div>
+
+            {/* Floating: AI Level indicator -- glass-card */}
+            <div className="absolute -top-4 -right-4 sm:right-4 w-44 rounded-2xl glass-card p-3">
+              <p className="text-[10px] font-medium text-gray-500 mb-2">AI Level Control</p>
+              <div className="flex gap-1">
+                {["L0", "L1", "L2", "L3", "L4"].map((l, i) => (
+                  <div
+                    key={l}
+                    className={`flex-1 rounded-full py-1 text-center text-[9px] font-bold ${
+                      i === 2
+                        ? "bg-gray-900 text-white"
+                        : "bg-gray-100 text-gray-400"
+                    }`}
+                  >
+                    {l}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </ScrollReveal>
         </div>
 
         {/* Scroll indicator */}
@@ -649,12 +629,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 2. WHO IT'S FOR ===== */}
-      <section className="py-24 bg-gradient-to-b from-[#FAFAF8] via-gray-50 to-[#FAFAF8]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-16">
-            <p className="text-sm font-semibold uppercase tracking-widest text-saffron mb-4">Built For Everyone</p>
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900">
+      {/* ===== 2. WHO IT'S FOR -- Glass Cards ===== */}
+      <section className="relative py-32 lg:py-40 bg-[#FAFAF8]">
+        {/* Subtle gradient orb */}
+        <div className="gradient-orb w-[500px] h-[500px] bg-saffron/20 top-20 -right-40" />
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ScrollReveal className="text-center mb-20 lg:mb-24">
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">Built For Everyone</p>
+            <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900">
               Who It&apos;s For
             </h2>
           </ScrollReveal>
@@ -662,23 +645,23 @@ export default function Home() {
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6" staggerDelay={0.1}>
             {/* Companies */}
             <StaggerItem>
-              <div className="rounded-2xl border border-gray-200 bg-white p-8 h-full transition-all hover:shadow-lg hover:-translate-y-1">
-                <div className="w-12 h-12 rounded-xl bg-saffron/10 flex items-center justify-center mb-6">
-                  <svg className="w-6 h-6 text-saffron" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-8 h-full transition-all hover:shadow-xl hover:shadow-gray-200/50">
+                <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center mb-6">
+                  <svg className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Companies</h3>
-                <p className="text-sm text-gray-500 mb-4">Run AI-controlled technical interviews with full audit trails and data-driven hiring decisions.</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Companies</h3>
+                <p className="text-sm text-gray-400 mb-4">Run AI-controlled technical interviews with full audit trails and data-driven hiring decisions.</p>
                 <ul className="space-y-2 mb-6">
                   {["5-level AI control per interview", "Auto-generated scorecards", "Candidate pipeline & comparisons", "Calendar scheduling & video"].map((f) => (
                     <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
-                      <svg className="w-4 h-4 text-saffron shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                      <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                       {f}
                     </li>
                   ))}
                 </ul>
-                <Link href="/auth/signup?role=company" className="text-sm font-semibold text-saffron hover:text-saffron/80">
+                <Link href="/auth/signup?role=company" className="text-sm font-semibold text-gray-900 hover:text-gray-600">
                   Start Hiring &rarr;
                 </Link>
               </div>
@@ -686,23 +669,23 @@ export default function Home() {
 
             {/* Candidates */}
             <StaggerItem>
-              <div className="rounded-2xl border border-gray-200 bg-white p-8 h-full transition-all hover:shadow-lg hover:-translate-y-1">
-                <div className="w-12 h-12 rounded-xl bg-india-green/10 flex items-center justify-center mb-6">
-                  <svg className="w-6 h-6 text-india-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-8 h-full transition-all hover:shadow-xl hover:shadow-gray-200/50">
+                <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center mb-6">
+                  <svg className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Candidates</h3>
-                <p className="text-sm text-gray-500 mb-4">Practice with 4,000+ problems, earn XP, unlock 17 badges, and climb the leaderboard.</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Candidates</h3>
+                <p className="text-sm text-gray-400 mb-4">Practice with 4,000+ problems, earn XP, unlock 17 badges, and climb the leaderboard.</p>
                 <ul className="space-y-2 mb-6">
                   {["XP, levels, and streaks", "17 achievement badges", "Global leaderboard", "7-language code execution"].map((f) => (
                     <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
-                      <svg className="w-4 h-4 text-india-green shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                      <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                       {f}
                     </li>
                   ))}
                 </ul>
-                <Link href="/auth/signup?role=candidate" className="text-sm font-semibold text-india-green hover:text-india-green/80">
+                <Link href="/auth/signup?role=candidate" className="text-sm font-semibold text-gray-900 hover:text-gray-600">
                   Start Practicing &rarr;
                 </Link>
               </div>
@@ -710,23 +693,23 @@ export default function Home() {
 
             {/* Schools */}
             <StaggerItem>
-              <div className="rounded-2xl border border-pink-200 bg-white p-8 h-full transition-all hover:shadow-lg hover:-translate-y-1">
-                <div className="w-12 h-12 rounded-xl bg-pink-50 flex items-center justify-center mb-6">
-                  <svg className="w-6 h-6 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-8 h-full transition-all hover:shadow-xl hover:shadow-gray-200/50">
+                <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center mb-6">
+                  <svg className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.26 10.147a60.438 60.438 0 00-.491 6.347A48.62 48.62 0 0112 20.904a48.62 48.62 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.636 50.636 0 00-2.658-.813A59.906 59.906 0 0112 3.493a59.903 59.903 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Schools & Universities</h3>
-                <p className="text-sm text-gray-500 mb-4">Enroll entire classrooms with one code. Assign problems, track student progress, and view class analytics.</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Schools & Universities</h3>
+                <p className="text-sm text-gray-400 mb-4">Enroll entire classrooms with one code. Assign problems, track student progress, and view class analytics.</p>
                 <ul className="space-y-2 mb-6">
                   {["Enrollment codes for classes", "Assignment creation", "Class-wide analytics dashboard", "$5/student/month pricing"].map((f) => (
                     <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
-                      <svg className="w-4 h-4 text-pink-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                      <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                       {f}
                     </li>
                   ))}
                 </ul>
-                <Link href="#schools" className="text-sm font-semibold text-pink-500 hover:text-pink-600">
+                <Link href="#schools" className="text-sm font-semibold text-gray-900 hover:text-gray-600">
                   Learn More &rarr;
                 </Link>
               </div>
@@ -735,33 +718,35 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 3. HOW IT WORKS ===== */}
-      <section className="py-24 bg-[#FAFAF8]">
+      {/* ===== 3. HOW IT WORKS -- Bento Grid ===== */}
+      <section className="py-32 lg:py-40 bg-[#FAFAF8]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-20">
-            <p className="text-sm font-semibold uppercase tracking-widest text-india-green mb-4">The Complete Flow</p>
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight">
+          <ScrollReveal className="text-center mb-20 lg:mb-24">
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">The Complete Flow</p>
+            <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900 leading-tight">
               From Job Posting to
               <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent"> Hire Decision</span>
             </h2>
-            <p className="mt-6 text-lg text-gray-500 max-w-3xl mx-auto">
+            <p className="mt-6 text-lg text-gray-400 max-w-3xl mx-auto">
               Watch how Intervue.AI transforms every step of the hiring process with intelligent automation and transparent AI auditing.
             </p>
           </ScrollReveal>
 
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" staggerDelay={0.1}>
-            {flowCards.map((card) => (
+            {flowCards.map((card, idx) => (
               <StaggerItem key={card.step}>
                 <div
-                  className={`group rounded-2xl border ${card.borderColor} bg-white p-6 transition-all duration-500 hover:shadow-lg hover:scale-[1.03] hover:-translate-y-1 h-full`}
+                  className={`group rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-6 transition-all duration-500 hover:shadow-xl hover:shadow-gray-200/50 h-full ${
+                    idx === 2 ? "lg:col-span-2" : ""
+                  }`}
                 >
                   <div className="flex items-center gap-3 mb-3">
-                    <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${card.color} text-xs font-bold text-white shadow-lg`}>
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-gray-200 bg-white text-xs font-bold text-gray-900">
                       {card.step}
                     </span>
                     <h3 className="text-base font-semibold text-gray-900">{card.title}</h3>
                   </div>
-                  <p className="text-sm text-gray-500 leading-relaxed">{card.desc}</p>
+                  <p className="text-sm text-gray-400 leading-relaxed">{card.desc}</p>
                   {card.mockup}
                 </div>
               </StaggerItem>
@@ -770,18 +755,21 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 4. GAMIFICATION SHOWCASE ===== */}
-      <section className="py-24 bg-gradient-to-b from-[#FAFAF8] via-saffron/[0.03] to-[#FAFAF8]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* ===== 4. GAMIFICATION SHOWCASE -- Glass Mockup ===== */}
+      <section className="relative py-32 lg:py-40 bg-[#FAFAF8]">
+        {/* Gradient orb */}
+        <div className="gradient-orb w-[600px] h-[600px] bg-saffron/10 top-20 -left-40" />
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left: Gamification Mockup */}
+            {/* Left: Gamification Mockup -- glassmorphic */}
             <ScrollReveal>
-              <div className="rounded-2xl border border-gray-200 bg-white shadow-lg p-6 space-y-5">
+              <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm shadow-xl shadow-gray-200/50 p-6 space-y-5">
                 {/* XP Bar */}
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-saffron/10 text-xs font-bold text-saffron">12</span>
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-50 text-xs font-bold text-gray-900">12</span>
                       <span className="text-sm font-semibold text-gray-900">Level 12</span>
                     </div>
                     <span className="text-xs text-gray-400">2,450 / 3,000 XP</span>
@@ -792,17 +780,17 @@ export default function Home() {
                 </div>
 
                 {/* Streak */}
-                <div className="flex items-center gap-4 rounded-xl bg-orange-50 border border-orange-200 p-4">
+                <div className="flex items-center gap-4 rounded-xl bg-gray-50 border border-gray-100 p-4">
                   <span className="text-3xl">🔥</span>
                   <div>
-                    <p className="text-lg font-bold text-gray-900">14-Day Streak</p>
-                    <p className="text-xs text-gray-500">Personal best: 23 days</p>
+                    <p className="text-lg font-semibold text-gray-900">14-Day Streak</p>
+                    <p className="text-xs text-gray-400">Personal best: 23 days</p>
                   </div>
                 </div>
 
                 {/* Heatmap mini */}
                 <div>
-                  <p className="text-xs font-medium text-gray-500 mb-2">Activity Heatmap</p>
+                  <p className="text-xs font-medium text-gray-400 mb-2">Activity Heatmap</p>
                   <div className="flex gap-0.5">
                     {Array.from({ length: 28 }, (_, i) => {
                       const intensity = [0,1,0,2,3,1,0,0,2,3,3,2,1,0,1,2,3,3,2,1,0,1,3,3,2,3,3,2][i];
@@ -814,7 +802,7 @@ export default function Home() {
 
                 {/* Badge row */}
                 <div>
-                  <p className="text-xs font-medium text-gray-500 mb-2">Recent Badges</p>
+                  <p className="text-xs font-medium text-gray-400 mb-2">Recent Badges</p>
                   <div className="flex gap-2">
                     {[
                       { emoji: "🏆", name: "First Solve" },
@@ -824,7 +812,7 @@ export default function Home() {
                       { emoji: "🎯", name: "Perfectionist" },
                     ].map((b) => (
                       <div key={b.name} className="flex flex-col items-center gap-1">
-                        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 border border-gray-200 text-lg">{b.emoji}</span>
+                        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 border border-gray-100 text-lg">{b.emoji}</span>
                         <span className="text-[9px] text-gray-400">{b.name}</span>
                       </div>
                     ))}
@@ -835,13 +823,13 @@ export default function Home() {
 
             {/* Right: Content */}
             <ScrollReveal delay={0.2} direction="right">
-              <p className="text-sm font-semibold uppercase tracking-widest text-saffron mb-4">Gamification</p>
-              <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight">
+              <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">Gamification</p>
+              <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900 leading-tight">
                 Earn XP. Level Up.
                 <br />
                 <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">Compete.</span>
               </h2>
-              <p className="mt-6 text-lg text-gray-500 leading-relaxed">
+              <p className="mt-6 text-lg text-gray-400 leading-relaxed">
                 Practice isn&apos;t just about solving problems -- it&apos;s about building momentum. Every solve earns XP, maintains your streak, and pushes you up the leaderboard.
               </p>
 
@@ -862,7 +850,7 @@ export default function Home() {
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-gray-900">{item.title}</p>
-                      <p className="text-sm text-gray-500">{item.desc}</p>
+                      <p className="text-sm text-gray-400">{item.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -870,7 +858,7 @@ export default function Home() {
 
               <Link
                 href="/auth/signup?role=candidate"
-                className="mt-10 inline-flex items-center gap-2 rounded-xl bg-india-green px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-india-green/20 transition-all hover:shadow-india-green/40 hover:scale-[1.02]"
+                className="mt-10 inline-flex items-center gap-2 rounded-full bg-india-green px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-india-green/20 transition-all hover:shadow-india-green/40 hover:shadow-xl"
               >
                 Start Earning XP
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -882,21 +870,24 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 5. SCHOOL/UNIVERSITY PARTNERSHIP ===== */}
-      <section id="schools" className="py-24 bg-gradient-to-b from-[#FAFAF8] via-pink-50/50 to-[#FAFAF8]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-16">
-            <p className="text-sm font-semibold uppercase tracking-widest text-pink-500 mb-4">For Educators</p>
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight">
+      {/* ===== 5. SCHOOL/UNIVERSITY PARTNERSHIP -- Simplified ===== */}
+      <section id="schools" className="relative py-32 lg:py-40 bg-[#FAFAF8]">
+        {/* Gradient orb */}
+        <div className="gradient-orb w-[500px] h-[500px] bg-pink-200/15 top-40 right-0" />
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ScrollReveal className="text-center mb-20 lg:mb-24">
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">For Educators</p>
+            <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900 leading-tight">
               Bring Coding Practice to
               <span className="text-pink-500"> Your Classroom</span>
             </h2>
-            <p className="mt-6 text-lg text-gray-500 max-w-3xl mx-auto">
+            <p className="mt-6 text-lg text-gray-400 max-w-3xl mx-auto">
               Set up your school in minutes. Share an enrollment code with students and get a complete analytics dashboard to track class-wide progress.
             </p>
           </ScrollReveal>
 
-          {/* 4-step flow */}
+          {/* 4-step flow -- glassmorphic cards */}
           <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20" staggerDelay={0.1}>
             {[
               { step: "1", title: "Sign Up as School", desc: "Create a school admin account and set up your institution profile.", icon: "🏫" },
@@ -905,11 +896,11 @@ export default function Home() {
               { step: "4", title: "Monitor Analytics", desc: "Track XP, streaks, problems solved, and time spent across your entire class.", icon: "📊" },
             ].map((s) => (
               <StaggerItem key={s.step}>
-                <div className="rounded-2xl border border-pink-200 bg-white p-6 text-center transition-all hover:shadow-lg hover:-translate-y-1 h-full">
+                <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-6 text-center transition-all hover:shadow-xl hover:shadow-gray-200/50 h-full">
                   <span className="text-3xl mb-3 block">{s.icon}</span>
-                  <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-pink-500 text-white text-sm font-bold mb-3">{s.step}</div>
+                  <div className="inline-flex items-center justify-center w-8 h-8 rounded-full border-2 border-gray-200 bg-white text-gray-900 text-sm font-bold mb-3">{s.step}</div>
                   <h3 className="text-base font-semibold text-gray-900 mb-2">{s.title}</h3>
-                  <p className="text-sm text-gray-500">{s.desc}</p>
+                  <p className="text-sm text-gray-400">{s.desc}</p>
                 </div>
               </StaggerItem>
             ))}
@@ -919,11 +910,11 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left: Dashboard mockup */}
             <ScrollReveal>
-              <div className="rounded-2xl border border-gray-200 bg-white shadow-lg overflow-hidden">
+              <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm shadow-xl shadow-gray-200/50 overflow-hidden">
                 {/* Header */}
-                <div className="border-b border-gray-100 bg-gray-50 px-6 py-4">
+                <div className="border-b border-gray-100 bg-gray-50/80 px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <span className="inline-flex items-center rounded-full bg-pink-50 border border-pink-200 px-2.5 py-0.5 text-xs font-medium text-pink-600">School Admin</span>
+                    <span className="inline-flex items-center rounded-full bg-gray-50 border border-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">School Admin</span>
                     <span className="text-sm font-medium text-gray-900">Stanford CS Department</span>
                   </div>
                 </div>
@@ -931,19 +922,19 @@ export default function Home() {
                 <div className="p-6 grid grid-cols-2 gap-4">
                   <div className="rounded-xl bg-gray-50 border border-gray-100 p-4">
                     <p className="text-[10px] text-gray-400 uppercase font-medium">Total Students</p>
-                    <p className="text-2xl font-bold text-gray-900 mt-1">142</p>
+                    <p className="text-2xl font-semibold text-gray-900 mt-1">142</p>
                   </div>
                   <div className="rounded-xl bg-gray-50 border border-gray-100 p-4">
                     <p className="text-[10px] text-gray-400 uppercase font-medium">Active This Week</p>
-                    <p className="text-2xl font-bold text-green-500 mt-1">89</p>
+                    <p className="text-2xl font-semibold text-gray-900 mt-1">89</p>
                   </div>
                   <div className="rounded-xl bg-gray-50 border border-gray-100 p-4">
                     <p className="text-[10px] text-gray-400 uppercase font-medium">Avg Problems Solved</p>
-                    <p className="text-2xl font-bold text-saffron mt-1">37</p>
+                    <p className="text-2xl font-semibold text-gray-900 mt-1">37</p>
                   </div>
                   <div className="rounded-xl bg-gray-50 border border-gray-100 p-4">
                     <p className="text-[10px] text-gray-400 uppercase font-medium">Avg Level</p>
-                    <p className="text-2xl font-bold text-india-green mt-1">8.4</p>
+                    <p className="text-2xl font-semibold text-gray-900 mt-1">8.4</p>
                   </div>
                 </div>
                 {/* Student table */}
@@ -965,9 +956,9 @@ export default function Home() {
                       ].map((s) => (
                         <tr key={s.name}>
                           <td className="py-2 text-gray-700 font-medium">{s.name}</td>
-                          <td className="py-2"><span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-saffron/10 text-[9px] font-bold text-saffron">{s.level}</span></td>
-                          <td className="py-2 text-gray-500">{s.xp}</td>
-                          <td className="py-2 text-gray-500">🔥 {s.streak}</td>
+                          <td className="py-2"><span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gray-50 border border-gray-100 text-[9px] font-bold text-gray-900">{s.level}</span></td>
+                          <td className="py-2 text-gray-400">{s.xp}</td>
+                          <td className="py-2 text-gray-400">🔥 {s.streak}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -995,7 +986,7 @@ export default function Home() {
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-gray-900">{item.title}</p>
-                      <p className="text-sm text-gray-500">{item.desc}</p>
+                      <p className="text-sm text-gray-400">{item.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -1003,7 +994,7 @@ export default function Home() {
 
               <Link
                 href="/auth/signup?role=school"
-                className="mt-10 inline-flex items-center gap-2 rounded-xl bg-pink-500 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-pink-500/20 transition-all hover:shadow-pink-500/40 hover:scale-[1.02]"
+                className="mt-10 inline-flex items-center gap-2 rounded-full bg-pink-500 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-pink-500/20 transition-all hover:shadow-pink-500/40 hover:shadow-xl"
               >
                 Set Up Your School
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1015,24 +1006,24 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 6. AI LEVELS ===== */}
-      <section className="py-24 bg-gradient-to-b from-[#FAFAF8] via-gray-50 to-[#FAFAF8]">
+      {/* ===== 6. AI LEVELS -- Neutral Cards ===== */}
+      <section className="py-32 lg:py-40 bg-[#FAFAF8]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-16">
-            <p className="text-sm font-semibold uppercase tracking-widest text-saffron mb-4">The Core Differentiator</p>
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900">
+          <ScrollReveal className="text-center mb-20 lg:mb-24">
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">The Core Differentiator</p>
+            <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900">
               5 Levels of AI Control
             </h2>
-            <p className="mt-6 text-lg text-gray-500 max-w-3xl mx-auto">
+            <p className="mt-6 text-lg text-gray-400 max-w-3xl mx-auto">
               You decide exactly how much help candidates get. Every level is logged, audited, and scored differently.
               Interviewers can even adjust levels mid-session.
             </p>
           </ScrollReveal>
 
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* AI Level Selector Mockup */}
+            {/* AI Level Selector Mockup -- glassmorphic */}
             <ScrollReveal direction="left">
-              <div className="rounded-2xl border border-gray-200 bg-white shadow-lg p-6">
+              <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm shadow-xl shadow-gray-200/50 p-6">
                 <div className="flex items-center gap-2 mb-6">
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-saffron to-india-green flex items-center justify-center">
                     <span className="text-xs font-bold text-white">AI</span>
@@ -1044,18 +1035,18 @@ export default function Home() {
                     <div
                       key={ai.level}
                       className={`flex items-center gap-3 rounded-xl border p-3 transition-all ${
-                        i === 2 ? "border-blue-400 bg-blue-50 ring-2 ring-blue-200" : "border-gray-200 bg-white"
+                        i === 2 ? "border-gray-900 bg-gray-50 ring-1 ring-gray-900/10" : "border-gray-100 bg-white/70"
                       }`}
                     >
-                      <span className={`flex-shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-lg text-xs font-bold ${ai.badge}`}>
+                      <span className="flex-shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-lg bg-gray-50 border border-gray-100 text-xs font-bold text-gray-900">
                         {ai.level}
                       </span>
                       <div className="flex-1">
-                        <p className={`text-sm font-semibold ${i === 2 ? "text-blue-700" : "text-gray-900"}`}>{ai.label}</p>
-                        <p className="text-xs text-gray-500">{ai.description}</p>
+                        <p className={`text-sm font-semibold ${i === 2 ? "text-gray-900" : "text-gray-900"}`}>{ai.label}</p>
+                        <p className="text-xs text-gray-400">{ai.description}</p>
                       </div>
                       {i === 2 && (
-                        <span className="text-xs font-medium text-blue-600 bg-blue-100 px-2 py-0.5 rounded-full">Active</span>
+                        <span className="text-xs font-medium text-white bg-gray-900 px-2 py-0.5 rounded-full">Active</span>
                       )}
                     </div>
                   ))}
@@ -1063,19 +1054,17 @@ export default function Home() {
               </div>
             </ScrollReveal>
 
-            {/* Level cards */}
+            {/* Level cards -- uniform neutral */}
             <StaggerContainer className="space-y-3" staggerDelay={0.1}>
               {aiLevels.map((ai) => (
                 <StaggerItem key={ai.level}>
-                  <div
-                    className={`group relative flex items-center gap-4 rounded-xl border ${ai.color} p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-md`}
-                  >
-                    <div className={`flex-shrink-0 inline-flex items-center justify-center w-12 h-12 rounded-xl ${ai.badge} shadow-sm`}>
-                      <span className="text-sm font-bold">{ai.level}</span>
+                  <div className="group relative flex items-center gap-4 rounded-xl border border-gray-100 bg-white/70 backdrop-blur-sm p-4 transition-all duration-300 hover:shadow-xl hover:shadow-gray-200/50">
+                    <div className="flex-shrink-0 inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gray-50 border border-gray-100 shadow-sm">
+                      <span className="text-sm font-bold text-gray-900">{ai.level}</span>
                     </div>
                     <div>
                       <h3 className="text-base font-semibold text-gray-900">{ai.label}</h3>
-                      <p className="text-sm text-gray-500">{ai.description}</p>
+                      <p className="text-sm text-gray-400">{ai.description}</p>
                     </div>
                   </div>
                 </StaggerItem>
@@ -1085,30 +1074,32 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 7. FEATURES GRID ===== */}
-      <section id="features" className="py-24 bg-[#FAFAF8]">
+      {/* ===== 7. FEATURES GRID -- Bento Grid ===== */}
+      <section id="features" className="py-32 lg:py-40 bg-[#FAFAF8]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-16">
-            <p className="text-sm font-semibold uppercase tracking-widest text-india-green mb-4">Everything You Need</p>
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900">
+          <ScrollReveal className="text-center mb-20 lg:mb-24">
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">Everything You Need</p>
+            <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900">
               One Platform, Zero Gaps
             </h2>
-            <p className="mt-6 text-lg text-gray-500 max-w-2xl mx-auto">
+            <p className="mt-6 text-lg text-gray-400 max-w-2xl mx-auto">
               Code editor, video calls, AI assistance, audit engine, pipeline tracking, scheduling, code execution in 7 languages, and 4,000+ practice problems -- all built in.
             </p>
           </ScrollReveal>
 
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4" staggerDelay={0.05}>
-            {platformFeatures.map((f) => (
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" staggerDelay={0.05}>
+            {platformFeatures.map((f, idx) => (
               <StaggerItem key={f.title}>
                 <div
-                  className="group rounded-xl border border-gray-200 bg-white p-6 transition-all hover:shadow-lg hover:scale-[1.03] hover:-translate-y-1 h-full"
+                  className={`group rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-6 transition-all hover:shadow-xl hover:shadow-gray-200/50 h-full ${
+                    idx < 2 ? "lg:col-span-2" : ""
+                  }`}
                 >
-                  <div className={`mb-4 w-12 h-12 rounded-lg ${f.iconBg} flex items-center justify-center ${f.iconColor}`}>
+                  <div className="mb-4 w-12 h-12 rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
                     {f.icon}
                   </div>
                   <h3 className="text-base font-semibold text-gray-900 mb-2">{f.title}</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">{f.description}</p>
+                  <p className="text-sm text-gray-400 leading-relaxed">{f.description}</p>
                 </div>
               </StaggerItem>
             ))}
@@ -1116,25 +1107,28 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 8. FOR CANDIDATES ===== */}
-      <section className="py-24 bg-gradient-to-b from-[#FAFAF8] via-india-green/[0.03] to-[#FAFAF8]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* ===== 8. FOR CANDIDATES -- Neutral Badges ===== */}
+      <section className="relative py-32 lg:py-40 bg-[#FAFAF8]">
+        {/* Gradient orb */}
+        <div className="gradient-orb w-[500px] h-[500px] bg-india-green/10 top-40 -right-40" />
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <ScrollReveal>
-              <p className="text-sm font-semibold uppercase tracking-widest text-india-green mb-4">For Candidates</p>
-              <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight">
+              <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">For Candidates</p>
+              <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900 leading-tight">
                 Practice, Prepare,
                 <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent"> Perform</span>
               </h2>
-              <p className="mt-6 text-lg text-gray-500 leading-relaxed">
+              <p className="mt-6 text-lg text-gray-400 leading-relaxed">
                 Get access to 4,000+ practice problems, 15 study patterns, code execution in 7 languages, AI coaching,
                 and the exact same environment you will use in your real interview.
               </p>
 
-              {/* FAANG badges */}
+              {/* FAANG badges -- neutral pills */}
               <div className="mt-8 flex flex-wrap gap-2">
                 {faangCompanies.map((c) => (
-                  <span key={c.name} className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold ${c.bg} ${c.color}`}>
+                  <span key={c.name} className="inline-flex items-center gap-1.5 rounded-full border border-gray-100 bg-white/80 px-3 py-1.5 text-xs font-semibold text-gray-600">
                     {c.name}
                   </span>
                 ))}
@@ -1156,7 +1150,7 @@ export default function Home() {
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-gray-900">{item.title}</p>
-                      <p className="text-sm text-gray-500">{item.desc}</p>
+                      <p className="text-sm text-gray-400">{item.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -1164,7 +1158,7 @@ export default function Home() {
 
               <Link
                 href="/auth/signup?role=candidate"
-                className="mt-10 inline-flex items-center gap-2 rounded-xl bg-india-green px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-india-green/20 transition-all hover:shadow-india-green/40 hover:scale-[1.02]"
+                className="mt-10 inline-flex items-center gap-2 rounded-full bg-india-green px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-india-green/20 transition-all hover:shadow-india-green/40 hover:shadow-xl"
               >
                 Start Practicing Free
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1173,10 +1167,10 @@ export default function Home() {
               </Link>
             </ScrollReveal>
 
-            {/* Right: Practice page mockup */}
+            {/* Right: Practice page mockup -- glassmorphic */}
             <ScrollReveal delay={0.2} direction="right">
-              <div className="rounded-2xl border border-gray-200 bg-white shadow-lg overflow-hidden">
-                <div className="border-b border-gray-100 bg-gray-50 px-6 py-3 flex items-center gap-2">
+              <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm shadow-xl shadow-gray-200/50 overflow-hidden">
+                <div className="border-b border-gray-100 bg-gray-50/80 px-6 py-3 flex items-center gap-2">
                   <div className="flex gap-1.5">
                     <div className="w-3 h-3 rounded-full bg-red-400" />
                     <div className="w-3 h-3 rounded-full bg-yellow-400" />
@@ -1188,16 +1182,16 @@ export default function Home() {
                   {/* Problem header */}
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="text-xs bg-yellow-50 text-yellow-700 border border-yellow-200 px-2 py-0.5 rounded font-medium">Medium</span>
+                      <span className="text-xs bg-gray-50 text-gray-600 border border-gray-100 px-2 py-0.5 rounded-full font-medium">Medium</span>
                       <h4 className="text-sm font-semibold text-gray-900 mt-1">Two Sum</h4>
                     </div>
                     <div className="text-right">
                       <p className="text-xs text-gray-400">+25 XP</p>
-                      <p className="text-xs text-india-green font-medium">Arrays</p>
+                      <p className="text-xs text-gray-600 font-medium">Arrays</p>
                     </div>
                   </div>
                   {/* Mini editor */}
-                  <div className="rounded-lg bg-gray-50 border border-gray-200 p-3 font-mono text-[10px] text-gray-600 space-y-0.5">
+                  <div className="rounded-lg bg-gray-50 border border-gray-100 p-3 font-mono text-[10px] text-gray-600 space-y-0.5">
                     <p><span className="text-purple-600">function</span> <span className="text-blue-600">twoSum</span>(nums, target) &#123;</p>
                     <p className="pl-3"><span className="text-purple-600">const</span> map = <span className="text-purple-600">new</span> Map();</p>
                     <p className="pl-3 text-gray-400">{"// Your code here..."}</p>
@@ -1211,10 +1205,10 @@ export default function Home() {
                       { label: "Test 3: [3,3], target=6", pass: false },
                     ].map((t) => (
                       <div key={t.label} className="flex items-center gap-2 text-[10px]">
-                        <span className={`w-4 h-4 rounded-full flex items-center justify-center ${t.pass ? "bg-green-50 text-green-500" : "bg-red-50 text-red-500"}`}>
+                        <span className={`w-4 h-4 rounded-full flex items-center justify-center ${t.pass ? "bg-gray-50 text-gray-900" : "bg-gray-50 text-gray-400"}`}>
                           {t.pass ? "✓" : "✗"}
                         </span>
-                        <span className="text-gray-500">{t.label}</span>
+                        <span className="text-gray-400">{t.label}</span>
                       </div>
                     ))}
                   </div>
@@ -1225,24 +1219,24 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 9. COMPARISON TABLE ===== */}
-      <section className="py-24 bg-[#FAFAF8]">
+      {/* ===== 9. COMPARISON TABLE -- Refined ===== */}
+      <section className="py-32 lg:py-40 bg-[#FAFAF8]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-16">
-            <p className="text-sm font-semibold uppercase tracking-widest text-india-green mb-4">The Honest Comparison</p>
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900">
+          <ScrollReveal className="text-center mb-20 lg:mb-24">
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">The Honest Comparison</p>
+            <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900">
               Why Intervue.AI?
             </h2>
-            <p className="mt-6 text-lg text-gray-500 max-w-2xl mx-auto">
+            <p className="mt-6 text-lg text-gray-400 max-w-2xl mx-auto">
               The only platform built from scratch for the AI era of technical hiring.
             </p>
           </ScrollReveal>
 
           <ScrollReveal>
-            <div className="overflow-x-auto rounded-2xl border border-gray-200 shadow-lg">
+            <div className="overflow-x-auto rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm shadow-xl shadow-gray-200/50">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-200 bg-gray-50">
+                  <tr className="border-b border-gray-100 bg-gray-50/50">
                     <th className="px-6 py-5 text-left text-sm font-semibold text-gray-700">Feature</th>
                     <th className="px-6 py-5 text-center">
                       <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent text-sm font-bold">Intervue.AI</span>
@@ -1254,18 +1248,18 @@ export default function Home() {
                   </tr>
                 </thead>
                 <tbody>
-                  {comparisonFeatures.map((row, i) => (
-                    <tr key={row.feature} className={`border-b border-gray-100 ${i % 2 === 0 ? "bg-white" : "bg-gray-50/50"}`}>
+                  {comparisonFeatures.map((row) => (
+                    <tr key={row.feature} className="border-b border-gray-50 transition-colors hover:bg-gray-50/50">
                       <td className="px-6 py-4 text-sm text-gray-700 font-medium">{row.feature}</td>
                       <td className="px-6 py-4 text-center">
                         {row.intervue ? (
-                          <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-50">
-                            <svg className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-gray-900">
+                            <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                             </svg>
                           </span>
                         ) : (
-                          <span className="text-gray-300">&#10007;</span>
+                          <span className="text-gray-200">&#10007;</span>
                         )}
                       </td>
                       {[row.hackerrank, row.coderpad, row.karat, row.leetcode].map((val, j) => (
@@ -1286,110 +1280,133 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 10. PRICING ===== */}
-      <section id="pricing" className="py-24 bg-gradient-to-b from-[#FAFAF8] via-gray-50 to-[#FAFAF8]">
+      {/* ===== 10. PRICING -- Gradient Border ===== */}
+      <section id="pricing" className="py-32 lg:py-40 bg-[#FAFAF8]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-16">
-            <p className="text-sm font-semibold uppercase tracking-widest text-saffron mb-4">Pricing</p>
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900">
+          <ScrollReveal className="text-center mb-20 lg:mb-24">
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">Pricing</p>
+            <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900">
               Simple, Transparent Pricing
             </h2>
-            <p className="mt-6 text-lg text-gray-500 max-w-2xl mx-auto">
+            <p className="mt-6 text-lg text-gray-400 max-w-2xl mx-auto">
               Start free. Scale as you grow. No hidden fees.
             </p>
           </ScrollReveal>
 
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5" staggerDelay={0.1}>
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" staggerDelay={0.1}>
             {pricingPlans.map((plan) => (
               <StaggerItem key={plan.name}>
-                <div
-                  className={`relative rounded-2xl border p-7 transition-all duration-300 hover:scale-105 hover:-translate-y-1 h-full ${
-                    plan.highlighted
-                      ? "border-saffron bg-white shadow-xl shadow-saffron/10"
-                      : plan.accent === "pink"
-                        ? "border-pink-200 bg-white hover:border-pink-300"
-                        : "border-gray-200 bg-white hover:border-gray-300"
-                  }`}
-                >
-                  {plan.highlighted && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                      <span className="rounded-full bg-saffron px-4 py-1 text-xs font-semibold text-white shadow-lg">
-                        Most Popular
-                      </span>
+                {plan.highlighted ? (
+                  /* Gradient border wrapper for highlighted card */
+                  <div className="rounded-2xl bg-gradient-to-b from-saffron/40 to-india-green/40 p-px h-full">
+                    <div className="relative rounded-2xl bg-white p-7 h-full">
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                        <span className="rounded-full bg-gray-900 px-4 py-1 text-xs font-semibold text-white shadow-lg">
+                          Most Popular
+                        </span>
+                      </div>
+
+                      <h3 className="text-lg font-semibold text-gray-900">{plan.name}</h3>
+                      <p className="mt-1 text-sm text-gray-400">{plan.description}</p>
+
+                      <div className="mt-5 flex items-baseline">
+                        <span className="text-4xl font-semibold text-gray-900">{plan.price}</span>
+                        <span className="ml-1 text-gray-400">{plan.period}</span>
+                      </div>
+
+                      <ul className="mt-6 space-y-2.5">
+                        {plan.features.map((feature) => (
+                          <li key={feature} className="flex items-center gap-2.5 text-sm text-gray-600">
+                            <svg className="h-4 w-4 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                            {feature}
+                          </li>
+                        ))}
+                      </ul>
+
+                      <Link
+                        href={plan.href}
+                        className="mt-7 block w-full rounded-full py-3 text-center text-sm font-semibold bg-gray-900 text-white transition-all hover:bg-gray-800 hover:shadow-xl"
+                      >
+                        {plan.cta}
+                      </Link>
                     </div>
-                  )}
-
-                  <h3 className="text-lg font-semibold text-gray-900">{plan.name}</h3>
-                  <p className="mt-1 text-sm text-gray-500">{plan.description}</p>
-
-                  <div className="mt-5 flex items-baseline">
-                    <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
-                    <span className="ml-1 text-gray-400">{plan.period}</span>
                   </div>
+                ) : (
+                  <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-7 transition-all hover:shadow-xl hover:shadow-gray-200/50 h-full">
+                    <h3 className="text-lg font-semibold text-gray-900">{plan.name}</h3>
+                    <p className="mt-1 text-sm text-gray-400">{plan.description}</p>
 
-                  <ul className="mt-6 space-y-2.5">
-                    {plan.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-2.5 text-sm text-gray-600">
-                        <svg className={`h-4 w-4 shrink-0 ${plan.accent === "pink" ? "text-pink-500" : "text-saffron"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
+                    <div className="mt-5 flex items-baseline">
+                      <span className="text-4xl font-semibold text-gray-900">{plan.price}</span>
+                      <span className="ml-1 text-gray-400">{plan.period}</span>
+                    </div>
 
-                  <Link
-                    href={plan.href}
-                    className={`mt-7 block w-full rounded-xl py-3 text-center text-sm font-semibold transition-all ${
-                      plan.highlighted
-                        ? "bg-saffron text-white hover:bg-saffron/90 shadow-lg shadow-saffron/20"
-                        : plan.accent === "pink"
-                          ? "border border-pink-300 bg-pink-50 text-pink-600 hover:bg-pink-100"
-                          : "border border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100"
-                    }`}
-                  >
-                    {plan.cta}
-                  </Link>
-                </div>
+                    <ul className="mt-6 space-y-2.5">
+                      {plan.features.map((feature) => (
+                        <li key={feature} className="flex items-center gap-2.5 text-sm text-gray-600">
+                          <svg className="h-4 w-4 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+
+                    <Link
+                      href={plan.href}
+                      className="mt-7 block w-full rounded-full py-3 text-center text-sm font-semibold border border-gray-200 text-gray-700 transition-all hover:bg-gray-50 hover:shadow-lg"
+                    >
+                      {plan.cta}
+                    </Link>
+                  </div>
+                )}
               </StaggerItem>
             ))}
           </StaggerContainer>
         </div>
       </section>
 
-      {/* ===== 11. CTA BANNER ===== */}
-      <section className="py-24 bg-[#FAFAF8]">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      {/* ===== 11. CTA BANNER -- Dark Inversion ===== */}
+      <section className="py-32 lg:py-40 bg-[#FAFAF8]">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
-            <div className="rounded-3xl bg-gradient-to-r from-saffron/10 to-india-green/10 border border-gray-200 p-12 sm:p-16 text-center">
-              <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight">
-                Ready to Transform
-                <br />
-                <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">
-                  Your Hiring?
-                </span>
-              </h2>
-              <p className="mt-6 text-lg text-gray-500 max-w-2xl mx-auto">
-                Join the companies using AI-controlled interviews to find the best engineers -- faster and more fairly.
-              </p>
-              <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  href="/auth/signup?role=company"
-                  className="inline-flex items-center justify-center rounded-xl bg-saffron px-10 py-4 text-lg font-semibold text-white shadow-lg shadow-saffron/20 transition-all hover:shadow-saffron/40 hover:scale-[1.02]"
-                >
-                  Start Hiring
-                </Link>
-                <Link
-                  href="/auth/signup?role=candidate"
-                  className="inline-flex items-center justify-center rounded-xl bg-india-green px-10 py-4 text-lg font-semibold text-white shadow-lg shadow-india-green/20 transition-all hover:shadow-india-green/40 hover:scale-[1.02]"
-                >
-                  I&apos;m a Candidate
-                </Link>
+            <div className="relative rounded-3xl bg-gray-900 p-12 sm:p-16 text-center overflow-hidden">
+              {/* Gradient orbs inside dark section */}
+              <div className="gradient-orb w-[400px] h-[400px] bg-saffron/20 -top-20 -right-20" />
+              <div className="gradient-orb w-[300px] h-[300px] bg-india-green/20 -bottom-20 -left-20" />
+
+              <div className="relative">
+                <h2 className="text-4xl sm:text-5xl font-semibold text-white leading-tight">
+                  Ready to Transform
+                  <br />
+                  <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">
+                    Your Hiring?
+                  </span>
+                </h2>
+                <p className="mt-6 text-lg text-gray-400 max-w-2xl mx-auto">
+                  Join the companies using AI-controlled interviews to find the best engineers -- faster and more fairly.
+                </p>
+                <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+                  <Link
+                    href="/auth/signup?role=company"
+                    className="inline-flex items-center justify-center rounded-full bg-white px-10 py-4 text-lg font-semibold text-gray-900 transition-all hover:bg-gray-100 hover:shadow-xl"
+                  >
+                    Start Hiring
+                  </Link>
+                  <Link
+                    href="/auth/signup?role=candidate"
+                    className="inline-flex items-center justify-center rounded-full border border-gray-600 px-10 py-4 text-lg font-semibold text-white transition-all hover:bg-gray-800 hover:border-gray-500"
+                  >
+                    I&apos;m a Candidate
+                  </Link>
+                </div>
                 <Link
                   href="/auth/signup?role=school"
-                  className="inline-flex items-center justify-center rounded-xl bg-pink-500 px-10 py-4 text-lg font-semibold text-white shadow-lg shadow-pink-500/20 transition-all hover:shadow-pink-500/40 hover:scale-[1.02]"
+                  className="mt-6 inline-flex items-center gap-1 text-sm text-gray-400 hover:text-white transition-colors"
                 >
-                  For Schools
+                  For Schools &rarr;
                 </Link>
               </div>
             </div>
@@ -1397,20 +1414,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 12. FOOTER ===== */}
-      <footer className="bg-gray-50/80 border-t border-gray-200 py-16">
+      {/* ===== 12. FOOTER -- Subtle ===== */}
+      <footer className="bg-[#FAFAF8] border-t border-gray-100 py-20 lg:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
             <div>
-              <span className="text-2xl font-bold tracking-tight text-gray-900">
+              <span className="text-2xl font-semibold tracking-tight text-gray-900">
                 Intervue<span className="text-india-green">.AI</span>
               </span>
-              <p className="mt-3 text-sm text-gray-500 leading-relaxed">
+              <p className="mt-3 text-sm text-gray-400 leading-relaxed">
                 The AI-controlled interview platform for modern engineering teams.
               </p>
             </div>
             <div>
-              <h4 className="text-sm font-semibold text-gray-900 mb-4">For Companies</h4>
+              <h4 className="text-xs font-medium uppercase tracking-wider text-gray-400 mb-4">For Companies</h4>
               <div className="space-y-2.5">
                 <Link href="/auth/signup?role=company" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">Sign Up</Link>
                 <Link href="/#pricing" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">Pricing</Link>
@@ -1418,7 +1435,7 @@ export default function Home() {
               </div>
             </div>
             <div>
-              <h4 className="text-sm font-semibold text-gray-900 mb-4">For Candidates</h4>
+              <h4 className="text-xs font-medium uppercase tracking-wider text-gray-400 mb-4">For Candidates</h4>
               <div className="space-y-2.5">
                 <Link href="/auth/signup?role=candidate" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">Sign Up</Link>
                 <Link href="/practice" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">Practice Mode</Link>
@@ -1428,7 +1445,7 @@ export default function Home() {
               </div>
             </div>
             <div>
-              <h4 className="text-sm font-semibold text-gray-900 mb-4">For Schools</h4>
+              <h4 className="text-xs font-medium uppercase tracking-wider text-gray-400 mb-4">For Schools</h4>
               <div className="space-y-2.5">
                 <Link href="/auth/signup?role=school" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">Sign Up</Link>
                 <Link href="/school/enrollment" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">Enrollment</Link>
@@ -1437,13 +1454,13 @@ export default function Home() {
               </div>
             </div>
             <div>
-              <h4 className="text-sm font-semibold text-gray-900 mb-4">Platform</h4>
+              <h4 className="text-xs font-medium uppercase tracking-wider text-gray-400 mb-4">Platform</h4>
               <div className="space-y-2.5">
                 <Link href="/auth/signin" className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">Sign In</Link>
               </div>
             </div>
           </div>
-          <div className="border-t border-gray-200 pt-8 flex flex-col items-center justify-between gap-4 sm:flex-row">
+          <div className="border-t border-gray-100 pt-8 flex flex-col items-center justify-between gap-4 sm:flex-row">
             <p className="text-sm text-gray-400">
               &copy; {new Date().getFullYear()} Intervue.AI. All rights reserved.
             </p>
