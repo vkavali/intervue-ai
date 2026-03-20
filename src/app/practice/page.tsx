@@ -9,7 +9,7 @@ import DailyChallengeCard from "@/components/gamification/DailyChallengeCard";
 
 const ITEMS_PER_PAGE = 24;
 
-const COMPANY_FILTERS = ["All", "Google", "Amazon", "Meta", "Apple", "Netflix", "General"];
+const COMPANY_FILTERS = ["All", "Google", "Amazon", "Meta", "Apple", "Netflix", "Flipkart", "Razorpay", "Swiggy", "Zerodha", "PhonePe", "CRED", "Meesho", "General"];
 const DIFFICULTY_FILTERS = ["All", "EASY", "MEDIUM", "HARD"];
 const CATEGORY_FILTERS = ["All", "Arrays", "Strings", "LinkedLists", "Trees", "Graph", "DynamicProgramming", "Sorting", "StackQueue", "Design", "Math", "Greedy", "Backtracking", "SlidingWindow", "Recursion"];
 

@@ -235,23 +235,6 @@ export default function Home() {
   const pricingPlans = isIndia
     ? [
         {
-          name: "Starter",
-          price: "Free",
-          period: "",
-          description: "For small teams getting started",
-          features: [
-            "Up to 5 interviews/month",
-            "L0-L2 AI levels",
-            "Basic audit reports",
-            "Email support",
-          ],
-          cta: "Get Started",
-          highlighted: false,
-          accent: "saffron",
-          href: "/auth/signup?role=company",
-          launchBadge: null,
-        },
-        {
           name: "Pro",
           price: "Rs.1,999",
           period: "/month",
@@ -263,9 +246,8 @@ export default function Home() {
             "Priority support",
             "Custom question library",
             "Calendar & scheduling",
-            "4,000+ practice problems",
           ],
-          cta: "Start Free Trial",
+          cta: "Start 3-Month Free Trial",
           highlighted: true,
           accent: "saffron",
           href: "/auth/signup?role=company",
@@ -285,7 +267,7 @@ export default function Home() {
             "Custom integrations",
             "On-prem deployment",
           ],
-          cta: "Start Free Trial",
+          cta: "Start 3-Month Free Trial",
           highlighted: false,
           accent: "saffron",
           href: "/auth/signup?role=company",
@@ -310,23 +292,61 @@ export default function Home() {
           launchBadge: null,
         },
         {
+          name: "Candidate Free",
+          price: "Free",
+          period: "",
+          description: "Start practicing today",
+          features: [
+            "Easy difficulty problems",
+            "Basic code execution",
+            "XP & streaks",
+            "Global leaderboard",
+            "Fresh grads: 6 months Pro free",
+            "Laid off? 1 month Pro free",
+          ],
+          cta: "Start Practicing",
+          highlighted: false,
+          accent: "india-green",
+          href: "/auth/signup?role=candidate",
+          launchBadge: null,
+        },
+        {
+          name: "Candidate Pro",
+          price: "Rs.199",
+          period: "/month",
+          description: "Unlock all problems & AI coaching",
+          features: [
+            "All difficulties (Easy + Medium + Hard)",
+            "AI coaching & editorials",
+            "Company-specific problems",
+            "Weakness profiling",
+            "15 study patterns",
+            "Priority support",
+          ],
+          cta: "Upgrade to Pro",
+          highlighted: false,
+          accent: "india-green",
+          href: "/auth/signup?role=candidate",
+          launchBadge: null,
+        },
+        {
           name: "Education",
           price: "Rs.249",
           period: "/student/month",
-          description: "For schools and universities",
+          description: "For IITs, NITs & colleges",
           features: [
-            "Enrollment codes",
+            "3 months free trial",
+            "Enrollment codes for batches",
             "Student assignments",
-            "Class-wide analytics",
+            "Placement readiness analytics",
             "XP & badge tracking",
-            "Leaderboard per school",
-            "Priority support",
+            "Leaderboard per college",
           ],
-          cta: "Set Up Your School",
+          cta: "Start Free Trial",
           highlighted: false,
           accent: "pink",
           href: "/auth/signup?role=school",
-          launchBadge: "LAUNCH PRICE" as const,
+          launchBadge: "3 MONTHS FREE" as const,
         },
       ]
     : [
@@ -403,6 +423,44 @@ export default function Home() {
           highlighted: false,
           accent: "saffron",
           href: "/auth/signup?role=company",
+          launchBadge: null,
+        },
+        {
+          name: "Candidate Free",
+          price: "$0",
+          period: "",
+          description: "Start practicing today",
+          features: [
+            "Easy difficulty problems",
+            "Basic code execution",
+            "XP & streaks",
+            "Global leaderboard",
+            "Fresh grads: 6 months Pro free",
+            "Laid off? 1 month Pro free",
+          ],
+          cta: "Start Practicing",
+          highlighted: false,
+          accent: "india-green",
+          href: "/auth/signup?role=candidate",
+          launchBadge: null,
+        },
+        {
+          name: "Candidate Pro",
+          price: "$5",
+          period: "/month",
+          description: "Unlock all problems & AI coaching",
+          features: [
+            "All difficulties (Easy + Medium + Hard)",
+            "AI coaching & editorials",
+            "Company-specific problems",
+            "Weakness profiling",
+            "15 study patterns",
+            "Priority support",
+          ],
+          cta: "Upgrade to Pro",
+          highlighted: false,
+          accent: "india-green",
+          href: "/auth/signup?role=candidate",
           launchBadge: null,
         },
         {
@@ -1123,15 +1181,19 @@ export default function Home() {
       <section id="pricing" className="py-32 lg:py-40 bg-[#FAFAF8]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-6">
-            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">Pricing</p>
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">{isIndia ? "Company & School Pricing" : "Pricing"}</p>
             <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900">
               {isIndia ? "Launch pricing for India" : "Start free. Scale as you grow."}
             </h2>
-            {isIndia && (
-              <p className="mt-4 text-base text-gray-400">
-                All prices in INR. Billed annually after 3-month free trial.
-              </p>
-            )}
+            <p className="mt-4 text-base text-gray-400">
+              {isIndia
+                ? "All prices in INR. First 100 companies get 3 months free. Schools get 3 months free trial."
+                : "Plans for companies, candidates, and schools. Start with free tiers and upgrade as you grow."}
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2 justify-center">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-saffron/10 border border-saffron/20 px-3 py-1 text-xs font-medium text-saffron">Fresh graduates: 6 months free</span>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-xs font-medium text-blue-600">Laid off? 1 month free</span>
+            </div>
           </ScrollReveal>
 
           <div className="mb-12" />
@@ -1229,20 +1291,20 @@ export default function Home() {
                     <ul className="mt-6 space-y-2.5">
                       {plan.features.map((feature) => (
                         <li key={feature} className="flex items-center gap-2.5 text-sm text-gray-600">
-                          <svg className={`h-4 w-4 shrink-0 ${plan.accent === "pink" ? "text-pink-500" : "text-gray-300"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                          <svg className={`h-4 w-4 shrink-0 ${plan.accent === "pink" ? "text-pink-500" : plan.accent === "india-green" ? "text-india-green" : "text-gray-300"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                           {feature}
                         </li>
                       ))}
                     </ul>
-                    <Link href={plan.href} className="mt-7 block w-full rounded-full py-3 text-center text-sm font-semibold border border-gray-200 text-gray-700 hover:bg-gray-50 transition-all">{plan.cta}</Link>
+                    <Link href={plan.href} className={`mt-7 block w-full rounded-full py-3 text-center text-sm font-semibold transition-all ${plan.accent === "india-green" ? "border border-india-green/30 text-india-green hover:bg-india-green/5" : "border border-gray-200 text-gray-700 hover:bg-gray-50"}`}>{plan.cta}</Link>
                   </div>
                 )}
               </StaggerItem>
             ))}
           </StaggerContainer>
 
-          {/* Bottom row: last 2 plans, centered */}
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto mt-6" staggerDelay={0.1}>
+          {/* Bottom row: remaining plans, centered */}
+          <StaggerContainer className={`grid grid-cols-1 ${pricingPlans.length - 3 > 1 ? "md:grid-cols-2 max-w-3xl" : "max-w-md"} gap-6 mx-auto mt-6`} staggerDelay={0.1}>
             {pricingPlans.slice(3).map((plan) => (
               <StaggerItem key={plan.name}>
                 <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-7 transition-all hover:shadow-xl hover:shadow-gray-200/50 h-full">
@@ -1260,12 +1322,12 @@ export default function Home() {
                   <ul className="mt-6 space-y-2.5">
                     {plan.features.map((feature) => (
                       <li key={feature} className="flex items-center gap-2.5 text-sm text-gray-600">
-                        <svg className={`h-4 w-4 shrink-0 ${plan.accent === "pink" ? "text-pink-500" : "text-gray-300"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                        <svg className={`h-4 w-4 shrink-0 ${plan.accent === "pink" ? "text-pink-500" : plan.accent === "india-green" ? "text-india-green" : "text-gray-300"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                         {feature}
                       </li>
                     ))}
                   </ul>
-                  <Link href={plan.href} className="mt-7 block w-full rounded-full py-3 text-center text-sm font-semibold border border-gray-200 text-gray-700 hover:bg-gray-50 transition-all">{plan.cta}</Link>
+                  <Link href={plan.href} className={`mt-7 block w-full rounded-full py-3 text-center text-sm font-semibold transition-all ${plan.accent === "india-green" ? "border border-india-green/30 text-india-green hover:bg-india-green/5" : "border border-gray-200 text-gray-700 hover:bg-gray-50"}`}>{plan.cta}</Link>
                 </div>
               </StaggerItem>
             ))}
