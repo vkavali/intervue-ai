@@ -684,94 +684,47 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 6. AI LEVELS -- Neutral Cards ===== */}
-      <section className="relative py-32 lg:py-40 bg-[#FAFAF8]">
-        <div className="gradient-orb w-[500px] h-[500px] bg-saffron/10 top-0 right-0" />
-        <div className="gradient-orb w-[400px] h-[400px] bg-india-green/10 bottom-20 -left-20" />
+      {/* ===== 6. AI LEVELS (DARK) ===== */}
+      <section className="relative py-32 lg:py-40 bg-gray-950">
+        <div className="gradient-orb w-[500px] h-[500px] bg-saffron/25 top-0 right-0 opacity-40" />
+        <div className="gradient-orb w-[400px] h-[400px] bg-india-green/20 bottom-20 -left-20 opacity-40" />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left: Glassmorphic selector mockup */}
-            <ScrollReveal>
-              <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm shadow-[0_20px_60px_-15px_rgba(0,0,0,0.08)] p-6 space-y-5">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-saffron to-india-green flex items-center justify-center">
-                    <span className="text-xs font-bold text-white">AI</span>
+          <ScrollReveal className="text-center mb-20 lg:mb-24">
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-500 mb-4">The Core Differentiator</p>
+            <h2 className="text-4xl sm:text-5xl font-semibold text-white leading-tight">
+              You control the AI.<br />
+              <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">Not the other way around.</span>
+            </h2>
+          </ScrollReveal>
+
+          {/* Level selector as horizontal strip */}
+          <ScrollReveal>
+            <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 max-w-5xl mx-auto">
+              {aiLevels.map((ai, i) => (
+                <div key={ai.level} className={`group rounded-2xl border p-5 text-center transition-all ${
+                  i === 2
+                    ? "border-saffron/30 bg-gradient-to-b from-saffron/10 to-transparent shadow-[0_0_40px_-10px_rgba(255,153,0,0.3)]"
+                    : "border-white/[0.06] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.12]"
+                }`}>
+                  <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl mb-3 ${
+                    i === 2 ? "bg-gradient-to-br from-saffron to-india-green shadow-lg" : "bg-white/[0.06] border border-white/10"
+                  }`}>
+                    <span className={`text-sm font-bold ${i === 2 ? "text-white" : "text-gray-400"}`}>{ai.level}</span>
                   </div>
-                  <span className="text-sm font-semibold text-gray-900">AI Level Configuration</span>
+                  <h3 className={`text-base font-semibold mb-1 ${i === 2 ? "text-white" : "text-gray-300"}`}>{ai.label}</h3>
+                  <p className="text-xs text-gray-500">{ai.description}</p>
+                  {i === 2 && <span className="mt-3 inline-block text-[10px] font-medium text-saffron bg-saffron/10 rounded-full px-3 py-0.5">Selected</span>}
                 </div>
+              ))}
+            </div>
+          </ScrollReveal>
 
-                <div>
-                  <p className="text-xs font-medium text-gray-400 mb-2">Select assistance level</p>
-                  <div className="flex gap-1.5">
-                    {["L0", "L1", "L2", "L3", "L4"].map((l, i) => (
-                      <div key={l} className={`flex-1 rounded-full py-2 text-center text-xs font-bold transition-all cursor-default ${
-                        i === 2
-                          ? "bg-gray-900 text-white shadow-sm"
-                          : "bg-gray-100 text-gray-400"
-                      }`}>{l}</div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="rounded-xl bg-gray-50 border border-gray-100 p-4">
-                  <p className="text-xs font-medium text-gray-500 mb-2">L2 Preview &mdash; Scaffold</p>
-                  <div className="rounded-lg bg-saffron/5 border border-saffron/10 p-3">
-                    <p className="text-xs text-gray-600 leading-relaxed">&quot;Consider using a HashMap to optimize the lookup. Here&apos;s a skeleton to get you started...&quot;</p>
-                  </div>
-                </div>
-
-                <div className="rounded-xl bg-gray-50 border border-gray-100 p-4">
-                  <p className="text-xs font-medium text-gray-500 mb-2">Session Log</p>
-                  <div className="space-y-1.5">
-                    {[
-                      { time: "14:32", event: "AI level changed L1 → L2", who: "Interviewer" },
-                      { time: "14:35", event: "Scaffold delivered", who: "AI" },
-                      { time: "14:38", event: "Candidate used suggestion", who: "System" },
-                    ].map((log) => (
-                      <div key={log.time} className="flex items-center gap-2 text-[10px]">
-                        <span className="text-gray-300 font-mono">{log.time}</span>
-                        <span className="text-gray-600">{log.event}</span>
-                        <span className="ml-auto text-gray-400">{log.who}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 text-xs text-gray-400">
-                  <span className="w-2 h-2 rounded-full bg-india-green animate-pulse" />
-                  All AI interactions logged &amp; audited
-                </div>
-              </div>
-            </ScrollReveal>
-
-            {/* Right: Header + level cards */}
-            <ScrollReveal delay={0.2} direction="right">
-              <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">The Core Differentiator</p>
-              <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900 leading-tight">
-                You control the AI.<br />
-                <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">Not the other way around.</span>
-              </h2>
-
-              <div className="mt-8 space-y-3">
-                {aiLevels.map((ai) => (
-                  <div key={ai.level} className="rounded-xl border border-gray-100 bg-white/70 backdrop-blur-sm p-4 flex items-center gap-4 transition-all hover:shadow-xl hover:shadow-gray-200/50">
-                    <div className="w-10 h-10 rounded-full border-2 border-gray-200 bg-white flex items-center justify-center shrink-0">
-                      <span className="text-sm font-bold text-gray-600">{ai.level}</span>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900">{ai.label}</p>
-                      <p className="text-xs text-gray-400">{ai.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <p className="mt-6 text-sm text-gray-400 max-w-md">
-                Every AI interaction is logged, timestamped, and factored into the audit score. Interviewers can adjust levels mid-session with a single click.
-              </p>
-            </ScrollReveal>
-          </div>
+          <ScrollReveal delay={0.2} className="mt-12 text-center">
+            <p className="text-gray-400 text-sm max-w-xl mx-auto">
+              Every AI interaction is logged, timestamped, and factored into the audit score. Interviewers can adjust levels mid-session with a single click.
+            </p>
+          </ScrollReveal>
         </div>
       </section>
 
@@ -956,11 +909,12 @@ export default function Home() {
             </h2>
           </ScrollReveal>
 
+          {/* Top row: first 3 plans */}
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto" staggerDelay={0.1}>
-            {pricingPlans.map((plan) => (
+            {pricingPlans.slice(0, 3).map((plan) => (
               <StaggerItem key={plan.name}>
                 {plan.highlighted ? (
-                  <div className="rounded-2xl p-px bg-gradient-to-b from-saffron/40 to-india-green/40 h-full shadow-[0_20px_60px_-15px_rgba(255,153,0,0.2)]">
+                  <div className="rounded-2xl p-px bg-gradient-to-b from-saffron via-orange-400 to-india-green h-full shadow-[0_20px_60px_-15px_rgba(255,153,0,0.2)]">
                     <div className="relative rounded-[15px] bg-white p-7 h-full">
                       <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                         <span className="rounded-full bg-gray-900 px-4 py-1 text-xs font-semibold text-white">Most Popular</span>
@@ -1001,6 +955,31 @@ export default function Home() {
                     <Link href={plan.href} className="mt-7 block w-full rounded-full py-3 text-center text-sm font-semibold border border-gray-200 text-gray-700 hover:bg-gray-50 transition-all">{plan.cta}</Link>
                   </div>
                 )}
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+
+          {/* Bottom row: last 2 plans, centered */}
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto mt-6" staggerDelay={0.1}>
+            {pricingPlans.slice(3).map((plan) => (
+              <StaggerItem key={plan.name}>
+                <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-7 transition-all hover:shadow-xl hover:shadow-gray-200/50 h-full">
+                  <h3 className="text-lg font-semibold text-gray-900">{plan.name}</h3>
+                  <p className="mt-1 text-sm text-gray-400">{plan.description}</p>
+                  <div className="mt-5 flex items-baseline">
+                    <span className="text-4xl font-semibold text-gray-900">{plan.price}</span>
+                    <span className="ml-1 text-gray-400">{plan.period}</span>
+                  </div>
+                  <ul className="mt-6 space-y-2.5">
+                    {plan.features.map((feature) => (
+                      <li key={feature} className="flex items-center gap-2.5 text-sm text-gray-600">
+                        <svg className={`h-4 w-4 shrink-0 ${plan.accent === "pink" ? "text-pink-500" : "text-gray-300"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link href={plan.href} className="mt-7 block w-full rounded-full py-3 text-center text-sm font-semibold border border-gray-200 text-gray-700 hover:bg-gray-50 transition-all">{plan.cta}</Link>
+                </div>
               </StaggerItem>
             ))}
           </StaggerContainer>
