@@ -540,88 +540,29 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 4. GAMIFICATION -- Glass Mockup ===== */}
-      <section className="relative py-32 lg:py-40 bg-[#FAFAF8]">
-        <div className="gradient-orb w-[600px] h-[600px] bg-saffron/10 top-20 -left-40" />
+      {/* ===== 4. FEATURES GRID -- Bento ===== */}
+      <section id="features" className="py-32 lg:py-40 bg-[#FAFAF8]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ScrollReveal className="text-center mb-20 lg:mb-24">
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">Everything You Need</p>
+            <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900">
+              One platform,<br /><span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">zero gaps</span>
+            </h2>
+          </ScrollReveal>
 
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <ScrollReveal>
-              <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm shadow-[0_20px_60px_-15px_rgba(0,0,0,0.08)] p-6 space-y-5">
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-saffron to-india-green text-xs font-bold text-white">12</span>
-                      <span className="text-sm font-semibold text-gray-900">Level 12</span>
-                    </div>
-                    <span className="text-xs text-gray-400">2,450 / 3,000 XP</span>
+          <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" staggerDelay={0.05}>
+            {platformFeatures.map((f, idx) => (
+              <StaggerItem key={f.title} className={idx < 2 ? "sm:col-span-2 lg:col-span-2" : ""}>
+                <div className="group rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-6 transition-all hover:shadow-xl hover:shadow-gray-200/50 h-full">
+                  <div className="mb-4 w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center text-gray-500">
+                    {f.icon}
                   </div>
-                  <div className="h-3 rounded-full bg-gray-100 overflow-hidden">
-                    <div className="w-[82%] h-full rounded-full bg-gradient-to-r from-saffron to-india-green" />
-                  </div>
+                  <h3 className="text-base font-semibold text-gray-900 mb-2">{f.title}</h3>
+                  <p className="text-sm text-gray-400 leading-relaxed">{f.description}</p>
                 </div>
-                <div className="flex items-center gap-4 rounded-xl bg-gradient-to-r from-saffron/5 to-orange-50 border border-saffron/10 p-4">
-                  <span className="text-3xl">🔥</span>
-                  <div>
-                    <p className="text-lg font-semibold text-gray-900">14-Day Streak</p>
-                    <p className="text-xs text-gray-400">Personal best: 23 days</p>
-                  </div>
-                </div>
-                <div>
-                  <p className="text-xs font-medium text-gray-400 mb-2">Activity Heatmap</p>
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: 28 }, (_, i) => {
-                      const intensity = [0,1,0,2,3,1,0,0,2,3,3,2,1,0,1,2,3,3,2,1,0,1,3,3,2,3,3,2][i];
-                      const colors = ["bg-gray-100", "bg-emerald-200", "bg-emerald-400", "bg-emerald-600"];
-                      return <div key={i} className={`w-3 h-3 rounded-sm ${colors[intensity]}`} />;
-                    })}
-                  </div>
-                </div>
-                <div>
-                  <p className="text-xs font-medium text-gray-400 mb-2">Recent Badges</p>
-                  <div className="flex gap-2">
-                    {[
-                      { emoji: "🏆", name: "First Solve" },
-                      { emoji: "🔥", name: "7-Day Streak" },
-                      { emoji: "⚡", name: "Speed Demon" },
-                      { emoji: "🧠", name: "DP Master" },
-                      { emoji: "🎯", name: "Perfectionist" },
-                    ].map((b) => (
-                      <div key={b.name} className="flex flex-col items-center gap-1">
-                        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 border border-gray-100 text-lg cursor-default">{b.emoji}</span>
-                        <span className="text-[9px] text-gray-400">{b.name}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </ScrollReveal>
-
-            <ScrollReveal delay={0.2} direction="right">
-              <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">Gamification</p>
-              <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900 leading-tight">
-                Practice shouldn&apos;t<br />feel like a{" "}
-                <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">chore</span>
-              </h2>
-              <p className="mt-6 text-lg text-gray-400 leading-relaxed">
-                Every solve earns XP, maintains your streak, and pushes you up the leaderboard. Unlock 17 badges and celebrate with confetti.
-              </p>
-              <div className="mt-8 grid grid-cols-2 gap-3">
-                {[
-                  "XP & Leveling", "17 Badges", "Global Leaderboard", "Daily Challenges", "Activity Heatmap", "Confetti Celebrations",
-                ].map((item) => (
-                  <div key={item} className="flex items-center gap-2 rounded-xl border border-gray-100 bg-white/70 backdrop-blur-sm px-4 py-3 text-sm text-gray-700">
-                    <div className="w-2 h-2 rounded-full bg-gradient-to-r from-saffron to-india-green shrink-0" />
-                    {item}
-                  </div>
-                ))}
-              </div>
-              <Link href="/auth/signup?role=candidate" className="mt-10 inline-flex items-center gap-2 rounded-full bg-india-green px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-india-green/25 transition-all hover:shadow-india-green/40 hover:shadow-xl">
-                Start Earning XP
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-              </Link>
-            </ScrollReveal>
-          </div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
         </div>
       </section>
 
@@ -730,29 +671,88 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 7. FEATURES GRID -- Bento ===== */}
-      <section id="features" className="py-32 lg:py-40 bg-[#FAFAF8]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-20 lg:mb-24">
-            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">Everything You Need</p>
-            <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900">
-              One platform,<br /><span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">zero gaps</span>
-            </h2>
-          </ScrollReveal>
+      {/* ===== 7. GAMIFICATION -- Glass Mockup ===== */}
+      <section className="relative py-32 lg:py-40 bg-[#FAFAF8]">
+        <div className="gradient-orb w-[600px] h-[600px] bg-saffron/10 top-20 -left-40" />
 
-          <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" staggerDelay={0.05}>
-            {platformFeatures.map((f, idx) => (
-              <StaggerItem key={f.title} className={idx < 2 ? "sm:col-span-2 lg:col-span-2" : ""}>
-                <div className="group rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-6 transition-all hover:shadow-xl hover:shadow-gray-200/50 h-full">
-                  <div className="mb-4 w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center text-gray-500">
-                    {f.icon}
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <ScrollReveal>
+              <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm shadow-[0_20px_60px_-15px_rgba(0,0,0,0.08)] p-6 space-y-5">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-saffron to-india-green text-xs font-bold text-white">12</span>
+                      <span className="text-sm font-semibold text-gray-900">Level 12</span>
+                    </div>
+                    <span className="text-xs text-gray-400">2,450 / 3,000 XP</span>
                   </div>
-                  <h3 className="text-base font-semibold text-gray-900 mb-2">{f.title}</h3>
-                  <p className="text-sm text-gray-400 leading-relaxed">{f.description}</p>
+                  <div className="h-3 rounded-full bg-gray-100 overflow-hidden">
+                    <div className="w-[82%] h-full rounded-full bg-gradient-to-r from-saffron to-india-green" />
+                  </div>
                 </div>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
+                <div className="flex items-center gap-4 rounded-xl bg-gradient-to-r from-saffron/5 to-orange-50 border border-saffron/10 p-4">
+                  <span className="text-3xl">🔥</span>
+                  <div>
+                    <p className="text-lg font-semibold text-gray-900">14-Day Streak</p>
+                    <p className="text-xs text-gray-400">Personal best: 23 days</p>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-gray-400 mb-2">Activity Heatmap</p>
+                  <div className="flex gap-0.5">
+                    {Array.from({ length: 28 }, (_, i) => {
+                      const intensity = [0,1,0,2,3,1,0,0,2,3,3,2,1,0,1,2,3,3,2,1,0,1,3,3,2,3,3,2][i];
+                      const colors = ["bg-gray-100", "bg-emerald-200", "bg-emerald-400", "bg-emerald-600"];
+                      return <div key={i} className={`w-3 h-3 rounded-sm ${colors[intensity]}`} />;
+                    })}
+                  </div>
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-gray-400 mb-2">Recent Badges</p>
+                  <div className="flex gap-2">
+                    {[
+                      { emoji: "🏆", name: "First Solve" },
+                      { emoji: "🔥", name: "7-Day Streak" },
+                      { emoji: "⚡", name: "Speed Demon" },
+                      { emoji: "🧠", name: "DP Master" },
+                      { emoji: "🎯", name: "Perfectionist" },
+                    ].map((b) => (
+                      <div key={b.name} className="flex flex-col items-center gap-1">
+                        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 border border-gray-100 text-lg cursor-default">{b.emoji}</span>
+                        <span className="text-[9px] text-gray-400">{b.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </ScrollReveal>
+
+            <ScrollReveal delay={0.2} direction="right">
+              <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">Gamification</p>
+              <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900 leading-tight">
+                Practice shouldn&apos;t<br />feel like a{" "}
+                <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">chore</span>
+              </h2>
+              <p className="mt-6 text-lg text-gray-400 leading-relaxed">
+                Every solve earns XP, maintains your streak, and pushes you up the leaderboard. Unlock 17 badges and celebrate with confetti.
+              </p>
+              <div className="mt-8 grid grid-cols-2 gap-3">
+                {[
+                  "XP & Leveling", "17 Badges", "Global Leaderboard", "Daily Challenges", "Activity Heatmap", "Confetti Celebrations",
+                ].map((item) => (
+                  <div key={item} className="flex items-center gap-2 rounded-xl border border-gray-100 bg-white/70 backdrop-blur-sm px-4 py-3 text-sm text-gray-700">
+                    <div className="w-2 h-2 rounded-full bg-gradient-to-r from-saffron to-india-green shrink-0" />
+                    {item}
+                  </div>
+                ))}
+              </div>
+              <Link href="/auth/signup?role=candidate" className="mt-10 inline-flex items-center gap-2 rounded-full bg-india-green px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-india-green/25 transition-all hover:shadow-india-green/40 hover:shadow-xl">
+                Start Earning XP
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </Link>
+            </ScrollReveal>
+          </div>
         </div>
       </section>
 
