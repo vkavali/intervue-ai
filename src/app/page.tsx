@@ -157,26 +157,44 @@ const platformFeatures = [
   },
 ];
 
-const comparisonFeatures = [
-  { feature: "5-Level AI Control", intervue: true, hackerrank: false, coderpad: false, karat: false, leetcode: false },
-  { feature: "Company-Controlled AI", intervue: true, hackerrank: false, coderpad: false, karat: false, leetcode: false },
-  { feature: "AI Audit Engine", intervue: true, hackerrank: false, coderpad: false, karat: false, leetcode: false },
-  { feature: "Live Code + Video", intervue: true, hackerrank: true, coderpad: true, karat: true, leetcode: false },
-  { feature: "Candidate Pipeline", intervue: true, hackerrank: false, coderpad: false, karat: false, leetcode: false },
-  { feature: "Calendar Scheduling", intervue: true, hackerrank: true, coderpad: false, karat: true, leetcode: false },
-  { feature: "Practice Mode", intervue: true, hackerrank: true, coderpad: false, karat: false, leetcode: true },
-  { feature: "AI Interaction Logging", intervue: true, hackerrank: false, coderpad: false, karat: false, leetcode: false },
-  { feature: "Hire/No-Hire AI", intervue: true, hackerrank: false, coderpad: false, karat: true, leetcode: false },
-  { feature: "Anti-Cheat System", intervue: true, hackerrank: true, coderpad: false, karat: false, leetcode: false },
-  { feature: "Code Execution (7 Languages)", intervue: true, hackerrank: true, coderpad: true, karat: false, leetcode: true },
-  { feature: "Pattern-Based Study Plans", intervue: true, hackerrank: false, coderpad: false, karat: false, leetcode: false },
-  { feature: "XP & Leveling", intervue: true, hackerrank: false, coderpad: false, karat: false, leetcode: false },
-  { feature: "Achievement Badges", intervue: true, hackerrank: true, coderpad: false, karat: false, leetcode: false },
-  { feature: "Daily Challenges", intervue: true, hackerrank: true, coderpad: false, karat: false, leetcode: true },
-  { feature: "Leaderboard", intervue: true, hackerrank: true, coderpad: false, karat: false, leetcode: true },
-  { feature: "Activity Heatmap", intervue: true, hackerrank: false, coderpad: false, karat: false, leetcode: true },
-  { feature: "School/University Mode", intervue: true, hackerrank: false, coderpad: false, karat: false, leetcode: false },
-  { feature: "Enrollment Codes", intervue: true, hackerrank: false, coderpad: false, karat: false, leetcode: false },
+const comparisonFeaturesGlobal = [
+  { feature: "5-Level AI Control", intervue: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Company-Controlled AI", intervue: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "AI Audit Engine", intervue: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Live Code + Video", intervue: true, c2: true, c3: true, c4: true, c5: false },
+  { feature: "Candidate Pipeline", intervue: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Calendar Scheduling", intervue: true, c2: true, c3: false, c4: true, c5: false },
+  { feature: "Practice Mode", intervue: true, c2: true, c3: false, c4: false, c5: true },
+  { feature: "AI Interaction Logging", intervue: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Hire/No-Hire AI", intervue: true, c2: false, c3: false, c4: true, c5: false },
+  { feature: "Anti-Cheat System", intervue: true, c2: true, c3: false, c4: false, c5: false },
+  { feature: "Code Execution (7 Languages)", intervue: true, c2: true, c3: true, c4: false, c5: true },
+  { feature: "Pattern-Based Study Plans", intervue: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "XP & Leveling", intervue: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Achievement Badges", intervue: true, c2: true, c3: false, c4: false, c5: false },
+  { feature: "Daily Challenges", intervue: true, c2: true, c3: false, c4: false, c5: true },
+  { feature: "Leaderboard", intervue: true, c2: true, c3: false, c4: false, c5: true },
+  { feature: "Activity Heatmap", intervue: true, c2: false, c3: false, c4: false, c5: true },
+  { feature: "School/University Mode", intervue: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Enrollment Codes", intervue: true, c2: false, c3: false, c4: false, c5: false },
+];
+
+const comparisonFeaturesIndia = [
+  { feature: "5-Level AI Control", intervue: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Company-Controlled AI", intervue: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "AI Audit Engine", intervue: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Live Code + Video", intervue: true, c2: true, c3: true, c4: true, c5: false },
+  { feature: "UPI / Razorpay Payments", intervue: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "INR Pricing", intervue: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Campus Hiring Support", intervue: true, c2: false, c3: false, c4: true, c5: false },
+  { feature: "Practice Mode", intervue: true, c2: true, c3: true, c4: false, c5: true },
+  { feature: "Hire/No-Hire AI", intervue: true, c2: false, c3: false, c4: true, c5: false },
+  { feature: "Anti-Cheat System", intervue: true, c2: true, c3: false, c4: false, c5: false },
+  { feature: "Code Execution (7 Languages)", intervue: true, c2: true, c3: true, c4: false, c5: true },
+  { feature: "XP & Gamification", intervue: true, c2: false, c3: true, c4: false, c5: false },
+  { feature: "Pattern-Based Study Plans", intervue: true, c2: false, c3: true, c4: false, c5: false },
+  { feature: "IIT/NIT University Mode", intervue: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Enrollment Codes", intervue: true, c2: false, c3: false, c4: false, c5: false },
 ];
 
 const faangCompanies = [
@@ -185,6 +203,17 @@ const faangCompanies = [
   { name: "Meta", color: "text-blue-500", bg: "bg-blue-50 border-blue-200" },
   { name: "Apple", color: "text-gray-600", bg: "bg-gray-50 border-gray-200" },
   { name: "Netflix", color: "text-red-600", bg: "bg-red-50 border-red-200" },
+];
+
+const indianCompanies = [
+  { name: "Flipkart", color: "text-blue-600", bg: "bg-blue-50 border-blue-200" },
+  { name: "Razorpay", color: "text-blue-500", bg: "bg-blue-50 border-blue-200" },
+  { name: "Swiggy", color: "text-orange-600", bg: "bg-orange-50 border-orange-200" },
+  { name: "Zerodha", color: "text-purple-600", bg: "bg-purple-50 border-purple-200" },
+  { name: "PhonePe", color: "text-indigo-600", bg: "bg-indigo-50 border-indigo-200" },
+  { name: "CRED", color: "text-gray-600", bg: "bg-gray-50 border-gray-200" },
+  { name: "Meesho", color: "text-pink-600", bg: "bg-pink-50 border-pink-200" },
+  { name: "Google India", color: "text-blue-600", bg: "bg-blue-50 border-blue-200" },
 ];
 
 export default function Home() {
@@ -407,7 +436,7 @@ export default function Home() {
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-24 pb-20 w-full">
           <ScrollReveal className="text-center max-w-4xl mx-auto">
-            <div className="floating-chip mb-10">
+            <div className="floating-chip mb-6">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-india-green opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-india-green" />
@@ -415,21 +444,62 @@ export default function Home() {
               Now with 5-level AI control & audit engine
             </div>
 
+            {/* Region Toggle */}
+            <div className="flex justify-center mb-8">
+              <div className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white p-1 shadow-sm">
+                <button
+                  onClick={() => setRegion("US")}
+                  className={`rounded-full px-5 py-2 text-sm font-medium transition-all ${
+                    region === "US"
+                      ? "bg-gray-900 text-white shadow-sm"
+                      : "text-gray-500 hover:text-gray-700"
+                  }`}
+                >
+                  Global (USD)
+                </button>
+                <button
+                  onClick={() => setRegion("IN")}
+                  className={`rounded-full px-5 py-2 text-sm font-medium transition-all flex items-center gap-2 ${
+                    region === "IN"
+                      ? "bg-gradient-to-r from-saffron to-india-green text-white shadow-sm"
+                      : "text-gray-500 hover:text-gray-700"
+                  }`}
+                >
+                  India (INR)
+                </button>
+              </div>
+            </div>
+
             <h1 className="text-6xl sm:text-7xl lg:text-[5.5rem] font-semibold tracking-tight leading-[1.05]">
-              <span className="text-gray-900">The future of</span>
+              <span className="text-gray-900">{isIndia ? "India\u2019s smartest" : "The future of"}</span>
               <br />
               <span className="bg-gradient-to-r from-saffron via-orange-500 to-india-green bg-clip-text text-transparent">
-                technical hiring
+                {isIndia ? "hiring platform" : "technical hiring"}
               </span>
             </h1>
 
             <p className="mt-8 text-lg sm:text-xl text-gray-400 leading-relaxed max-w-2xl mx-auto">
-              Company-controlled AI assistance. Auto-audited sessions. Candidate gamification with XP, badges, and leaderboards. Everything in one platform.
+              {isIndia
+                ? "Built for India\u2019s 5M+ developer workforce. AI-controlled interviews, auto-audited sessions, and campus hiring \u2014 all with UPI payments and INR pricing."
+                : "Company-controlled AI assistance. Auto-audited sessions. Candidate gamification with XP, badges, and leaderboards. Everything in one platform."}
             </p>
+
+            {/* India Launch Offer Chip */}
+            {isIndia && launchOffer.isActive && (
+              <div className="mt-6 flex justify-center">
+                <a href="#pricing" className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-saffron/10 to-india-green/10 border border-saffron/20 px-5 py-2 text-sm font-semibold text-saffron hover:shadow-lg transition-all">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-saffron opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-saffron" />
+                  </span>
+                  Launch Offer: 3 months free for first 100 companies &mdash; {launchOffer.remaining} spots left
+                </a>
+              </div>
+            )}
 
             <div className="mt-10 flex flex-col sm:flex-row flex-wrap gap-4 justify-center">
               <Link href="/auth/signup?role=company" className="pill-cta-primary group">
-                Start Hiring Smarter
+                {isIndia ? "Start Free Trial" : "Start Hiring Smarter"}
                 <svg className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
               </Link>
               <Link href="/auth/signup?role=candidate" className="pill-cta-secondary group">
@@ -437,7 +507,7 @@ export default function Home() {
                 <svg className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
               </Link>
               <Link href="/auth/signup?role=school" className="pill-cta-secondary group">
-                For Schools
+                {isIndia ? "For IITs & Universities" : "For Schools"}
                 <svg className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
               </Link>
             </div>
@@ -446,12 +516,17 @@ export default function Home() {
           {/* Trust bar -- neutral colors */}
           <ScrollReveal delay={0.2} className="mt-20 max-w-3xl mx-auto">
             <div className="grid grid-cols-4 gap-4">
-              {[
+              {(isIndia ? [
+                { value: "5M+", label: "Indian Developers" },
+                { value: "Rs.0", label: "UPI Fees" },
+                { value: "4,000+", label: "Problems" },
+                { value: "7", label: "Languages" },
+              ] : [
                 { value: "4,000+", label: "Problems" },
                 { value: "7", label: "Languages" },
                 { value: "17", label: "Badges" },
                 { value: "15", label: "Study Patterns" },
-              ].map((stat) => (
+              ]).map((stat) => (
                 <div key={stat.label} className="text-center">
                   <p className="text-3xl sm:text-4xl font-semibold text-gray-900">{stat.value}</p>
                   <p className="text-sm text-gray-400 mt-1">{stat.label}</p>
@@ -551,45 +626,57 @@ export default function Home() {
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-20">
-            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">Built For Everyone</p>
-            <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900">Three platforms, one product</h2>
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">{isIndia ? "Built For India" : "Built For Everyone"}</p>
+            <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900">{isIndia ? "One platform for companies, candidates & colleges" : "Three platforms, one product"}</h2>
           </ScrollReveal>
 
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6" staggerDelay={0.1}>
             {[
               {
                 title: "Companies",
-                desc: "Run AI-controlled technical interviews with full audit trails and data-driven hiring decisions.",
+                desc: isIndia
+                  ? "From TCS to startups like Razorpay \u2014 run AI-controlled interviews with auto-audited scorecards and data-driven hiring."
+                  : "Run AI-controlled technical interviews with full audit trails and data-driven hiring decisions.",
                 icon: (
                   <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
                   </svg>
                 ),
-                features: ["5-level AI control per interview", "Auto-generated scorecards", "Candidate pipeline & comparisons", "Calendar scheduling & video"],
+                features: isIndia
+                  ? ["5-level AI control per interview", "Auto-generated scorecards", "Campus & bulk hiring support", "UPI & Razorpay payments"]
+                  : ["5-level AI control per interview", "Auto-generated scorecards", "Candidate pipeline & comparisons", "Calendar scheduling & video"],
                 href: "/auth/signup?role=company",
                 cta: "Start Hiring",
               },
               {
                 title: "Candidates",
-                desc: "Practice with 4,000+ problems, earn XP, unlock 17 badges, and climb the leaderboard.",
+                desc: isIndia
+                  ? "Crack interviews at Flipkart, Swiggy, Google India, and more. 4,000+ problems with XP, badges, and leaderboards."
+                  : "Practice with 4,000+ problems, earn XP, unlock 17 badges, and climb the leaderboard.",
                 icon: (
                   <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25" />
                   </svg>
                 ),
-                features: ["XP, levels, and streaks", "17 achievement badges", "Global leaderboard", "7-language code execution"],
+                features: isIndia
+                  ? ["XP, levels, and streaks", "17 achievement badges", "India leaderboard", "DSA patterns for placements"]
+                  : ["XP, levels, and streaks", "17 achievement badges", "Global leaderboard", "7-language code execution"],
                 href: "/auth/signup?role=candidate",
                 cta: "Start Practicing",
               },
               {
-                title: "Schools",
-                desc: "Enroll entire classrooms with one code. Assign problems, track student progress.",
+                title: isIndia ? "IITs & Universities" : "Schools",
+                desc: isIndia
+                  ? "Designed for IITs, NITs, BITS, and engineering colleges. Enroll entire batches, assign problems, track placement readiness."
+                  : "Enroll entire classrooms with one code. Assign problems, track student progress.",
                 icon: (
                   <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.26 10.147a60.438 60.438 0 00-.491 6.347A48.62 48.62 0 0112 20.904a48.62 48.62 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.636 50.636 0 00-2.658-.813A59.906 59.906 0 0112 3.493a59.903 59.903 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
                   </svg>
                 ),
-                features: ["Enrollment codes for classes", "Assignment creation", "Class-wide analytics dashboard", "$5/student/month pricing"],
+                features: isIndia
+                  ? ["Enrollment codes for batches", "Assignment & lab creation", "Placement readiness analytics", "Rs.249/student/month"]
+                  : ["Enrollment codes for classes", "Assignment creation", "Class-wide analytics dashboard", "$5/student/month pricing"],
                 href: "#schools",
                 cta: "Learn More",
               },
@@ -626,7 +713,7 @@ export default function Home() {
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-20 lg:mb-24">
-            <p className="text-sm font-medium uppercase tracking-widest text-gray-500 mb-4">The Complete Flow</p>
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-500 mb-4">{isIndia ? "Hire at India\u2019s Scale" : "The Complete Flow"}</p>
             <h2 className="text-4xl sm:text-5xl font-semibold text-white leading-tight">
               Six steps to your next
               <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent"> great hire</span>
@@ -691,9 +778,9 @@ export default function Home() {
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-20 lg:mb-24">
-            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">For Educators</p>
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">{isIndia ? "For IITs, NITs & Colleges" : "For Educators"}</p>
             <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900 leading-tight">
-              Your classroom,<br /><span className="text-pink-500">supercharged</span>
+              {isIndia ? "Placement-ready" : "Your classroom,"}<br /><span className="text-pink-500">{isIndia ? "students" : "supercharged"}</span>
             </h2>
           </ScrollReveal>
 
@@ -719,7 +806,7 @@ export default function Home() {
             <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm shadow-[0_20px_60px_-15px_rgba(0,0,0,0.08)] overflow-hidden max-w-4xl mx-auto">
               <div className="border-b border-gray-100 bg-gray-50 px-6 py-4 flex items-center gap-3">
                 <span className="inline-flex items-center rounded-full bg-pink-50 border border-pink-100 px-2.5 py-0.5 text-xs font-medium text-pink-600">School Admin</span>
-                <span className="text-sm font-medium text-gray-900">Stanford CS Department</span>
+                <span className="text-sm font-medium text-gray-900">{isIndia ? "IIT Bombay CSE" : "Stanford CS Department"}</span>
               </div>
               <div className="p-6 grid grid-cols-4 gap-4">
                 {[
@@ -884,10 +971,10 @@ export default function Home() {
             <ScrollReveal>
               <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">For Candidates</p>
               <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900 leading-tight">
-                Land your dream job at
+                {isIndia ? "Crack your next interview at" : "Land your dream job at"}
               </h2>
               <div className="mt-4 flex flex-wrap gap-2">
-                {faangCompanies.map((c) => (
+                {(isIndia ? indianCompanies : faangCompanies).map((c) => (
                   <span key={c.name} className="inline-flex items-center rounded-full border border-gray-100 bg-white/80 px-4 py-2 text-sm font-semibold text-gray-600">
                     {c.name}
                   </span>
@@ -895,12 +982,17 @@ export default function Home() {
               </div>
 
               <div className="mt-8 space-y-3">
-                {[
+                {(isIndia ? [
+                  { title: "4,000+ Problems", desc: "All patterns asked by TCS, Infosys, Flipkart, and more" },
+                  { title: "7-Language Execution", desc: "Python, Java, C++, JS, TS, Go, and Rust" },
+                  { title: "15 DSA Patterns", desc: "Two Pointers, Sliding Window, DP \u2014 aligned to placement rounds" },
+                  { title: "AI Coaching", desc: "Weakness profiling and mock interview prep" },
+                ] : [
                   { title: "4,000+ Problems", desc: "Comprehensive bank covering all difficulty levels" },
                   { title: "7-Language Execution", desc: "JS, TS, Python, Java, C++, Go, and Rust" },
                   { title: "15 Study Patterns", desc: "Two Pointers, Sliding Window, DP, and more" },
                   { title: "AI Coaching", desc: "Get AI feedback, editorials, and weakness profiling" },
-                ].map((item) => (
+                ]).map((item) => (
                   <div key={item.title} className="flex items-start gap-3">
                     <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-saffron to-india-green flex items-center justify-center">
                       <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
@@ -973,11 +1065,16 @@ export default function Home() {
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-20 lg:mb-24">
-            <p className="text-sm font-medium uppercase tracking-widest text-gray-500 mb-4">The Honest Comparison</p>
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-500 mb-4">{isIndia ? "vs Indian Assessment Tools" : "The Honest Comparison"}</p>
             <h2 className="text-4xl sm:text-5xl font-semibold text-white">
-              Why teams switch to{" "}
-              <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">Intervue</span>
+              {isIndia ? "More than just coding tests" : "Why teams switch to"}{" "}
+              <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">{isIndia ? "" : "Intervue"}</span>
             </h2>
+            {isIndia && (
+              <p className="mt-4 text-base text-gray-500 max-w-2xl mx-auto">
+                Every competitor is assessment-only. Intervue.AI is the only platform with AI-controlled interviews, tiered assistance, and auto-generated scorecards.
+              </p>
+            )}
           </ScrollReveal>
 
           <ScrollReveal>
@@ -989,14 +1086,16 @@ export default function Home() {
                     <th className="px-6 py-5 text-center">
                       <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent text-sm font-bold">Intervue.AI</span>
                     </th>
-                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-600">HackerRank</th>
-                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-600">CoderPad</th>
-                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-600">Karat</th>
-                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-600">LeetCode</th>
+                    {(isIndia
+                      ? ["HackerRank", "HackerEarth", "Mettl", "LeetCode"]
+                      : ["HackerRank", "CoderPad", "Karat", "LeetCode"]
+                    ).map((name) => (
+                      <th key={name} className="px-6 py-5 text-center text-sm font-semibold text-gray-600">{name}</th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {comparisonFeatures.map((row) => (
+                  {(isIndia ? comparisonFeaturesIndia : comparisonFeaturesGlobal).map((row) => (
                     <tr key={row.feature} className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
                       <td className="px-6 py-3.5 text-sm text-gray-300 font-medium">{row.feature}</td>
                       <td className="px-6 py-3.5 text-center">
@@ -1006,7 +1105,7 @@ export default function Home() {
                           </span>
                         ) : <span className="text-gray-700">&#10007;</span>}
                       </td>
-                      {[row.hackerrank, row.coderpad, row.karat, row.leetcode].map((val, j) => (
+                      {[row.c2, row.c3, row.c4, row.c5].map((val, j) => (
                         <td key={j} className="px-6 py-3.5 text-center">
                           {val ? <span className="text-gray-500">&#10003;</span> : <span className="text-gray-700">&#10007;</span>}
                         </td>
@@ -1035,31 +1134,7 @@ export default function Home() {
             )}
           </ScrollReveal>
 
-          {/* Region Selector */}
-          <div className="flex justify-center mb-12">
-            <div className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white p-1 shadow-sm">
-              <button
-                onClick={() => setRegion("US")}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all ${
-                  region === "US"
-                    ? "bg-gray-900 text-white shadow-sm"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                USD ($)
-              </button>
-              <button
-                onClick={() => setRegion("IN")}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all ${
-                  region === "IN"
-                    ? "bg-gradient-to-r from-saffron to-india-green text-white shadow-sm"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                INR (Rs.)
-              </button>
-            </div>
-          </div>
+          <div className="mb-12" />
 
           {/* Launch Offer Banner — India only */}
           {isIndia && launchOffer.isActive && (
@@ -1208,23 +1283,25 @@ export default function Home() {
 
               <div className="relative">
                 <h2 className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-white leading-tight">
-                  Ready to hire
+                  {isIndia ? "India\u2019s hiring" : "Ready to hire"}
                   <br />
-                  <span className="bg-gradient-to-r from-saffron via-orange-400 to-india-green bg-clip-text text-transparent">smarter?</span>
+                  <span className="bg-gradient-to-r from-saffron via-orange-400 to-india-green bg-clip-text text-transparent">{isIndia ? "revolution starts here" : "smarter?"}</span>
                 </h2>
                 <p className="mt-6 text-lg text-gray-400 max-w-xl mx-auto">
-                  Join the companies using AI-controlled interviews to find the best engineers.
+                  {isIndia
+                    ? "Join the first 100 companies to get 3 months free. Pay in INR via UPI. Built for India\u2019s scale."
+                    : "Join the companies using AI-controlled interviews to find the best engineers."}
                 </p>
                 <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
                   <Link href="/auth/signup?role=company" className="inline-flex items-center justify-center rounded-full bg-white px-10 py-4 text-lg font-semibold text-gray-900 hover:bg-gray-100 transition-all hover:shadow-[0_0_40px_rgba(255,255,255,0.15)]">
-                    Start Hiring
+                    {isIndia ? "Claim Launch Offer" : "Start Hiring"}
                   </Link>
                   <Link href="/auth/signup?role=candidate" className="inline-flex items-center justify-center rounded-full border border-gray-600 px-10 py-4 text-lg font-semibold text-white hover:bg-white/[0.05] hover:border-gray-500 transition-all">
                     I&apos;m a Candidate
                   </Link>
                 </div>
                 <Link href="/auth/signup?role=school" className="mt-6 inline-flex items-center gap-1 text-sm text-gray-500 hover:text-white transition-colors">
-                  For Schools &rarr;
+                  {isIndia ? "For IITs & Universities" : "For Schools"} &rarr;
                 </Link>
               </div>
             </div>
@@ -1243,7 +1320,7 @@ export default function Home() {
             {[
               { title: "For Companies", links: [{ label: "Sign Up", href: "/auth/signup?role=company" }, { label: "Pricing", href: "/#pricing" }, { label: "Features", href: "/#features" }] },
               { title: "For Candidates", links: [{ label: "Sign Up", href: "/auth/signup?role=candidate" }, { label: "Practice Mode", href: "/practice" }, { label: "Study Plans", href: "/practice?tab=patterns" }, { label: "Leaderboard", href: "/leaderboard" }, { label: "Badges", href: "/candidate/badges" }] },
-              { title: "For Schools", links: [{ label: "Sign Up", href: "/auth/signup?role=school" }, { label: "Enrollment", href: "/school/enrollment" }, { label: "Assignments", href: "/school/assignments" }, { label: "Analytics", href: "/school/analytics" }] },
+              { title: isIndia ? "For Colleges" : "For Schools", links: [{ label: "Sign Up", href: "/auth/signup?role=school" }, { label: "Enrollment", href: "/school/enrollment" }, { label: "Assignments", href: "/school/assignments" }, { label: "Analytics", href: "/school/analytics" }] },
               { title: "Platform", links: [{ label: "Sign In", href: "/auth/signin" }] },
             ].map((col) => (
               <div key={col.title}>
