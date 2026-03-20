@@ -109,9 +109,12 @@ export default async function DashboardLayout({
     redirect("/auth/signin?callbackUrl=/dashboard");
   }
 
-  // Redirect candidates to their own dashboard
+  // Redirect non-company users to their own dashboards
   if (session.user.role === "CANDIDATE") {
     redirect("/candidate");
+  }
+  if (session.user.role === "SCHOOL_ADMIN") {
+    redirect("/school");
   }
 
   const isAdmin = session.user.role === "COMPANY_ADMIN";

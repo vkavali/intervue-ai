@@ -1023,16 +1023,36 @@ export default function Home() {
       {/* ===== 10. PRICING -- Gradient Border ===== */}
       <section id="pricing" className="py-32 lg:py-40 bg-[#FAFAF8]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-12">
-            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">Pricing</p>
-            <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900">
-              {isIndia ? "Launch pricing for India" : "Start free. Scale as you grow."}
-            </h2>
-            {isIndia && (
-              <p className="mt-4 text-base text-gray-400">
-                All prices in INR. Billed annually after 3-month free trial.
-              </p>
-            )}
+          <ScrollReveal className="mb-12">
+            <div className="flex items-start justify-between">
+              <div className="flex-1 text-center">
+                <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">Pricing</p>
+                <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900">
+                  {isIndia ? "Launch pricing for India" : "Start free. Scale as you grow."}
+                </h2>
+                {isIndia && (
+                  <p className="mt-4 text-base text-gray-400">
+                    All prices in INR. Billed annually after 3-month free trial.
+                  </p>
+                )}
+              </div>
+              {/* Region Selector */}
+              <div className="shrink-0 ml-4">
+                <div className="relative">
+                  <select
+                    value={region}
+                    onChange={(e) => setRegion(e.target.value as Region)}
+                    className="appearance-none rounded-lg border border-gray-200 bg-white pl-3 pr-8 py-2 text-sm font-medium text-gray-700 cursor-pointer hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-saffron/20 focus:border-saffron"
+                  >
+                    <option value="US">USD ($)</option>
+                    <option value="IN">INR (Rs.)</option>
+                  </select>
+                  <svg className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
+            </div>
           </ScrollReveal>
 
           {/* Launch Offer Banner — India only */}

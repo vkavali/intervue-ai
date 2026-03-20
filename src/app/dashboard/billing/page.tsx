@@ -168,12 +168,28 @@ export default function BillingPage() {
   return (
     <div>
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Billing</h1>
-        <p className="mt-1 text-sm text-gray-500">
-          Manage your subscription and billing details
-          {isIndia && " - India Launch Pricing (INR)"}
-        </p>
+      <div className="mb-8 flex items-start justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Billing</h1>
+          <p className="mt-1 text-sm text-gray-500">
+            Manage your subscription and billing details
+            {isIndia && " - India Launch Pricing (INR)"}
+          </p>
+        </div>
+        {/* Region Selector */}
+        <div className="relative shrink-0">
+          <select
+            value={region}
+            onChange={(e) => setRegion(e.target.value as Region)}
+            className="appearance-none rounded-lg border border-gray-200 bg-white pl-3 pr-8 py-2 text-sm font-medium text-gray-700 cursor-pointer hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-saffron/20 focus:border-saffron"
+          >
+            <option value="US">USD ($)</option>
+            <option value="IN">INR (Rs.)</option>
+          </select>
+          <svg className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
       </div>
 
       {/* Success / Cancel banners */}

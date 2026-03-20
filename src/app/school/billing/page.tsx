@@ -9,16 +9,44 @@ export default async function SchoolBillingPage() {
     redirect("/auth/redirect");
   }
 
-  const school = await prisma.school.findFirst({
-    where: { adminId: session.user.id },
-    include: { _count: { select: { students: true } } },
-  });
+  let school: {
+    id: string;
+    name: string;
+    plan: string;
+    maxStudents: number;
+    enrollmentCode: string;
+    region?: string;
+    _count: { students: number };
+  } | null = null;
+
+  try {
+    school = await prisma.school.findFirst({
+      where: { adminId: session.user.id },
+      include: { _count: { select: { students: true } } },
+    });
+  } catch {
+    // DB migration may not have been applied yet — retry without new fields
+    const basicSchool = await prisma.school.findFirst({
+      where: { adminId: session.user.id },
+      select: {
+        id: true,
+        name: true,
+        plan: true,
+        maxStudents: true,
+        enrollmentCode: true,
+        _count: { select: { students: true } },
+      },
+    });
+    if (basicSchool) {
+      school = { ...basicSchool, region: "US" };
+    }
+  }
 
   if (!school) {
     return <div className="text-center py-16"><p className="text-gray-500">School not found.</p></div>;
   }
 
-  const isIndia = school.region === "IN";
+  const isIndia = (school.region ?? "US") === "IN";
 
   const plans = isIndia
     ? [

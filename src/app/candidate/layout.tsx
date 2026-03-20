@@ -74,9 +74,9 @@ export default async function CandidateLayout({
     redirect("/auth/signin?callbackUrl=/candidate");
   }
 
-  // Redirect non-candidates to admin dashboard
+  // Redirect non-candidates to their own dashboard
   if (session.user.role !== "CANDIDATE") {
-    redirect("/dashboard");
+    redirect("/auth/redirect");
   }
 
   // Fetch gamification data for sidebar (graceful if columns don't exist yet)
