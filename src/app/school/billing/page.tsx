@@ -18,57 +18,118 @@ export default async function SchoolBillingPage() {
     return <div className="text-center py-16"><p className="text-gray-500">School not found.</p></div>;
   }
 
-  const plans = [
-    {
-      name: "Education Free",
-      price: "$0",
-      period: "/month",
-      features: [
-        "Up to 25 students",
-        "Basic practice problems",
-        "Student progress tracking",
-        "Enrollment codes",
-      ],
-      current: school.plan === "EDUCATION" && school.maxStudents <= 25,
-    },
-    {
-      name: "Education Pro",
-      price: "$5",
-      period: "/student/month",
-      features: [
-        "Up to 500 students",
-        "Full problem bank access",
-        "AI-powered practice (L0-L4)",
-        "Advanced analytics",
-        "Assignment management",
-        "CSV export",
-        "Priority support",
-      ],
-      current: school.plan === "EDUCATION_PRO",
-      recommended: true,
-    },
-    {
-      name: "Education Enterprise",
-      price: "Custom",
-      period: "",
-      features: [
-        "Unlimited students",
-        "Everything in Pro",
-        "Custom branding",
-        "SSO integration",
-        "API access",
-        "Dedicated account manager",
-        "Custom problem creation",
-      ],
-      current: school.plan === "EDUCATION_ENTERPRISE",
-    },
-  ];
+  const isIndia = school.region === "IN";
+
+  const plans = isIndia
+    ? [
+        {
+          name: "Education Free",
+          price: "Free",
+          period: "",
+          features: [
+            "Up to 25 students",
+            "Basic practice problems",
+            "Student progress tracking",
+            "Enrollment codes",
+          ],
+          current: school.plan === "EDUCATION" && school.maxStudents <= 25,
+          recommended: false,
+          launchBadge: false,
+        },
+        {
+          name: "Education Pro",
+          price: "Rs.249",
+          period: "/student/month",
+          features: [
+            "Up to 500 students",
+            "Full problem bank access",
+            "AI-powered practice (L0-L4)",
+            "Advanced analytics",
+            "Assignment management",
+            "CSV export",
+            "Priority support",
+          ],
+          current: school.plan === "EDUCATION_PRO",
+          recommended: true,
+          launchBadge: true,
+        },
+        {
+          name: "Education Enterprise",
+          price: "Custom",
+          period: "",
+          features: [
+            "Unlimited students",
+            "Everything in Pro",
+            "Custom branding",
+            "SSO integration",
+            "API access",
+            "Dedicated account manager",
+            "Custom problem creation",
+          ],
+          current: school.plan === "EDUCATION_ENTERPRISE",
+          recommended: false,
+          launchBadge: false,
+        },
+      ]
+    : [
+        {
+          name: "Education Free",
+          price: "$0",
+          period: "/month",
+          features: [
+            "Up to 25 students",
+            "Basic practice problems",
+            "Student progress tracking",
+            "Enrollment codes",
+          ],
+          current: school.plan === "EDUCATION" && school.maxStudents <= 25,
+          recommended: false,
+          launchBadge: false,
+        },
+        {
+          name: "Education Pro",
+          price: "$5",
+          period: "/student/month",
+          features: [
+            "Up to 500 students",
+            "Full problem bank access",
+            "AI-powered practice (L0-L4)",
+            "Advanced analytics",
+            "Assignment management",
+            "CSV export",
+            "Priority support",
+          ],
+          current: school.plan === "EDUCATION_PRO",
+          recommended: true,
+          launchBadge: false,
+        },
+        {
+          name: "Education Enterprise",
+          price: "Custom",
+          period: "",
+          features: [
+            "Unlimited students",
+            "Everything in Pro",
+            "Custom branding",
+            "SSO integration",
+            "API access",
+            "Dedicated account manager",
+            "Custom problem creation",
+          ],
+          current: school.plan === "EDUCATION_ENTERPRISE",
+          recommended: false,
+          launchBadge: false,
+        },
+      ];
 
   return (
     <div>
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">Billing</h1>
-        <p className="mt-1 text-gray-500">Manage your education plan and billing.</p>
+        <p className="mt-1 text-gray-500">
+          Manage your education plan and billing.
+          {isIndia && " Prices shown in INR."}
+        </p>
       </div>
 
       {/* Current Usage */}
@@ -107,12 +168,17 @@ export default async function SchoolBillingPage() {
           >
             {plan.recommended && !plan.current && (
               <span className="inline-block rounded-full bg-saffron/10 px-2 py-0.5 text-[10px] font-semibold text-saffron mb-3">
-                Recommended
+                {isIndia ? "3 Months Free" : "Recommended"}
               </span>
             )}
             {plan.current && (
               <span className="inline-block rounded-full bg-pink-100 px-2 py-0.5 text-[10px] font-semibold text-pink-600 mb-3">
                 Current Plan
+              </span>
+            )}
+            {plan.launchBadge && (
+              <span className="inline-block rounded-full bg-saffron/10 px-2 py-0.5 text-[10px] font-semibold text-saffron mb-3 ml-1">
+                LAUNCH PRICE
               </span>
             )}
             <h3 className="text-lg font-semibold text-gray-900">{plan.name}</h3>

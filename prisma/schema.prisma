@@ -64,12 +64,19 @@ model User {
 // ─── Company ────────────────────────────────────────────────────────────────────
 
 model Company {
-  id               String   @id @default(cuid())
-  name             String
-  logo             String?
-  plan             String   // STARTER | GROWTH | ENTERPRISE | PAY_PER_INTERVIEW
-  stripeCustomerId String?
-  createdAt        DateTime @default(now())
+  id                      String    @id @default(cuid())
+  name                    String
+  logo                    String?
+  plan                    String    // STARTER | GROWTH | ENTERPRISE | PAY_PER_INTERVIEW
+  stripeCustomerId        String?
+  razorpayCustomerId      String?
+  razorpaySubscriptionId  String?
+  paymentGateway          String?   // "stripe" | "razorpay"
+  region                  String    @default("US") // "IN" | "US"
+  currency                String    @default("usd") // "inr" | "usd"
+  isLaunchOffer           Boolean   @default(false)
+  trialEndsAt             DateTime?
+  createdAt               DateTime  @default(now())
 
   users              User[]
   interviewTemplates InterviewTemplate[]
@@ -573,13 +580,17 @@ model DailyChallenge {
 // ─── School Partnership ───────────────────────────────────────────────────
 
 model School {
-  id             String   @id @default(cuid())
-  name           String
-  enrollmentCode String   @unique
-  maxStudents    Int      @default(100)
-  plan           String   @default("EDUCATION")
-  adminId        String   @unique
-  createdAt      DateTime @default(now())
+  id                      String   @id @default(cuid())
+  name                    String
+  enrollmentCode          String   @unique
+  maxStudents             Int      @default(100)
+  plan                    String   @default("EDUCATION")
+  adminId                 String   @unique
+  razorpaySubscriptionId  String?
+  paymentGateway          String?  // "stripe" | "razorpay"
+  region                  String   @default("US") // "IN" | "US"
+  currency                String   @default("usd") // "inr" | "usd"
+  createdAt               DateTime @default(now())
 
   admin    User   @relation("SchoolAdmin", fields: [adminId], references: [id])
   students User[]
@@ -593,4 +604,13 @@ model SchoolAssignment {
   problemIds  String   // JSON array of problem IDs
   dueDate     DateTime?
   createdAt   DateTime @default(now())
+}
+
+// ─── Launch Offer Counter ─────────────────────────────────────────────────────
+
+model LaunchOfferCounter {
+  id        String   @id @default("india-launch-2026")
+  count     Int      @default(0)
+  maxCount  Int      @default(100)
+  updatedAt DateTime @updatedAt
 }

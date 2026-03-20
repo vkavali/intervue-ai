@@ -1,18 +1,40 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { PLANS, PlanKey } from "@/lib/stripe"
+import { RAZORPAY_LAUNCH_PLANS, RazorpayLaunchPlanKey } from "@/lib/razorpay"
+import { detectRegion, type Region } from "@/lib/payment"
 
 const planOrder: PlanKey[] = ["FREE", "PRO", "ENTERPRISE"]
+
+declare global {
+  interface Window {
+    Razorpay: new (options: Record<string, unknown>) => { open: () => void }
+  }
+}
 
 export default function BillingPage() {
   const [loading, setLoading] = useState<string | null>(null)
   const [portalLoading, setPortalLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [region, setRegion] = useState<Region>("US")
 
-  // For now, we read the plan from URL search params or default to FREE
-  // In a real scenario this would come from the server or session
   const [currentPlan] = useState<PlanKey>("FREE")
+
+  const isIndia = region === "IN"
+
+  useEffect(() => {
+    const detected = detectRegion()
+    setRegion(detected)
+
+    // Load Razorpay checkout script for Indian users
+    if (detected === "IN") {
+      const script = document.createElement("script")
+      script.src = "https://checkout.razorpay.com/v1/checkout.js"
+      script.async = true
+      document.body.appendChild(script)
+    }
+  }, [])
 
   const handleCheckout = async (planKey: PlanKey) => {
     const plan = PLANS[planKey]
@@ -41,6 +63,63 @@ export default function BillingPage() {
       if (data.url) {
         window.location.href = data.url
       }
+    } catch {
+      setError("Something went wrong. Please try again.")
+    } finally {
+      setLoading(null)
+    }
+  }
+
+  const handleRazorpayCheckout = async (planKey: RazorpayLaunchPlanKey) => {
+    setLoading(planKey)
+    setError(null)
+
+    try {
+      const res = await fetch("/api/razorpay/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ planKey, isLaunchOffer: true }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        setError(data.error || "Failed to create Razorpay subscription")
+        return
+      }
+
+      const options = {
+        key: data.razorpayKeyId,
+        subscription_id: data.subscriptionId,
+        name: "Intervue.AI",
+        description: `${data.planName} Plan - Launch Offer`,
+        currency: data.currency,
+        handler: async (response: {
+          razorpay_payment_id: string
+          razorpay_subscription_id: string
+          razorpay_signature: string
+        }) => {
+          // Verify payment
+          const verifyRes = await fetch("/api/razorpay/verify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              ...response,
+              planKey,
+            }),
+          })
+
+          if (verifyRes.ok) {
+            window.location.href = "/dashboard/billing?success=true"
+          } else {
+            setError("Payment verification failed. Please contact support.")
+          }
+        },
+        theme: { color: "#FF9933" },
+      }
+
+      const rzp = new window.Razorpay(options)
+      rzp.open()
     } catch {
       setError("Something went wrong. Please try again.")
     } finally {
@@ -80,6 +159,12 @@ export default function BillingPage() {
     planOrder.indexOf(planKey) > planOrder.indexOf(currentPlan)
   const hasSubscription = currentPlan !== "FREE"
 
+  // Build display plans based on region
+  const razorpayPlanMap: Record<string, RazorpayLaunchPlanKey> = {
+    PRO: "PRO",
+    ENTERPRISE: "ENTERPRISE",
+  }
+
   return (
     <div>
       {/* Header */}
@@ -87,6 +172,7 @@ export default function BillingPage() {
         <h1 className="text-2xl font-bold text-gray-900">Billing</h1>
         <p className="mt-1 text-sm text-gray-500">
           Manage your subscription and billing details
+          {isIndia && " - India Launch Pricing (INR)"}
         </p>
       </div>
 
@@ -198,6 +284,16 @@ export default function BillingPage() {
           const upgrade = isUpgrade(planKey)
           const recommended = planKey === "PRO"
 
+          // Get INR pricing if India
+          const rzpKey = razorpayPlanMap[planKey]
+          const rzpPlan = rzpKey ? RAZORPAY_LAUNCH_PLANS[rzpKey] : null
+          const displayPrice = isIndia && rzpPlan
+            ? `Rs.${rzpPlan.priceMonthly.toLocaleString("en-IN")}`
+            : plan.price === 0
+              ? "Free"
+              : `$${plan.price}`
+          const displayPeriod = plan.price === 0 ? "" : "/month"
+
           return (
             <div
               key={planKey}
@@ -213,7 +309,7 @@ export default function BillingPage() {
               {recommended && !current && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                   <span className="inline-flex items-center rounded-full border border-saffron bg-transparent px-3 py-1 text-xs font-semibold text-saffron">
-                    Recommended
+                    {isIndia ? "3 Months Free" : "Recommended"}
                   </span>
                 </div>
               )}
@@ -232,19 +328,24 @@ export default function BillingPage() {
                 <h3 className="text-lg font-semibold text-gray-900">
                   {plan.name}
                 </h3>
+                {isIndia && rzpPlan && (
+                  <span className="inline-block mt-1 rounded-full bg-saffron/10 px-2 py-0.5 text-[10px] font-semibold text-saffron">
+                    LAUNCH PRICE
+                  </span>
+                )}
                 <div className="mt-2 flex items-baseline gap-1">
                   <span className="text-3xl font-bold text-gray-900">
-                    {plan.price === 0 ? "Free" : `$${plan.price}`}
+                    {displayPrice}
                   </span>
-                  {plan.price > 0 && (
-                    <span className="text-sm text-gray-500">/month</span>
+                  {displayPrice !== "Free" && (
+                    <span className="text-sm text-gray-500">{displayPeriod}</span>
                   )}
                 </div>
               </div>
 
               {/* Features list */}
               <ul className="mb-8 space-y-3">
-                {plan.features.map((feature) => (
+                {(isIndia && rzpPlan ? rzpPlan.features : plan.features).map((feature) => (
                   <li key={feature} className="flex items-start gap-3">
                     <svg
                       className="mt-0.5 h-5 w-5 shrink-0 text-saffron"
@@ -274,11 +375,15 @@ export default function BillingPage() {
                 </button>
               ) : upgrade ? (
                 <button
-                  onClick={() => handleCheckout(planKey)}
-                  disabled={loading === planKey || !plan.priceId}
+                  onClick={() =>
+                    isIndia && rzpKey
+                      ? handleRazorpayCheckout(rzpKey)
+                      : handleCheckout(planKey)
+                  }
+                  disabled={loading === planKey || loading === rzpKey}
                   className="w-full rounded-lg border border-saffron bg-transparent px-4 py-2.5 text-sm font-medium text-saffron transition-colors hover:bg-saffron/10 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading === planKey ? (
+                  {loading === planKey || loading === rzpKey ? (
                     <span className="inline-flex items-center gap-2">
                       <svg
                         className="h-4 w-4 animate-spin"
@@ -350,8 +455,9 @@ export default function BillingPage() {
               Do you offer annual billing?
             </h4>
             <p className="mt-1 text-sm text-gray-500">
-              Annual billing with a discount is coming soon. Contact us at
-              billing@intervue.ai for early access.
+              {isIndia
+                ? "India launch offer includes annual billing with 3 months free. All plans are billed annually after the trial period."
+                : "Annual billing with a discount is coming soon. Contact us at billing@intervue.ai for early access."}
             </p>
           </div>
         </div>

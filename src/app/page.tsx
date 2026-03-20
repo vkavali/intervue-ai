@@ -1,7 +1,9 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ScrollReveal";
+import { detectRegion, type Region } from "@/lib/payment";
 
 const aiLevels = [
   {
@@ -177,98 +179,6 @@ const comparisonFeatures = [
   { feature: "Enrollment Codes", intervue: true, hackerrank: false, coderpad: false, karat: false, leetcode: false },
 ];
 
-const pricingPlans = [
-  {
-    name: "Starter",
-    price: "$0",
-    period: "/month",
-    description: "For small teams getting started",
-    features: [
-      "Up to 5 interviews/month",
-      "L0-L2 AI levels",
-      "Basic audit reports",
-      "Email support",
-    ],
-    cta: "Get Started",
-    highlighted: false,
-    accent: "saffron",
-    href: "/auth/signup?role=company",
-  },
-  {
-    name: "Growth",
-    price: "$99",
-    period: "/month",
-    description: "For growing engineering teams",
-    features: [
-      "Up to 50 interviews/month",
-      "All AI levels (L0-L4)",
-      "Full audit reports",
-      "Priority support",
-      "Custom question library",
-      "Calendar & scheduling",
-      "4,000+ practice problems",
-    ],
-    cta: "Start Free Trial",
-    highlighted: true,
-    accent: "saffron",
-    href: "/auth/signup?role=company",
-  },
-  {
-    name: "Enterprise",
-    price: "Custom",
-    period: "",
-    description: "For large organizations",
-    features: [
-      "Unlimited interviews",
-      "All AI levels (L0-L4)",
-      "Advanced analytics",
-      "Dedicated support",
-      "SSO & SAML",
-      "Custom integrations",
-      "On-prem deployment",
-    ],
-    cta: "Contact Sales",
-    highlighted: false,
-    accent: "saffron",
-    href: "/auth/signup?role=company",
-  },
-  {
-    name: "Pay Per Interview",
-    price: "$15",
-    period: "/session",
-    description: "No commitment, pay as you go",
-    features: [
-      "No monthly fee",
-      "All AI levels (L0-L4)",
-      "Full audit reports",
-      "Email support",
-      "Volume discounts available",
-    ],
-    cta: "Get Started",
-    highlighted: false,
-    accent: "saffron",
-    href: "/auth/signup?role=company",
-  },
-  {
-    name: "Education",
-    price: "$5",
-    period: "/student/month",
-    description: "For schools and universities",
-    features: [
-      "Enrollment codes",
-      "Student assignments",
-      "Class-wide analytics",
-      "XP & badge tracking",
-      "Leaderboard per school",
-      "Priority support",
-    ],
-    cta: "Set Up Your School",
-    highlighted: false,
-    accent: "pink",
-    href: "/auth/signup?role=school",
-  },
-];
-
 const faangCompanies = [
   { name: "Google", color: "text-blue-600", bg: "bg-blue-50 border-blue-200" },
   { name: "Amazon", color: "text-amber-600", bg: "bg-amber-50 border-amber-200" },
@@ -278,6 +188,215 @@ const faangCompanies = [
 ];
 
 export default function Home() {
+  const [region, setRegion] = useState<Region>("US");
+  const [launchOffer, setLaunchOffer] = useState({ claimed: 0, remaining: 100, isActive: true });
+
+  useEffect(() => {
+    const detected = detectRegion();
+    setRegion(detected);
+
+    fetch("/api/launch-offer/status")
+      .then((res) => res.json())
+      .then((data) => setLaunchOffer(data))
+      .catch(() => {});
+  }, []);
+
+  const isIndia = region === "IN";
+
+  const pricingPlans = isIndia
+    ? [
+        {
+          name: "Starter",
+          price: "Free",
+          period: "",
+          description: "For small teams getting started",
+          features: [
+            "Up to 5 interviews/month",
+            "L0-L2 AI levels",
+            "Basic audit reports",
+            "Email support",
+          ],
+          cta: "Get Started",
+          highlighted: false,
+          accent: "saffron",
+          href: "/auth/signup?role=company",
+          launchBadge: null,
+        },
+        {
+          name: "Pro",
+          price: "Rs.1,999",
+          period: "/month",
+          description: "For growing engineering teams",
+          features: [
+            "Up to 50 interviews/month",
+            "All AI levels (L0-L4)",
+            "Full audit reports",
+            "Priority support",
+            "Custom question library",
+            "Calendar & scheduling",
+            "4,000+ practice problems",
+          ],
+          cta: "Start Free Trial",
+          highlighted: true,
+          accent: "saffron",
+          href: "/auth/signup?role=company",
+          launchBadge: "LAUNCH PRICE" as const,
+        },
+        {
+          name: "Enterprise",
+          price: "Rs.7,999",
+          period: "/month",
+          description: "For large organizations",
+          features: [
+            "Unlimited interviews",
+            "All AI levels (L0-L4)",
+            "Advanced analytics",
+            "Dedicated support",
+            "SSO & SAML",
+            "Custom integrations",
+            "On-prem deployment",
+          ],
+          cta: "Start Free Trial",
+          highlighted: false,
+          accent: "saffron",
+          href: "/auth/signup?role=company",
+          launchBadge: "LAUNCH PRICE" as const,
+        },
+        {
+          name: "Pay Per Interview",
+          price: "Rs.999",
+          period: "/session",
+          description: "No commitment, pay as you go",
+          features: [
+            "No monthly fee",
+            "All AI levels (L0-L4)",
+            "Full audit reports",
+            "Email support",
+            "Volume discounts available",
+          ],
+          cta: "Get Started",
+          highlighted: false,
+          accent: "saffron",
+          href: "/auth/signup?role=company",
+          launchBadge: null,
+        },
+        {
+          name: "Education",
+          price: "Rs.249",
+          period: "/student/month",
+          description: "For schools and universities",
+          features: [
+            "Enrollment codes",
+            "Student assignments",
+            "Class-wide analytics",
+            "XP & badge tracking",
+            "Leaderboard per school",
+            "Priority support",
+          ],
+          cta: "Set Up Your School",
+          highlighted: false,
+          accent: "pink",
+          href: "/auth/signup?role=school",
+          launchBadge: "LAUNCH PRICE" as const,
+        },
+      ]
+    : [
+        {
+          name: "Starter",
+          price: "$0",
+          period: "/month",
+          description: "For small teams getting started",
+          features: [
+            "Up to 5 interviews/month",
+            "L0-L2 AI levels",
+            "Basic audit reports",
+            "Email support",
+          ],
+          cta: "Get Started",
+          highlighted: false,
+          accent: "saffron",
+          href: "/auth/signup?role=company",
+          launchBadge: null,
+        },
+        {
+          name: "Growth",
+          price: "$99",
+          period: "/month",
+          description: "For growing engineering teams",
+          features: [
+            "Up to 50 interviews/month",
+            "All AI levels (L0-L4)",
+            "Full audit reports",
+            "Priority support",
+            "Custom question library",
+            "Calendar & scheduling",
+            "4,000+ practice problems",
+          ],
+          cta: "Start Free Trial",
+          highlighted: true,
+          accent: "saffron",
+          href: "/auth/signup?role=company",
+          launchBadge: null,
+        },
+        {
+          name: "Enterprise",
+          price: "Custom",
+          period: "",
+          description: "For large organizations",
+          features: [
+            "Unlimited interviews",
+            "All AI levels (L0-L4)",
+            "Advanced analytics",
+            "Dedicated support",
+            "SSO & SAML",
+            "Custom integrations",
+            "On-prem deployment",
+          ],
+          cta: "Contact Sales",
+          highlighted: false,
+          accent: "saffron",
+          href: "/auth/signup?role=company",
+          launchBadge: null,
+        },
+        {
+          name: "Pay Per Interview",
+          price: "$15",
+          period: "/session",
+          description: "No commitment, pay as you go",
+          features: [
+            "No monthly fee",
+            "All AI levels (L0-L4)",
+            "Full audit reports",
+            "Email support",
+            "Volume discounts available",
+          ],
+          cta: "Get Started",
+          highlighted: false,
+          accent: "saffron",
+          href: "/auth/signup?role=company",
+          launchBadge: null,
+        },
+        {
+          name: "Education",
+          price: "$5",
+          period: "/student/month",
+          description: "For schools and universities",
+          features: [
+            "Enrollment codes",
+            "Student assignments",
+            "Class-wide analytics",
+            "XP & badge tracking",
+            "Leaderboard per school",
+            "Priority support",
+          ],
+          cta: "Set Up Your School",
+          highlighted: false,
+          accent: "pink",
+          href: "/auth/signup?role=school",
+          launchBadge: null,
+        },
+      ];
+
   return (
     <div className="min-h-screen overflow-hidden">
       {/* ===== 1. HERO ===== */}
@@ -904,12 +1023,60 @@ export default function Home() {
       {/* ===== 10. PRICING -- Gradient Border ===== */}
       <section id="pricing" className="py-32 lg:py-40 bg-[#FAFAF8]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-20 lg:mb-24">
+          <ScrollReveal className="text-center mb-12">
             <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">Pricing</p>
             <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900">
-              Start free. Scale as you grow.
+              {isIndia ? "Launch pricing for India" : "Start free. Scale as you grow."}
             </h2>
+            {isIndia && (
+              <p className="mt-4 text-base text-gray-400">
+                All prices in INR. Billed annually after 3-month free trial.
+              </p>
+            )}
           </ScrollReveal>
+
+          {/* Launch Offer Banner — India only */}
+          {isIndia && launchOffer.isActive && (
+            <ScrollReveal className="mb-16 max-w-3xl mx-auto">
+              <div className="rounded-2xl p-px bg-gradient-to-r from-saffron via-orange-400 to-india-green">
+                <div className="rounded-[15px] bg-white p-8">
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-saffron/10 border border-saffron/20 px-3 py-1 text-xs font-semibold text-saffron">
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-saffron opacity-75" />
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-saffron" />
+                      </span>
+                      India Launch Offer
+                    </span>
+                  </div>
+                  <h3 className="text-2xl font-semibold text-gray-900 mb-6">
+                    First 100 companies get 3 months free
+                  </h3>
+                  <div className="grid grid-cols-3 gap-4 mb-6">
+                    <div className="text-center">
+                      <p className="text-3xl font-bold text-gray-900">{launchOffer.remaining}</p>
+                      <p className="text-xs text-gray-400 mt-1">Spots Remaining</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-3xl font-bold bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">3</p>
+                      <p className="text-xs text-gray-400 mt-1">Months Free</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-3xl font-bold text-gray-900">1 yr</p>
+                      <p className="text-xs text-gray-400 mt-1">Commitment</p>
+                    </div>
+                  </div>
+                  <div className="w-full h-2 rounded-full bg-gray-100 overflow-hidden">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-saffron to-india-green transition-all duration-500"
+                      style={{ width: `${(launchOffer.claimed / 100) * 100}%` }}
+                    />
+                  </div>
+                  <p className="text-xs text-gray-400 mt-2 text-right">{launchOffer.claimed}/100 claimed</p>
+                </div>
+              </div>
+            </ScrollReveal>
+          )}
 
           {/* Top row: first 3 plans */}
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto" staggerDelay={0.1}>
@@ -919,9 +1086,16 @@ export default function Home() {
                   <div className="rounded-2xl p-px bg-gradient-to-b from-saffron via-orange-400 to-india-green h-full shadow-[0_20px_60px_-15px_rgba(255,153,0,0.2)]">
                     <div className="relative rounded-[15px] bg-white p-7 h-full">
                       <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                        <span className="rounded-full bg-gray-900 px-4 py-1 text-xs font-semibold text-white">Most Popular</span>
+                        <span className={`rounded-full px-4 py-1 text-xs font-semibold text-white ${isIndia ? "bg-gradient-to-r from-saffron to-india-green" : "bg-gray-900"}`}>
+                          {isIndia ? "3 Months Free" : "Most Popular"}
+                        </span>
                       </div>
                       <h3 className="text-lg font-semibold text-gray-900">{plan.name}</h3>
+                      {plan.launchBadge && (
+                        <span className="inline-block mt-1 rounded-full bg-saffron/10 px-2 py-0.5 text-[10px] font-semibold text-saffron">
+                          {plan.launchBadge}
+                        </span>
+                      )}
                       <p className="mt-1 text-sm text-gray-400">{plan.description}</p>
                       <div className="mt-5 flex items-baseline">
                         <span className="text-4xl font-semibold text-gray-900">{plan.price}</span>
@@ -941,6 +1115,11 @@ export default function Home() {
                 ) : (
                   <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-7 transition-all hover:shadow-xl hover:shadow-gray-200/50 h-full">
                     <h3 className="text-lg font-semibold text-gray-900">{plan.name}</h3>
+                    {plan.launchBadge && (
+                      <span className="inline-block mt-1 rounded-full bg-saffron/10 px-2 py-0.5 text-[10px] font-semibold text-saffron">
+                        {plan.launchBadge}
+                      </span>
+                    )}
                     <p className="mt-1 text-sm text-gray-400">{plan.description}</p>
                     <div className="mt-5 flex items-baseline">
                       <span className="text-4xl font-semibold text-gray-900">{plan.price}</span>
@@ -967,6 +1146,11 @@ export default function Home() {
               <StaggerItem key={plan.name}>
                 <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-7 transition-all hover:shadow-xl hover:shadow-gray-200/50 h-full">
                   <h3 className="text-lg font-semibold text-gray-900">{plan.name}</h3>
+                  {plan.launchBadge && (
+                    <span className="inline-block mt-1 rounded-full bg-saffron/10 px-2 py-0.5 text-[10px] font-semibold text-saffron">
+                      {plan.launchBadge}
+                    </span>
+                  )}
                   <p className="mt-1 text-sm text-gray-400">{plan.description}</p>
                   <div className="mt-5 flex items-baseline">
                     <span className="text-4xl font-semibold text-gray-900">{plan.price}</span>
