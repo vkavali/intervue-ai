@@ -176,6 +176,16 @@ async function executeLocal(language: string, code: string): Promise<ExecutionRe
       const mainClassMatch = code.match(/class\s+(\w+)[\s\S]*?public\s+static\s+void\s+main/);
       const anyClassMatch = code.match(/^(?!.*\/\/).*class\s+(\w+)/m);
       const className = (publicClassMatch || mainClassMatch || anyClassMatch)?.[1] || "Solution";
+
+      // If no main method exists, inject an empty one so Java can run without error
+      const hasMain = /public\s+static\s+void\s+main\s*\(/.test(code);
+      if (!hasMain) {
+        const lastBrace = code.lastIndexOf("}");
+        if (lastBrace !== -1) {
+          code = code.slice(0, lastBrace) + "\n    public static void main(String[] args) {}\n}";
+        }
+      }
+
       const filePath = join(tmpDir, `${className}.java`);
       await writeFile(filePath, code);
 

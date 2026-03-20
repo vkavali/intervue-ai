@@ -9,6 +9,7 @@ const statusColors: Record<string, { bg: string; text: string; dot: string; labe
   ACTIVE: { bg: "bg-green-500/10", text: "text-green-400", dot: "bg-green-400", label: "In Progress" },
   COMPLETED: { bg: "bg-india-green/10", text: "text-india-green", dot: "bg-blue-400", label: "Completed" },
   CANCELLED: { bg: "bg-gray-500/10", text: "text-gray-500", dot: "bg-gray-400", label: "Cancelled" },
+  EXPIRED: { bg: "bg-orange-500/10", text: "text-orange-400", dot: "bg-orange-400", label: "Expired" },
 };
 
 export default async function CandidateInterviewsPage() {
@@ -17,6 +18,16 @@ export default async function CandidateInterviewsPage() {
   if (!session?.user) {
     redirect("/auth/signin?callbackUrl=/candidate/interviews");
   }
+
+  // Auto-expire PENDING sessions whose scheduledAt has passed
+  await prisma.interviewSession.updateMany({
+    where: {
+      candidateId: session.user.id,
+      status: "PENDING",
+      scheduledAt: { not: null, lt: new Date() },
+    },
+    data: { status: "EXPIRED" },
+  });
 
   const interviews = await prisma.interviewSession.findMany({
     where: { candidateId: session.user.id },
@@ -63,13 +74,10 @@ export default async function CandidateInterviewsPage() {
         <div className="space-y-4">
           {interviews.map((interview) => {
             const status = statusColors[interview.status] || statusColors.CANCELLED;
-            const now = new Date();
             const isTimeExpired = interview.status === "ACTIVE" && interview.startedAt && interview.totalDurationMinutes
               ? Date.now() > new Date(interview.startedAt).getTime() + interview.totalDurationMinutes * 60 * 1000
               : false;
-            const isPastDue =
-              (interview.status === "PENDING" && interview.scheduledAt && new Date(interview.scheduledAt) <= now) ||
-              isTimeExpired;
+            const isPastDue = interview.status === "EXPIRED" || isTimeExpired;
             return (
               <div
                 key={interview.id}

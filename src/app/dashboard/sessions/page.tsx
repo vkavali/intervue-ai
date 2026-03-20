@@ -3,12 +3,14 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { SessionTimer } from "./SessionTimer";
+import { ReinviteButton } from "./ReinviteButton";
 
 const statusColors: Record<string, string> = {
   PENDING: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30",
   ACTIVE: "bg-green-500/10 text-green-400 border-green-500/30",
   COMPLETED: "bg-india-green/10 text-india-green border-india-green/30",
   CANCELLED: "bg-accent-red/10 text-accent-red border-accent-red/30",
+  EXPIRED: "bg-orange-500/10 text-orange-400 border-orange-500/30",
 };
 
 export default async function SessionsPage() {
@@ -31,6 +33,18 @@ export default async function SessionsPage() {
     template: { title: string; role: string; seniority: string };
     auditReport: { overallScore: number; suggestedDecision: string } | null;
   }[] = [];
+
+  // Auto-expire PENDING sessions whose scheduledAt has passed
+  if (user?.companyId) {
+    await prisma.interviewSession.updateMany({
+      where: {
+        companyId: user.companyId,
+        status: "PENDING",
+        scheduledAt: { not: null, lt: new Date() },
+      },
+      data: { status: "EXPIRED" },
+    });
+  }
 
   if (user?.companyId) {
     sessions = await prisma.interviewSession.findMany({
@@ -212,6 +226,9 @@ export default async function SessionsPage() {
                             </Link>
                           );
                         })()
+                      )}
+                      {(s.status === "EXPIRED" || s.status === "CANCELLED") && (
+                        <ReinviteButton sessionId={s.id} />
                       )}
                       <Link
                         href={`/dashboard/sessions/${s.id}`}

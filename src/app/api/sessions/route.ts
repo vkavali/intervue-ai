@@ -20,6 +20,23 @@ export async function GET(_req: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
+    // Auto-expire PENDING sessions whose scheduledAt has passed
+    const expireFilter: Record<string, unknown> = {
+      status: "PENDING",
+      scheduledAt: { not: null, lt: new Date() },
+    }
+    if (user.role === "COMPANY_ADMIN" && user.companyId) {
+      expireFilter.companyId = user.companyId
+    } else if (user.role === "INTERVIEWER") {
+      expireFilter.interviewerId = user.id
+    } else if (user.role === "CANDIDATE") {
+      expireFilter.candidateId = user.id
+    }
+    await prisma.interviewSession.updateMany({
+      where: expireFilter,
+      data: { status: "EXPIRED" },
+    })
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let sessions: any[]
 

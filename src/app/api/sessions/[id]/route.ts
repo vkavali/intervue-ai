@@ -54,6 +54,19 @@ export async function GET(
       )
     }
 
+    // Auto-expire if PENDING and past scheduledAt
+    if (
+      interviewSession.status === "PENDING" &&
+      interviewSession.scheduledAt &&
+      new Date(interviewSession.scheduledAt) < new Date()
+    ) {
+      await prisma.interviewSession.update({
+        where: { id: interviewSession.id },
+        data: { status: "EXPIRED" },
+      })
+      interviewSession.status = "EXPIRED"
+    }
+
     // Verify the user has access to this session
     const hasAccess =
       (user.role === "COMPANY_ADMIN" &&

@@ -264,7 +264,7 @@ export default function SessionPage() {
   }
 
   // Session expired
-  if (sessionData.status === "COMPLETED" || sessionData.status === "CANCELLED") {
+  if (sessionData.status === "COMPLETED" || sessionData.status === "CANCELLED" || sessionData.status === "EXPIRED") {
     return (
       <div className="flex h-screen items-center justify-center bg-editor">
         <div className="text-center max-w-md">
@@ -282,10 +282,12 @@ export default function SessionPage() {
             />
           </svg>
           <h2 className="text-xl font-bold text-white mb-2">
-            Session {sessionData.status === "COMPLETED" ? "Completed" : "Cancelled"}
+            Session {sessionData.status === "COMPLETED" ? "Completed" : sessionData.status === "EXPIRED" ? "Expired" : "Cancelled"}
           </h2>
           <p className="text-gray-400 mb-6">
-            This interview session has ended.
+            {sessionData.status === "EXPIRED"
+              ? "This interview session has expired. Please contact your recruiter for a new invitation."
+              : "This interview session has ended."}
           </p>
           <a
             href="/dashboard"

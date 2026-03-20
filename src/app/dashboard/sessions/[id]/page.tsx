@@ -6,12 +6,14 @@ import Link from "next/link";
 import { ReassignInterviewerForm } from "./ReassignInterviewerForm";
 import { RescheduleForm } from "./RescheduleForm";
 import { GenerateThinkingButton } from "./GenerateThinkingButton";
+import { ReinviteButton } from "../ReinviteButton";
 
 const statusColors: Record<string, string> = {
   PENDING: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30",
   ACTIVE: "bg-green-500/10 text-green-400 border-green-500/30",
   COMPLETED: "bg-india-green/10 text-india-green border-india-green/30",
   CANCELLED: "bg-accent-red/10 text-accent-red border-accent-red/30",
+  EXPIRED: "bg-orange-500/10 text-orange-400 border-orange-500/30",
 };
 
 const aiLevelLabels: Record<number, string> = {
@@ -216,6 +218,23 @@ export default async function SessionDetailPage({
             sessionId={s.id}
             currentScheduledAt={s.scheduledAt?.toISOString() ?? null}
           />
+        </div>
+      )}
+
+      {/* Re-invite (EXPIRED / CANCELLED sessions) */}
+      {(s.status === "EXPIRED" || s.status === "CANCELLED") && (
+        <div className="rounded-xl border border-orange-200 bg-orange-50 p-6 mb-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">
+                {s.status === "EXPIRED" ? "Interview Expired" : "Interview Cancelled"}
+              </h2>
+              <p className="text-sm text-gray-500 mt-1">
+                Create a new interview session for this candidate with the same template and settings.
+              </p>
+            </div>
+            <ReinviteButton sessionId={s.id} />
+          </div>
         </div>
       )}
 
