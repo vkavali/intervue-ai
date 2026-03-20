@@ -304,7 +304,7 @@ export default function Home() {
               </span>
             </h1>
 
-            <p className="mt-8 text-lg sm:text-xl text-gray-500 leading-relaxed max-w-2xl mx-auto">
+            <p className="mt-8 text-lg sm:text-xl text-gray-400 leading-relaxed max-w-2xl mx-auto">
               Company-controlled AI assistance. Auto-audited sessions. Candidate gamification with XP, badges, and leaderboards. Everything in one platform.
             </p>
 
@@ -320,7 +320,7 @@ export default function Home() {
             </div>
           </ScrollReveal>
 
-          {/* Stats strip */}
+          {/* Trust bar -- neutral colors */}
           <ScrollReveal delay={0.2} className="mt-20 max-w-3xl mx-auto">
             <div className="grid grid-cols-4 gap-4">
               {[
@@ -330,7 +330,7 @@ export default function Home() {
                 { value: "15", label: "Study Patterns" },
               ].map((stat) => (
                 <div key={stat.label} className="text-center">
-                  <p className="text-3xl sm:text-4xl font-semibold bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">{stat.value}</p>
+                  <p className="text-3xl sm:text-4xl font-semibold text-gray-900">{stat.value}</p>
                   <p className="text-sm text-gray-400 mt-1">{stat.label}</p>
                 </div>
               ))}
@@ -394,7 +394,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Floating cards with glow */}
+            {/* Floating cards */}
             <div className="absolute -bottom-6 -left-4 sm:left-8 rounded-2xl bg-white border border-gray-100 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.12)] p-4 w-52">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center">
@@ -422,8 +422,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 2. WHO IT'S FOR (LIGHT) ===== */}
+      {/* ===== 2. WHO IT'S FOR -- Glass Cards ===== */}
       <section className="relative py-32 lg:py-40 bg-[#FAFAF8]">
+        <div className="gradient-orb w-[600px] h-[600px] bg-saffron/10 -top-40 right-0" />
+
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-20">
             <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">Built For Everyone</p>
@@ -432,24 +434,59 @@ export default function Home() {
 
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6" staggerDelay={0.1}>
             {[
-              { title: "Companies", desc: "Run AI-controlled technical interviews with full audit trails and data-driven hiring decisions.", icon: "🏢", color: "saffron", features: ["5-level AI control per interview", "Auto-generated scorecards", "Candidate pipeline & comparisons", "Calendar scheduling & video"], href: "/auth/signup?role=company", cta: "Start Hiring" },
-              { title: "Candidates", desc: "Practice with 4,000+ problems, earn XP, unlock 17 badges, and climb the leaderboard.", icon: "👨‍💻", color: "india-green", features: ["XP, levels, and streaks", "17 achievement badges", "Global leaderboard", "7-language code execution"], href: "/auth/signup?role=candidate", cta: "Start Practicing" },
-              { title: "Schools", desc: "Enroll entire classrooms with one code. Assign problems, track student progress.", icon: "🎓", color: "pink-500", features: ["Enrollment codes for classes", "Assignment creation", "Class-wide analytics dashboard", "$5/student/month pricing"], href: "#schools", cta: "Learn More" },
+              {
+                title: "Companies",
+                desc: "Run AI-controlled technical interviews with full audit trails and data-driven hiring decisions.",
+                icon: (
+                  <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+                  </svg>
+                ),
+                features: ["5-level AI control per interview", "Auto-generated scorecards", "Candidate pipeline & comparisons", "Calendar scheduling & video"],
+                href: "/auth/signup?role=company",
+                cta: "Start Hiring",
+              },
+              {
+                title: "Candidates",
+                desc: "Practice with 4,000+ problems, earn XP, unlock 17 badges, and climb the leaderboard.",
+                icon: (
+                  <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25" />
+                  </svg>
+                ),
+                features: ["XP, levels, and streaks", "17 achievement badges", "Global leaderboard", "7-language code execution"],
+                href: "/auth/signup?role=candidate",
+                cta: "Start Practicing",
+              },
+              {
+                title: "Schools",
+                desc: "Enroll entire classrooms with one code. Assign problems, track student progress.",
+                icon: (
+                  <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.26 10.147a60.438 60.438 0 00-.491 6.347A48.62 48.62 0 0112 20.904a48.62 48.62 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.636 50.636 0 00-2.658-.813A59.906 59.906 0 0112 3.493a59.903 59.903 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
+                  </svg>
+                ),
+                features: ["Enrollment codes for classes", "Assignment creation", "Class-wide analytics dashboard", "$5/student/month pricing"],
+                href: "#schools",
+                cta: "Learn More",
+              },
             ].map((card) => (
               <StaggerItem key={card.title}>
-                <div className="group rounded-2xl border border-gray-100 bg-white p-8 h-full transition-all hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] hover:border-gray-200">
-                  <span className="text-4xl block mb-5">{card.icon}</span>
+                <div className="group rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-8 h-full transition-all hover:shadow-xl hover:shadow-gray-200/50">
+                  <div className="mb-5 w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center text-gray-600">
+                    {card.icon}
+                  </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">{card.title}</h3>
-                  <p className="text-sm text-gray-500 mb-5">{card.desc}</p>
+                  <p className="text-sm text-gray-400 mb-5">{card.desc}</p>
                   <ul className="space-y-2 mb-6">
                     {card.features.map((f) => (
                       <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
-                        <div className={`w-1.5 h-1.5 rounded-full bg-${card.color} shrink-0`} />
+                        <div className="w-1.5 h-1.5 rounded-full bg-gray-300 shrink-0" />
                         {f}
                       </li>
                     ))}
                   </ul>
-                  <Link href={card.href} className={`text-sm font-semibold text-${card.color} hover:opacity-80`}>
+                  <Link href={card.href} className="text-sm font-semibold text-gray-900 hover:opacity-70 transition-opacity">
                     {card.cta} &rarr;
                   </Link>
                 </div>
@@ -459,54 +496,56 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 3. HOW IT WORKS (DARK) ===== */}
-      <section className="relative py-32 lg:py-40 bg-gray-950">
-        <div className="gradient-orb w-[800px] h-[800px] bg-saffron/20 -top-60 -left-40 opacity-40" />
-        <div className="gradient-orb w-[600px] h-[600px] bg-india-green/15 bottom-0 right-0 opacity-40" />
+      {/* ===== 3. HOW IT WORKS -- Bento Grid ===== */}
+      <section className="relative py-32 lg:py-40 bg-[#FAFAF8]">
+        <div className="gradient-orb w-[700px] h-[700px] bg-saffron/10 -top-40 -left-40" />
+        <div className="gradient-orb w-[500px] h-[500px] bg-india-green/10 bottom-0 right-0" />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-20 lg:mb-24">
-            <p className="text-sm font-medium uppercase tracking-widest text-gray-500 mb-4">The Complete Flow</p>
-            <h2 className="text-4xl sm:text-5xl font-semibold text-white leading-tight">
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">The Complete Flow</p>
+            <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900 leading-tight">
               Six steps to your next
               <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent"> great hire</span>
             </h2>
           </ScrollReveal>
 
-          {/* Asymmetric bento grid */}
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-6 gap-4" staggerDelay={0.08}>
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" staggerDelay={0.08}>
             {[
-              { step: "01", title: "Create Position", desc: "Define your open role, configure interview questions, set AI levels per question.", span: "md:col-span-2" },
-              { step: "02", title: "Schedule & Invite", desc: "Find available slots, schedule sessions, and send candidates their unique links.", span: "md:col-span-2" },
-              { step: "03", title: "Live Interview", desc: "Candidate codes in real-time. Interviewer watches, adjusts AI levels on the fly, communicates via video + chat.", span: "md:col-span-2" },
-              { step: "04", title: "AI Audits Everything", desc: "Every keystroke, AI interaction, and behavior logged. Structured scorecards generated automatically.", span: "md:col-span-3" },
-              { step: "05", title: "Pipeline & Compare", desc: "Move candidates through stages. Generate AI comparisons between candidates for the same role.", span: "md:col-span-3" },
-              { step: "06", title: "Hire with Confidence", desc: "Make data-backed decisions with AI recommendations, scorecards, risk flags, and comparisons.", span: "md:col-span-6 md:max-w-2xl md:mx-auto" },
-            ].map((card) => (
-              <StaggerItem key={card.step}>
-                <div className={`${card.span} group rounded-2xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-sm p-6 transition-all hover:bg-white/[0.06] hover:border-white/[0.12] h-full`}>
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-saffron to-india-green text-xs font-bold text-white shadow-lg shadow-saffron/20">
-                      {card.step}
-                    </span>
-                    <h3 className="text-lg font-semibold text-white">{card.title}</h3>
+              { step: "01", title: "Create Position", desc: "Define your open role, configure interview questions, set AI levels per question." },
+              { step: "02", title: "Schedule & Invite", desc: "Find available slots, schedule sessions, and send candidates their unique links." },
+              { step: "03", title: "Live Interview", desc: "Candidate codes in real-time. Interviewer watches, adjusts AI levels on the fly, communicates via video + chat." },
+              { step: "04", title: "AI Audits Everything", desc: "Every keystroke, AI interaction, and behavior logged. Structured scorecards generated automatically." },
+              { step: "05", title: "Pipeline & Compare", desc: "Move candidates through stages. Generate AI comparisons between candidates for the same role." },
+              { step: "06", title: "Hire with Confidence", desc: "Make data-backed decisions with AI recommendations, scorecards, risk flags, and comparisons." },
+            ].map((card, idx) => {
+              const spans = ["", "", "md:col-span-2 lg:col-span-2", "lg:col-span-2", "lg:col-span-2", "md:col-span-2 lg:col-span-4"];
+              return (
+                <StaggerItem key={card.step} className={spans[idx]}>
+                  <div className={`group rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-6 transition-all hover:shadow-xl hover:shadow-gray-200/50 h-full ${idx === 5 ? "max-w-2xl mx-auto" : ""}`}>
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-gray-200 bg-white text-sm font-bold text-gray-600">
+                        {card.step}
+                      </span>
+                      <h3 className="text-lg font-semibold text-gray-900">{card.title}</h3>
+                    </div>
+                    <p className="text-sm text-gray-400 leading-relaxed">{card.desc}</p>
                   </div>
-                  <p className="text-sm text-gray-400 leading-relaxed">{card.desc}</p>
-                </div>
-              </StaggerItem>
-            ))}
+                </StaggerItem>
+              );
+            })}
           </StaggerContainer>
         </div>
       </section>
 
-      {/* ===== 4. GAMIFICATION (LIGHT) ===== */}
+      {/* ===== 4. GAMIFICATION -- Glass Mockup ===== */}
       <section className="relative py-32 lg:py-40 bg-[#FAFAF8]">
-        <div className="gradient-orb w-[600px] h-[600px] bg-saffron/15 top-20 -left-40 opacity-30" />
+        <div className="gradient-orb w-[600px] h-[600px] bg-saffron/10 top-20 -left-40" />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <ScrollReveal>
-              <div className="rounded-2xl border border-gray-100 bg-white shadow-[0_20px_60px_-15px_rgba(0,0,0,0.08)] p-6 space-y-5">
+              <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm shadow-[0_20px_60px_-15px_rgba(0,0,0,0.08)] p-6 space-y-5">
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
@@ -547,7 +586,7 @@ export default function Home() {
                       { emoji: "🎯", name: "Perfectionist" },
                     ].map((b) => (
                       <div key={b.name} className="flex flex-col items-center gap-1">
-                        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 border border-gray-100 text-lg hover:scale-110 transition-transform cursor-default">{b.emoji}</span>
+                        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 border border-gray-100 text-lg cursor-default">{b.emoji}</span>
                         <span className="text-[9px] text-gray-400">{b.name}</span>
                       </div>
                     ))}
@@ -557,19 +596,19 @@ export default function Home() {
             </ScrollReveal>
 
             <ScrollReveal delay={0.2} direction="right">
-              <p className="text-sm font-medium uppercase tracking-widest text-saffron mb-4">Gamification</p>
+              <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">Gamification</p>
               <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900 leading-tight">
                 Practice shouldn&apos;t<br />feel like a{" "}
                 <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">chore</span>
               </h2>
-              <p className="mt-6 text-lg text-gray-500 leading-relaxed">
+              <p className="mt-6 text-lg text-gray-400 leading-relaxed">
                 Every solve earns XP, maintains your streak, and pushes you up the leaderboard. Unlock 17 badges and celebrate with confetti.
               </p>
               <div className="mt-8 grid grid-cols-2 gap-3">
                 {[
                   "XP & Leveling", "17 Badges", "Global Leaderboard", "Daily Challenges", "Activity Heatmap", "Confetti Celebrations",
                 ].map((item) => (
-                  <div key={item} className="flex items-center gap-2 rounded-xl border border-gray-100 bg-white px-4 py-3 text-sm text-gray-700">
+                  <div key={item} className="flex items-center gap-2 rounded-xl border border-gray-100 bg-white/70 backdrop-blur-sm px-4 py-3 text-sm text-gray-700">
                     <div className="w-2 h-2 rounded-full bg-gradient-to-r from-saffron to-india-green shrink-0" />
                     {item}
                   </div>
@@ -584,11 +623,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 5. SCHOOLS (LIGHT) ===== */}
-      <section id="schools" className="relative py-32 lg:py-40 bg-gradient-to-b from-[#FAFAF8] via-pink-50/30 to-[#FAFAF8]">
+      {/* ===== 5. SCHOOLS -- Simplified ===== */}
+      <section id="schools" className="relative py-32 lg:py-40 bg-[#FAFAF8]">
+        <div className="gradient-orb w-[600px] h-[600px] bg-pink-200/15 top-20 -right-40" />
+
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-20 lg:mb-24">
-            <p className="text-sm font-medium uppercase tracking-widest text-pink-500 mb-4">For Educators</p>
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">For Educators</p>
             <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900 leading-tight">
               Your classroom,<br /><span className="text-pink-500">supercharged</span>
             </h2>
@@ -602,9 +643,9 @@ export default function Home() {
               { step: "4", title: "Monitor", desc: "Track class-wide progress & XP.", icon: "📊" },
             ].map((s) => (
               <StaggerItem key={s.step}>
-                <div className="rounded-2xl border border-pink-100 bg-white p-6 text-center transition-all hover:shadow-[0_12px_40px_-12px_rgba(236,72,153,0.15)] h-full">
+                <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-6 text-center transition-all hover:shadow-xl hover:shadow-gray-200/50 h-full">
                   <span className="text-3xl mb-3 block">{s.icon}</span>
-                  <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-pink-500 text-white text-sm font-bold mb-3">{s.step}</div>
+                  <div className="inline-flex items-center justify-center w-8 h-8 rounded-full border-2 border-gray-200 bg-white text-sm font-bold text-gray-600 mb-3">{s.step}</div>
                   <h3 className="text-sm font-semibold text-gray-900 mb-1">{s.title}</h3>
                   <p className="text-xs text-gray-400">{s.desc}</p>
                 </div>
@@ -613,7 +654,7 @@ export default function Home() {
           </StaggerContainer>
 
           <ScrollReveal>
-            <div className="rounded-2xl border border-gray-100 bg-white shadow-[0_20px_60px_-15px_rgba(0,0,0,0.08)] overflow-hidden max-w-4xl mx-auto">
+            <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm shadow-[0_20px_60px_-15px_rgba(0,0,0,0.08)] overflow-hidden max-w-4xl mx-auto">
               <div className="border-b border-gray-100 bg-gray-50 px-6 py-4 flex items-center gap-3">
                 <span className="inline-flex items-center rounded-full bg-pink-50 border border-pink-100 px-2.5 py-0.5 text-xs font-medium text-pink-600">School Admin</span>
                 <span className="text-sm font-medium text-gray-900">Stanford CS Department</span>
@@ -643,71 +684,116 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 6. AI LEVELS (DARK) ===== */}
-      <section className="relative py-32 lg:py-40 bg-gray-950">
-        <div className="gradient-orb w-[500px] h-[500px] bg-saffron/25 top-0 right-0 opacity-40" />
-        <div className="gradient-orb w-[400px] h-[400px] bg-india-green/20 bottom-20 -left-20 opacity-40" />
+      {/* ===== 6. AI LEVELS -- Neutral Cards ===== */}
+      <section className="relative py-32 lg:py-40 bg-[#FAFAF8]">
+        <div className="gradient-orb w-[500px] h-[500px] bg-saffron/10 top-0 right-0" />
+        <div className="gradient-orb w-[400px] h-[400px] bg-india-green/10 bottom-20 -left-20" />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-20 lg:mb-24">
-            <p className="text-sm font-medium uppercase tracking-widest text-gray-500 mb-4">The Core Differentiator</p>
-            <h2 className="text-4xl sm:text-5xl font-semibold text-white leading-tight">
-              You control the AI.<br />
-              <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">Not the other way around.</span>
-            </h2>
-          </ScrollReveal>
-
-          {/* Level selector as horizontal strip */}
-          <ScrollReveal>
-            <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 max-w-5xl mx-auto">
-              {aiLevels.map((ai, i) => (
-                <div key={ai.level} className={`group rounded-2xl border p-5 text-center transition-all ${
-                  i === 2
-                    ? "border-saffron/30 bg-gradient-to-b from-saffron/10 to-transparent shadow-[0_0_40px_-10px_rgba(255,153,0,0.3)]"
-                    : "border-white/[0.06] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.12]"
-                }`}>
-                  <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl mb-3 ${
-                    i === 2 ? "bg-gradient-to-br from-saffron to-india-green shadow-lg" : "bg-white/[0.06] border border-white/10"
-                  }`}>
-                    <span className={`text-sm font-bold ${i === 2 ? "text-white" : "text-gray-400"}`}>{ai.level}</span>
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left: Glassmorphic selector mockup */}
+            <ScrollReveal>
+              <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm shadow-[0_20px_60px_-15px_rgba(0,0,0,0.08)] p-6 space-y-5">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-saffron to-india-green flex items-center justify-center">
+                    <span className="text-xs font-bold text-white">AI</span>
                   </div>
-                  <h3 className={`text-base font-semibold mb-1 ${i === 2 ? "text-white" : "text-gray-300"}`}>{ai.label}</h3>
-                  <p className="text-xs text-gray-500">{ai.description}</p>
-                  {i === 2 && <span className="mt-3 inline-block text-[10px] font-medium text-saffron bg-saffron/10 rounded-full px-3 py-0.5">Selected</span>}
+                  <span className="text-sm font-semibold text-gray-900">AI Level Configuration</span>
                 </div>
-              ))}
-            </div>
-          </ScrollReveal>
 
-          <ScrollReveal delay={0.2} className="mt-12 text-center">
-            <p className="text-gray-400 text-sm max-w-xl mx-auto">
-              Every AI interaction is logged, timestamped, and factored into the audit score. Interviewers can adjust levels mid-session with a single click.
-            </p>
-          </ScrollReveal>
+                <div>
+                  <p className="text-xs font-medium text-gray-400 mb-2">Select assistance level</p>
+                  <div className="flex gap-1.5">
+                    {["L0", "L1", "L2", "L3", "L4"].map((l, i) => (
+                      <div key={l} className={`flex-1 rounded-full py-2 text-center text-xs font-bold transition-all cursor-default ${
+                        i === 2
+                          ? "bg-gray-900 text-white shadow-sm"
+                          : "bg-gray-100 text-gray-400"
+                      }`}>{l}</div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="rounded-xl bg-gray-50 border border-gray-100 p-4">
+                  <p className="text-xs font-medium text-gray-500 mb-2">L2 Preview &mdash; Scaffold</p>
+                  <div className="rounded-lg bg-saffron/5 border border-saffron/10 p-3">
+                    <p className="text-xs text-gray-600 leading-relaxed">&quot;Consider using a HashMap to optimize the lookup. Here&apos;s a skeleton to get you started...&quot;</p>
+                  </div>
+                </div>
+
+                <div className="rounded-xl bg-gray-50 border border-gray-100 p-4">
+                  <p className="text-xs font-medium text-gray-500 mb-2">Session Log</p>
+                  <div className="space-y-1.5">
+                    {[
+                      { time: "14:32", event: "AI level changed L1 → L2", who: "Interviewer" },
+                      { time: "14:35", event: "Scaffold delivered", who: "AI" },
+                      { time: "14:38", event: "Candidate used suggestion", who: "System" },
+                    ].map((log) => (
+                      <div key={log.time} className="flex items-center gap-2 text-[10px]">
+                        <span className="text-gray-300 font-mono">{log.time}</span>
+                        <span className="text-gray-600">{log.event}</span>
+                        <span className="ml-auto text-gray-400">{log.who}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 text-xs text-gray-400">
+                  <span className="w-2 h-2 rounded-full bg-india-green animate-pulse" />
+                  All AI interactions logged &amp; audited
+                </div>
+              </div>
+            </ScrollReveal>
+
+            {/* Right: Header + level cards */}
+            <ScrollReveal delay={0.2} direction="right">
+              <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">The Core Differentiator</p>
+              <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900 leading-tight">
+                You control the AI.<br />
+                <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">Not the other way around.</span>
+              </h2>
+
+              <div className="mt-8 space-y-3">
+                {aiLevels.map((ai) => (
+                  <div key={ai.level} className="rounded-xl border border-gray-100 bg-white/70 backdrop-blur-sm p-4 flex items-center gap-4 transition-all hover:shadow-xl hover:shadow-gray-200/50">
+                    <div className="w-10 h-10 rounded-full border-2 border-gray-200 bg-white flex items-center justify-center shrink-0">
+                      <span className="text-sm font-bold text-gray-600">{ai.level}</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">{ai.label}</p>
+                      <p className="text-xs text-gray-400">{ai.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <p className="mt-6 text-sm text-gray-400 max-w-md">
+                Every AI interaction is logged, timestamped, and factored into the audit score. Interviewers can adjust levels mid-session with a single click.
+              </p>
+            </ScrollReveal>
+          </div>
         </div>
       </section>
 
-      {/* ===== 7. FEATURES GRID -- Bento (LIGHT) ===== */}
+      {/* ===== 7. FEATURES GRID -- Bento ===== */}
       <section id="features" className="py-32 lg:py-40 bg-[#FAFAF8]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-20 lg:mb-24">
-            <p className="text-sm font-medium uppercase tracking-widest text-india-green mb-4">Everything You Need</p>
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">Everything You Need</p>
             <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900">
               One platform,<br /><span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">zero gaps</span>
             </h2>
           </ScrollReveal>
 
-          <StaggerContainer className="grid grid-cols-2 lg:grid-cols-4 gap-4" staggerDelay={0.05}>
+          <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" staggerDelay={0.05}>
             {platformFeatures.map((f, idx) => (
-              <StaggerItem key={f.title}>
-                <div className={`group rounded-2xl border border-gray-100 bg-white p-6 transition-all hover:shadow-[0_12px_40px_-12px_rgba(0,0,0,0.1)] hover:border-gray-200 h-full ${
-                  idx < 2 ? "lg:col-span-2" : ""
-                }`}>
-                  <div className={`mb-4 w-12 h-12 rounded-xl ${f.iconBg} flex items-center justify-center ${f.iconColor} group-hover:scale-110 transition-transform`}>
+              <StaggerItem key={f.title} className={idx < 2 ? "sm:col-span-2 lg:col-span-2" : ""}>
+                <div className="group rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-6 transition-all hover:shadow-xl hover:shadow-gray-200/50 h-full">
+                  <div className="mb-4 w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center text-gray-500">
                     {f.icon}
                   </div>
                   <h3 className="text-base font-semibold text-gray-900 mb-2">{f.title}</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">{f.description}</p>
+                  <p className="text-sm text-gray-400 leading-relaxed">{f.description}</p>
                 </div>
               </StaggerItem>
             ))}
@@ -715,18 +801,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 8. FOR CANDIDATES (LIGHT w/ gradient accent) ===== */}
-      <section className="relative py-32 lg:py-40 bg-gradient-to-b from-[#FAFAF8] via-emerald-50/20 to-[#FAFAF8]">
+      {/* ===== 8. FOR CANDIDATES -- Neutral Badges ===== */}
+      <section className="relative py-32 lg:py-40 bg-[#FAFAF8]">
+        <div className="gradient-orb w-[500px] h-[500px] bg-india-green/10 top-20 -right-40" />
+
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <ScrollReveal>
-              <p className="text-sm font-medium uppercase tracking-widest text-india-green mb-4">For Candidates</p>
+              <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">For Candidates</p>
               <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900 leading-tight">
                 Land your dream job at
               </h2>
               <div className="mt-4 flex flex-wrap gap-2">
                 {faangCompanies.map((c) => (
-                  <span key={c.name} className={`inline-flex items-center rounded-full border px-4 py-2 text-sm font-semibold ${c.bg} ${c.color}`}>
+                  <span key={c.name} className="inline-flex items-center rounded-full border border-gray-100 bg-white/80 px-4 py-2 text-sm font-semibold text-gray-600">
                     {c.name}
                   </span>
                 ))}
@@ -745,7 +833,7 @@ export default function Home() {
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-gray-900">{item.title}</p>
-                      <p className="text-sm text-gray-500">{item.desc}</p>
+                      <p className="text-sm text-gray-400">{item.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -758,7 +846,7 @@ export default function Home() {
             </ScrollReveal>
 
             <ScrollReveal delay={0.2} direction="right">
-              <div className="rounded-2xl border border-gray-100 bg-white shadow-[0_20px_60px_-15px_rgba(0,0,0,0.08)] overflow-hidden">
+              <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm shadow-[0_20px_60px_-15px_rgba(0,0,0,0.08)] overflow-hidden">
                 <div className="border-b border-gray-100 bg-gray-50 px-6 py-3 flex items-center gap-2">
                   <div className="flex gap-1.5">
                     <div className="w-3 h-3 rounded-full bg-red-400" />
@@ -805,48 +893,48 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 9. COMPARISON TABLE (DARK) ===== */}
-      <section className="relative py-32 lg:py-40 bg-gray-950">
-        <div className="gradient-orb w-[500px] h-[500px] bg-india-green/15 -top-20 -left-40 opacity-40" />
+      {/* ===== 9. COMPARISON TABLE -- Refined ===== */}
+      <section className="relative py-32 lg:py-40 bg-[#FAFAF8]">
+        <div className="gradient-orb w-[500px] h-[500px] bg-india-green/10 -top-20 -left-40" />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-20 lg:mb-24">
-            <p className="text-sm font-medium uppercase tracking-widest text-gray-500 mb-4">The Honest Comparison</p>
-            <h2 className="text-4xl sm:text-5xl font-semibold text-white">
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">The Honest Comparison</p>
+            <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900">
               Why teams switch to{" "}
               <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">Intervue</span>
             </h2>
           </ScrollReveal>
 
           <ScrollReveal>
-            <div className="overflow-x-auto rounded-2xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm">
+            <div className="overflow-x-auto rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-white/[0.06]">
-                    <th className="px-6 py-5 text-left text-sm font-semibold text-gray-300">Feature</th>
+                  <tr className="border-b border-gray-100">
+                    <th className="px-6 py-5 text-left text-sm font-semibold text-gray-700">Feature</th>
                     <th className="px-6 py-5 text-center">
                       <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent text-sm font-bold">Intervue.AI</span>
                     </th>
-                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-600">HackerRank</th>
-                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-600">CoderPad</th>
-                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-600">Karat</th>
-                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-600">LeetCode</th>
+                    <th className="px-6 py-5 text-center text-sm font-medium text-gray-400">HackerRank</th>
+                    <th className="px-6 py-5 text-center text-sm font-medium text-gray-400">CoderPad</th>
+                    <th className="px-6 py-5 text-center text-sm font-medium text-gray-400">Karat</th>
+                    <th className="px-6 py-5 text-center text-sm font-medium text-gray-400">LeetCode</th>
                   </tr>
                 </thead>
                 <tbody>
                   {comparisonFeatures.map((row) => (
-                    <tr key={row.feature} className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
-                      <td className="px-6 py-3.5 text-sm text-gray-300 font-medium">{row.feature}</td>
+                    <tr key={row.feature} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                      <td className="px-6 py-3.5 text-sm text-gray-700 font-medium">{row.feature}</td>
                       <td className="px-6 py-3.5 text-center">
                         {row.intervue ? (
-                          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-gradient-to-br from-saffron to-india-green">
+                          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-gray-900">
                             <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                           </span>
-                        ) : <span className="text-gray-700">&#10007;</span>}
+                        ) : <span className="text-gray-200">&#10007;</span>}
                       </td>
                       {[row.hackerrank, row.coderpad, row.karat, row.leetcode].map((val, j) => (
                         <td key={j} className="px-6 py-3.5 text-center">
-                          {val ? <span className="text-gray-500">&#10003;</span> : <span className="text-gray-700">&#10007;</span>}
+                          {val ? <span className="text-gray-400">&#10003;</span> : <span className="text-gray-200">&#10007;</span>}
                         </td>
                       ))}
                     </tr>
@@ -858,11 +946,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 10. PRICING (LIGHT) ===== */}
+      {/* ===== 10. PRICING -- Gradient Border ===== */}
       <section id="pricing" className="py-32 lg:py-40 bg-[#FAFAF8]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-20 lg:mb-24">
-            <p className="text-sm font-medium uppercase tracking-widest text-saffron mb-4">Pricing</p>
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">Pricing</p>
             <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900">
               Start free. Scale as you grow.
             </h2>
@@ -872,7 +960,7 @@ export default function Home() {
             {pricingPlans.map((plan) => (
               <StaggerItem key={plan.name}>
                 {plan.highlighted ? (
-                  <div className="rounded-2xl p-px bg-gradient-to-b from-saffron via-orange-400 to-india-green h-full shadow-[0_20px_60px_-15px_rgba(255,153,0,0.2)]">
+                  <div className="rounded-2xl p-px bg-gradient-to-b from-saffron/40 to-india-green/40 h-full shadow-[0_20px_60px_-15px_rgba(255,153,0,0.2)]">
                     <div className="relative rounded-[15px] bg-white p-7 h-full">
                       <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                         <span className="rounded-full bg-gray-900 px-4 py-1 text-xs font-semibold text-white">Most Popular</span>
@@ -895,7 +983,7 @@ export default function Home() {
                     </div>
                   </div>
                 ) : (
-                  <div className="rounded-2xl border border-gray-100 bg-white p-7 transition-all hover:shadow-[0_12px_40px_-12px_rgba(0,0,0,0.1)] h-full">
+                  <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-7 transition-all hover:shadow-xl hover:shadow-gray-200/50 h-full">
                     <h3 className="text-lg font-semibold text-gray-900">{plan.name}</h3>
                     <p className="mt-1 text-sm text-gray-400">{plan.description}</p>
                     <div className="mt-5 flex items-baseline">
@@ -919,14 +1007,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 11. CTA BANNER (DARK) ===== */}
+      {/* ===== 11. CTA BANNER -- Dark Inversion ===== */}
       <section className="py-24 bg-[#FAFAF8]">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
-            <div className="relative rounded-[2rem] bg-gray-950 p-12 sm:p-20 text-center overflow-hidden">
+            <div className="relative rounded-3xl bg-gray-900 p-12 sm:p-20 text-center overflow-hidden">
               <div className="gradient-orb w-[500px] h-[500px] bg-saffron/30 -top-40 -right-40 opacity-50" />
               <div className="gradient-orb w-[400px] h-[400px] bg-india-green/30 -bottom-40 -left-40 opacity-50" />
-              <div className="gradient-orb w-[300px] h-[300px] bg-purple-500/20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-30" />
 
               <div className="relative">
                 <h2 className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-white leading-tight">
@@ -941,7 +1028,7 @@ export default function Home() {
                   <Link href="/auth/signup?role=company" className="inline-flex items-center justify-center rounded-full bg-white px-10 py-4 text-lg font-semibold text-gray-900 hover:bg-gray-100 transition-all hover:shadow-[0_0_40px_rgba(255,255,255,0.15)]">
                     Start Hiring
                   </Link>
-                  <Link href="/auth/signup?role=candidate" className="inline-flex items-center justify-center rounded-full border border-gray-700 px-10 py-4 text-lg font-semibold text-white hover:bg-white/[0.05] hover:border-gray-500 transition-all">
+                  <Link href="/auth/signup?role=candidate" className="inline-flex items-center justify-center rounded-full border border-gray-600 px-10 py-4 text-lg font-semibold text-white hover:bg-white/[0.05] hover:border-gray-500 transition-all">
                     I&apos;m a Candidate
                   </Link>
                 </div>
@@ -954,12 +1041,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 12. FOOTER (DARK) ===== */}
-      <footer className="bg-gray-950 border-t border-white/[0.05] py-20 lg:py-24">
+      {/* ===== 12. FOOTER -- Subtle ===== */}
+      <footer className="border-t border-gray-100 py-20 lg:py-24 bg-[#FAFAF8]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
             <div>
-              <span className="text-2xl font-semibold tracking-tight text-white">Intervue<span className="text-india-green">.AI</span></span>
+              <span className="text-2xl font-semibold tracking-tight text-gray-900">Intervue<span className="text-india-green">.AI</span></span>
               <p className="mt-3 text-sm text-gray-500 leading-relaxed">The AI-controlled interview platform for modern engineering teams.</p>
             </div>
             {[
@@ -969,17 +1056,17 @@ export default function Home() {
               { title: "Platform", links: [{ label: "Sign In", href: "/auth/signin" }] },
             ].map((col) => (
               <div key={col.title}>
-                <h4 className="text-xs font-medium uppercase tracking-wider text-gray-500 mb-4">{col.title}</h4>
+                <h4 className="text-xs font-medium uppercase tracking-wider text-gray-400 mb-4">{col.title}</h4>
                 <div className="space-y-2.5">
                   {col.links.map((link) => (
-                    <Link key={link.label} href={link.href} className="block text-sm text-gray-400 hover:text-white transition-colors">{link.label}</Link>
+                    <Link key={link.label} href={link.href} className="block text-sm text-gray-500 hover:text-gray-900 transition-colors">{link.label}</Link>
                   ))}
                 </div>
               </div>
             ))}
           </div>
-          <div className="border-t border-white/[0.05] pt-8 flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <p className="text-sm text-gray-600">&copy; {new Date().getFullYear()} Intervue.AI. All rights reserved.</p>
+          <div className="border-t border-gray-100 pt-8 flex flex-col items-center justify-between gap-4 sm:flex-row">
+            <p className="text-sm text-gray-400">&copy; {new Date().getFullYear()} Intervue.AI. All rights reserved.</p>
           </div>
         </div>
       </footer>
