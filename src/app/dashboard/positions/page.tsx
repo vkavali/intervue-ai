@@ -44,6 +44,9 @@ export default function PositionsPage() {
   const [showForm, setShowForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [aiMode, setAiMode] = useState(false);
+  const [jdText, setJdText] = useState("");
+  const [parsing, setParsing] = useState(false);
 
   // Form state
   const [form, setForm] = useState({
@@ -126,6 +129,40 @@ export default function PositionsPage() {
     }
   };
 
+  const handleAIParse = async () => {
+    if (!jdText.trim() || jdText.trim().length < 20) {
+      setError("Please paste a job description with at least 20 characters.");
+      return;
+    }
+    setParsing(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/positions/parse", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: jdText }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to parse job description");
+      }
+      setForm({
+        title: data.title || "",
+        role: data.role || "",
+        seniority: data.seniority || "MID",
+        department: data.department || "",
+        location: data.location || "",
+        description: data.description || "",
+        headcount: data.headcount || "1",
+      });
+      setAiMode(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to parse");
+    } finally {
+      setParsing(false);
+    }
+  };
+
   const openCount = positions.filter((p) => p.status === "OPEN").length;
   const filledCount = positions.filter((p) => p.status === "FILLED").length;
   const totalHeadcount = positions.filter((p) => p.status === "OPEN").reduce((sum, p) => sum + p.headcount, 0);
@@ -174,7 +211,61 @@ export default function PositionsPage() {
       {/* Create Form */}
       {showForm && (
         <div className="mb-6 rounded-xl border border-gray-200 bg-white p-6">
-          <h2 className="mb-4 text-lg font-semibold text-gray-900">New Position</h2>
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-gray-900">New Position</h2>
+            <button
+              type="button"
+              onClick={() => setAiMode(!aiMode)}
+              className={`inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+                aiMode
+                  ? "border border-purple-300 bg-purple-50 text-purple-700"
+                  : "border border-gray-200 bg-gray-50 text-gray-600 hover:bg-gray-100"
+              }`}
+            >
+              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              {aiMode ? "AI Parse On" : "AI Parse"}
+            </button>
+          </div>
+
+          {/* AI Parse Section */}
+          {aiMode && (
+            <div className="mb-5 rounded-lg border border-purple-200 bg-purple-50/50 p-4">
+              <p className="mb-2 text-sm font-medium text-purple-800">Paste a job description and AI will fill the form</p>
+              <textarea
+                value={jdText}
+                onChange={(e) => setJdText(e.target.value)}
+                placeholder="Paste the full job description here..."
+                rows={5}
+                className="w-full rounded-lg border border-purple-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-purple-400 focus:outline-none focus:ring-1 focus:ring-purple-400"
+              />
+              <button
+                type="button"
+                onClick={handleAIParse}
+                disabled={parsing || jdText.trim().length < 20}
+                className="mt-2 inline-flex items-center gap-2 rounded-lg border border-purple-300 bg-purple-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-purple-700 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {parsing ? (
+                  <>
+                    <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Parsing...
+                  </>
+                ) : (
+                  <>
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    Parse with AI
+                  </>
+                )}
+              </button>
+            </div>
+          )}
+
           <form onSubmit={handleCreate} className="space-y-4">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>

@@ -38,7 +38,10 @@ export default function BillingPage() {
 
   const handleCheckout = async (planKey: PlanKey) => {
     const plan = PLANS[planKey]
-    if (!plan.priceId) return
+    if (!plan.priceId) {
+      setError("Payment is not configured yet. Please contact support or try again later.")
+      return
+    }
 
     setLoading(planKey)
     setError(null)

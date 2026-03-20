@@ -1242,7 +1242,7 @@ export default function Home() {
           )}
 
           {/* All plans in a responsive grid */}
-          <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 max-w-7xl mx-auto" staggerDelay={0.06}>
+          <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto" staggerDelay={0.06}>
             {pricingPlans.map((plan) => (
               <StaggerItem key={plan.name}>
                 {plan.highlighted ? (
