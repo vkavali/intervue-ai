@@ -247,7 +247,7 @@ export default function Home() {
             "Custom question library",
             "Calendar & scheduling",
           ],
-          cta: "Start 3-Month Free Trial",
+          cta: "Get Started",
           highlighted: true,
           accent: "saffron",
           href: "/auth/signup?role=company",
@@ -267,7 +267,7 @@ export default function Home() {
             "Custom integrations",
             "On-prem deployment",
           ],
-          cta: "Start 3-Month Free Trial",
+          cta: "Get Started",
           highlighted: false,
           accent: "saffron",
           href: "/auth/signup?role=company",
@@ -550,7 +550,7 @@ export default function Home() {
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-saffron opacity-75" />
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-saffron" />
                   </span>
-                  Launch Offer: 3 months free for first 100 companies &mdash; {launchOffer.remaining} spots left
+                  Launch Offer: First 100 candidates get 6 months Pro free &mdash; {launchOffer.remaining} spots left
                 </a>
               </div>
             )}
@@ -1187,7 +1187,7 @@ export default function Home() {
             </h2>
             <p className="mt-4 text-base text-gray-400">
               {isIndia
-                ? "All prices in INR. First 100 companies get 3 months free. Schools get 3 months free trial."
+                ? "All prices in INR. First 100 candidates get 6 months Pro free. Schools get 3 months free trial."
                 : "Plans for companies, candidates, and schools. Start with free tiers and upgrade as you grow."}
             </p>
             <div className="mt-3 flex flex-wrap gap-2 justify-center">
@@ -1213,7 +1213,7 @@ export default function Home() {
                     </span>
                   </div>
                   <h3 className="text-2xl font-semibold text-gray-900 mb-6">
-                    First 100 companies get 3 months free
+                    First 100 candidates get 6 months Pro free
                   </h3>
                   <div className="grid grid-cols-3 gap-4 mb-6">
                     <div className="text-center">
@@ -1221,12 +1221,12 @@ export default function Home() {
                       <p className="text-xs text-gray-400 mt-1">Spots Remaining</p>
                     </div>
                     <div className="text-center">
-                      <p className="text-3xl font-bold bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">3</p>
-                      <p className="text-xs text-gray-400 mt-1">Months Free</p>
+                      <p className="text-3xl font-bold bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">6</p>
+                      <p className="text-xs text-gray-400 mt-1">Months Pro Free</p>
                     </div>
                     <div className="text-center">
-                      <p className="text-3xl font-bold text-gray-900">1 yr</p>
-                      <p className="text-xs text-gray-400 mt-1">Commitment</p>
+                      <p className="text-3xl font-bold text-gray-900">Rs.199</p>
+                      <p className="text-xs text-gray-400 mt-1">After Trial</p>
                     </div>
                   </div>
                   <div className="w-full h-2 rounded-full bg-gray-100 overflow-hidden">
@@ -1241,16 +1241,16 @@ export default function Home() {
             </ScrollReveal>
           )}
 
-          {/* Top row: first 3 plans */}
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto" staggerDelay={0.1}>
-            {pricingPlans.slice(0, 3).map((plan) => (
+          {/* All plans in a responsive grid */}
+          <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 max-w-7xl mx-auto" staggerDelay={0.06}>
+            {pricingPlans.map((plan) => (
               <StaggerItem key={plan.name}>
                 {plan.highlighted ? (
                   <div className="rounded-2xl p-px bg-gradient-to-b from-saffron via-orange-400 to-india-green h-full shadow-[0_20px_60px_-15px_rgba(255,153,0,0.2)]">
-                    <div className="relative rounded-[15px] bg-white p-7 h-full">
+                    <div className="relative rounded-[15px] bg-white p-6 h-full flex flex-col">
                       <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                         <span className={`rounded-full px-4 py-1 text-xs font-semibold text-white ${isIndia ? "bg-gradient-to-r from-saffron to-india-green" : "bg-gray-900"}`}>
-                          {isIndia ? "3 Months Free" : "Most Popular"}
+                          Most Popular
                         </span>
                       </div>
                       <h3 className="text-lg font-semibold text-gray-900">{plan.name}</h3>
@@ -1260,23 +1260,23 @@ export default function Home() {
                         </span>
                       )}
                       <p className="mt-1 text-sm text-gray-400">{plan.description}</p>
-                      <div className="mt-5 flex items-baseline">
-                        <span className="text-4xl font-semibold text-gray-900">{plan.price}</span>
-                        <span className="ml-1 text-gray-400">{plan.period}</span>
+                      <div className="mt-4 flex items-baseline">
+                        <span className="text-3xl font-semibold text-gray-900">{plan.price}</span>
+                        <span className="ml-1 text-gray-400 text-sm">{plan.period}</span>
                       </div>
-                      <ul className="mt-6 space-y-2.5">
+                      <ul className="mt-5 space-y-2 flex-1">
                         {plan.features.map((feature) => (
-                          <li key={feature} className="flex items-center gap-2.5 text-sm text-gray-600">
+                          <li key={feature} className="flex items-center gap-2 text-sm text-gray-600">
                             <svg className="h-4 w-4 shrink-0 text-saffron" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                             {feature}
                           </li>
                         ))}
                       </ul>
-                      <Link href={plan.href} className="mt-7 block w-full rounded-full py-3 text-center text-sm font-semibold bg-gray-900 text-white hover:bg-gray-800 transition-all">{plan.cta}</Link>
+                      <Link href={plan.href} className="mt-6 block w-full rounded-full py-3 text-center text-sm font-semibold bg-gray-900 text-white hover:bg-gray-800 transition-all">{plan.cta}</Link>
                     </div>
                   </div>
                 ) : (
-                  <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-7 transition-all hover:shadow-xl hover:shadow-gray-200/50 h-full">
+                  <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-6 transition-all hover:shadow-xl hover:shadow-gray-200/50 h-full flex flex-col">
                     <h3 className="text-lg font-semibold text-gray-900">{plan.name}</h3>
                     {plan.launchBadge && (
                       <span className="inline-block mt-1 rounded-full bg-saffron/10 px-2 py-0.5 text-[10px] font-semibold text-saffron">
@@ -1284,51 +1284,21 @@ export default function Home() {
                       </span>
                     )}
                     <p className="mt-1 text-sm text-gray-400">{plan.description}</p>
-                    <div className="mt-5 flex items-baseline">
-                      <span className="text-4xl font-semibold text-gray-900">{plan.price}</span>
-                      <span className="ml-1 text-gray-400">{plan.period}</span>
+                    <div className="mt-4 flex items-baseline">
+                      <span className="text-3xl font-semibold text-gray-900">{plan.price}</span>
+                      <span className="ml-1 text-gray-400 text-sm">{plan.period}</span>
                     </div>
-                    <ul className="mt-6 space-y-2.5">
+                    <ul className="mt-5 space-y-2 flex-1">
                       {plan.features.map((feature) => (
-                        <li key={feature} className="flex items-center gap-2.5 text-sm text-gray-600">
+                        <li key={feature} className="flex items-center gap-2 text-sm text-gray-600">
                           <svg className={`h-4 w-4 shrink-0 ${plan.accent === "pink" ? "text-pink-500" : plan.accent === "india-green" ? "text-india-green" : "text-gray-300"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                           {feature}
                         </li>
                       ))}
                     </ul>
-                    <Link href={plan.href} className={`mt-7 block w-full rounded-full py-3 text-center text-sm font-semibold transition-all ${plan.accent === "india-green" ? "border border-india-green/30 text-india-green hover:bg-india-green/5" : "border border-gray-200 text-gray-700 hover:bg-gray-50"}`}>{plan.cta}</Link>
+                    <Link href={plan.href} className={`mt-6 block w-full rounded-full py-3 text-center text-sm font-semibold transition-all ${plan.accent === "india-green" ? "border border-india-green/30 text-india-green hover:bg-india-green/5" : plan.accent === "pink" ? "border border-pink-200 text-pink-600 hover:bg-pink-50" : "border border-gray-200 text-gray-700 hover:bg-gray-50"}`}>{plan.cta}</Link>
                   </div>
                 )}
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-
-          {/* Bottom row: remaining plans, centered */}
-          <StaggerContainer className={`grid grid-cols-1 ${pricingPlans.length - 3 > 1 ? "md:grid-cols-2 max-w-3xl" : "max-w-md"} gap-6 mx-auto mt-6`} staggerDelay={0.1}>
-            {pricingPlans.slice(3).map((plan) => (
-              <StaggerItem key={plan.name}>
-                <div className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-7 transition-all hover:shadow-xl hover:shadow-gray-200/50 h-full">
-                  <h3 className="text-lg font-semibold text-gray-900">{plan.name}</h3>
-                  {plan.launchBadge && (
-                    <span className="inline-block mt-1 rounded-full bg-saffron/10 px-2 py-0.5 text-[10px] font-semibold text-saffron">
-                      {plan.launchBadge}
-                    </span>
-                  )}
-                  <p className="mt-1 text-sm text-gray-400">{plan.description}</p>
-                  <div className="mt-5 flex items-baseline">
-                    <span className="text-4xl font-semibold text-gray-900">{plan.price}</span>
-                    <span className="ml-1 text-gray-400">{plan.period}</span>
-                  </div>
-                  <ul className="mt-6 space-y-2.5">
-                    {plan.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-2.5 text-sm text-gray-600">
-                        <svg className={`h-4 w-4 shrink-0 ${plan.accent === "pink" ? "text-pink-500" : plan.accent === "india-green" ? "text-india-green" : "text-gray-300"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                  <Link href={plan.href} className={`mt-7 block w-full rounded-full py-3 text-center text-sm font-semibold transition-all ${plan.accent === "india-green" ? "border border-india-green/30 text-india-green hover:bg-india-green/5" : "border border-gray-200 text-gray-700 hover:bg-gray-50"}`}>{plan.cta}</Link>
-                </div>
               </StaggerItem>
             ))}
           </StaggerContainer>
@@ -1351,12 +1321,12 @@ export default function Home() {
                 </h2>
                 <p className="mt-6 text-lg text-gray-400 max-w-xl mx-auto">
                   {isIndia
-                    ? "Join the first 100 companies to get 3 months free. Pay in INR via UPI. Built for India\u2019s scale."
+                    ? "First 100 candidates get 6 months Pro free. Companies and schools pay in INR via UPI. Built for India\u2019s scale."
                     : "Join the companies using AI-controlled interviews to find the best engineers."}
                 </p>
                 <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
                   <Link href="/auth/signup?role=company" className="inline-flex items-center justify-center rounded-full bg-white px-10 py-4 text-lg font-semibold text-gray-900 hover:bg-gray-100 transition-all hover:shadow-[0_0_40px_rgba(255,255,255,0.15)]">
-                    {isIndia ? "Claim Launch Offer" : "Start Hiring"}
+                    Start Hiring
                   </Link>
                   <Link href="/auth/signup?role=candidate" className="inline-flex items-center justify-center rounded-full border border-gray-600 px-10 py-4 text-lg font-semibold text-white hover:bg-white/[0.05] hover:border-gray-500 transition-all">
                     I&apos;m a Candidate
