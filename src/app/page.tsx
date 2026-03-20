@@ -848,48 +848,48 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 9. COMPARISON TABLE -- Refined ===== */}
-      <section className="relative py-32 lg:py-40 bg-[#FAFAF8]">
-        <div className="gradient-orb w-[500px] h-[500px] bg-india-green/10 -top-20 -left-40" />
+      {/* ===== 9. COMPARISON TABLE (DARK) ===== */}
+      <section className="relative py-32 lg:py-40 bg-gray-950">
+        <div className="gradient-orb w-[500px] h-[500px] bg-india-green/15 -top-20 -left-40 opacity-40" />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-20 lg:mb-24">
-            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">The Honest Comparison</p>
-            <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900">
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-500 mb-4">The Honest Comparison</p>
+            <h2 className="text-4xl sm:text-5xl font-semibold text-white">
               Why teams switch to{" "}
               <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">Intervue</span>
             </h2>
           </ScrollReveal>
 
           <ScrollReveal>
-            <div className="overflow-x-auto rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm">
+            <div className="overflow-x-auto rounded-2xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-100">
-                    <th className="px-6 py-5 text-left text-sm font-semibold text-gray-700">Feature</th>
+                  <tr className="border-b border-white/[0.06]">
+                    <th className="px-6 py-5 text-left text-sm font-semibold text-gray-300">Feature</th>
                     <th className="px-6 py-5 text-center">
                       <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent text-sm font-bold">Intervue.AI</span>
                     </th>
-                    <th className="px-6 py-5 text-center text-sm font-medium text-gray-400">HackerRank</th>
-                    <th className="px-6 py-5 text-center text-sm font-medium text-gray-400">CoderPad</th>
-                    <th className="px-6 py-5 text-center text-sm font-medium text-gray-400">Karat</th>
-                    <th className="px-6 py-5 text-center text-sm font-medium text-gray-400">LeetCode</th>
+                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-600">HackerRank</th>
+                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-600">CoderPad</th>
+                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-600">Karat</th>
+                    <th className="px-6 py-5 text-center text-sm font-semibold text-gray-600">LeetCode</th>
                   </tr>
                 </thead>
                 <tbody>
                   {comparisonFeatures.map((row) => (
-                    <tr key={row.feature} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                      <td className="px-6 py-3.5 text-sm text-gray-700 font-medium">{row.feature}</td>
+                    <tr key={row.feature} className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
+                      <td className="px-6 py-3.5 text-sm text-gray-300 font-medium">{row.feature}</td>
                       <td className="px-6 py-3.5 text-center">
                         {row.intervue ? (
-                          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-gray-900">
+                          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-gradient-to-br from-saffron to-india-green">
                             <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                           </span>
-                        ) : <span className="text-gray-200">&#10007;</span>}
+                        ) : <span className="text-gray-700">&#10007;</span>}
                       </td>
                       {[row.hackerrank, row.coderpad, row.karat, row.leetcode].map((val, j) => (
                         <td key={j} className="px-6 py-3.5 text-center">
-                          {val ? <span className="text-gray-400">&#10003;</span> : <span className="text-gray-200">&#10007;</span>}
+                          {val ? <span className="text-gray-500">&#10003;</span> : <span className="text-gray-700">&#10007;</span>}
                         </td>
                       ))}
                     </tr>
