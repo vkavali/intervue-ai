@@ -496,44 +496,42 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 3. HOW IT WORKS -- Bento Grid ===== */}
-      <section className="relative py-32 lg:py-40 bg-[#FAFAF8]">
-        <div className="gradient-orb w-[700px] h-[700px] bg-saffron/10 -top-40 -left-40" />
-        <div className="gradient-orb w-[500px] h-[500px] bg-india-green/10 bottom-0 right-0" />
+      {/* ===== 3. HOW IT WORKS (DARK) ===== */}
+      <section className="relative py-32 lg:py-40 bg-gray-950">
+        <div className="gradient-orb w-[800px] h-[800px] bg-saffron/20 -top-60 -left-40 opacity-40" />
+        <div className="gradient-orb w-[600px] h-[600px] bg-india-green/15 bottom-0 right-0 opacity-40" />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-20 lg:mb-24">
-            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">The Complete Flow</p>
-            <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900 leading-tight">
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-500 mb-4">The Complete Flow</p>
+            <h2 className="text-4xl sm:text-5xl font-semibold text-white leading-tight">
               Six steps to your next
               <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent"> great hire</span>
             </h2>
           </ScrollReveal>
 
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" staggerDelay={0.08}>
+          {/* Asymmetric bento grid */}
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-6 gap-4" staggerDelay={0.08}>
             {[
-              { step: "01", title: "Create Position", desc: "Define your open role, configure interview questions, set AI levels per question." },
-              { step: "02", title: "Schedule & Invite", desc: "Find available slots, schedule sessions, and send candidates their unique links." },
-              { step: "03", title: "Live Interview", desc: "Candidate codes in real-time. Interviewer watches, adjusts AI levels on the fly, communicates via video + chat." },
-              { step: "04", title: "AI Audits Everything", desc: "Every keystroke, AI interaction, and behavior logged. Structured scorecards generated automatically." },
-              { step: "05", title: "Pipeline & Compare", desc: "Move candidates through stages. Generate AI comparisons between candidates for the same role." },
-              { step: "06", title: "Hire with Confidence", desc: "Make data-backed decisions with AI recommendations, scorecards, risk flags, and comparisons." },
-            ].map((card, idx) => {
-              const spans = ["", "", "md:col-span-2 lg:col-span-2", "lg:col-span-2", "lg:col-span-2", "md:col-span-2 lg:col-span-4"];
-              return (
-                <StaggerItem key={card.step} className={spans[idx]}>
-                  <div className={`group rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-6 transition-all hover:shadow-xl hover:shadow-gray-200/50 h-full ${idx === 5 ? "max-w-2xl mx-auto" : ""}`}>
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-gray-200 bg-white text-sm font-bold text-gray-600">
-                        {card.step}
-                      </span>
-                      <h3 className="text-lg font-semibold text-gray-900">{card.title}</h3>
-                    </div>
-                    <p className="text-sm text-gray-400 leading-relaxed">{card.desc}</p>
+              { step: "01", title: "Create Position", desc: "Define your open role, configure interview questions, set AI levels per question.", span: "md:col-span-2" },
+              { step: "02", title: "Schedule & Invite", desc: "Find available slots, schedule sessions, and send candidates their unique links.", span: "md:col-span-2" },
+              { step: "03", title: "Live Interview", desc: "Candidate codes in real-time. Interviewer watches, adjusts AI levels on the fly, communicates via video + chat.", span: "md:col-span-2" },
+              { step: "04", title: "AI Audits Everything", desc: "Every keystroke, AI interaction, and behavior logged. Structured scorecards generated automatically.", span: "md:col-span-3" },
+              { step: "05", title: "Pipeline & Compare", desc: "Move candidates through stages. Generate AI comparisons between candidates for the same role.", span: "md:col-span-3" },
+              { step: "06", title: "Hire with Confidence", desc: "Make data-backed decisions with AI recommendations, scorecards, risk flags, and comparisons.", span: "md:col-span-6 md:max-w-2xl md:mx-auto" },
+            ].map((card) => (
+              <StaggerItem key={card.step} className={card.span}>
+                <div className="group rounded-2xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-sm p-6 transition-all hover:bg-white/[0.06] hover:border-white/[0.12] h-full">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-saffron to-india-green text-xs font-bold text-white shadow-lg shadow-saffron/20">
+                      {card.step}
+                    </span>
+                    <h3 className="text-lg font-semibold text-white">{card.title}</h3>
                   </div>
-                </StaggerItem>
-              );
-            })}
+                  <p className="text-sm text-gray-400 leading-relaxed">{card.desc}</p>
+                </div>
+              </StaggerItem>
+            ))}
           </StaggerContainer>
         </div>
       </section>
