@@ -308,7 +308,7 @@ export default function Home() {
               Company-controlled AI assistance. Auto-audited sessions. Candidate gamification with XP, badges, and leaderboards. Everything in one platform.
             </p>
 
-            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="mt-10 flex flex-col sm:flex-row flex-wrap gap-4 justify-center">
               <Link href="/auth/signup?role=company" className="pill-cta-primary group">
                 Start Hiring Smarter
                 <svg className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
