@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ScrollReveal";
+import Carousel from "@/components/Carousel";
 import { detectRegion, type Region } from "@/lib/payment";
 
 const aiLevels = [
@@ -866,7 +867,7 @@ export default function Home() {
             </h2>
           </ScrollReveal>
 
-          <StaggerContainer className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-thin" staggerDelay={0.08}>
+          <Carousel autoScrollSpeed={0.4}>
             {[
               {
                 title: "One Platform, Every Role",
@@ -932,7 +933,7 @@ export default function Home() {
                 ),
               },
             ].map((item) => (
-              <StaggerItem key={item.title} className="min-w-[220px] max-w-[240px] flex-shrink-0 snap-start">
+              <div key={item.title} className="min-w-[220px] max-w-[240px] flex-shrink-0">
                 <div className="group rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-6 transition-all hover:shadow-xl hover:shadow-gray-200/50 h-full">
                   <div className="mb-4 w-12 h-12 rounded-xl bg-gradient-to-br from-saffron/10 to-india-green/10 flex items-center justify-center text-gray-600">
                     {item.icon}
@@ -940,9 +941,9 @@ export default function Home() {
                   <h3 className="text-base font-semibold text-gray-900 mb-2">{item.title}</h3>
                   <p className="text-sm text-gray-400 leading-relaxed">{item.desc}</p>
                 </div>
-              </StaggerItem>
+              </div>
             ))}
-          </StaggerContainer>
+          </Carousel>
         </div>
       </section>
 
@@ -1423,10 +1424,10 @@ export default function Home() {
             </ScrollReveal>
           )}
 
-          {/* All plans in a responsive grid */}
-          <StaggerContainer className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-thin max-w-7xl mx-auto" staggerDelay={0.06}>
+          {/* All plans in a carousel */}
+          <Carousel autoScrollSpeed={0.3}>
             {pricingPlans.map((plan) => (
-              <StaggerItem key={plan.name} className="min-w-[260px] max-w-[280px] flex-shrink-0 snap-start">
+              <div key={plan.name} className="min-w-[260px] max-w-[280px] flex-shrink-0">
                 {plan.highlighted ? (
                   <div className="rounded-2xl p-px bg-gradient-to-b from-saffron via-orange-400 to-india-green h-full shadow-[0_20px_60px_-15px_rgba(255,153,0,0.2)]">
                     <div className="relative rounded-[15px] bg-white p-6 h-full flex flex-col">
@@ -1481,9 +1482,9 @@ export default function Home() {
                     <Link href={plan.href} className={`mt-6 block w-full rounded-full py-3 text-center text-sm font-semibold transition-all ${plan.accent === "india-green" ? "border border-india-green/30 text-india-green hover:bg-india-green/5" : plan.accent === "pink" ? "border border-pink-200 text-pink-600 hover:bg-pink-50" : "border border-gray-200 text-gray-700 hover:bg-gray-50"}`}>{plan.cta}</Link>
                   </div>
                 )}
-              </StaggerItem>
+              </div>
             ))}
-          </StaggerContainer>
+          </Carousel>
         </div>
       </section>
 
