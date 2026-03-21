@@ -866,7 +866,7 @@ export default function Home() {
             </h2>
           </ScrollReveal>
 
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" staggerDelay={0.08}>
+          <StaggerContainer className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-thin" staggerDelay={0.08}>
             {[
               {
                 title: "One Platform, Every Role",
@@ -932,7 +932,7 @@ export default function Home() {
                 ),
               },
             ].map((item) => (
-              <StaggerItem key={item.title}>
+              <StaggerItem key={item.title} className="min-w-[220px] max-w-[240px] flex-shrink-0 snap-start">
                 <div className="group rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-6 transition-all hover:shadow-xl hover:shadow-gray-200/50 h-full">
                   <div className="mb-4 w-12 h-12 rounded-xl bg-gradient-to-br from-saffron/10 to-india-green/10 flex items-center justify-center text-gray-600">
                     {item.icon}
@@ -1424,9 +1424,9 @@ export default function Home() {
           )}
 
           {/* All plans in a responsive grid */}
-          <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto" staggerDelay={0.06}>
+          <StaggerContainer className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-thin max-w-7xl mx-auto" staggerDelay={0.06}>
             {pricingPlans.map((plan) => (
-              <StaggerItem key={plan.name}>
+              <StaggerItem key={plan.name} className="min-w-[260px] max-w-[280px] flex-shrink-0 snap-start">
                 {plan.highlighted ? (
                   <div className="rounded-2xl p-px bg-gradient-to-b from-saffron via-orange-400 to-india-green h-full shadow-[0_20px_60px_-15px_rgba(255,153,0,0.2)]">
                     <div className="relative rounded-[15px] bg-white p-6 h-full flex flex-col">
