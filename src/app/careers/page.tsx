@@ -2,7 +2,7 @@ import Link from "next/link"
 import { prisma } from "@/lib/prisma"
 import { fetchExternalJobs, ExternalJob } from "@/lib/external-jobs"
 
-export const revalidate = 3600 // Revalidate every hour
+export const dynamic = "force-dynamic" // Always fetch fresh data, never pre-render
 
 export default async function CareersPage({
   searchParams,
@@ -27,19 +27,27 @@ export default async function CareersPage({
   if (department) internalWhere.department = department
   if (location) internalWhere.location = { contains: location, mode: "insensitive" }
 
-  const [internalPositions, externalJobs] = await Promise.all([
-    source !== "external"
-      ? prisma.openPosition.findMany({
-          where: internalWhere,
-          include: { company: { select: { id: true, name: true, logo: true } } },
-          orderBy: { createdAt: "desc" },
-          take: 50,
-        })
-      : Promise.resolve([]),
-    source !== "intervue"
-      ? fetchExternalJobs(search || undefined, 30)
-      : Promise.resolve([]),
-  ])
+  // Fetch both sources independently — if one fails, the other still works
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let internalPositions: any[] = []
+  let externalJobs: ExternalJob[] = []
+
+  try {
+    if (source !== "external") {
+      internalPositions = await prisma.openPosition.findMany({
+        where: internalWhere,
+        include: { company: { select: { id: true, name: true, logo: true } } },
+        orderBy: { createdAt: "desc" },
+        take: 50,
+      })
+    }
+  } catch { /* DB unavailable */ }
+
+  try {
+    if (source !== "intervue") {
+      externalJobs = await fetchExternalJobs(search || undefined, 30)
+    }
+  } catch { /* External API unavailable */ }
 
   // Normalize internal positions to common format
   const internalJobs: ExternalJob[] = internalPositions.map((p) => ({
@@ -73,11 +81,14 @@ export default async function CareersPage({
     (a, b) => new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime()
   )
 
-  // Get filter values from internal positions
-  const filterPositions = await prisma.openPosition.findMany({
-    where: { status: "OPEN", isPublic: true },
-    select: { department: true, location: true },
-  })
+  // Get filter values from internal positions (graceful fallback)
+  let filterPositions: { department: string | null; location: string | null }[] = []
+  try {
+    filterPositions = await prisma.openPosition.findMany({
+      where: { status: "OPEN", isPublic: true },
+      select: { department: true, location: true },
+    })
+  } catch { /* DB unavailable, skip filters */ }
   const departments = Array.from(
     new Set(filterPositions.map((p) => p.department).filter(Boolean))
   ) as string[]
