@@ -1,21 +1,42 @@
 import Link from "next/link"
-
-async function getJobs(searchParams: Record<string, string>) {
-  const params = new URLSearchParams()
-  if (searchParams.department) params.set("department", searchParams.department)
-  if (searchParams.seniority) params.set("seniority", searchParams.seniority)
-  if (searchParams.location) params.set("location", searchParams.location)
-  if (searchParams.search) params.set("search", searchParams.search)
-
-  const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000"
-  const res = await fetch(`${baseUrl}/api/jobs?${params}`, { cache: "no-store" })
-  if (!res.ok) return { positions: [], filters: { departments: [], seniorities: [], locations: [] }, total: 0 }
-  return res.json()
-}
+import { prisma } from "@/lib/prisma"
 
 export default async function JobsPage({ searchParams }: { searchParams: Record<string, string> }) {
-  const data = await getJobs(searchParams)
-  const { positions, filters } = data
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const where: any = {
+    status: "OPEN",
+    isPublic: true,
+  }
+
+  if (searchParams.department) where.department = searchParams.department
+  if (searchParams.seniority) where.seniority = searchParams.seniority
+  if (searchParams.location) where.location = { contains: searchParams.location, mode: "insensitive" }
+  if (searchParams.search) {
+    where.OR = [
+      { title: { contains: searchParams.search, mode: "insensitive" } },
+      { role: { contains: searchParams.search, mode: "insensitive" } },
+      { description: { contains: searchParams.search, mode: "insensitive" } },
+    ]
+  }
+
+  const positions = await prisma.openPosition.findMany({
+    where,
+    include: {
+      company: { select: { id: true, name: true, logo: true, slug: true } },
+      _count: { select: { applications: true } },
+    },
+    orderBy: { createdAt: "desc" },
+  })
+
+  // Get distinct filter values
+  const allPositions = await prisma.openPosition.findMany({
+    where: { status: "OPEN", isPublic: true },
+    select: { department: true, seniority: true, location: true },
+  })
+
+  const departments = Array.from(new Set(allPositions.map(p => p.department).filter(Boolean)))
+  const seniorities = Array.from(new Set(allPositions.map(p => p.seniority)))
+  const locations = Array.from(new Set(allPositions.map(p => p.location).filter(Boolean)))
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -52,39 +73,39 @@ export default async function JobsPage({ searchParams }: { searchParams: Record<
 
             {/* Filters */}
             <div className="mt-3 flex flex-wrap gap-3">
-              {filters.departments?.length > 0 && (
+              {departments.length > 0 && (
                 <select
                   name="department"
                   defaultValue={searchParams.department || ""}
                   className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-saffron focus:outline-none"
                 >
                   <option value="">All Departments</option>
-                  {filters.departments.map((d: string) => (
-                    <option key={d} value={d}>{d}</option>
+                  {departments.map((d) => (
+                    <option key={d} value={d!}>{d}</option>
                   ))}
                 </select>
               )}
-              {filters.seniorities?.length > 0 && (
+              {seniorities.length > 0 && (
                 <select
                   name="seniority"
                   defaultValue={searchParams.seniority || ""}
                   className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-saffron focus:outline-none"
                 >
                   <option value="">All Levels</option>
-                  {filters.seniorities.map((s: string) => (
+                  {seniorities.map((s) => (
                     <option key={s} value={s}>{s}</option>
                   ))}
                 </select>
               )}
-              {filters.locations?.length > 0 && (
+              {locations.length > 0 && (
                 <select
                   name="location"
                   defaultValue={searchParams.location || ""}
                   className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-saffron focus:outline-none"
                 >
                   <option value="">All Locations</option>
-                  {filters.locations.map((l: string) => (
-                    <option key={l} value={l}>{l}</option>
+                  {locations.map((l) => (
+                    <option key={l} value={l!}>{l}</option>
                   ))}
                 </select>
               )}
@@ -104,13 +125,7 @@ export default async function JobsPage({ searchParams }: { searchParams: Record<
           </div>
         ) : (
           <div className="space-y-4">
-            {positions.map((p: {
-              id: string; title: string; role: string; seniority: string;
-              department: string | null; location: string | null; description: string | null;
-              salaryMin: number | null; salaryMax: number | null; salaryCurrency: string | null;
-              company: { id: string; name: string; logo: string | null; slug: string | null };
-              createdAt: string;
-            }) => (
+            {positions.map((p) => (
               <Link
                 key={p.id}
                 href={`/jobs/${p.id}`}
