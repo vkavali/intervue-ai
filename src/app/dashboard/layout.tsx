@@ -130,15 +130,19 @@ export default async function DashboardLayout({
     redirect("/auth/signin?callbackUrl=/dashboard");
   }
 
-  // Redirect non-company users to their own dashboards
-  if (session.user.role === "CANDIDATE") {
+  // Allow test-mode access for the dev email regardless of role
+  const testModeEmail = process.env.TEST_MODE_EMAIL;
+  const isDevUser = testModeEmail && session.user.email === testModeEmail;
+
+  // Redirect non-company users to their own dashboards (unless dev user)
+  if (!isDevUser && session.user.role === "CANDIDATE") {
     redirect("/candidate");
   }
-  if (session.user.role === "SCHOOL_ADMIN") {
+  if (!isDevUser && session.user.role === "SCHOOL_ADMIN") {
     redirect("/school");
   }
 
-  const isAdmin = session.user.role === "COMPANY_ADMIN";
+  const isAdmin = session.user.role === "COMPANY_ADMIN" || !!isDevUser;
 
   // Fetch company plan for sidebar
   let companyPlan = "Starter";
@@ -152,11 +156,9 @@ export default async function DashboardLayout({
     }
   }
 
-  const testModeEmail = process.env.TEST_MODE_EMAIL;
-  const isDev = testModeEmail ? session.user.email === testModeEmail : isAdmin;
   const visibleLinks = sidebarLinks.filter(
     (link) =>
-      (!link.adminOnly || isAdmin) && (!link.devOnly || isDev)
+      (!link.adminOnly || isAdmin) && (!link.devOnly || isDevUser)
   );
 
   return (
