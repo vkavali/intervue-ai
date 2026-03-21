@@ -1533,9 +1533,9 @@ export default function Home() {
             </div>
             {[
               { title: "For Companies", links: [{ label: "Sign Up", href: "/auth/signup?role=company" }, { label: "Pricing", href: "/#pricing" }, { label: "Features", href: "/#features" }] },
-              { title: "For Candidates", links: [{ label: "Sign Up", href: "/auth/signup?role=candidate" }, { label: "Practice Mode", href: "/practice" }, { label: "Study Plans", href: "/practice?tab=patterns" }, { label: "Leaderboard", href: "/leaderboard" }, { label: "Badges", href: "/candidate/badges" }] },
+              { title: "For Candidates", links: [{ label: "Sign Up", href: "/auth/signup?role=candidate" }, { label: "Careers", href: "/careers" }, { label: "Practice Mode", href: "/practice" }, { label: "Study Plans", href: "/practice?tab=patterns" }, { label: "Leaderboard", href: "/leaderboard" }] },
               { title: isIndia ? "For Colleges" : "For Schools", links: [{ label: "Sign Up", href: "/auth/signup?role=school" }, { label: "Enrollment", href: "/school/enrollment" }, { label: "Assignments", href: "/school/assignments" }, { label: "Analytics", href: "/school/analytics" }] },
-              { title: "Platform", links: [{ label: "Sign In", href: "/auth/signin" }, { label: "Job Board", href: "/jobs" }, { label: "Templates", href: "/dashboard/interviews/templates" }] },
+              { title: "Platform", links: [{ label: "Sign In", href: "/auth/signin" }, { label: "Careers", href: "/careers" }, { label: "Job Board", href: "/jobs" }, { label: "Templates", href: "/dashboard/interviews/templates" }] },
             ].map((col) => (
               <div key={col.title}>
                 <h4 className="text-xs font-medium uppercase tracking-wider text-gray-400 mb-4">{col.title}</h4>

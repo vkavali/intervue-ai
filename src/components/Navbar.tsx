@@ -54,12 +54,20 @@ export default function Navbar() {
                 </Link>
 
                 {session.user.role === "CANDIDATE" && (
-                  <Link
-                    href="/practice"
-                    className="rounded-md px-3 py-1.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
-                  >
-                    Practice
-                  </Link>
+                  <>
+                    <Link
+                      href="/careers"
+                      className="rounded-md px-3 py-1.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
+                    >
+                      Careers
+                    </Link>
+                    <Link
+                      href="/practice"
+                      className="rounded-md px-3 py-1.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
+                    >
+                      Practice
+                    </Link>
+                  </>
                 )}
 
                 <span className="text-sm text-gray-600">
@@ -90,6 +98,12 @@ export default function Navbar() {
 
             {status === "unauthenticated" && (
               <>
+                <Link
+                  href="/careers"
+                  className="rounded-md px-3 py-1.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
+                >
+                  Careers
+                </Link>
                 <Link
                   href="/auth/signin"
                   className="rounded-md px-3 py-1.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
