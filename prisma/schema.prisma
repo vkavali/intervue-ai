@@ -157,6 +157,23 @@ model InterviewSession {
   violations       Violation[]
   chatMessages     ChatMessage[]
   sessionLogs      SessionLog[]
+  codeSnapshots    CodeSnapshot[]
+}
+
+// ─── CodeSnapshot ──────────────────────────────────────────────────────────────
+// Periodic code snapshots for session playback
+
+model CodeSnapshot {
+  id            String   @id @default(cuid())
+  sessionId     String
+  code          String
+  language      String
+  questionIndex Int
+  timestamp     DateTime @default(now())
+
+  session InterviewSession @relation(fields: [sessionId], references: [id])
+
+  @@index([sessionId, timestamp])
 }
 
 // ─── AIInteraction ──────────────────────────────────────────────────────────────

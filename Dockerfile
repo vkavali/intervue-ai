@@ -1,6 +1,6 @@
 FROM node:22-alpine
 
-RUN apk add --no-cache python3 py3-pip openjdk17-jre-headless openjdk17-jdk
+RUN apk add --no-cache python3 py3-pip openjdk17-jre-headless openjdk17-jdk g++ go rust cargo
 
 WORKDIR /app
 
@@ -16,4 +16,4 @@ ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 ENV NODE_ENV=production
 
-CMD ["sh", "-c", "npx prisma db push --accept-data-loss 2>/dev/null; npx prisma migrate resolve --rolled-back 20260308040000_add_practice_testcases 2>/dev/null; npx prisma migrate deploy || echo 'Migration warning: deploy returned non-zero'; npm start"]
+CMD ["sh", "-c", "npx prisma db push --accept-data-loss 2>/dev/null; npx prisma migrate resolve --rolled-back 20260308040000_add_practice_testcases 2>/dev/null; npx prisma migrate deploy || echo 'Migration warning: deploy returned non-zero'; node server.js"]

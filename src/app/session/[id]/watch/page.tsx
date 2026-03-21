@@ -2,10 +2,23 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "next/navigation";
-import Editor from "@monaco-editor/react";
+import Editor, { type OnMount } from "@monaco-editor/react";
+import type { editor as monacoEditor } from "monaco-editor";
 import ScreenCapture from "@/components/ScreenCapture";
 import VideoCall from "@/components/VideoCall";
 import SessionChat from "@/components/SessionChat";
+import SessionPlayback from "@/components/editor/SessionPlayback";
+import { RemoteCursorManager } from "@/components/editor/RemoteCursor";
+import {
+  connectSocket,
+  disconnectSocket,
+  isConnected,
+  emitAiLevelChanged,
+  type CodeUpdateEvent,
+  type CursorPositionEvent,
+  type UserJoinedEvent,
+  type UserLeftEvent,
+} from "@/lib/socket-client";
 
 interface SessionData {
   id: string;
@@ -116,8 +129,17 @@ export default function WatchSessionPage() {
   const [thinkingAnalysis, setThinkingAnalysis] = useState<ThinkingAnalysis | null>(null);
   const [thinkingLoading, setThinkingLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'interactions' | 'thinking' | 'chat'>('interactions');
+  const [showPlayback, setShowPlayback] = useState(false);
+  const [socketConnected, setSocketConnected] = useState(false);
+
+  // Live code from socket
+  const [liveCode, setLiveCode] = useState<string | null>(null);
+  const [liveLanguage, setLiveLanguage] = useState<string | null>(null);
+
   const interactionLogRef = useRef<HTMLDivElement>(null);
   const notesRef = useRef<HTMLDivElement>(null);
+  const editorRef = useRef<monacoEditor.IStandaloneCodeEditor | null>(null);
+  const cursorManagerRef = useRef<RemoteCursorManager | null>(null);
 
   // Fetch session data
   const fetchSession = useCallback(async () => {
@@ -147,25 +169,73 @@ export default function WatchSessionPage() {
   // Initial fetch
   useEffect(() => {
     fetchSession();
-    // Fetch current user for VideoCall
     fetch("/api/auth/me").then(r => r.ok ? r.json() : null).then(u => {
       if (u?.id) setUserId(u.id);
     }).catch(() => {});
   }, [fetchSession]);
 
-  // Poll every 2 seconds
+  // Socket.io connection — replaces most HTTP polling
   useEffect(() => {
-    const interval = setInterval(fetchSession, 1000);
+    if (!userId) return;
+
+    const socket = connectSocket(sessionId, userId);
+
+    if (socket) {
+      const checkConnection = setInterval(() => {
+        setSocketConnected(isConnected());
+      }, 2000);
+
+      // Live code updates from candidate
+      socket.on("code-update", (data: CodeUpdateEvent) => {
+        setLiveCode(data.code);
+        if (data.language) setLiveLanguage(data.language);
+      });
+
+      // Remote cursor
+      socket.on("cursor-position", (data: CursorPositionEvent) => {
+        cursorManagerRef.current?.updateCursor(
+          data.userId,
+          data.userName,
+          data.lineNumber,
+          data.column
+        );
+      });
+
+      // User joined/left notifications
+      socket.on("user-joined", (_data: UserJoinedEvent) => {
+        // Could show a toast notification
+      });
+      socket.on("user-left", (_data: UserLeftEvent) => {
+        cursorManagerRef.current?.removeCursor(_data.userId);
+      });
+
+      return () => {
+        clearInterval(checkConnection);
+        cursorManagerRef.current?.dispose();
+        cursorManagerRef.current = null;
+        disconnectSocket();
+      };
+    }
+  }, [sessionId, userId]);
+
+  // Fallback polling — reduced frequency when socket connected (30s vs 2s)
+  useEffect(() => {
+    const interval = setInterval(fetchSession, socketConnected ? 30000 : 2000);
     return () => clearInterval(interval);
-  }, [fetchSession]);
+  }, [fetchSession, socketConnected]);
 
   // Auto-scroll interaction log
   useEffect(() => {
     if (interactionLogRef.current) {
-      interactionLogRef.current.scrollTop =
-        interactionLogRef.current.scrollHeight;
+      interactionLogRef.current.scrollTop = interactionLogRef.current.scrollHeight;
     }
   }, [sessionData?.aiInteractions]);
+
+  // Editor mount — initialize remote cursor manager
+  const handleEditorMount: OnMount = useCallback((editor) => {
+    editorRef.current = editor;
+    cursorManagerRef.current = new RemoteCursorManager(editor);
+  }, []);
 
   // Handle AI level change
   function handleSliderChange(newLevel: number) {
@@ -193,7 +263,8 @@ export default function WatchSessionPage() {
         setAiSliderValue(pendingLevel);
         setShowReasonInput(false);
         setAiSliderReason("");
-        // Refetch to get updated data
+        // Notify candidate via socket
+        emitAiLevelChanged(pendingLevel);
         fetchSession();
       }
     } catch {
@@ -265,12 +336,17 @@ export default function WatchSessionPage() {
     );
   }
 
-  const currentQuestion =
-    sessionData.template.questions[sessionData.currentQuestionIndex];
+  // Show playback mode
+  if (showPlayback) {
+    return <SessionPlayback sessionId={sessionId} onClose={() => setShowPlayback(false)} />;
+  }
+
+  const currentQuestion = sessionData.template.questions[sessionData.currentQuestionIndex];
+  const displayCode = liveCode ?? sessionData.code;
+  const displayLanguage = liveLanguage ?? sessionData.language ?? "javascript";
 
   const stageLower = thinkingAnalysis?.problemSolvingStage?.toLowerCase() || "";
-  const stageBadgeClass =
-    stageBadgeColors[stageLower] || "text-gray-300 bg-gray-900 border-gray-700";
+  const stageBadgeClass = stageBadgeColors[stageLower] || "text-gray-300 bg-gray-900 border-gray-700";
 
   return (
     <div className="flex h-screen flex-col bg-gray-950 overflow-hidden">
@@ -288,13 +364,31 @@ export default function WatchSessionPage() {
           <span className="text-sm text-gray-400">
             {sessionData.template.title}
           </span>
+          {/* Socket status */}
+          <span
+            className={`inline-block h-2 w-2 rounded-full ${
+              socketConnected ? "bg-green-500" : "bg-gray-600"
+            }`}
+            title={socketConnected ? "Live connected" : "Polling mode"}
+          />
         </div>
 
         <div className="flex items-center gap-3">
-          {/* Video Call — only for the actual interviewer, not admin observers */}
           {userId && sessionData.interviewerId === userId && <VideoCall sessionId={sessionId} userId={userId} isInterviewer={true} />}
-          {/* Screen Capture Button (interviewer view) */}
           <ScreenCapture sessionId={sessionId} isInterviewer={true} />
+
+          {/* Playback button (after session ends) */}
+          {sessionData.status === "COMPLETED" && (
+            <button
+              onClick={() => setShowPlayback(true)}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-saffron/30 bg-saffron/10 px-3 py-1.5 text-xs font-medium text-saffron hover:bg-saffron/20 transition-colors"
+            >
+              <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              Playback
+            </button>
+          )}
 
           <div className="flex items-center gap-2">
             <span
@@ -339,16 +433,23 @@ export default function WatchSessionPage() {
                 Candidate&apos;s Code
               </span>
               <span className="text-xs text-gray-600">(read-only)</span>
+              {socketConnected && liveCode !== null && (
+                <span className="text-[10px] text-green-500 flex items-center gap-1">
+                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+                  LIVE
+                </span>
+              )}
             </div>
             <span className="text-xs text-gray-500">
-              {sessionData.language || "javascript"}
+              {displayLanguage}
             </span>
           </div>
           <Editor
             height="100%"
-            language={sessionData.language || "javascript"}
-            value={sessionData.code || "// Waiting for candidate to start coding..."}
+            language={displayLanguage}
+            value={displayCode || "// Waiting for candidate to start coding..."}
             theme="vs-dark"
+            onMount={handleEditorMount}
             options={{
               readOnly: true,
               fontSize: 14,
@@ -413,7 +514,6 @@ export default function WatchSessionPage() {
                 )}
               </div>
             ) : activeTab === 'interactions' ? (
-              /* AI Interaction Log */
               <div
                 ref={interactionLogRef}
                 className="flex-1 overflow-y-auto p-3 space-y-3"
@@ -442,17 +542,11 @@ export default function WatchSessionPage() {
                       </div>
                       <div className="space-y-1.5">
                         <div>
-                          <span className="text-[10px] text-gray-500 block">
-                            Candidate:
-                          </span>
-                          <p className="text-xs text-blue-300">
-                            {interaction.prompt}
-                          </p>
+                          <span className="text-[10px] text-gray-500 block">Candidate:</span>
+                          <p className="text-xs text-blue-300">{interaction.prompt}</p>
                         </div>
                         <div>
-                          <span className="text-[10px] text-gray-500 block">
-                            AI:
-                          </span>
+                          <span className="text-[10px] text-gray-500 block">AI:</span>
                           <p className="text-xs text-gray-300 whitespace-pre-wrap">
                             {interaction.response.length > 300
                               ? interaction.response.substring(0, 300) + "..."
@@ -467,7 +561,6 @@ export default function WatchSessionPage() {
             ) : (
               /* Thinking Analysis Tab */
               <div className="flex-1 overflow-y-auto p-3 space-y-3">
-                {/* Analyze Button */}
                 <button
                   onClick={fetchThinkingAnalysis}
                   disabled={thinkingLoading}
@@ -499,17 +592,11 @@ export default function WatchSessionPage() {
 
                 {thinkingAnalysis && (
                   <div className="space-y-3">
-                    {/* Overall Approach */}
                     <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
-                      <h4 className="text-[10px] font-semibold uppercase tracking-wider text-saffron mb-1.5">
-                        Overall Approach
-                      </h4>
-                      <p className="text-xs text-gray-300 leading-relaxed">
-                        {thinkingAnalysis.overallApproach}
-                      </p>
+                      <h4 className="text-[10px] font-semibold uppercase tracking-wider text-saffron mb-1.5">Overall Approach</h4>
+                      <p className="text-xs text-gray-300 leading-relaxed">{thinkingAnalysis.overallApproach}</p>
                     </div>
 
-                    {/* Problem-Solving Stage + Confidence */}
                     <div className="flex items-center gap-2">
                       <div className="flex-1 rounded-lg border border-gray-800 bg-gray-900 p-2.5 flex items-center gap-2">
                         <span className="text-[10px] text-gray-500 shrink-0">Stage:</span>
@@ -525,39 +612,26 @@ export default function WatchSessionPage() {
                       </div>
                     </div>
 
-                    {/* Thinking Patterns */}
                     {thinkingAnalysis.thinkingPatterns.length > 0 && (
                       <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
-                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-saffron mb-2">
-                          Thinking Patterns
-                        </h4>
+                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-saffron mb-2">Thinking Patterns</h4>
                         <div className="space-y-2">
                           {thinkingAnalysis.thinkingPatterns.map((tp, i) => (
-                            <div
-                              key={i}
-                              className={`rounded border p-2 ${strengthColors[tp.strength]}`}
-                            >
+                            <div key={i} className={`rounded border p-2 ${strengthColors[tp.strength]}`}>
                               <div className="flex items-center gap-1.5 mb-1">
                                 <span className={`inline-block h-1.5 w-1.5 rounded-full ${strengthDotColors[tp.strength]}`} />
-                                <span className="text-[10px] font-medium">
-                                  {tp.pattern}
-                                </span>
+                                <span className="text-[10px] font-medium">{tp.pattern}</span>
                               </div>
-                              <p className="text-[10px] opacity-80 pl-3">
-                                {tp.evidence}
-                              </p>
+                              <p className="text-[10px] opacity-80 pl-3">{tp.evidence}</p>
                             </div>
                           ))}
                         </div>
                       </div>
                     )}
 
-                    {/* Strengths */}
                     {thinkingAnalysis.strengths.length > 0 && (
                       <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
-                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-green-400 mb-2">
-                          Strengths
-                        </h4>
+                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-green-400 mb-2">Strengths</h4>
                         <ul className="space-y-1">
                           {thinkingAnalysis.strengths.map((s, i) => (
                             <li key={i} className="flex items-start gap-1.5">
@@ -569,12 +643,9 @@ export default function WatchSessionPage() {
                       </div>
                     )}
 
-                    {/* Concerns */}
                     {thinkingAnalysis.concerns.length > 0 && (
                       <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
-                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-red-400 mb-2">
-                          Concerns
-                        </h4>
+                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-red-400 mb-2">Concerns</h4>
                         <ul className="space-y-1">
                           {thinkingAnalysis.concerns.map((c, i) => (
                             <li key={i} className="flex items-start gap-1.5">
@@ -586,28 +657,18 @@ export default function WatchSessionPage() {
                       </div>
                     )}
 
-                    {/* AI Usage Pattern */}
                     <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
-                      <h4 className="text-[10px] font-semibold uppercase tracking-wider text-saffron mb-1.5">
-                        AI Usage Pattern
-                      </h4>
-                      <p className="text-xs text-gray-300 leading-relaxed">
-                        {thinkingAnalysis.aiUsagePattern}
-                      </p>
+                      <h4 className="text-[10px] font-semibold uppercase tracking-wider text-saffron mb-1.5">AI Usage Pattern</h4>
+                      <p className="text-xs text-gray-300 leading-relaxed">{thinkingAnalysis.aiUsagePattern}</p>
                     </div>
 
-                    {/* Suggested Follow-Up Questions */}
                     {thinkingAnalysis.suggestedFollowUp.length > 0 && (
                       <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
-                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-saffron mb-2">
-                          Suggested Follow-Up Questions
-                        </h4>
+                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-saffron mb-2">Suggested Follow-Up Questions</h4>
                         <ol className="space-y-1.5">
                           {thinkingAnalysis.suggestedFollowUp.map((q, i) => (
                             <li key={i} className="flex items-start gap-2">
-                              <span className="text-[10px] text-saffron font-mono font-bold shrink-0 mt-px">
-                                {i + 1}.
-                              </span>
+                              <span className="text-[10px] text-saffron font-mono font-bold shrink-0 mt-px">{i + 1}.</span>
                               <span className="text-xs text-gray-300">{q}</span>
                             </li>
                           ))}
@@ -620,32 +681,23 @@ export default function WatchSessionPage() {
             )}
           </div>
 
-          {/* Notes Panel (unchanged) */}
+          {/* Notes Panel */}
           <div className="h-64 flex flex-col overflow-hidden">
             <div className="border-b border-gray-800 bg-gray-900/50 px-4 py-2">
               <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400">
                 Interviewer Notes ({sessionData.interviewerNotes?.length || 0})
               </h3>
             </div>
-            <div
-              ref={notesRef}
-              className="flex-1 overflow-y-auto p-3 space-y-2"
-            >
-              {(!sessionData.interviewerNotes ||
-                sessionData.interviewerNotes.length === 0) ? (
+            <div ref={notesRef} className="flex-1 overflow-y-auto p-3 space-y-2">
+              {(!sessionData.interviewerNotes || sessionData.interviewerNotes.length === 0) ? (
                 <p className="text-xs text-gray-600 text-center py-4">
                   No notes yet. Add timestamped observations below.
                 </p>
               ) : (
                 sessionData.interviewerNotes.map((note) => (
-                  <div
-                    key={note.id}
-                    className="rounded bg-gray-800 px-3 py-2"
-                  >
+                  <div key={note.id} className="rounded bg-gray-800 px-3 py-2">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-[10px] text-gray-500">
-                        {note.interviewer.name}
-                      </span>
+                      <span className="text-[10px] text-gray-500">{note.interviewer.name}</span>
                       <span className="text-[10px] text-gray-600">
                         {new Date(note.timestamp).toLocaleTimeString()}
                       </span>
@@ -655,10 +707,7 @@ export default function WatchSessionPage() {
                 ))
               )}
             </div>
-            <form
-              onSubmit={handleNoteSubmit}
-              className="border-t border-gray-800 p-2"
-            >
+            <form onSubmit={handleNoteSubmit} className="border-t border-gray-800 p-2">
               <div className="flex gap-2">
                 <input
                   type="text"

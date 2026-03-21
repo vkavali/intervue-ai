@@ -2,7 +2,7 @@
 // Transforms {code, testInput} into executable code that outputs results as JSON
 
 // Languages that support full test case wrapping (input→output comparison)
-export const TEST_CASE_LANGUAGES = ["javascript", "typescript", "python", "java"];
+export const TEST_CASE_LANGUAGES = ["javascript", "typescript", "python", "java", "cpp", "go", "rust"];
 
 /**
  * Convert a camelCase name to snake_case (for Python)
@@ -67,6 +67,15 @@ export function adaptFunctionCall(language: string, jsExpression: string): strin
       const translatedArgs = translateJSArrayToJava(argsStr);
       return `${fnName}(${translatedArgs})`;
     }
+    case "cpp":
+    case "go": {
+      // C++ and Go use camelCase like JS
+      return jsExpression;
+    }
+    case "rust": {
+      const rustName = camelToSnake(fnName);
+      return jsExpression.replace(new RegExp(`^${fnName}`), rustName);
+    }
     default:
       return jsExpression;
   }
@@ -128,6 +137,57 @@ export function wrapTestCode(language: string, userCode: string, testInput: stri
         return `import java.util.*;\n\nclass ${className} {\n${userCode}\n${printCode}\n}`;
       }
       return `import java.util.*;\n\n${userCode.slice(0, lastBrace)}\n${printCode}\n}`;
+    }
+
+    case "cpp": {
+      const adapted = adaptFunctionCall("cpp", testInput);
+      // Remove existing main function if present
+      const mainRegexCpp = /int\s+main\s*\([^)]*\)\s*\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}/;
+      userCode = userCode.replace(mainRegexCpp, '');
+
+      const mainCode = `
+int main() {
+    Solution sol;
+    auto result = sol.${adapted};
+    // Print result as JSON-like
+    std::cout << result << std::endl;
+    return 0;
+}`;
+      return `#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\n${userCode}\n${mainCode}`;
+    }
+
+    case "go": {
+      const adapted = adaptFunctionCall("go", testInput);
+      // Remove existing main func if present
+      const mainRegexGo = /func\s+main\s*\(\)\s*\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}/;
+      userCode = userCode.replace(mainRegexGo, '');
+      // Remove package declaration (we'll add our own)
+      userCode = userCode.replace(/^package\s+\w+\s*\n?/m, '');
+
+      return `package main
+
+import "fmt"
+
+${userCode}
+
+func main() {
+	result := ${adapted}
+	fmt.Println(result)
+}`;
+    }
+
+    case "rust": {
+      const adapted = adaptFunctionCall("rust", testInput);
+      // Remove existing main fn if present
+      const mainRegexRust = /fn\s+main\s*\(\)\s*\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}/;
+      userCode = userCode.replace(mainRegexRust, '');
+
+      return `${userCode}
+
+fn main() {
+    let result = ${adapted};
+    println!("{:?}", result);
+}`;
     }
 
     default:

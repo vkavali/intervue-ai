@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "outDir": ".",
+    "rootDir": ".",
+    "strict": true,
+    "skipLibCheck": true,
+    "declaration": false
+  },
+  "include": ["server.ts"],
+  "exclude": ["node_modules", "src", ".next"]
+}

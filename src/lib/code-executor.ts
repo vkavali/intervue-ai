@@ -33,7 +33,7 @@ const JUDGE0_LANGUAGES: Record<string, number> = {
 };
 
 export const SUPPORTED_LANGUAGES = ["javascript", "typescript", "python", "java", "cpp", "go", "rust"];
-export const LOCAL_LANGUAGES = ["javascript", "typescript", "python", "java"];
+export const LOCAL_LANGUAGES = ["javascript", "typescript", "python", "java", "cpp", "go", "rust"];
 
 export interface ExecutionResult {
   output: string;
@@ -199,6 +199,44 @@ async function executeLocal(language: string, code: string): Promise<ExecutionRe
       }
 
       return await runCommand(`java -cp "${tmpDir}" ${className}`, tmpDir);
+    }
+
+    if (language === "cpp") {
+      const filePath = join(tmpDir, "solution.cpp");
+      const outPath = join(tmpDir, "solution");
+      await writeFile(filePath, code);
+
+      const compileResult = await runCommand(`g++ -std=c++17 -o "${outPath}" "${filePath}"`, tmpDir);
+      if (compileResult.exitCode !== 0) {
+        return {
+          output: "",
+          error: compileResult.error || "Compilation failed",
+          exitCode: 1,
+        };
+      }
+      return await runCommand(`"${outPath}"`, tmpDir);
+    }
+
+    if (language === "go") {
+      const filePath = join(tmpDir, "solution.go");
+      await writeFile(filePath, code);
+      return await runCommand(`go run "${filePath}"`, tmpDir);
+    }
+
+    if (language === "rust") {
+      const filePath = join(tmpDir, "solution.rs");
+      const outPath = join(tmpDir, "solution");
+      await writeFile(filePath, code);
+
+      const compileResult = await runCommand(`rustc -o "${outPath}" "${filePath}"`, tmpDir);
+      if (compileResult.exitCode !== 0) {
+        return {
+          output: "",
+          error: compileResult.error || "Compilation failed",
+          exitCode: 1,
+        };
+      }
+      return await runCommand(`"${outPath}"`, tmpDir);
     }
 
     throw new Error(`Local execution not supported for ${language}`);
