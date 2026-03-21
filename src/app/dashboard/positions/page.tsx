@@ -41,6 +41,7 @@ export default function PositionsPage() {
 
   const [positions, setPositions] = useState<Position[]>([]);
   const [loading, setLoading] = useState(true);
+  const [companySlug, setCompanySlug] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -67,7 +68,8 @@ export default function PositionsPage() {
       const res = await fetch("/api/positions");
       if (res.ok) {
         const data = await res.json();
-        setPositions(data);
+        setPositions(data.positions || data);
+        if (data.companySlug) setCompanySlug(data.companySlug);
       }
     } catch {
       // silently fail
@@ -179,7 +181,7 @@ export default function PositionsPage() {
         </div>
         <div className="flex items-center gap-3">
           <Link
-            href="/jobs"
+            href={companySlug ? `/jobs/company/${companySlug}` : "/jobs"}
             target="_blank"
             className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
           >

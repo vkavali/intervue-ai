@@ -12,6 +12,7 @@ export async function GET() {
 
     const user = await prisma.user.findUnique({
       where: { email: session.user.email! },
+      include: { company: { select: { slug: true } } },
     });
 
     if (!user || !user.companyId) {
@@ -47,7 +48,10 @@ export async function GET() {
       candidateCount: countMap[`${p.role}::${p.seniority}`] || 0,
     }));
 
-    return NextResponse.json(positionsWithCounts);
+    return NextResponse.json({
+      positions: positionsWithCounts,
+      companySlug: user.company?.slug || null,
+    });
   } catch (error) {
     console.error("GET /api/positions error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
