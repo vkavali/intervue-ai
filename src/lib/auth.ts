@@ -96,6 +96,16 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id
         token.role = user.role
+      } else if (token.id) {
+        // Re-read role from DB on every token refresh so demo role switches
+        // take effect on page reload without requiring re-login
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.id },
+          select: { role: true },
+        })
+        if (dbUser) {
+          token.role = dbUser.role as UserRole
+        }
       }
       return token
     },

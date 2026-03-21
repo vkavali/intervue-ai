@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import { authOptions } from '@/lib/auth';
-import TestModePage from '@/components/test-mode/TestModePage';
+import DemoModePage from '@/components/test-mode/DemoModePage';
 
 export default async function TestModePageRoute() {
   const session = await getServerSession(authOptions);
@@ -23,5 +23,5 @@ export default async function TestModePageRoute() {
     }
   }
 
-  return <TestModePage />;
+  return <DemoModePage />;
 }
