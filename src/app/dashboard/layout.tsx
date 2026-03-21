@@ -134,8 +134,9 @@ export default async function DashboardLayout({
   const testModeEmail = process.env.TEST_MODE_EMAIL;
   const isDevUser = testModeEmail && session.user.email === testModeEmail;
 
-  // Redirect non-company users to their own dashboards (unless dev user)
-  if (!isDevUser && session.user.role === "CANDIDATE") {
+  // Redirect non-company users to their own dashboards
+  // Candidates always go to /candidate (even dev user — use floating toolbar to switch back)
+  if (session.user.role === "CANDIDATE") {
     redirect("/candidate");
   }
   if (!isDevUser && session.user.role === "SCHOOL_ADMIN") {

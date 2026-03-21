@@ -304,6 +304,16 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
     };
   }, [sessionId, code, language, currentQuestionIndex]);
 
+  // Navigation guard — warn before leaving an active session
+  useEffect(() => {
+    function handleBeforeUnload(e: BeforeUnloadEvent) {
+      if (timeExpired) return; // already ended, no need to warn
+      e.preventDefault();
+    }
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [timeExpired]);
+
   // Reset test results on question change
   useEffect(() => {
     setTestResults(null);

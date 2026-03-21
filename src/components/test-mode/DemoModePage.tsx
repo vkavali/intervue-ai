@@ -109,7 +109,8 @@ export default function DemoModePage() {
       const data = await res.json();
       if (data.success) {
         setActionMessage(`Switched to ${role}. Reloading...`);
-        setTimeout(() => window.location.href = "/dashboard/test-mode", 500);
+        const dest = role === "CANDIDATE" ? "/candidate" : "/dashboard/test-mode";
+        setTimeout(() => window.location.href = dest, 500);
       } else {
         setActionMessage(`Error: ${data.error || "Unknown error"}`);
       }

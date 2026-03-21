@@ -39,18 +39,20 @@ export default function DemoFloatingToolbar() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ role }),
       });
-      // Reload to apply new role
-      window.location.reload();
+      // Redirect to the appropriate dashboard for the new role
+      const dest = role === "CANDIDATE" ? "/candidate" : "/dashboard/test-mode";
+      window.location.href = dest;
     } catch {
       setSwitching(false);
     }
   }
 
   async function handleExit() {
+    if (!confirm("This will clear all demo data and restore your original role. Continue?")) return;
     setSwitching(true);
     try {
       await fetch("/api/test-mode/cleanup", { method: "POST" });
-      window.location.href = "/dashboard/test-mode";
+      window.location.href = "/dashboard";
     } catch {
       setSwitching(false);
     }
