@@ -45,8 +45,8 @@ const aiLevels = [
 
 const platformFeatures = [
   {
-    title: "Live Code Editor",
-    description: "Monaco-powered editor with syntax highlighting, autocomplete, and multi-language support. Candidates code in real-time while interviewers watch every keystroke.",
+    title: "Live Interview Environment",
+    description: "Code editor for engineering roles, scenario workspace for sales, marketing, and product roles. Real-time collaboration with interviewer observation.",
     icon: (
       <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
@@ -57,7 +57,7 @@ const platformFeatures = [
   },
   {
     title: "AI Audit Engine",
-    description: "Every AI interaction is logged and audited. Get structured scorecards with problem comprehension, code quality, communication, and hire/no-hire recommendations.",
+    description: "Every AI interaction is logged and audited. Get role-specific scorecards \u2014 code quality for engineers, persuasion for sales, strategy for PMs \u2014 with hire/no-hire recommendations.",
     icon: (
       <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
@@ -101,7 +101,7 @@ const platformFeatures = [
   },
   {
     title: "Practice Mode",
-    description: "4,000+ problems with code execution in 7 languages and AI coaching.",
+    description: "4,000+ coding problems plus role-specific scenarios for sales, marketing, product, and more. AI coaching included.",
     icon: (
       <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.26 10.147a60.438 60.438 0 00-.491 6.347A48.62 48.62 0 0112 20.904a48.62 48.62 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.636 50.636 0 00-2.658-.813A59.906 59.906 0 0112 3.493a59.903 59.903 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
@@ -111,8 +111,8 @@ const platformFeatures = [
     iconColor: "text-pink-600",
   },
   {
-    title: "Open Positions",
-    description: "Track active requisitions with headcount and pipeline per position.",
+    title: "Open Positions & Job Board",
+    description: "Track active requisitions across all departments. Public job board with AI-generated job descriptions.",
     icon: (
       <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
@@ -158,9 +158,12 @@ const platformFeatures = [
 ];
 
 const comparisonFeaturesGlobal = [
+  { feature: "Multi-Role Hiring (Sales, Marketing, Product...)", intervue: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Role-Specific AI Scoring", intervue: true, c2: false, c3: false, c4: false, c5: false },
   { feature: "5-Level AI Control", intervue: true, c2: false, c3: false, c4: false, c5: false },
   { feature: "Company-Controlled AI", intervue: true, c2: false, c3: false, c4: false, c5: false },
   { feature: "AI Audit Engine", intervue: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Public Job Board + AI JD Generator", intervue: true, c2: false, c3: false, c4: false, c5: false },
   { feature: "Live Code + Video", intervue: true, c2: true, c3: true, c4: true, c5: false },
   { feature: "Candidate Pipeline", intervue: true, c2: false, c3: false, c4: false, c5: false },
   { feature: "Calendar Scheduling", intervue: true, c2: true, c3: false, c4: true, c5: false },
@@ -180,9 +183,12 @@ const comparisonFeaturesGlobal = [
 ];
 
 const comparisonFeaturesIndia = [
+  { feature: "Multi-Role Hiring (Sales, Marketing, Product...)", intervue: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Role-Specific AI Scoring", intervue: true, c2: false, c3: false, c4: false, c5: false },
   { feature: "5-Level AI Control", intervue: true, c2: false, c3: false, c4: false, c5: false },
   { feature: "Company-Controlled AI", intervue: true, c2: false, c3: false, c4: false, c5: false },
   { feature: "AI Audit Engine", intervue: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Public Job Board + AI JD Generator", intervue: true, c2: false, c3: false, c4: false, c5: false },
   { feature: "Live Code + Video", intervue: true, c2: true, c3: true, c4: true, c5: false },
   { feature: "UPI / Razorpay Payments", intervue: true, c2: false, c3: false, c4: false, c5: false },
   { feature: "INR Pricing", intervue: true, c2: false, c3: false, c4: false, c5: false },
@@ -238,7 +244,7 @@ export default function Home() {
           name: "Pro",
           price: "Rs.1,999",
           period: "/month",
-          description: "For growing engineering teams",
+          description: "For growing teams",
           features: [
             "Up to 50 interviews/month",
             "All AI levels (L0-L4)",
@@ -371,7 +377,7 @@ export default function Home() {
           name: "Growth",
           price: "$99",
           period: "/month",
-          description: "For growing engineering teams",
+          description: "For growing teams",
           features: [
             "Up to 50 interviews/month",
             "All AI levels (L0-L4)",
@@ -499,7 +505,7 @@ export default function Home() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-india-green opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-india-green" />
               </span>
-              Now with 5-level AI control & audit engine
+              Now hiring across Engineering, Sales, Marketing, Product & more
             </div>
 
             {/* Region Toggle */}
@@ -529,17 +535,17 @@ export default function Home() {
             </div>
 
             <h1 className="text-6xl sm:text-7xl lg:text-[5.5rem] font-semibold tracking-tight leading-[1.05]">
-              <span className="text-gray-900">{isIndia ? "India\u2019s smartest" : "The future of"}</span>
+              <span className="text-gray-900">{isIndia ? "One platform." : "One platform."}</span>
               <br />
               <span className="bg-gradient-to-r from-saffron via-orange-500 to-india-green bg-clip-text text-transparent">
-                {isIndia ? "hiring platform" : "technical hiring"}
+                {isIndia ? "Every role. AI-powered." : "Every role. AI-powered."}
               </span>
             </h1>
 
             <p className="mt-8 text-lg sm:text-xl text-gray-400 leading-relaxed max-w-2xl mx-auto">
               {isIndia
-                ? "Built for India\u2019s 5M+ developer workforce. AI-controlled interviews, auto-audited sessions, and campus hiring \u2014 all with UPI payments and INR pricing."
-                : "Company-controlled AI assistance. Auto-audited sessions. Candidate gamification with XP, badges, and leaderboards. Everything in one platform."}
+                ? "Hire engineers, salespeople, marketers, PMs, and executives \u2014 all on one platform. AI-controlled interviews, auto-audited scorecards, and UPI payments."
+                : "Hire across every department \u2014 Engineering, Sales, Marketing, Product, and more. AI-controlled interviews with role-specific scoring and auto-generated scorecards."}
             </p>
 
             {/* India Launch Offer Chip */}
@@ -693,16 +699,16 @@ export default function Home() {
               {
                 title: "Companies",
                 desc: isIndia
-                  ? "From TCS to startups like Razorpay \u2014 run AI-controlled interviews with auto-audited scorecards and data-driven hiring."
-                  : "Run AI-controlled technical interviews with full audit trails and data-driven hiring decisions.",
+                  ? "From TCS to startups like Razorpay \u2014 hire across engineering, sales, marketing, and product with AI-controlled interviews and auto-audited scorecards."
+                  : "Hire across every department \u2014 engineering, sales, marketing, product, and more. AI-controlled interviews with role-specific audit trails.",
                 icon: (
                   <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
                   </svg>
                 ),
                 features: isIndia
-                  ? ["5-level AI control per interview", "Auto-generated scorecards", "Campus & bulk hiring support", "UPI & Razorpay payments"]
-                  : ["5-level AI control per interview", "Auto-generated scorecards", "Candidate pipeline & comparisons", "Calendar scheduling & video"],
+                  ? ["9 interview types across all departments", "Role-specific AI scoring", "Campus & bulk hiring support", "UPI & Razorpay payments"]
+                  : ["9 interview types across all departments", "Role-specific AI scoring & audit", "Public job board with AI JD generator", "Calendar scheduling & video"],
                 href: "/auth/signup?role=company",
                 cta: "Start Hiring",
               },
@@ -764,6 +770,182 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ===== 2B. ROLES WE SUPPORT ===== */}
+      <section className="relative py-32 lg:py-40 bg-white">
+        <div className="gradient-orb w-[600px] h-[600px] bg-india-green/10 -top-40 -left-40" />
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ScrollReveal className="text-center mb-20 lg:mb-24">
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">Beyond Engineering</p>
+            <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900">
+              Roles we{" "}
+              <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">support</span>
+            </h2>
+            <p className="mt-4 text-base text-gray-400 max-w-2xl mx-auto">
+              One platform for every department. Role-specific AI scoring, tailored interview formats, and department-aware pipeline stages.
+            </p>
+          </ScrollReveal>
+
+          <StaggerContainer className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4" staggerDelay={0.05}>
+            {[
+              { dept: "Engineering", icon: (
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
+                </svg>
+              ), color: "bg-blue-50 text-blue-600 border-blue-200", desc: "Coding, system design, DSA" },
+              { dept: "Sales", icon: (
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
+                </svg>
+              ), color: "bg-orange-50 text-orange-600 border-orange-200", desc: "Discovery, pitch, objections" },
+              { dept: "Marketing", icon: (
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535m0 0A23.74 23.74 0 0018.795 3m.38 1.125a23.91 23.91 0 011.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 001.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 010 3.46" />
+                </svg>
+              ), color: "bg-pink-50 text-pink-600 border-pink-200", desc: "Strategy, analytics, campaigns" },
+              { dept: "Product", icon: (
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+                </svg>
+              ), color: "bg-indigo-50 text-indigo-600 border-indigo-200", desc: "PRDs, prioritization, metrics" },
+              { dept: "Executive", icon: (
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+              ), color: "bg-purple-50 text-purple-600 border-purple-200", desc: "Leadership, vision, P&L" },
+              { dept: "Customer Success", icon: (
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
+                </svg>
+              ), color: "bg-teal-50 text-teal-600 border-teal-200", desc: "Escalations, QBRs, retention" },
+              { dept: "HR", icon: (
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+                </svg>
+              ), color: "bg-emerald-50 text-emerald-600 border-emerald-200", desc: "Policy, conflict, compensation" },
+              { dept: "Finance", icon: (
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              ), color: "bg-cyan-50 text-cyan-600 border-cyan-200", desc: "Modeling, budgets, audits" },
+              { dept: "Legal", icon: (
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0012 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 01-2.031.352 5.988 5.988 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971zm-16.5.52c.99-.203 1.99-.377 3-.52m0 0l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 01-2.031.352 5.989 5.989 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L5.25 4.971z" />
+                </svg>
+              ), color: "bg-slate-50 text-slate-600 border-slate-200", desc: "Contracts, compliance, regulatory" },
+              { dept: "General", icon: (
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z" />
+                </svg>
+              ), color: "bg-gray-50 text-gray-600 border-gray-200", desc: "Behavioral, culture fit" },
+            ].map((role) => (
+              <StaggerItem key={role.dept}>
+                <div className={`rounded-2xl border p-5 text-center transition-all hover:shadow-lg h-full ${role.color}`}>
+                  <div className="mb-3 mx-auto w-12 h-12 rounded-xl bg-white/80 flex items-center justify-center">
+                    {role.icon}
+                  </div>
+                  <h3 className="text-sm font-semibold mb-1">{role.dept}</h3>
+                  <p className="text-xs opacity-70">{role.desc}</p>
+                </div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+        </div>
+      </section>
+
+      {/* ===== 2C. WHY INTERVUE.AI ===== */}
+      <section className="relative py-32 lg:py-40 bg-[#FAFAF8]">
+        <div className="gradient-orb w-[500px] h-[500px] bg-saffron/10 top-20 -right-40" />
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ScrollReveal className="text-center mb-20 lg:mb-24">
+            <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">The Advantage</p>
+            <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900">
+              Why{" "}
+              <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">Intervue.AI</span>
+            </h2>
+          </ScrollReveal>
+
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" staggerDelay={0.08}>
+            {[
+              {
+                title: "One Platform, Every Role",
+                desc: "No more 5 disconnected tools. Hire engineers, salespeople, marketers, PMs, and executives from a single dashboard.",
+                icon: (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+                  </svg>
+                ),
+              },
+              {
+                title: "5-Level AI Adapts Per Role",
+                desc: "Socratic questions for executives, frameworks for PMs, code scaffolding for engineers. AI adjusts to each role automatically.",
+                icon: (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+                  </svg>
+                ),
+              },
+              {
+                title: "Automated, Unbiased Scoring",
+                desc: "Role-specific rubrics remove gut-feel decisions. Structured interviews predict 65%+ of job performance vs 14% for unstructured.",
+                icon: (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                  </svg>
+                ),
+              },
+              {
+                title: "Kills the Middleman",
+                desc: "Replace $4k-$8k recruiter fees with AI-powered scheduling, evaluation, and scorecards. Cut your cost-per-hire by 80%.",
+                icon: (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                ),
+              },
+              {
+                title: "Candidates Love It",
+                desc: "Practice with AI coaching before real interviews. XP, badges, and leaderboards make prep engaging instead of stressful.",
+                icon: (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                  </svg>
+                ),
+              },
+              {
+                title: "45-Day Hire to 15-Day Hire",
+                desc: "AI generates interview questions, auto-audits sessions, and produces instant scorecards. 3x faster time-to-hire.",
+                icon: (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                  </svg>
+                ),
+              },
+              {
+                title: "Structured Beats Unstructured",
+                desc: "78% of first-round interviews are now virtual. Without a platform: inconsistent evaluation, no audit trail, and legal liability.",
+                icon: (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                  </svg>
+                ),
+              },
+            ].map((item) => (
+              <StaggerItem key={item.title}>
+                <div className="group rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-6 transition-all hover:shadow-xl hover:shadow-gray-200/50 h-full">
+                  <div className="mb-4 w-12 h-12 rounded-xl bg-gradient-to-br from-saffron/10 to-india-green/10 flex items-center justify-center text-gray-600">
+                    {item.icon}
+                  </div>
+                  <h3 className="text-base font-semibold text-gray-900 mb-2">{item.title}</h3>
+                  <p className="text-sm text-gray-400 leading-relaxed">{item.desc}</p>
+                </div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+        </div>
+      </section>
+
       {/* ===== 3. HOW IT WORKS (DARK) ===== */}
       <section className="relative py-32 lg:py-40 bg-gray-950">
         <div className="gradient-orb w-[800px] h-[800px] bg-saffron/20 -top-60 -left-40 opacity-40" />
@@ -781,10 +963,10 @@ export default function Home() {
           {/* Asymmetric bento grid */}
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-6 gap-4" staggerDelay={0.08}>
             {[
-              { step: "01", title: "Create Position", desc: "Define your open role, configure interview questions, set AI levels per question.", span: "md:col-span-2" },
+              { step: "01", title: "Create Position", desc: "Define any role \u2014 engineering, sales, marketing, or executive. Configure interview type, questions, and AI levels.", span: "md:col-span-2" },
               { step: "02", title: "Schedule & Invite", desc: "Find available slots, schedule sessions, and send candidates their unique links.", span: "md:col-span-2" },
-              { step: "03", title: "Live Interview", desc: "Candidate codes in real-time. Interviewer watches, adjusts AI levels on the fly, communicates via video + chat.", span: "md:col-span-2" },
-              { step: "04", title: "AI Audits Everything", desc: "Every keystroke, AI interaction, and behavior logged. Structured scorecards generated automatically.", span: "md:col-span-3" },
+              { step: "03", title: "Live Interview", desc: "Candidates work in a role-appropriate environment \u2014 code editor, scenario workspace, or case study. Interviewer watches and adjusts AI on the fly.", span: "md:col-span-2" },
+              { step: "04", title: "AI Audits Everything", desc: "Every interaction logged. Role-specific scorecards generated automatically \u2014 code quality for engineers, persuasion for sales, strategy for PMs.", span: "md:col-span-3" },
               { step: "05", title: "Pipeline & Compare", desc: "Move candidates through stages. Generate AI comparisons between candidates for the same role.", span: "md:col-span-3" },
               { step: "06", title: "Hire with Confidence", desc: "Make data-backed decisions with AI recommendations, scorecards, risk flags, and comparisons.", span: "md:col-span-6 md:max-w-2xl md:mx-auto" },
             ].map((card) => (
@@ -1315,14 +1497,14 @@ export default function Home() {
 
               <div className="relative">
                 <h2 className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-white leading-tight">
-                  {isIndia ? "India\u2019s hiring" : "Ready to hire"}
+                  {isIndia ? "India\u2019s hiring" : "Every department."}
                   <br />
-                  <span className="bg-gradient-to-r from-saffron via-orange-400 to-india-green bg-clip-text text-transparent">{isIndia ? "revolution starts here" : "smarter?"}</span>
+                  <span className="bg-gradient-to-r from-saffron via-orange-400 to-india-green bg-clip-text text-transparent">{isIndia ? "revolution starts here" : "One platform."}</span>
                 </h2>
                 <p className="mt-6 text-lg text-gray-400 max-w-xl mx-auto">
                   {isIndia
                     ? "First 100 candidates get 6 months Pro free. Companies and schools pay in INR via UPI. Built for India\u2019s scale."
-                    : "Join the companies using AI-controlled interviews to find the best engineers."}
+                    : "Join the companies using AI-controlled interviews to hire the best talent across engineering, sales, marketing, product, and every other role."}
                 </p>
                 <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
                   <Link href="/auth/signup?role=company" className="inline-flex items-center justify-center rounded-full bg-white px-10 py-4 text-lg font-semibold text-gray-900 hover:bg-gray-100 transition-all hover:shadow-[0_0_40px_rgba(255,255,255,0.15)]">
@@ -1347,13 +1529,13 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
             <div>
               <span className="text-2xl font-semibold tracking-tight text-gray-900">Intervue<span className="text-india-green">.AI</span></span>
-              <p className="mt-3 text-sm text-gray-500 leading-relaxed">The AI-controlled interview platform for modern engineering teams.</p>
+              <p className="mt-3 text-sm text-gray-500 leading-relaxed">The AI-controlled interview platform for hiring across every department.</p>
             </div>
             {[
               { title: "For Companies", links: [{ label: "Sign Up", href: "/auth/signup?role=company" }, { label: "Pricing", href: "/#pricing" }, { label: "Features", href: "/#features" }] },
               { title: "For Candidates", links: [{ label: "Sign Up", href: "/auth/signup?role=candidate" }, { label: "Practice Mode", href: "/practice" }, { label: "Study Plans", href: "/practice?tab=patterns" }, { label: "Leaderboard", href: "/leaderboard" }, { label: "Badges", href: "/candidate/badges" }] },
               { title: isIndia ? "For Colleges" : "For Schools", links: [{ label: "Sign Up", href: "/auth/signup?role=school" }, { label: "Enrollment", href: "/school/enrollment" }, { label: "Assignments", href: "/school/assignments" }, { label: "Analytics", href: "/school/analytics" }] },
-              { title: "Platform", links: [{ label: "Sign In", href: "/auth/signin" }] },
+              { title: "Platform", links: [{ label: "Sign In", href: "/auth/signin" }, { label: "Job Board", href: "/jobs" }, { label: "Templates", href: "/dashboard/interviews/templates" }] },
             ].map((col) => (
               <div key={col.title}>
                 <h4 className="text-xs font-medium uppercase tracking-wider text-gray-400 mb-4">{col.title}</h4>

@@ -45,6 +45,7 @@ export async function POST(
 
     const interviewSession = await prisma.interviewSession.findUnique({
       where: { id: params.id },
+      include: { template: { select: { interviewType: true } } },
     })
 
     if (!interviewSession) {
@@ -112,6 +113,7 @@ export async function POST(
       prompt: validation.sanitizedPrompt!,
       code: validation.sanitizedCode ?? "",
       questionContext: validation.sanitizedContext ?? "",
+      interviewType: interviewSession.template?.interviewType,
     })
 
     // Save the interaction

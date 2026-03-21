@@ -139,7 +139,15 @@ Guidelines:
 - For PROJECT_MANAGEMENT interviews: generate project planning, risk management, and stakeholder scenario questions, NOT code.
 - If the interviewType is SQL, generate SQL query and database design questions.
 - Match questions to the specified industry when provided.
-- For non-coding interview types, do NOT generate coding or algorithm questions. Generate scenario-based, analytical, or domain-specific questions appropriate for the interview type.`
+- For non-coding interview types, do NOT generate coding or algorithm questions. Generate scenario-based, analytical, or domain-specific questions appropriate for the interview type.
+- For SALES interviews: generate discovery call scenarios, objection handling role-plays, pitch presentations, pipeline management questions, and negotiation scenarios. Focus on selling methodology (MEDDIC, SPIN, Challenger) and customer engagement.
+- For MARKETING interviews: generate campaign strategy cases, marketing analytics interpretation, brand positioning exercises, growth marketing scenarios, and content strategy questions. Focus on ROI thinking and data-driven decision making.
+- For EXECUTIVE interviews: generate leadership vision presentations, board presentation simulations, P&L analysis exercises, organizational design questions, and change management scenarios. Focus on strategic thinking and executive presence.
+- For PRODUCT (Product Management) interviews: generate PRD writing exercises, feature prioritization frameworks (RICE, ICE), metrics definition and KPI analysis, user research scenario questions, and roadmap planning exercises. Focus on customer empathy and analytical rigor.
+- For CUSTOMER_SUCCESS interviews: generate customer escalation handling scenarios, QBR (Quarterly Business Review) preparation exercises, churn prevention strategies, onboarding plan design, and renewal negotiation role-plays. Focus on customer relationship management and problem resolution.
+- For HR interviews: generate employment policy scenario questions, conflict resolution cases, compensation analysis exercises, employee relations situations, and compliance/legal awareness questions. Focus on fairness, judgment, and people management.
+- For FINANCE interviews: generate financial modeling exercises, budgeting and forecasting questions, variance analysis cases, audit scenario questions, and risk assessment exercises. Focus on analytical accuracy and financial judgment.
+- For LEGAL interviews: generate contract review exercises, compliance scenario questions, regulatory analysis cases, IP protection questions, and risk mitigation strategies. Focus on legal reasoning and attention to detail.`
 
     const userPrompt = `Generate a complete interview template based on this description:
 

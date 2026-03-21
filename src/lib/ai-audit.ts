@@ -1,4 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk'
+import { getScoringDimensions, isNonCodingType } from '@/data/interview-types'
 
 interface AuditInput {
   session: {
@@ -36,6 +37,7 @@ interface AuditInput {
   }[]
   code: string
   language: string
+  interviewType?: string
 }
 
 interface AuditAnalysis {
@@ -55,7 +57,11 @@ interface AuditAnalysis {
 }
 
 export async function generateAuditReport(input: AuditInput): Promise<AuditAnalysis> {
-  const { session, questions, aiInteractions, aiLevelOverrides, code, language } = input
+  const { session, questions, aiInteractions, aiLevelOverrides, code, language, interviewType } = input
+
+  const type = interviewType || 'TECHNICAL'
+  const nonCoding = isNonCodingType(type)
+  const dimensions = getScoringDimensions(type)
 
   const questionsText = questions
     .map((q, i) => `Q${i + 1}: ${q.title}\nDescription: ${q.description}\nDifficulty: ${q.difficulty}\nConstraints: ${q.constraints || 'N/A'}\nExamples: ${q.examples || 'N/A'}`)
@@ -79,15 +85,22 @@ export async function generateAuditReport(input: AuditInput): Promise<AuditAnaly
     apiKey: process.env.ANTHROPIC_API_KEY,
   })
 
-  const auditPrompt = `You are an expert technical interview auditor for Intervue.AI. Analyze the following interview session and generate a comprehensive audit report.
+  const responseSection = nonCoding
+    ? `## Candidate's Response\n${code || 'No response submitted'}`
+    : `## Candidate's Final Code (${language})\n\`\`\`${language}\n${code || 'No code submitted'}\n\`\`\``
+
+  const auditorRole = nonCoding
+    ? `You are an expert ${type.toLowerCase().replace(/_/g, ' ')} interview auditor for Intervue.AI.`
+    : 'You are an expert technical interview auditor for Intervue.AI.'
+
+  const auditPrompt = `${auditorRole} Analyze the following interview session and generate a comprehensive audit report.
+
+## Interview Type: ${type.replace(/_/g, ' ')}
 
 ## Interview Questions
 ${questionsText}
 
-## Candidate's Final Code (${language})
-\`\`\`${language}
-${code || 'No code submitted'}
-\`\`\`
+${responseSection}
 
 ## AI Interaction Transcript
 ${transcript || 'No AI interactions recorded'}
@@ -107,13 +120,13 @@ Analyze the complete session and provide your assessment as a JSON object with E
 
 {
   "overallScore": <number 0-100>,
-  "problemComprehension": <number 0-10>,
-  "solutionCorrectness": <number 0-10>,
-  "codeQuality": <number 0-10>,
-  "communication": <number 0-10>,
-  "aiUsageQuality": <number 0-10>,
-  "timeManagement": <number 0-10>,
-  "thinkingTrace": "<narrative of how the candidate approached the problem>",
+  "problemComprehension": <number 0-10, evaluate: ${dimensions.problemComprehension}>,
+  "solutionCorrectness": <number 0-10, evaluate: ${dimensions.solutionCorrectness}>,
+  "codeQuality": <number 0-10, evaluate: ${dimensions.codeQuality}>,
+  "communication": <number 0-10, evaluate: ${dimensions.communication}>,
+  "aiUsageQuality": <number 0-10, evaluate: ${dimensions.aiUsageQuality}>,
+  "timeManagement": <number 0-10, evaluate: ${dimensions.timeManagement}>,
+  "thinkingTrace": "<narrative of how the candidate approached the ${nonCoding ? 'scenario' : 'problem'}>",
   "riskFlags": ["<array of concern strings>"],
   "quoteHighlights": ["<array of notable candidate quotes>"],
   "suggestedDecision": "<HIRE | NO_HIRE | FURTHER_ROUND>",
@@ -122,9 +135,9 @@ Analyze the complete session and provide your assessment as a JSON object with E
 }
 
 Scoring guidelines:
-- aiUsageQuality: High for candidates who use AI as a thinking partner with targeted questions. Low for blind copy-paste.
+- ${dimensions.aiUsageQuality}: High for candidates who use AI as a thinking partner with targeted questions. Low for blind copy-paste or over-reliance.
 - If AI level was L0, score aiUsageQuality as 5 (N/A).
-- riskFlags: Flag patterns like copying without understanding, no clarifying questions, over-reliance on AI.
+- riskFlags: Flag patterns like ${nonCoding ? 'superficial answers, lack of structure, vague responses, no follow-up questions' : 'copying without understanding, no clarifying questions, over-reliance on AI'}.
 - quoteHighlights: Pick 3-5 representative moments.
 
 Respond with ONLY the JSON object.`

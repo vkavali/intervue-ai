@@ -66,6 +66,7 @@ model User {
 model Company {
   id                      String    @id @default(cuid())
   name                    String
+  slug                    String?   @unique
   logo                    String?
   plan                    String    // STARTER | GROWTH | ENTERPRISE | PAY_PER_INTERVIEW
   stripeCustomerId        String?
@@ -434,20 +435,49 @@ model EnrichedBankProblem {
 // Tracks active hiring needs / job requisitions
 
 model OpenPosition {
+  id              String   @id @default(cuid())
+  companyId       String
+  title           String
+  role            String
+  seniority       String   // JUNIOR | MID | SENIOR | STAFF | PRINCIPAL
+  department      String?
+  location        String?
+  description     String?
+  interviewType   String?  // Links to INTERVIEW_TYPES config
+  isPublic        Boolean  @default(true)
+  requirements    String?  // Markdown or plain text
+  benefits        String?  // Markdown or plain text
+  salaryMin       Int?
+  salaryMax       Int?
+  salaryCurrency  String?  @default("USD")
+  headcount       Int      @default(1)
+  status          String   @default("OPEN") // OPEN | PAUSED | CLOSED | FILLED
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  company      Company          @relation(fields: [companyId], references: [id])
+  applications JobApplication[]
+}
+
+// ─── JobApplication ──────────────────────────────────────────────────────
+// Public job applications from the job board
+
+model JobApplication {
   id          String   @id @default(cuid())
-  companyId   String
-  title       String
-  role        String
-  seniority   String   // JUNIOR | MID | SENIOR | STAFF | PRINCIPAL
-  department  String?
-  location    String?
-  description String?
-  headcount   Int      @default(1)
-  status      String   @default("OPEN") // OPEN | PAUSED | CLOSED | FILLED
+  positionId  String
+  name        String
+  email       String
+  phone       String?
+  resumeUrl   String?
+  coverLetter String?
+  linkedinUrl String?
+  status      String   @default("NEW") // NEW | REVIEWING | SHORTLISTED | REJECTED | HIRED
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  company Company @relation(fields: [companyId], references: [id])
+  position OpenPosition @relation(fields: [positionId], references: [id])
+
+  @@unique([positionId, email])
 }
 
 // ─── ProblemHints ──────────────────────────────────────────────────────────

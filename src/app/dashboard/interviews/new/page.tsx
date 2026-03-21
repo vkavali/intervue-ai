@@ -3,9 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { INTERVIEW_TYPES, INDUSTRIES } from "@/data/interview-types";
-
-const NON_CODING_TYPES = ["BEHAVIORAL", "BUSINESS_ANALYST", "PROJECT_MANAGEMENT"];
+import { INTERVIEW_TYPES, INDUSTRIES, isNonCodingType } from "@/data/interview-types";
 
 const TRIVIAL_PATTERNS = [
   /trivia/i,
@@ -664,15 +662,44 @@ export default function NewInterviewPage() {
                 onChange={(e) => setRoundType(e.target.value)}
                 className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-900 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
               >
-                <option value="Technical">Technical</option>
-                <option value="System Design">System Design</option>
-                <option value="Behavioral">Behavioral</option>
-                <option value="Take Home">Take Home</option>
-                <option value="Live Coding">Live Coding</option>
-                <option value="SQL">SQL</option>
-                <option value="Business Analysis">Business Analysis</option>
-                <option value="Project Management">Project Management</option>
-                <option value="DevOps">DevOps</option>
+                <optgroup label="Engineering">
+                  <option value="Technical">Technical</option>
+                  <option value="System Design">System Design</option>
+                  <option value="Live Coding">Live Coding</option>
+                  <option value="SQL">SQL</option>
+                  <option value="DevOps">DevOps</option>
+                  <option value="Take Home">Take Home</option>
+                </optgroup>
+                <optgroup label="General">
+                  <option value="Behavioral">Behavioral</option>
+                  <option value="Business Analysis">Business Analysis</option>
+                  <option value="Project Management">Project Management</option>
+                </optgroup>
+                <optgroup label="Sales">
+                  <option value="Sales Screen">Sales Screen</option>
+                  <option value="Sales Role Play">Sales Role Play</option>
+                </optgroup>
+                <optgroup label="Marketing">
+                  <option value="Marketing Strategy">Marketing Strategy</option>
+                </optgroup>
+                <optgroup label="Executive">
+                  <option value="Executive Assessment">Executive Assessment</option>
+                </optgroup>
+                <optgroup label="Product">
+                  <option value="Product Case Study">Product Case Study</option>
+                </optgroup>
+                <optgroup label="Customer Success">
+                  <option value="CS Scenario">CS Scenario</option>
+                </optgroup>
+                <optgroup label="HR">
+                  <option value="HR Interview">HR Interview</option>
+                </optgroup>
+                <optgroup label="Finance">
+                  <option value="Finance Analysis">Finance Analysis</option>
+                </optgroup>
+                <optgroup label="Legal">
+                  <option value="Legal Review">Legal Review</option>
+                </optgroup>
               </select>
             </div>
 
@@ -720,7 +747,7 @@ export default function NewInterviewPage() {
               )}
             </div>
 
-            {!NON_CODING_TYPES.includes(interviewType) && (
+            {!isNonCodingType(interviewType) && (
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
                 Default AI Level

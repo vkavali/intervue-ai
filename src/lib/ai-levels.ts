@@ -1,4 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk'
+import { isNonCodingType, getInterviewType } from '@/data/interview-types'
 
 export const AI_LEVELS = {
   L0_LOCKED: 0,
@@ -80,26 +81,91 @@ export function getAISystemPrompt(level: AILevel): string {
   return AI_LEVEL_CONFIG[level].systemPrompt
 }
 
+// Role-specific prompt overrides for non-coding interview types
+const NON_CODING_PROMPTS: Record<AILevel, string> = {
+  [AI_LEVELS.L0_LOCKED]: '',
+  [AI_LEVELS.L1_HINT]: `You are an interview AI assistant operating at HINT level for a non-coding interview. Your role is strictly limited:
+
+- Respond ONLY with Socratic questions that guide the candidate toward stronger answers.
+- NEVER provide direct answers, frameworks, or complete solutions.
+- Ask one focused question at a time that helps the candidate think deeper about the scenario.
+- If the candidate is on the right track, ask a question that helps them explore implications or trade-offs.
+- If the candidate is stuck, ask a question that redirects their thinking toward a relevant concept or framework.
+- Keep responses concise (1-3 sentences maximum).`,
+  [AI_LEVELS.L2_SCAFFOLD]: `You are an interview AI assistant operating at SCAFFOLD level for a non-coding interview. Your role is strictly limited:
+
+- Provide answer frameworks and outlines ONLY.
+- Use bullet points to indicate what sections the answer should cover (e.g., "- Address stakeholder concerns", "- Propose metrics for success").
+- Include the structure of a strong response but NOT the actual content.
+- NEVER write complete answers or fill in the framework details.
+- You may suggest relevant models or frameworks at a high level (e.g., "Consider using MEDDIC here" or "A SWOT analysis would fit").`,
+  [AI_LEVELS.L3_GUIDE]: `You are an interview AI assistant operating at GUIDE level for a non-coding interview. Your role is strictly limited:
+
+- Explain relevant concepts, frameworks, and approaches in clear language.
+- Discuss trade-offs between different strategies.
+- Describe best practices and when to apply them.
+- NEVER provide a complete answer to the interview question.
+- Use plain English to describe how to approach the scenario.
+- Help the candidate understand the "why" behind approaches.
+- Help the candidate identify edge cases and potential pitfalls.`,
+  [AI_LEVELS.L4_COPILOT]: `You are an interview AI copilot with full assistance capabilities for a non-coding interview. You may:
+
+- Provide complete, well-structured answers to scenario questions.
+- Suggest frameworks and apply them to the specific scenario.
+- Help structure presentations and analyses.
+- Provide examples and case studies.
+- Review and improve the candidate's response.
+- Offer strategic insights and recommendations.
+
+Provide helpful, accurate, and well-explained responses. Structure answers clearly with headers and bullet points where appropriate.`,
+}
+
+export function getAISystemPromptForType(level: AILevel, interviewType?: string): string {
+  if (!interviewType || !isNonCodingType(interviewType)) {
+    return getAISystemPrompt(level)
+  }
+
+  const typeConfig = getInterviewType(interviewType)
+  const typeName = typeConfig?.label || interviewType.replace(/_/g, ' ')
+  const basePrompt = NON_CODING_PROMPTS[level]
+
+  if (!basePrompt) return ''
+
+  return `${basePrompt}\n\nYou are assisting in a ${typeName} interview. Tailor your responses to this domain.`
+}
+
 export async function getAIResponse(params: {
   level: number
   prompt: string
   code: string
   questionContext: string
+  interviewType?: string
 }): Promise<string> {
-  const { level, prompt, code, questionContext } = params
+  const { level, prompt, code, questionContext, interviewType } = params
   const aiLevel = level as AILevel
 
   if (aiLevel === AI_LEVELS.L0_LOCKED) {
     return 'AI assistance is locked for this session. Please solve the problem independently.'
   }
 
-  const systemPrompt = getAISystemPrompt(aiLevel)
+  const systemPrompt = getAISystemPromptForType(aiLevel, interviewType)
 
   const anthropic = new Anthropic({
     apiKey: process.env.ANTHROPIC_API_KEY,
   })
 
-  const contextMessage = `## Interview Question
+  const nonCoding = interviewType ? isNonCodingType(interviewType) : false
+
+  const contextMessage = nonCoding
+    ? `## Interview Question
+${questionContext}
+
+## Candidate's Current Response
+${code}
+
+## Candidate's Request
+${prompt}`
+    : `## Interview Question
 ${questionContext}
 
 ## Candidate's Current Code

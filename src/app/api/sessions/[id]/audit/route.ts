@@ -151,6 +151,7 @@ export async function POST(
       interviewerNotes: interviewSession.interviewerNotes,
       code: interviewSession.code ?? "",
       language: interviewSession.language ?? "unknown",
+      interviewType: interviewSession.template.interviewType,
     })
 
     // Save the audit report

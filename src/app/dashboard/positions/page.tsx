@@ -44,9 +44,11 @@ export default function PositionsPage() {
   const [showForm, setShowForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [aiMode, setAiMode] = useState(false);
+  const [aiMode, setAiMode] = useState<"off" | "parse" | "generate">("off");
   const [jdText, setJdText] = useState("");
   const [parsing, setParsing] = useState(false);
+  const [generating, setGenerating] = useState(false);
+  const [genTitle, setGenTitle] = useState("");
 
   // Form state
   const [form, setForm] = useState({
@@ -155,7 +157,7 @@ export default function PositionsPage() {
         description: data.description || "",
         headcount: data.headcount || "1",
       });
-      setAiMode(false);
+      setAiMode("off");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to parse");
     } finally {
@@ -175,6 +177,17 @@ export default function PositionsPage() {
           <h1 className="text-2xl font-bold text-gray-900">Open Positions</h1>
           <p className="mt-1 text-sm text-gray-500">Track active hiring needs and job requisitions</p>
         </div>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/jobs"
+            target="_blank"
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+          >
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+            View Public Board
+          </Link>
         <button
           onClick={() => setShowForm(!showForm)}
           className="inline-flex items-center gap-2 rounded-lg border border-saffron bg-transparent px-4 py-2 text-sm font-medium text-saffron transition-colors hover:bg-saffron/10"
@@ -190,6 +203,7 @@ export default function PositionsPage() {
             </>
           )}
         </button>
+        </div>
       </div>
 
       {/* Stats */}
@@ -213,24 +227,110 @@ export default function PositionsPage() {
         <div className="mb-6 rounded-xl border border-gray-200 bg-white p-6">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-lg font-semibold text-gray-900">New Position</h2>
-            <button
-              type="button"
-              onClick={() => setAiMode(!aiMode)}
-              className={`inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-                aiMode
-                  ? "border border-purple-300 bg-purple-50 text-purple-700"
-                  : "border border-gray-200 bg-gray-50 text-gray-600 hover:bg-gray-100"
-              }`}
-            >
-              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-              {aiMode ? "AI Parse On" : "AI Parse"}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setAiMode(aiMode === "parse" ? "off" : "parse")}
+                className={`inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+                  aiMode === "parse"
+                    ? "border border-purple-300 bg-purple-50 text-purple-700"
+                    : "border border-gray-200 bg-gray-50 text-gray-600 hover:bg-gray-100"
+                }`}
+              >
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                AI Parse
+              </button>
+              <button
+                type="button"
+                onClick={() => setAiMode(aiMode === "generate" ? "off" : "generate")}
+                className={`inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+                  aiMode === "generate"
+                    ? "border border-saffron/50 bg-saffron/10 text-saffron-dark"
+                    : "border border-gray-200 bg-gray-50 text-gray-600 hover:bg-gray-100"
+                }`}
+              >
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                AI Generate
+              </button>
+            </div>
           </div>
 
+          {/* AI Generate Section */}
+          {aiMode === "generate" && (
+            <div className="mb-5 rounded-lg border border-saffron/30 bg-saffron/5 p-4">
+              <p className="mb-2 text-sm font-medium text-saffron-dark">Type a role title and AI will generate a full job description</p>
+              <div className="flex gap-3">
+                <input
+                  type="text"
+                  value={genTitle}
+                  onChange={(e) => setGenTitle(e.target.value)}
+                  placeholder="e.g. Senior Product Manager, Growth Marketing Lead..."
+                  className="flex-1 rounded-lg border border-saffron/30 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-saffron focus:outline-none focus:ring-1 focus:ring-saffron"
+                />
+                <button
+                  type="button"
+                  onClick={async () => {
+                    if (!genTitle.trim()) return;
+                    setGenerating(true);
+                    setError(null);
+                    try {
+                      const res = await fetch("/api/positions/generate", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          title: genTitle,
+                          department: form.department || undefined,
+                          seniority: form.seniority || undefined,
+                        }),
+                      });
+                      const data = await res.json();
+                      if (!res.ok) throw new Error(data.error || "Failed to generate");
+                      setForm({
+                        title: data.title || genTitle,
+                        role: data.role || genTitle,
+                        seniority: data.seniority || "MID",
+                        department: data.department || "",
+                        location: form.location,
+                        description: data.description || "",
+                        headcount: form.headcount,
+                      });
+                      setAiMode("off");
+                    } catch (err) {
+                      setError(err instanceof Error ? err.message : "Failed to generate");
+                    } finally {
+                      setGenerating(false);
+                    }
+                  }}
+                  disabled={generating || !genTitle.trim()}
+                  className="inline-flex items-center gap-2 rounded-lg border border-saffron bg-saffron px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-saffron-dark disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {generating ? (
+                    <>
+                      <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                      Generating...
+                    </>
+                  ) : (
+                    <>
+                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                      Generate JD
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* AI Parse Section */}
-          {aiMode && (
+          {aiMode === "parse" && (
             <div className="mb-5 rounded-lg border border-purple-200 bg-purple-50/50 p-4">
               <p className="mb-2 text-sm font-medium text-purple-800">Paste a job description and AI will fill the form</p>
               <textarea
@@ -427,6 +527,15 @@ export default function PositionsPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>
                     {p.candidateCount} candidate{p.candidateCount !== 1 ? "s" : ""} in pipeline
+                  </Link>
+                  <Link
+                    href={`/dashboard/positions/${p.id}/applications`}
+                    className="flex items-center gap-1 text-india-green hover:text-india-green-dark"
+                  >
+                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Applications
                   </Link>
                 </div>
 

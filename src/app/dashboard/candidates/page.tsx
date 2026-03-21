@@ -3,21 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { StageDropdown } from "./StageDropdown";
-
-const stageColors: Record<string, string> = {
-  SCREENING: "bg-india-green/10 text-india-green border-india-green/30",
-  TECHNICAL: "bg-saffron/10 text-saffron border-saffron/30",
-  SYSTEM_DESIGN: "bg-orange-500/10 text-orange-400 border-orange-500/30",
-  BEHAVIORAL: "bg-teal-500/10 text-teal-400 border-teal-500/30",
-  FINAL: "bg-indigo-500/10 text-indigo-400 border-indigo-500/30",
-  HIRED: "bg-green-500/10 text-green-400 border-green-500/30",
-  REJECTED: "bg-accent-red/10 text-accent-red border-accent-red/30",
-  ON_HOLD: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30",
-};
-
-function formatStage(stage: string): string {
-  return stage.replace(/_/g, " ");
-}
+import { getStageColor, getStageLabel } from "@/data/pipeline-stages";
 
 function getInitials(name: string): string {
   return name
@@ -347,11 +333,10 @@ export default async function CandidatePipelinePage() {
                             <td className="px-6 py-4">
                               <span
                                 className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${
-                                  stageColors[entry.stage] ||
-                                  "bg-gray-500/10 text-gray-500 border-gray-500/30"
+                                  getStageColor(entry.stage)
                                 }`}
                               >
-                                {formatStage(entry.stage)}
+                                {getStageLabel(entry.stage)}
                               </span>
                             </td>
 

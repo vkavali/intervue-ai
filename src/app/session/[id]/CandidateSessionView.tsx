@@ -6,6 +6,7 @@ import SessionProtections from "@/components/SessionProtections";
 import ScreenCapture from "@/components/ScreenCapture";
 import SessionChat from "@/components/SessionChat";
 import VideoCall from "@/components/VideoCall";
+import { isNonCodingType } from "@/data/interview-types";
 
 interface Question {
   id: string;
@@ -417,9 +418,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
   }
 
   const currentAiLevel = currentQuestion?.aiLevel ?? sessionData.aiLevel;
-  const isNonCoding = ["BEHAVIORAL", "BUSINESS_ANALYST", "PROJECT_MANAGEMENT"].includes(
-    sessionData.template.interviewType || ""
-  );
+  const isNonCoding = isNonCodingType(sessionData.template.interviewType || "");
   const isSql = sessionData.template.interviewType === "SQL";
   const isSystemDesign = sessionData.template.interviewType === "SYSTEM_DESIGN";
 

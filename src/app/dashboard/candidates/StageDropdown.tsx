@@ -3,40 +3,18 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
-
-const STAGES = [
-  "SCREENING",
-  "TECHNICAL",
-  "SYSTEM_DESIGN",
-  "BEHAVIORAL",
-  "FINAL",
-  "HIRED",
-  "REJECTED",
-  "ON_HOLD",
-];
-
-const stageColors: Record<string, string> = {
-  SCREENING: "text-india-green",
-  TECHNICAL: "text-saffron",
-  SYSTEM_DESIGN: "text-orange-400",
-  BEHAVIORAL: "text-teal-400",
-  FINAL: "text-indigo-400",
-  HIRED: "text-green-400",
-  REJECTED: "text-accent-red",
-  ON_HOLD: "text-yellow-400",
-};
-
-function formatStage(stage: string): string {
-  return stage.replace(/_/g, " ");
-}
+import { getStagesForDepartment, type PipelineStage } from "@/data/pipeline-stages";
 
 export function StageDropdown({
   entryId,
   currentStage,
+  department,
 }: {
   entryId: string;
   currentStage: string;
+  department?: string | null;
 }) {
+  const stages: PipelineStage[] = getStagesForDepartment(department);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [pos, setPos] = useState({ top: 0, left: 0 });
@@ -135,22 +113,22 @@ export function StageDropdown({
             className="fixed z-[9999] w-44 max-h-64 overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 shadow-2xl"
             style={{ top: pos.top, left: pos.left }}
           >
-            {STAGES.map((stage) => (
+            {stages.map((stage) => (
               <button
-                key={stage}
-                onClick={() => handleStageChange(stage)}
+                key={stage.value}
+                onClick={() => handleStageChange(stage.value)}
                 className={`flex w-full items-center gap-2 px-3 py-2 text-left text-xs transition-colors hover:bg-gray-100 ${
-                  stage === currentStage
+                  stage.value === currentStage
                     ? "bg-gray-50 font-semibold"
                     : "font-medium"
-                } ${stageColors[stage] || "text-gray-700"}`}
+                } text-gray-700`}
               >
-                {stage === currentStage && (
+                {stage.value === currentStage && (
                   <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 )}
-                {formatStage(stage)}
+                {stage.label}
               </button>
             ))}
           </div>,

@@ -2,17 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-
-const VALID_STAGES = [
-  'SCREENING',
-  'TECHNICAL',
-  'SYSTEM_DESIGN',
-  'BEHAVIORAL',
-  'FINAL',
-  'HIRED',
-  'REJECTED',
-  'ON_HOLD',
-]
+import { getValidStageValues } from '@/data/pipeline-stages'
 
 // GET /api/pipeline - List all candidates in the pipeline for the company
 export async function GET(req: NextRequest) {
@@ -159,10 +149,11 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // Validate stage if provided
-    if (stage && !VALID_STAGES.includes(stage)) {
+    // Validate stage if provided — stages are now department-aware
+    const validStages = getValidStageValues(body.department || null)
+    if (stage && !validStages.includes(stage)) {
       return NextResponse.json(
-        { error: `Invalid stage. Must be one of: ${VALID_STAGES.join(', ')}` },
+        { error: `Invalid stage. Must be one of: ${validStages.join(', ')}` },
         { status: 400 }
       )
     }
