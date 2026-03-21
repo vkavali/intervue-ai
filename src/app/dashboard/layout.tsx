@@ -152,7 +152,8 @@ export default async function DashboardLayout({
     }
   }
 
-  const isDev = session.user.email === process.env.TEST_MODE_EMAIL;
+  const testModeEmail = process.env.TEST_MODE_EMAIL;
+  const isDev = testModeEmail ? session.user.email === testModeEmail : isAdmin;
   const visibleLinks = sidebarLinks.filter(
     (link) =>
       (!link.adminOnly || isAdmin) && (!link.devOnly || isDev)

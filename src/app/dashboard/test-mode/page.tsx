@@ -6,9 +6,21 @@ import TestModePage from '@/components/test-mode/TestModePage';
 export default async function TestModePageRoute() {
   const session = await getServerSession(authOptions);
 
-  const testModeEmail = process.env.TEST_MODE_EMAIL;
-  if (!session || session.user.email !== testModeEmail) {
+  if (!session) {
     redirect('/dashboard');
+  }
+
+  const testModeEmail = process.env.TEST_MODE_EMAIL;
+  // If TEST_MODE_EMAIL is set, restrict to that email only
+  // If not set, fall back to any COMPANY_ADMIN
+  if (testModeEmail) {
+    if (session.user.email !== testModeEmail) {
+      redirect('/dashboard');
+    }
+  } else {
+    if (session.user.role !== 'COMPANY_ADMIN') {
+      redirect('/dashboard');
+    }
   }
 
   return <TestModePage />;
