@@ -241,6 +241,7 @@ export default async function CareersPage({
                     <div className="flex items-start gap-4 min-w-0">
                       {/* Company logo or initial */}
                       {job.companyLogo ? (
+                        /* eslint-disable-next-line @next/next/no-img-element */
                         <img
                           src={job.companyLogo}
                           alt={job.company}

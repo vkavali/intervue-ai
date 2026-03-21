@@ -35,6 +35,7 @@ export default async function JobsPage({ searchParams }: { searchParams: Record<
     : null
 
   // Get distinct filter values (scoped to company if filtered)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const filterWhere: any = { status: "OPEN", isPublic: true }
   if (searchParams.company) filterWhere.companyId = searchParams.company
 
