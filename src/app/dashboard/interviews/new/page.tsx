@@ -77,12 +77,26 @@ export default function NewInterviewPage() {
   }, [status, session, router]);
 
   const [title, setTitle] = useState("");
-  const [role, setRole] = useState(searchParams.get("role") || "");
-  const [seniority, setSeniority] = useState(searchParams.get("seniority") || "MID");
-  const [roundType, setRoundType] = useState(searchParams.get("roundType") || "Technical");
+  const [role, setRole] = useState("");
+  const [seniority, setSeniority] = useState("MID");
+  const [roundType, setRoundType] = useState("Technical");
   const [industry, setIndustry] = useState("");
-  const [interviewType, setInterviewType] = useState(searchParams.get("interviewType") || "TECHNICAL");
-  const [defaultAiLevel, setDefaultAiLevel] = useState(Number(searchParams.get("aiLevel")) || 0);
+  const [interviewType, setInterviewType] = useState("TECHNICAL");
+  const [defaultAiLevel, setDefaultAiLevel] = useState(0);
+
+  // Pre-fill form from URL query params (e.g. from template library "Use Template")
+  useEffect(() => {
+    const r = searchParams.get("role");
+    const s = searchParams.get("seniority");
+    const rt = searchParams.get("roundType");
+    const it = searchParams.get("interviewType");
+    const al = searchParams.get("aiLevel");
+    if (r) setRole(r);
+    if (s) setSeniority(s);
+    if (rt) setRoundType(rt);
+    if (it) setInterviewType(it);
+    if (al) setDefaultAiLevel(Number(al));
+  }, [searchParams]);
   const [questions, setQuestions] = useState<Question[]>([emptyQuestion()]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");

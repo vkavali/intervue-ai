@@ -217,17 +217,26 @@ export default async function SessionsPage() {
                         (() => {
                           const isSessionExpired = s.startedAt && s.totalDurationMinutes &&
                             new Date(s.startedAt).getTime() + s.totalDurationMinutes * 60 * 1000 < Date.now();
-                          return isSessionExpired ? (
-                            <span className="text-xs font-medium text-accent-red">Expired</span>
-                          ) : (
+                          if (isSessionExpired) {
+                            return <span className="text-xs font-medium text-accent-red">Expired</span>;
+                          }
+                          const isInterviewer = s.interviewer?.email === user?.email;
+                          return (
                             <Link
-                              href={`/session/${s.id}`}
-                              className="text-xs font-medium text-green-400 hover:text-green-300 transition-colors"
+                              href={`/session/${s.id}/watch`}
+                              className="inline-flex items-center gap-1 rounded-lg border border-green-500/30 bg-green-500/10 px-2.5 py-1 text-xs font-medium text-green-600 hover:bg-green-500/20 transition-colors"
                             >
-                              Watch Live
+                              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                              {isInterviewer ? "Join Interview" : "Watch Live"}
                             </Link>
                           );
                         })()
+                      )}
+                      {s.status === "PENDING" && s.interviewer?.email === user?.email && (
+                        <span className="text-xs font-medium text-yellow-600">Assigned to you</span>
                       )}
                       {(s.status === "EXPIRED" || s.status === "CANCELLED") && (
                         <ReinviteButton sessionId={s.id} />
