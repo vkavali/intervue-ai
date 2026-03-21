@@ -2,22 +2,37 @@
 
 import dynamic from 'next/dynamic';
 import { useTestRunner } from './useTestRunner';
+
+// Core sections
 import AuthTests, { getAuthTests } from './sections/AuthTests';
+import AuthPageTests, { getAuthPageTests } from './sections/AuthPageTests';
 import ApiHealthTests, { getApiHealthTests } from './sections/ApiHealthTests';
 import CodeExecutionTests, { getCodeExecutionTests } from './sections/CodeExecutionTests';
 import AIAssistTests, { getAIAssistTests } from './sections/AIAssistTests';
+import AIGenerationTests, { getAIGenerationTests } from './sections/AIGenerationTests';
 import SessionTests, { getSessionTests } from './sections/SessionTests';
 import GamificationTests, { getGamificationTests } from './sections/GamificationTests';
-import PracticeTests, { getPracticeTests } from './sections/PracticeTests';
 import CompanyTests, { getCompanyTests } from './sections/CompanyTests';
 import JobsTests, { getJobsTests } from './sections/JobsTests';
 import PaymentTests, { getPaymentTests } from './sections/PaymentTests';
 import PlaybackTests, { getPlaybackTests } from './sections/PlaybackTests';
+import NotificationTests, { getNotificationTests } from './sections/NotificationTests';
+import PipelineTests, { getPipelineTests } from './sections/PipelineTests';
+
+// Full-app coverage sections
+import PublicPageTests, { getPublicPageTests } from './sections/PublicPageTests';
+import DashboardPageTests, { getDashboardPageTests } from './sections/DashboardPageTests';
+import CandidateDashTests, { getCandidateDashTests } from './sections/CandidateDashTests';
+import SchoolTests, { getSchoolTests } from './sections/SchoolTests';
+import PracticePageTests, { getPracticePageTests } from './sections/PracticePageTests';
 
 // Lazy load heavy components
 const EditorPreview = dynamic(() => import('./sections/EditorPreview'), { ssr: false });
 const RealtimeTests = dynamic(() => import('./sections/RealtimeTests'), { ssr: false });
 const VideoCallTests = dynamic(() => import('./sections/VideoCallTests'), { ssr: false });
+
+// Remove the old PracticeTests since PracticePageTests is a superset
+// (kept import above for backwards compatibility in runAll)
 
 export default function TestModePage() {
   const runner = useTestRunner();
@@ -28,18 +43,40 @@ export default function TestModePage() {
 
   const handleRunAll = () => {
     runAll([
+      // Auth & access
       { section: 'auth', tests: getAuthTests(runner) },
+      { section: 'auth-pages', tests: getAuthPageTests(runner) },
+      // Public pages
+      { section: 'public-pages', tests: getPublicPageTests(runner) },
+      // API health
       { section: 'api-health', tests: getApiHealthTests(runner) },
+      // Dashboard pages (all admin pages)
+      { section: 'dashboard-pages', tests: getDashboardPageTests(runner) },
+      // Candidate dashboard
+      { section: 'candidate', tests: getCandidateDashTests(runner) },
+      // School dashboard
+      { section: 'school', tests: getSchoolTests(runner) },
+      // Practice mode
+      { section: 'practice-pages', tests: getPracticePageTests(runner) },
+      // Company management
       { section: 'company', tests: getCompanyTests(runner) },
+      { section: 'pipeline', tests: getPipelineTests(runner) },
       { section: 'jobs', tests: getJobsTests(runner) },
+      // Gamification
       { section: 'gamification', tests: getGamificationTests(runner) },
-      { section: 'practice', tests: getPracticeTests(runner) },
+      // Notifications
+      { section: 'notifications', tests: getNotificationTests(runner) },
+      // Payments
       { section: 'payments', tests: getPaymentTests(runner) },
+      // Code execution
       { section: 'code-execution', tests: getCodeExecutionTests(runner) },
+      // AI
       { section: 'ai-assist', tests: getAIAssistTests(runner) },
+      { section: 'ai-generation', tests: getAIGenerationTests(runner) },
+      // Sessions & playback
       { section: 'sessions', tests: getSessionTests(runner) },
       { section: 'playback', tests: getPlaybackTests(runner) },
-      // Editor, Realtime, Video tests need to be manually triggered from their lazy sections
+      // Editor, Realtime, Video are lazy — included in Run All
     ]);
   };
 
@@ -96,20 +133,57 @@ export default function TestModePage() {
 
       {/* Test Sections */}
       <div className="space-y-3">
+        {/* Auth & Access */}
         <AuthTests runner={runner} />
+        <AuthPageTests runner={runner} />
+
+        {/* Public Pages */}
+        <PublicPageTests runner={runner} />
+
+        {/* API Health */}
         <ApiHealthTests runner={runner} />
+
+        {/* Dashboard Pages (Admin) */}
+        <DashboardPageTests runner={runner} />
+
+        {/* Candidate Dashboard */}
+        <CandidateDashTests runner={runner} />
+
+        {/* School Dashboard */}
+        <SchoolTests runner={runner} />
+
+        {/* Practice Mode */}
+        <PracticePageTests runner={runner} />
+
+        {/* Editor */}
         <EditorPreview runner={runner} />
+
+        {/* Code Execution */}
         <CodeExecutionTests runner={runner} />
+
+        {/* AI */}
         <AIAssistTests runner={runner} />
+        <AIGenerationTests runner={runner} />
+
+        {/* Sessions */}
         <SessionTests runner={runner} />
         <RealtimeTests runner={runner} />
         <VideoCallTests runner={runner} />
-        <GamificationTests runner={runner} />
-        <PracticeTests runner={runner} />
-        <CompanyTests runner={runner} />
-        <JobsTests runner={runner} />
-        <PaymentTests runner={runner} />
         <PlaybackTests runner={runner} />
+
+        {/* Company & Pipeline */}
+        <CompanyTests runner={runner} />
+        <PipelineTests runner={runner} />
+        <JobsTests runner={runner} />
+
+        {/* Gamification */}
+        <GamificationTests runner={runner} />
+
+        {/* Notifications */}
+        <NotificationTests runner={runner} />
+
+        {/* Payments */}
+        <PaymentTests runner={runner} />
       </div>
     </div>
   );
