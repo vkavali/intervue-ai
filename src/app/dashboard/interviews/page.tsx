@@ -117,6 +117,8 @@ export default async function InterviewsPage() {
                 <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
                   Actions
                 </th>
+                <th className="px-6 py-3" />
+
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -164,9 +166,21 @@ export default async function InterviewsPage() {
                   <td className="px-6 py-4 text-right">
                     <Link
                       href={`/dashboard/interviews/${template.id}`}
-                      className="text-sm text-saffron hover:text-saffron-dark transition-colors"
+                      className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
                     >
-                      View &rarr;
+                      View
+                    </Link>
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    <Link
+                      href={`/dashboard/interviews/${template.id}/session`}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-saffron bg-transparent px-3 py-1.5 text-xs font-semibold text-saffron-dark transition-all hover:bg-saffron/10"
+                    >
+                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      Use Template
                     </Link>
                   </td>
                 </tr>
