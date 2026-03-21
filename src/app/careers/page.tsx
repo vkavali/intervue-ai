@@ -13,6 +13,9 @@ export default async function CareersPage({
   const source = searchParams.source || "all" // all | intervue | external
   const department = searchParams.department || ""
   const location = searchParams.location || ""
+  const jobType = searchParams.jobType || ""
+  const workMode = searchParams.workMode || "" // remote | onsite | hybrid
+  const category = searchParams.category || ""
 
   // Fetch internal positions from companies on Intervue.AI
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -68,20 +71,52 @@ export default async function CareersPage({
     postedAt: p.createdAt.toISOString(),
   }))
 
-  // Filter external jobs by location if specified
-  let filteredExternal = externalJobs
+  // Combine all jobs
+  let allJobs = [...internalJobs, ...externalJobs]
+
+  // Apply filters
   if (location) {
-    filteredExternal = externalJobs.filter((j) =>
+    allJobs = allJobs.filter((j) =>
       j.location.toLowerCase().includes(location.toLowerCase())
     )
   }
+  if (jobType) {
+    allJobs = allJobs.filter((j) =>
+      j.type.toLowerCase().includes(jobType.toLowerCase())
+    )
+  }
+  if (workMode === "remote") {
+    allJobs = allJobs.filter((j) =>
+      j.location.toLowerCase().includes("remote") ||
+      j.location.toLowerCase().includes("anywhere") ||
+      j.location.toLowerCase().includes("worldwide")
+    )
+  } else if (workMode === "onsite") {
+    allJobs = allJobs.filter((j) =>
+      !j.location.toLowerCase().includes("remote") &&
+      !j.location.toLowerCase().includes("anywhere") &&
+      !j.location.toLowerCase().includes("worldwide")
+    )
+  } else if (workMode === "hybrid") {
+    allJobs = allJobs.filter((j) =>
+      j.location.toLowerCase().includes("hybrid")
+    )
+  }
+  if (category) {
+    allJobs = allJobs.filter((j) =>
+      j.category?.toLowerCase().includes(category.toLowerCase())
+    )
+  }
 
-  // Combine and sort
-  const allJobs = [...internalJobs, ...filteredExternal].sort(
-    (a, b) => new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime()
-  )
+  // Sort by date (newest first)
+  allJobs.sort((a, b) => new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime())
 
-  // Get filter values from internal positions (graceful fallback)
+  // Collect available filter values from all fetched jobs
+  const allUnfilteredJobs = [...internalJobs, ...externalJobs]
+  const jobTypes = Array.from(new Set(allUnfilteredJobs.map((j) => j.type).filter(Boolean))).sort()
+  const categories = Array.from(new Set(allUnfilteredJobs.map((j) => j.category).filter(Boolean))).sort()
+
+  // Get department filter values from internal positions (graceful fallback)
   let filterPositions: { department: string | null; location: string | null }[] = []
   try {
     filterPositions = await prisma.openPosition.findMany({
@@ -146,6 +181,42 @@ export default async function CareersPage({
                 <option value="all">All Sources</option>
                 <option value="intervue">Intervue.AI Companies</option>
                 <option value="external">External Job Boards</option>
+              </select>
+
+              {/* Work mode filter */}
+              <select
+                name="workMode"
+                defaultValue={workMode}
+                className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-saffron focus:outline-none"
+              >
+                <option value="">Remote / On-site</option>
+                <option value="remote">Remote</option>
+                <option value="onsite">On-site</option>
+                <option value="hybrid">Hybrid</option>
+              </select>
+
+              {/* Job type filter */}
+              <select
+                name="jobType"
+                defaultValue={jobType}
+                className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-saffron focus:outline-none"
+              >
+                <option value="">All Job Types</option>
+                {jobTypes.map((t) => (
+                  <option key={t} value={t}>{t}</option>
+                ))}
+              </select>
+
+              {/* Category filter */}
+              <select
+                name="category"
+                defaultValue={category}
+                className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-saffron focus:outline-none"
+              >
+                <option value="">All Categories</option>
+                {categories.map((c) => (
+                  <option key={c} value={c!}>{c}</option>
+                ))}
               </select>
 
               {/* Department filter */}
