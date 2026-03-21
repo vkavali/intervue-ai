@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 
-const sidebarLinks = [
+const sidebarLinks: { href: string; label: string; adminOnly: boolean; devOnly?: boolean; icon: React.ReactNode }[] = [
   {
     href: "/dashboard",
     label: "Dashboard",
@@ -110,6 +110,7 @@ const sidebarLinks = [
     href: "/dashboard/test-mode",
     label: "Test Mode",
     adminOnly: true,
+    devOnly: true,
     icon: (
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -151,8 +152,10 @@ export default async function DashboardLayout({
     }
   }
 
+  const isDev = session.user.email === process.env.TEST_MODE_EMAIL;
   const visibleLinks = sidebarLinks.filter(
-    (link) => !link.adminOnly || isAdmin
+    (link) =>
+      (!link.adminOnly || isAdmin) && (!link.devOnly || isDev)
   );
 
   return (
