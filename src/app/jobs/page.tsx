@@ -29,10 +29,15 @@ export default async function JobsPage({ searchParams }: { searchParams: Record<
     orderBy: { createdAt: "desc" },
   })
 
-  // If filtered by company, get the company name for the heading
-  const companyName = searchParams.company && positions.length > 0
-    ? positions[0].company.name
-    : null
+  // If filtered by company, fetch the company name for the heading
+  let companyName: string | null = null
+  if (searchParams.company) {
+    const company = await prisma.company.findUnique({
+      where: { id: searchParams.company },
+      select: { name: true },
+    })
+    companyName = company?.name || null
+  }
 
   // Get distinct filter values (scoped to company if filtered)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
