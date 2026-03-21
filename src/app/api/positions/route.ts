@@ -51,6 +51,7 @@ export async function GET() {
     return NextResponse.json({
       positions: positionsWithCounts,
       companySlug: user.company?.slug || null,
+      companyId: user.companyId,
     });
   } catch (error) {
     console.error("GET /api/positions error:", error);

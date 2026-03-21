@@ -8,6 +8,7 @@ export default async function JobsPage({ searchParams }: { searchParams: Record<
     isPublic: true,
   }
 
+  if (searchParams.company) where.companyId = searchParams.company
   if (searchParams.department) where.department = searchParams.department
   if (searchParams.seniority) where.seniority = searchParams.seniority
   if (searchParams.location) where.location = { contains: searchParams.location, mode: "insensitive" }
@@ -28,9 +29,17 @@ export default async function JobsPage({ searchParams }: { searchParams: Record<
     orderBy: { createdAt: "desc" },
   })
 
-  // Get distinct filter values
+  // If filtered by company, get the company name for the heading
+  const companyName = searchParams.company && positions.length > 0
+    ? positions[0].company.name
+    : null
+
+  // Get distinct filter values (scoped to company if filtered)
+  const filterWhere: any = { status: "OPEN", isPublic: true }
+  if (searchParams.company) filterWhere.companyId = searchParams.company
+
   const allPositions = await prisma.openPosition.findMany({
-    where: { status: "OPEN", isPublic: true },
+    where: filterWhere,
     select: { department: true, seniority: true, location: true },
   })
 
@@ -50,8 +59,14 @@ export default async function JobsPage({ searchParams }: { searchParams: Record<
             <span className="text-gray-300">|</span>
             <span className="text-sm text-gray-500">Job Board</span>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">Open Positions</h1>
-          <p className="mt-2 text-gray-500">Find your next opportunity across top companies</p>
+          <h1 className="text-3xl font-bold text-gray-900">
+            {companyName ? `${companyName} — Open Positions` : "Careers"}
+          </h1>
+          <p className="mt-2 text-gray-500">
+            {companyName
+              ? `${positions.length} open position${positions.length !== 1 ? "s" : ""}`
+              : "Find your next opportunity across top companies"}
+          </p>
 
           {/* Search */}
           <form className="mt-6">
