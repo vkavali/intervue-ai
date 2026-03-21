@@ -31,6 +31,7 @@ interface RemotiveJob {
 
 async function fetchRemotiveJobs(search?: string, category?: string, limit = 20): Promise<ExternalJob[]> {
   try {
+    console.log("[external-jobs] Fetching Remotive...")
     const params = new URLSearchParams()
     if (search) params.set("search", search)
     if (category) params.set("category", category)
@@ -38,13 +39,17 @@ async function fetchRemotiveJobs(search?: string, category?: string, limit = 20)
 
     const res = await fetch(
       `https://remotive.com/api/remote-jobs?${params}`,
-      { next: { revalidate: 3600 } } // Cache for 1 hour
+      { cache: "no-store" }
     )
 
-    if (!res.ok) return []
+    if (!res.ok) {
+      console.log("[external-jobs] Remotive returned", res.status)
+      return []
+    }
 
     const data = await res.json()
     const jobs: RemotiveJob[] = data.jobs || []
+    console.log("[external-jobs] Remotive returned", jobs.length, "jobs")
 
     return jobs.map((j) => ({
       id: `remotive-${j.id}`,
@@ -60,7 +65,8 @@ async function fetchRemotiveJobs(search?: string, category?: string, limit = 20)
       source: "remotive" as const,
       postedAt: j.publication_date,
     }))
-  } catch {
+  } catch (err) {
+    console.error("[external-jobs] Remotive error:", err)
     return []
   }
 }
@@ -82,15 +88,20 @@ interface ArbeitnowJob {
 
 async function fetchArbeitnowJobs(limit = 20): Promise<ExternalJob[]> {
   try {
+    console.log("[external-jobs] Fetching Arbeitnow...")
     const res = await fetch(
       "https://www.arbeitnow.com/api/job-board-api",
-      { next: { revalidate: 3600 } }
+      { cache: "no-store" }
     )
 
-    if (!res.ok) return []
+    if (!res.ok) {
+      console.log("[external-jobs] Arbeitnow returned", res.status)
+      return []
+    }
 
     const data = await res.json()
     const jobs: ArbeitnowJob[] = (data.data || []).slice(0, limit)
+    console.log("[external-jobs] Arbeitnow returned", jobs.length, "jobs")
 
     return jobs.map((j) => ({
       id: `arbeitnow-${j.slug}`,
@@ -106,7 +117,8 @@ async function fetchArbeitnowJobs(limit = 20): Promise<ExternalJob[]> {
       source: "arbeitnow" as const,
       postedAt: new Date(j.created_at * 1000).toISOString(),
     }))
-  } catch {
+  } catch (err) {
+    console.error("[external-jobs] Arbeitnow error:", err)
     return []
   }
 }
