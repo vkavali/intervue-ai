@@ -54,20 +54,6 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    if (!role || typeof role !== "string" || role.trim().length === 0) {
-      return NextResponse.json(
-        { error: "Role is required to generate a relevant interview template" },
-        { status: 400 }
-      )
-    }
-
-    if (!interviewType || typeof interviewType !== "string" || interviewType.trim().length === 0) {
-      return NextResponse.json(
-        { error: "Interview type is required to generate appropriate questions" },
-        { status: 400 }
-      )
-    }
-
     const systemPrompt = `You are an expert technical interview designer. Your job is to generate a complete, well-structured interview template from a natural language description provided by an employer.
 
 You must respond with ONLY a valid JSON object (no markdown fences, no extra text). The JSON must have this exact structure:

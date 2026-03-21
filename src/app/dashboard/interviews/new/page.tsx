@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { INTERVIEW_TYPES, INDUSTRIES, isNonCodingType } from "@/data/interview-types";
 
@@ -67,6 +67,7 @@ const aiLevelLabels: Record<number, string> = {
 
 export default function NewInterviewPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { data: session, status } = useSession();
 
   useEffect(() => {
@@ -76,12 +77,12 @@ export default function NewInterviewPage() {
   }, [status, session, router]);
 
   const [title, setTitle] = useState("");
-  const [role, setRole] = useState("");
-  const [seniority, setSeniority] = useState("MID");
-  const [roundType, setRoundType] = useState("Technical");
+  const [role, setRole] = useState(searchParams.get("role") || "");
+  const [seniority, setSeniority] = useState(searchParams.get("seniority") || "MID");
+  const [roundType, setRoundType] = useState(searchParams.get("roundType") || "Technical");
   const [industry, setIndustry] = useState("");
-  const [interviewType, setInterviewType] = useState("TECHNICAL");
-  const [defaultAiLevel, setDefaultAiLevel] = useState(0);
+  const [interviewType, setInterviewType] = useState(searchParams.get("interviewType") || "TECHNICAL");
+  const [defaultAiLevel, setDefaultAiLevel] = useState(Number(searchParams.get("aiLevel")) || 0);
   const [questions, setQuestions] = useState<Question[]>([emptyQuestion()]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -269,15 +270,6 @@ export default function NewInterviewPage() {
   async function handleGenerateInterview() {
     if (!aiInterviewPrompt.trim()) return;
 
-    // Require role, interviewType, and industry before AI generation
-    if (!role.trim()) {
-      setError("Please specify a Role before generating with AI.");
-      return;
-    }
-    if (!interviewType) {
-      setError("Please select an Interview Type before generating with AI.");
-      return;
-    }
     const promptText = aiInterviewPrompt.trim();
 
     // Check for trivial / irrelevant prompts
@@ -533,9 +525,9 @@ export default function NewInterviewPage() {
         <div className="mt-3 flex justify-end">
           <button
             type="button"
-            disabled={aiInterviewLoading || !aiInterviewPrompt.trim() || !role.trim() || !interviewType}
+            disabled={aiInterviewLoading || !aiInterviewPrompt.trim()}
             onClick={handleGenerateInterview}
-            title={!role.trim() || !interviewType ? "Fill in Role and Interview Type first" : ""}
+            title={!aiInterviewPrompt.trim() ? "Enter a prompt describing the interview" : ""}
             className="inline-flex items-center gap-2 rounded-lg border border-saffron bg-transparent px-5 py-2.5 text-sm font-semibold text-saffron-dark transition-all hover:bg-saffron/10 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {aiInterviewLoading ? (
