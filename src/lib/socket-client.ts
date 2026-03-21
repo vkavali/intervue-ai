@@ -73,7 +73,7 @@ export function isConnected(): boolean {
  * Uses cookie-based auth (NextAuth JWT is sent automatically).
  * Gracefully degrades — returns null if connection fails.
  */
-export function connectSocket(sessionId: string, userId: string): Socket | null {
+export function connectSocket(sessionId: string, _userId?: string): Socket | null {
   // Already connected to same session
   if (socket?.connected && currentSessionId === sessionId) {
     return socket;

@@ -85,6 +85,7 @@ export default function VideoCall({ sessionId, userId, isInterviewer = false }: 
 
     pcRef.current = pc;
     return pc;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId, userId]);
 
   async function startCall(audioOnly?: boolean) {
