@@ -24,8 +24,10 @@ export default async function InterviewDetailPage({
   params: { id: string };
 }) {
   const session = await getServerSession(authOptions);
+  if (!session?.user?.email) { return null; }
+
   const user = await prisma.user.findUnique({
-    where: { email: session!.user.email! },
+    where: { email: session.user.email },
   });
 
   const template = await prisma.interviewTemplate.findUnique({

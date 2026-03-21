@@ -535,10 +535,10 @@ export default function Home() {
             </div>
 
             <h1 className="text-6xl sm:text-7xl lg:text-[5.5rem] font-semibold tracking-tight leading-[1.05]">
-              <span className="text-gray-900">{isIndia ? "One platform." : "One platform."}</span>
+              <span className="text-gray-900">{isIndia ? "India\u2019s smartest" : "One platform."}</span>
               <br />
               <span className="bg-gradient-to-r from-saffron via-orange-500 to-india-green bg-clip-text text-transparent">
-                {isIndia ? "Every role. AI-powered." : "Every role. AI-powered."}
+                {isIndia ? "all-role hiring platform" : "Every role. AI-powered."}
               </span>
             </h1>
 

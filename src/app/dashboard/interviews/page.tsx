@@ -22,13 +22,14 @@ const seniorityColors: Record<string, string> = {
 
 export default async function InterviewsPage() {
   const session = await getServerSession(authOptions);
+  if (!session?.user?.email) { return null; }
 
-  if (session?.user.role !== "COMPANY_ADMIN") {
+  if (session.user.role !== "COMPANY_ADMIN") {
     redirect("/dashboard");
   }
 
   const user = await prisma.user.findUnique({
-    where: { email: session!.user.email! },
+    where: { email: session.user.email },
   });
 
   let templates: {
