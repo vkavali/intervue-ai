@@ -68,13 +68,6 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    if (!industry || typeof industry !== "string" || industry.trim().length === 0) {
-      return NextResponse.json(
-        { error: "Industry is required for generating domain-relevant questions" },
-        { status: 400 }
-      )
-    }
-
     const systemPrompt = `You are an expert technical interview designer. Your job is to generate a complete, well-structured interview template from a natural language description provided by an employer.
 
 You must respond with ONLY a valid JSON object (no markdown fences, no extra text). The JSON must have this exact structure:

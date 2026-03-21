@@ -278,11 +278,6 @@ export default function NewInterviewPage() {
       setError("Please select an Interview Type before generating with AI.");
       return;
     }
-    if (!industry) {
-      setError("Please select an Industry before generating with AI.");
-      return;
-    }
-
     const promptText = aiInterviewPrompt.trim();
 
     // Check for trivial / irrelevant prompts
@@ -538,9 +533,9 @@ export default function NewInterviewPage() {
         <div className="mt-3 flex justify-end">
           <button
             type="button"
-            disabled={aiInterviewLoading || !aiInterviewPrompt.trim() || !role.trim() || !interviewType || !industry}
+            disabled={aiInterviewLoading || !aiInterviewPrompt.trim() || !role.trim() || !interviewType}
             onClick={handleGenerateInterview}
-            title={!role.trim() || !interviewType || !industry ? "Fill in Role, Interview Type, and Industry first" : ""}
+            title={!role.trim() || !interviewType ? "Fill in Role and Interview Type first" : ""}
             className="inline-flex items-center gap-2 rounded-lg border border-saffron bg-transparent px-5 py-2.5 text-sm font-semibold text-saffron-dark transition-all hover:bg-saffron/10 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {aiInterviewLoading ? (
