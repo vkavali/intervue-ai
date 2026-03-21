@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef, useCallback, ComponentType } from 'react';
 import type { useTestRunner } from '../useTestRunner';
 import TestSection from '../TestSection';
 
@@ -24,7 +24,7 @@ interface Props {
   runner: ReturnType<typeof useTestRunner>;
 }
 
-export function getEditorTests(runner: ReturnType<typeof useTestRunner>) {
+export function getEditorTests(_runner: ReturnType<typeof useTestRunner>) {
   return TEST_DEFS.map((td) => ({
     id: td.id,
     fn: async (_signal: AbortSignal) => {
@@ -91,13 +91,14 @@ export function getEditorTests(runner: ReturnType<typeof useTestRunner>) {
 
 function EditorPreviewPanel() {
   const [theme, setTheme] = useState('vs-dark');
-  const [mounted, setMounted] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [EditorComp, setEditorComp] = useState<ComponentType<any> | null>(null);
   const editorRef = useRef<HTMLDivElement>(null);
 
   const loadEditor = useCallback(async () => {
     try {
-      const Editor = (await import('@monaco-editor/react')).default;
-      setMounted(true);
+      const mod = await import('@monaco-editor/react');
+      setEditorComp(() => mod.default);
     } catch {
       // Editor load failed silently for preview
     }
@@ -107,12 +108,9 @@ function EditorPreviewPanel() {
     loadEditor();
   }, [loadEditor]);
 
-  if (!mounted) {
+  if (!EditorComp) {
     return <div className="text-xs text-gray-400 p-2">Loading editor preview...</div>;
   }
-
-  // Use dynamic import for rendering
-  const LazyEditor = require('@monaco-editor/react').default;
 
   return (
     <div className="border border-gray-200 rounded-lg overflow-hidden mx-4 mb-3">
@@ -129,7 +127,7 @@ function EditorPreviewPanel() {
         </select>
       </div>
       <div ref={editorRef} style={{ height: 150 }}>
-        <LazyEditor
+        <EditorComp
           height="150px"
           language="javascript"
           theme={theme}

@@ -17,7 +17,7 @@ interface Props {
   runner: ReturnType<typeof useTestRunner>;
 }
 
-export function getVideoCallTests(runner: ReturnType<typeof useTestRunner>) {
+export function getVideoCallTests(_runner: ReturnType<typeof useTestRunner>) {
   return TEST_DEFS.map((td) => ({
     id: td.id,
     fn: async (signal: AbortSignal) => {

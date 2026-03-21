@@ -25,7 +25,7 @@ interface Props {
   runner: ReturnType<typeof useTestRunner>;
 }
 
-export function getCodeExecutionTests(runner: ReturnType<typeof useTestRunner>) {
+export function getCodeExecutionTests(_runner: ReturnType<typeof useTestRunner>) {
   return [
     ...LANGUAGES.map((l) => ({
       id: `exec-${l.lang}`,

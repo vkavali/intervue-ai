@@ -15,7 +15,7 @@ interface Props {
   runner: ReturnType<typeof useTestRunner>;
 }
 
-export function getJobsTests(runner: ReturnType<typeof useTestRunner>) {
+export function getJobsTests(_runner: ReturnType<typeof useTestRunner>) {
   return TEST_DEFS.map((td) => ({
     id: td.id,
     fn: async (signal: AbortSignal) => {

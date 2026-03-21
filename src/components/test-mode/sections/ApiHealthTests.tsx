@@ -32,7 +32,7 @@ interface Props {
   runner: ReturnType<typeof useTestRunner>;
 }
 
-export function getApiHealthTests(runner: ReturnType<typeof useTestRunner>) {
+export function getApiHealthTests(_runner: ReturnType<typeof useTestRunner>) {
   return ENDPOINTS.map((ep) => ({
     id: `health-${ep.replace(/\//g, '-')}`,
     fn: async (signal: AbortSignal) => {

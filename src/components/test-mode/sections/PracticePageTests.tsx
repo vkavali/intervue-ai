@@ -23,7 +23,7 @@ interface Props {
   runner: ReturnType<typeof useTestRunner>;
 }
 
-export function getPracticePageTests(runner: ReturnType<typeof useTestRunner>) {
+export function getPracticePageTests(_runner: ReturnType<typeof useTestRunner>) {
   return TEST_DEFS.map((td) => ({
     id: td.id,
     fn: async (signal: AbortSignal) => {

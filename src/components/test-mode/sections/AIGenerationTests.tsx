@@ -20,7 +20,7 @@ interface Props {
   runner: ReturnType<typeof useTestRunner>;
 }
 
-export function getAIGenerationTests(runner: ReturnType<typeof useTestRunner>) {
+export function getAIGenerationTests(_runner: ReturnType<typeof useTestRunner>) {
   return TEST_DEFS.map((td) => ({
     id: td.id,
     fn: async (signal: AbortSignal) => {

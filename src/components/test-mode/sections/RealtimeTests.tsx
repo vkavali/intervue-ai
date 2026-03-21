@@ -17,7 +17,7 @@ interface Props {
   runner: ReturnType<typeof useTestRunner>;
 }
 
-export function getRealtimeTests(runner: ReturnType<typeof useTestRunner>) {
+export function getRealtimeTests(_runner: ReturnType<typeof useTestRunner>) {
   return TEST_DEFS.map((td) => ({
     id: td.id,
     fn: async (_signal: AbortSignal) => {
@@ -48,7 +48,7 @@ export function getRealtimeTests(runner: ReturnType<typeof useTestRunner>) {
               resolve();
             });
 
-            socket.on('connect_error', (err) => {
+            socket.on('connect_error', (_err) => {
               clearTimeout(timer);
               socket.disconnect();
               // Socket server may not be running in dev, but the client works
