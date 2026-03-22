@@ -218,7 +218,7 @@ export default async function InsightPage({
           <div className="absolute inset-0 bg-gradient-to-br from-saffron/5 via-transparent to-india-green/5" />
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-gradient-to-b from-saffron/10 to-transparent rounded-full blur-3xl" />
           <div className="relative">
-            <span className="relative text-2xl font-bold tracking-tight text-gray-900 font-mono"><span className="absolute -top-2.5 -left-1 text-[8px] font-normal text-gray-400 font-sans">the</span>printf<span className="text-saffron">(</span><span className="text-india-green">)</span><span className="absolute -bottom-2.5 -right-1 text-[8px] font-normal text-gray-400 font-sans">.com</span></span>
+            <span className="relative text-2xl font-bold tracking-tight text-gray-900 font-mono my-2 mx-3 inline-block"><span className="absolute -top-4 left-0 text-[9px] font-normal text-gray-400 font-sans leading-none">the</span>printf<span className="text-saffron">(</span><span className="text-india-green">)</span><span className="absolute -bottom-4 right-0 text-[9px] font-normal text-gray-400 font-sans leading-none">.com</span></span>
             <p className="mt-3 text-gray-500 max-w-md mx-auto">
               AI-powered technical interviews with real-time assessment and detailed performance insights.
             </p>

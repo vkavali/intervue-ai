@@ -27,7 +27,7 @@ export default function Navbar() {
         <div className="flex h-16 items-center justify-between">
           {/* Left: Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <span className="relative text-xl font-bold tracking-tight text-gray-900 font-mono"><span className="absolute -top-2 -left-1 text-[8px] font-normal text-gray-400 font-sans">the</span>printf<span className="text-saffron">(</span><span className="text-india-green">)</span><span className="absolute -bottom-2 -right-1 text-[8px] font-normal text-gray-400 font-sans">.com</span></span>
+            <span className="relative text-xl font-bold tracking-tight text-gray-900 font-mono my-2 mx-3 inline-block"><span className="absolute -top-3.5 left-0 text-[8px] font-normal text-gray-400 font-sans leading-none">the</span>printf<span className="text-saffron">(</span><span className="text-india-green">)</span><span className="absolute -bottom-3.5 right-0 text-[8px] font-normal text-gray-400 font-sans leading-none">.com</span></span>
           </Link>
 
           {/* Right: Auth actions */}

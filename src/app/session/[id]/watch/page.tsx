@@ -353,7 +353,7 @@ export default function WatchSessionPage() {
       {/* Top Bar */}
       <div className="flex items-center justify-between border-b border-gray-800 bg-gray-900 px-4 py-2 shrink-0">
         <div className="flex items-center gap-4">
-          <span className="relative text-sm font-bold text-white font-mono"><span className="absolute -top-1.5 -left-0.5 text-[6px] font-normal text-gray-500 font-sans">the</span>printf<span className="text-saffron">(</span><span className="text-india-green">)</span><span className="absolute -bottom-1.5 -right-0.5 text-[6px] font-normal text-gray-500 font-sans">.com</span></span>
+          <span className="relative text-sm font-bold text-white font-mono my-1.5 mx-2 inline-block"><span className="absolute -top-2.5 left-0 text-[6px] font-normal text-gray-500 font-sans leading-none">the</span>printf<span className="text-saffron">(</span><span className="text-india-green">)</span><span className="absolute -bottom-2.5 right-0 text-[6px] font-normal text-gray-500 font-sans leading-none">.com</span></span>
           <span className="text-xs text-gray-500">|</span>
           <span className="text-sm text-gray-300">
             Watching: {sessionData.candidate.name}
