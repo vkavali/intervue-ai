@@ -9,7 +9,7 @@ export interface ExternalJob {
   salary: string | null
   description: string | null
   url: string
-  source: "remotive" | "arbeitnow" | "intervue"
+  source: "remotive" | "arbeitnow" | "printf"
   postedAt: string
 }
 

@@ -138,7 +138,7 @@ function runCommand(cmd: string, cwd?: string): Promise<ExecutionResult> {
 }
 
 async function executeLocal(language: string, code: string): Promise<ExecutionResult> {
-  const tmpDir = join(tmpdir(), `intervue-exec-${randomUUID()}`);
+  const tmpDir = join(tmpdir(), `printf-exec-${randomUUID()}`);
   await mkdir(tmpDir, { recursive: true });
 
   try {

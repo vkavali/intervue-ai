@@ -10,14 +10,14 @@ export default async function CareersPage({
   searchParams: Record<string, string>
 }) {
   const search = searchParams.search || ""
-  const source = searchParams.source || "all" // all | intervue | external
+  const source = searchParams.source || "all" // all | printf | external
   const department = searchParams.department || ""
   const location = searchParams.location || ""
   const jobType = searchParams.jobType || ""
   const workMode = searchParams.workMode || "" // remote | onsite | hybrid
   const category = searchParams.category || ""
 
-  // Fetch internal positions from companies on Intervue.AI
+  // Fetch internal positions from companies on printf
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const internalWhere: any = { status: "OPEN", isPublic: true }
   if (search) {
@@ -47,14 +47,14 @@ export default async function CareersPage({
   } catch { /* DB unavailable */ }
 
   try {
-    if (source !== "intervue") {
+    if (source !== "printf") {
       externalJobs = await fetchExternalJobs(search || undefined, 30)
     }
   } catch { /* External API unavailable */ }
 
   // Normalize internal positions to common format
   const internalJobs: ExternalJob[] = internalPositions.map((p) => ({
-    id: `intervue-${p.id}`,
+    id: `printf-${p.id}`,
     title: p.title,
     company: p.company.name,
     companyLogo: p.company.logo,
@@ -67,7 +67,7 @@ export default async function CareersPage({
         : null,
     description: p.description?.slice(0, 300) || null,
     url: `/jobs/${p.id}`,
-    source: "intervue" as const,
+    source: "printf" as const,
     postedAt: p.createdAt.toISOString(),
   }))
 
@@ -130,7 +130,7 @@ export default async function CareersPage({
 
   const sourceLabel: Record<string, string> = {
     all: "All Sources",
-    intervue: "Intervue.AI Companies",
+    printf: "printf Companies",
     external: "External Job Boards",
   }
 
@@ -141,7 +141,7 @@ export default async function CareersPage({
         <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 mb-6">
             <Link href="/" className="text-xl font-bold text-gray-900">
-              Intervue<span className="text-saffron">.AI</span>
+              printf
             </Link>
             <span className="text-gray-300">|</span>
             <span className="text-sm font-medium text-gray-500">Careers</span>
@@ -150,7 +150,7 @@ export default async function CareersPage({
             Find Your Next Role
           </h1>
           <p className="mt-3 text-lg text-gray-500">
-            Browse jobs from companies on Intervue.AI and top remote job boards — all in one place.
+            Browse jobs from companies on printf and top remote job boards — all in one place.
           </p>
 
           {/* Search + Filters */}
@@ -179,7 +179,7 @@ export default async function CareersPage({
                 className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-saffron focus:outline-none"
               >
                 <option value="all">All Sources</option>
-                <option value="intervue">Intervue.AI Companies</option>
+                <option value="printf">printf Companies</option>
                 <option value="external">External Job Boards</option>
               </select>
 
@@ -257,7 +257,7 @@ export default async function CareersPage({
           </p>
           <div className="flex items-center gap-2 text-xs text-gray-400">
             <span className="inline-flex items-center gap-1 rounded-full bg-saffron/10 border border-saffron/30 px-2 py-0.5 text-saffron">
-              Intervue.AI
+              printf
             </span>
             <span className="inline-flex items-center gap-1 rounded-full bg-blue-500/10 border border-blue-500/30 px-2 py-0.5 text-blue-500">
               Remotive
@@ -294,8 +294,8 @@ export default async function CareersPage({
           <div className="space-y-3">
             {allJobs.map((job) => {
               const sourceConfig = {
-                intervue: {
-                  badge: "Intervue.AI",
+                printf: {
+                  badge: "printf",
                   color: "bg-saffron/10 text-saffron border-saffron/30",
                 },
                 remotive: {
@@ -308,7 +308,7 @@ export default async function CareersPage({
                 },
               }[job.source]
 
-              const isInternal = job.source === "intervue"
+              const isInternal = job.source === "printf"
               const href = isInternal ? job.url : job.url
 
               return (
@@ -424,7 +424,7 @@ export default async function CareersPage({
             >
               Arbeitnow
             </a>
-            . Company-posted positions are managed through Intervue.AI.
+            . Company-posted positions are managed through printf.
           </p>
         </div>
       </div>

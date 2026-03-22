@@ -353,9 +353,7 @@ export default function WatchSessionPage() {
       {/* Top Bar */}
       <div className="flex items-center justify-between border-b border-gray-800 bg-gray-900 px-4 py-2 shrink-0">
         <div className="flex items-center gap-4">
-          <span className="text-sm font-bold text-white">
-            Intervue<span className="text-blue-400">.AI</span>
-          </span>
+          <span className="text-sm font-bold text-white font-mono">printf<span className="text-saffron">(</span><span className="text-india-green">)</span></span>
           <span className="text-xs text-gray-500">|</span>
           <span className="text-sm text-gray-300">
             Watching: {sessionData.candidate.name}

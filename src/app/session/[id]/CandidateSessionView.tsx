@@ -645,7 +645,7 @@ export default function CandidateSessionView({ sessionData, sessionId, userId }:
 
       {/* Main Content — Resizable Panels */}
       <ResizablePanelLayout
-        storageKey="intervue-session-panels"
+        storageKey="printf-session-panels"
         defaultLeftWidth={320}
         defaultRightWidth={320}
         defaultBottomHeight={280}

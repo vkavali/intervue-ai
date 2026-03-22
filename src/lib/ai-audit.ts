@@ -90,8 +90,8 @@ export async function generateAuditReport(input: AuditInput): Promise<AuditAnaly
     : `## Candidate's Final Code (${language})\n\`\`\`${language}\n${code || 'No code submitted'}\n\`\`\``
 
   const auditorRole = nonCoding
-    ? `You are an expert ${type.toLowerCase().replace(/_/g, ' ')} interview auditor for Intervue.AI.`
-    : 'You are an expert technical interview auditor for Intervue.AI.'
+    ? `You are an expert ${type.toLowerCase().replace(/_/g, ' ')} interview auditor for printf.`
+    : 'You are an expert technical interview auditor for printf.'
 
   const auditPrompt = `${auditorRole} Analyze the following interview session and generate a comprehensive audit report.
 

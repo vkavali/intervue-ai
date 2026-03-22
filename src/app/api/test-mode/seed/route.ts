@@ -565,7 +565,7 @@ export async function POST() {
         { userId: bob.id, type: "SESSION_COMPLETED", title: "Interview Completed", message: "Your technical interview has been completed. Audit report is available.", link: `/dashboard/sessions/${completedSessions[1].id}` },
         { userId: bob.id, type: "CANDIDATE_WAITING", title: "Interview Scheduled", message: "You have an upcoming interview scheduled for tomorrow." },
         { userId: carol.id, type: "REVIEW_PENDING", title: "Interview In Progress", message: "Your current interview session is active." },
-        { userId: carol.id, type: "SYSTEM", title: "Welcome to Intervue.AI", message: "Complete your profile to get started with practice problems." },
+        { userId: carol.id, type: "SYSTEM", title: "Welcome to printf", message: "Complete your profile to get started with practice problems." },
       ],
     });
 

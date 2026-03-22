@@ -94,7 +94,7 @@ export default function BillingPage() {
       const options = {
         key: data.razorpayKeyId,
         subscription_id: data.subscriptionId,
-        name: "Intervue.AI",
+        name: "printf",
         description: `${data.planName} Plan - Launch Offer`,
         currency: data.currency,
         handler: async (response: {
@@ -476,7 +476,7 @@ export default function BillingPage() {
             <p className="mt-1 text-sm text-gray-500">
               {isIndia
                 ? "India launch offer includes annual billing with 3 months free. All plans are billed annually after the trial period."
-                : "Annual billing with a discount is coming soon. Contact us at billing@intervue.ai for early access."}
+                : "Annual billing with a discount is coming soon. Contact us at billing@theprintf.com for early access."}
             </p>
           </div>
         </div>

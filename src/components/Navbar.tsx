@@ -27,9 +27,7 @@ export default function Navbar() {
         <div className="flex h-16 items-center justify-between">
           {/* Left: Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-xl font-bold tracking-tight text-gray-900">
-              Intervue<span className="text-india-green">.AI</span>
-            </span>
+            <span className="text-xl font-bold tracking-tight text-gray-900 font-mono">printf<span className="text-saffron">(</span><span className="text-india-green">)</span></span>
           </Link>
 
           {/* Right: Auth actions */}

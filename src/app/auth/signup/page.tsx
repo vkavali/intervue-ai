@@ -133,10 +133,10 @@ function SignUpForm() {
             <h1 className="text-2xl font-bold text-gray-900">Create Your Account</h1>
             <p className="mt-2 text-sm text-gray-500">
               {role === "CANDIDATE"
-                ? "Join Intervue.AI and ace your next coding interview"
+                ? "Join printf and ace your next coding interview"
                 : role === "INTERVIEWER"
-                  ? "Join Intervue.AI and conduct smarter interviews"
-                  : "Join Intervue.AI and transform your hiring process"}
+                  ? "Join printf and conduct smarter interviews"
+                  : "Join printf and transform your hiring process"}
             </p>
           </div>
 

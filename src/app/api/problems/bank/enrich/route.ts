@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
       apiKey: process.env.ANTHROPIC_API_KEY,
     })
 
-    const enrichPrompt = `You are enriching a coding interview problem for Intervue.AI. Given the problem below, generate:
+    const enrichPrompt = `You are enriching a coding interview problem for printf. Given the problem below, generate:
 1. Detailed constraints (if not already provided)
 2. Clear examples with input/output (if not already provided)
 3. Starter code templates in JavaScript, Python, and Java

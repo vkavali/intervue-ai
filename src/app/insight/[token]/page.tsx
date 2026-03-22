@@ -28,7 +28,7 @@ export async function generateMetadata({
   const audit = await getAuditByToken(params.token)
 
   if (!audit) {
-    return { title: "Report Not Found | Intervue.AI" }
+    return { title: "Report Not Found | printf" }
   }
 
   const name = audit.session.candidate.name
@@ -36,11 +36,11 @@ export async function generateMetadata({
   const score = audit.overallScore.toFixed(1)
 
   return {
-    title: `${name} - ${role} Interview | Intervue.AI`,
-    description: `${name} scored ${score}/100 in their ${role} interview on Intervue.AI`,
+    title: `${name} - ${role} Interview | printf`,
+    description: `${name} scored ${score}/100 in their ${role} interview on printf`,
     openGraph: {
       title: `${name} - ${role} Interview Performance`,
-      description: `Overall Score: ${score}/100 | Verified by Intervue.AI`,
+      description: `Overall Score: ${score}/100 | Verified by printf`,
       images: [
         {
           url: `/api/og/badge/${params.token}`,
@@ -54,7 +54,7 @@ export async function generateMetadata({
     twitter: {
       card: "summary_large_image",
       title: `${name} - ${role} Interview Performance`,
-      description: `Overall Score: ${score}/100 | Verified by Intervue.AI`,
+      description: `Overall Score: ${score}/100 | Verified by printf`,
       images: [`/api/og/badge/${params.token}`],
     },
   }
@@ -218,9 +218,7 @@ export default async function InsightPage({
           <div className="absolute inset-0 bg-gradient-to-br from-saffron/5 via-transparent to-india-green/5" />
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-gradient-to-b from-saffron/10 to-transparent rounded-full blur-3xl" />
           <div className="relative">
-            <span className="text-2xl font-bold tracking-tight text-gray-900">
-              Intervue<span className="text-india-green">.AI</span>
-            </span>
+            <span className="text-2xl font-bold tracking-tight text-gray-900 font-mono">printf<span className="text-saffron">(</span><span className="text-india-green">)</span></span>
             <p className="mt-3 text-gray-500 max-w-md mx-auto">
               AI-powered technical interviews with real-time assessment and detailed performance insights.
             </p>

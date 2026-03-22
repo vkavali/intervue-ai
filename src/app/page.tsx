@@ -159,49 +159,49 @@ const platformFeatures = [
 ];
 
 const comparisonFeaturesGlobal = [
-  { feature: "Multi-Role Hiring (Sales, Marketing, Product...)", intervue: true, c2: false, c3: false, c4: false, c5: false },
-  { feature: "Role-Specific AI Scoring", intervue: true, c2: false, c3: false, c4: false, c5: false },
-  { feature: "5-Level AI Control", intervue: true, c2: false, c3: false, c4: false, c5: false },
-  { feature: "Company-Controlled AI", intervue: true, c2: false, c3: false, c4: false, c5: false },
-  { feature: "AI Audit Engine", intervue: true, c2: false, c3: false, c4: false, c5: false },
-  { feature: "Public Job Board + AI JD Generator", intervue: true, c2: false, c3: false, c4: false, c5: false },
-  { feature: "Live Code + Video", intervue: true, c2: true, c3: true, c4: true, c5: false },
-  { feature: "Candidate Pipeline", intervue: true, c2: false, c3: false, c4: false, c5: false },
-  { feature: "Calendar Scheduling", intervue: true, c2: true, c3: false, c4: true, c5: false },
-  { feature: "Practice Mode", intervue: true, c2: true, c3: false, c4: false, c5: true },
-  { feature: "AI Interaction Logging", intervue: true, c2: false, c3: false, c4: false, c5: false },
-  { feature: "Hire/No-Hire AI", intervue: true, c2: false, c3: false, c4: true, c5: false },
-  { feature: "Anti-Cheat System", intervue: true, c2: true, c3: false, c4: false, c5: false },
-  { feature: "Code Execution (7 Languages)", intervue: true, c2: true, c3: true, c4: false, c5: true },
-  { feature: "Pattern-Based Study Plans", intervue: true, c2: false, c3: false, c4: false, c5: false },
-  { feature: "XP & Leveling", intervue: true, c2: false, c3: false, c4: false, c5: false },
-  { feature: "Achievement Badges", intervue: true, c2: true, c3: false, c4: false, c5: false },
-  { feature: "Daily Challenges", intervue: true, c2: true, c3: false, c4: false, c5: true },
-  { feature: "Leaderboard", intervue: true, c2: true, c3: false, c4: false, c5: true },
-  { feature: "Activity Heatmap", intervue: true, c2: false, c3: false, c4: false, c5: true },
-  { feature: "School/University Mode", intervue: true, c2: false, c3: false, c4: false, c5: false },
-  { feature: "Enrollment Codes", intervue: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Multi-Role Hiring (Sales, Marketing, Product...)", printf: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Role-Specific AI Scoring", printf: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "5-Level AI Control", printf: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Company-Controlled AI", printf: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "AI Audit Engine", printf: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Public Job Board + AI JD Generator", printf: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Live Code + Video", printf: true, c2: true, c3: true, c4: true, c5: false },
+  { feature: "Candidate Pipeline", printf: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Calendar Scheduling", printf: true, c2: true, c3: false, c4: true, c5: false },
+  { feature: "Practice Mode", printf: true, c2: true, c3: false, c4: false, c5: true },
+  { feature: "AI Interaction Logging", printf: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Hire/No-Hire AI", printf: true, c2: false, c3: false, c4: true, c5: false },
+  { feature: "Anti-Cheat System", printf: true, c2: true, c3: false, c4: false, c5: false },
+  { feature: "Code Execution (7 Languages)", printf: true, c2: true, c3: true, c4: false, c5: true },
+  { feature: "Pattern-Based Study Plans", printf: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "XP & Leveling", printf: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Achievement Badges", printf: true, c2: true, c3: false, c4: false, c5: false },
+  { feature: "Daily Challenges", printf: true, c2: true, c3: false, c4: false, c5: true },
+  { feature: "Leaderboard", printf: true, c2: true, c3: false, c4: false, c5: true },
+  { feature: "Activity Heatmap", printf: true, c2: false, c3: false, c4: false, c5: true },
+  { feature: "School/University Mode", printf: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Enrollment Codes", printf: true, c2: false, c3: false, c4: false, c5: false },
 ];
 
 const comparisonFeaturesIndia = [
-  { feature: "Multi-Role Hiring (Sales, Marketing, Product...)", intervue: true, c2: false, c3: false, c4: false, c5: false },
-  { feature: "Role-Specific AI Scoring", intervue: true, c2: false, c3: false, c4: false, c5: false },
-  { feature: "5-Level AI Control", intervue: true, c2: false, c3: false, c4: false, c5: false },
-  { feature: "Company-Controlled AI", intervue: true, c2: false, c3: false, c4: false, c5: false },
-  { feature: "AI Audit Engine", intervue: true, c2: false, c3: false, c4: false, c5: false },
-  { feature: "Public Job Board + AI JD Generator", intervue: true, c2: false, c3: false, c4: false, c5: false },
-  { feature: "Live Code + Video", intervue: true, c2: true, c3: true, c4: true, c5: false },
-  { feature: "UPI / Razorpay Payments", intervue: true, c2: false, c3: false, c4: false, c5: false },
-  { feature: "INR Pricing", intervue: true, c2: false, c3: false, c4: false, c5: false },
-  { feature: "Campus Hiring Support", intervue: true, c2: false, c3: false, c4: true, c5: false },
-  { feature: "Practice Mode", intervue: true, c2: true, c3: true, c4: false, c5: true },
-  { feature: "Hire/No-Hire AI", intervue: true, c2: false, c3: false, c4: true, c5: false },
-  { feature: "Anti-Cheat System", intervue: true, c2: true, c3: false, c4: false, c5: false },
-  { feature: "Code Execution (7 Languages)", intervue: true, c2: true, c3: true, c4: false, c5: true },
-  { feature: "XP & Gamification", intervue: true, c2: false, c3: true, c4: false, c5: false },
-  { feature: "Pattern-Based Study Plans", intervue: true, c2: false, c3: true, c4: false, c5: false },
-  { feature: "IIT/NIT University Mode", intervue: true, c2: false, c3: false, c4: false, c5: false },
-  { feature: "Enrollment Codes", intervue: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Multi-Role Hiring (Sales, Marketing, Product...)", printf: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Role-Specific AI Scoring", printf: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "5-Level AI Control", printf: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Company-Controlled AI", printf: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "AI Audit Engine", printf: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Public Job Board + AI JD Generator", printf: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Live Code + Video", printf: true, c2: true, c3: true, c4: true, c5: false },
+  { feature: "UPI / Razorpay Payments", printf: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "INR Pricing", printf: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Campus Hiring Support", printf: true, c2: false, c3: false, c4: true, c5: false },
+  { feature: "Practice Mode", printf: true, c2: true, c3: true, c4: false, c5: true },
+  { feature: "Hire/No-Hire AI", printf: true, c2: false, c3: false, c4: true, c5: false },
+  { feature: "Anti-Cheat System", printf: true, c2: true, c3: false, c4: false, c5: false },
+  { feature: "Code Execution (7 Languages)", printf: true, c2: true, c3: true, c4: false, c5: true },
+  { feature: "XP & Gamification", printf: true, c2: false, c3: true, c4: false, c5: false },
+  { feature: "Pattern-Based Study Plans", printf: true, c2: false, c3: true, c4: false, c5: false },
+  { feature: "IIT/NIT University Mode", printf: true, c2: false, c3: false, c4: false, c5: false },
+  { feature: "Enrollment Codes", printf: true, c2: false, c3: false, c4: false, c5: false },
 ];
 
 const faangCompanies = [
@@ -610,7 +610,7 @@ export default function Home() {
                   <div className="w-3 h-3 rounded-full bg-green-400" />
                 </div>
                 <div className="flex-1 flex justify-center">
-                  <div className="rounded-full bg-gray-100 px-4 py-1 text-xs text-gray-400 font-mono">intervue.ai/session/live</div>
+                  <div className="rounded-full bg-gray-100 px-4 py-1 text-xs text-gray-400 font-mono">theprintf.com/session/live</div>
                 </div>
               </div>
               <div className="p-4 grid grid-cols-5 gap-3" style={{ minHeight: "300px" }}>
@@ -854,7 +854,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 2C. WHY INTERVUE.AI ===== */}
+      {/* ===== 2C. WHY printf ===== */}
       <section className="relative py-32 lg:py-40 bg-[#FAFAF8]">
         <div className="gradient-orb w-[500px] h-[500px] bg-saffron/10 top-20 -right-40" />
 
@@ -863,7 +863,7 @@ export default function Home() {
             <p className="text-sm font-medium uppercase tracking-widest text-gray-400 mb-4">The Advantage</p>
             <h2 className="text-4xl sm:text-5xl font-semibold text-gray-900">
               Why{" "}
-              <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">Intervue.AI</span>
+              <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent font-mono">printf()</span>
             </h2>
           </ScrollReveal>
 
@@ -1260,7 +1260,7 @@ export default function Home() {
                     <div className="w-3 h-3 rounded-full bg-yellow-400" />
                     <div className="w-3 h-3 rounded-full bg-green-400" />
                   </div>
-                  <span className="text-xs text-gray-400 font-mono ml-2">intervue.ai/practice</span>
+                  <span className="text-xs text-gray-400 font-mono ml-2">theprintf.com/practice</span>
                 </div>
                 <div className="p-6 space-y-4">
                   <div className="flex items-center justify-between">
@@ -1309,11 +1309,11 @@ export default function Home() {
             <p className="text-sm font-medium uppercase tracking-widest text-gray-500 mb-4">{isIndia ? "vs Indian Assessment Tools" : "The Honest Comparison"}</p>
             <h2 className="text-4xl sm:text-5xl font-semibold text-white">
               {isIndia ? "More than just coding tests" : "Why teams switch to"}{" "}
-              <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent">{isIndia ? "" : "Intervue"}</span>
+              <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent font-mono">{isIndia ? "" : "printf()"}</span>
             </h2>
             {isIndia && (
               <p className="mt-4 text-base text-gray-500 max-w-2xl mx-auto">
-                Every competitor is assessment-only. Intervue.AI is the only platform with AI-controlled interviews, tiered assistance, and auto-generated scorecards.
+                Every competitor is assessment-only. printf is the only platform with AI-controlled interviews, tiered assistance, and auto-generated scorecards.
               </p>
             )}
           </ScrollReveal>
@@ -1325,7 +1325,7 @@ export default function Home() {
                   <tr className="border-b border-white/[0.06]">
                     <th className="px-6 py-5 text-left text-sm font-semibold text-gray-300">Feature</th>
                     <th className="px-6 py-5 text-center">
-                      <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent text-sm font-bold">Intervue.AI</span>
+                      <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent text-sm font-bold font-mono">printf()</span>
                     </th>
                     {(isIndia
                       ? ["HackerRank", "HackerEarth", "Mettl", "LeetCode"]
@@ -1340,7 +1340,7 @@ export default function Home() {
                     <tr key={row.feature} className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
                       <td className="px-6 py-3.5 text-sm text-gray-300 font-medium">{row.feature}</td>
                       <td className="px-6 py-3.5 text-center">
-                        {row.intervue ? (
+                        {row.printf ? (
                           <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-gradient-to-br from-saffron to-india-green">
                             <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                           </span>
@@ -1529,7 +1529,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
             <div>
-              <span className="text-2xl font-semibold tracking-tight text-gray-900">Intervue<span className="text-india-green">.AI</span></span>
+              <span className="text-2xl font-semibold tracking-tight text-gray-900 font-mono">printf<span className="text-saffron">(</span><span className="text-india-green">)</span></span>
               <p className="mt-3 text-sm text-gray-500 leading-relaxed">The AI-controlled interview platform for hiring across every department.</p>
             </div>
             {[
@@ -1549,7 +1549,7 @@ export default function Home() {
             ))}
           </div>
           <div className="border-t border-gray-100 pt-8 flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <p className="text-sm text-gray-400">&copy; {new Date().getFullYear()} Intervue.AI. All rights reserved.</p>
+            <p className="text-sm text-gray-400">&copy; {new Date().getFullYear()} <span className="font-mono">printf()</span>. All rights reserved.</p>
           </div>
         </div>
       </footer>

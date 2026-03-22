@@ -72,7 +72,7 @@ function SignInForm() {
           <div className="mb-8 text-center">
             <h1 className="text-2xl font-bold text-gray-900">Welcome Back</h1>
             <p className="mt-2 text-sm text-gray-500">
-              Sign in to your Intervue.AI account
+              Sign in to your printf account
             </p>
           </div>
 

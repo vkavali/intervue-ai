@@ -49,7 +49,7 @@ export async function generateMetadata({
   const data = await getTalentProfile(params.userId)
 
   if (!data) {
-    return { title: "Profile Not Found | Intervue.AI" }
+    return { title: "Profile Not Found | printf" }
   }
 
   const avgScore = data.sessions.length > 0
@@ -57,7 +57,7 @@ export async function generateMetadata({
     : 0
 
   return {
-    title: `${data.user.name} - Talent Profile | Intervue.AI`,
+    title: `${data.user.name} - Talent Profile | printf`,
     description: `${data.user.name} has completed ${data.sessions.length} verified interviews with an average score of ${avgScore.toFixed(1)}/100`,
   }
 }

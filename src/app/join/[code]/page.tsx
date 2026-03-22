@@ -131,7 +131,7 @@ export default function JoinSchoolPage() {
             <div className="text-3xl mb-3">🎓</div>
             <h1 className="text-2xl font-bold text-gray-900">Join {schoolName}</h1>
             <p className="mt-2 text-sm text-gray-500">
-              Create your student account to join this school on Intervue.AI
+              Create your student account to join this school on printf
             </p>
           </div>
 

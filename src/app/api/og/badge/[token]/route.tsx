@@ -135,10 +135,10 @@ export async function GET(
         {/* Footer */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div style={{ fontSize: "16px", color: "#64748b" }}>
-            Verified by Intervue.AI
+            Verified by printf
           </div>
           <div style={{ fontSize: "14px", color: "#475569" }}>
-            intervue.ai
+            theprintf.com
           </div>
         </div>
       </div>

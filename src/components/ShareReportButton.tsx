@@ -55,7 +55,7 @@ export function ShareReportButton({ sessionId, existingShareToken }: ShareReport
     : null
 
   const twitterUrl = shareUrl
-    ? `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent("Check out my interview performance on Intervue.AI!")}`
+    ? `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent("Check out my interview performance on printf!")}`
     : null
 
   if (!shareToken) {

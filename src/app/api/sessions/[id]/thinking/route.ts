@@ -278,7 +278,7 @@ async function generateThinkingAnalysis(
     apiKey: process.env.ANTHROPIC_API_KEY,
   })
 
-  const analysisPrompt = `You are an expert interview analyst for Intervue.AI. Your job is to analyze a candidate's thinking process during a live coding interview by examining their AI interactions, code, and the problem context.
+  const analysisPrompt = `You are an expert interview analyst for printf. Your job is to analyze a candidate's thinking process during a live coding interview by examining their AI interactions, code, and the problem context.
 
 ## Interview Context
 - Role: ${template.role}

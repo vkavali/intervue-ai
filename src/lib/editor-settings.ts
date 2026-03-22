@@ -12,7 +12,7 @@ export interface EditorSettings {
   cursorBlinking: "blink" | "smooth" | "phase" | "expand" | "solid";
 }
 
-const STORAGE_KEY = "intervue-editor-settings";
+const STORAGE_KEY = "printf-editor-settings";
 
 const DEFAULT_SETTINGS: EditorSettings = {
   theme: "vs-dark",

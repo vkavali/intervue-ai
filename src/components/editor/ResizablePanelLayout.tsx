@@ -48,7 +48,7 @@ function saveSizes(key: string, sizes: PanelSizes) {
 }
 
 export default function ResizablePanelLayout({
-  storageKey = "intervue-panel-sizes",
+  storageKey = "printf-panel-sizes",
   leftPanel,
   centerPanel,
   rightPanel,
