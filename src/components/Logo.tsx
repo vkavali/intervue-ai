@@ -13,31 +13,31 @@ interface LogoProps {
 const sizeConfig = {
   sm: {
     main: "text-lg",
-    sub: "text-[7px]",
-    topOffset: "-top-2.5",
-    bottomOffset: "-bottom-2.5",
-    padding: "my-1.5 mx-2",
+    sub: "text-[10px]",
+    topOffset: "-top-3",
+    bottomOffset: "-bottom-3",
+    padding: "my-2 mx-2",
   },
   md: {
     main: "text-2xl",
-    sub: "text-[9px]",
-    topOffset: "-top-3",
-    bottomOffset: "-bottom-3",
-    padding: "my-2 mx-3",
-  },
-  lg: {
-    main: "text-3xl",
-    sub: "text-[10px]",
+    sub: "text-xs",
     topOffset: "-top-3.5",
     bottomOffset: "-bottom-3.5",
     padding: "my-2.5 mx-3",
   },
-  xl: {
-    main: "text-4xl",
-    sub: "text-xs",
+  lg: {
+    main: "text-3xl",
+    sub: "text-sm",
     topOffset: "-top-4",
     bottomOffset: "-bottom-4",
-    padding: "my-3 mx-4",
+    padding: "my-3 mx-3",
+  },
+  xl: {
+    main: "text-4xl",
+    sub: "text-base",
+    topOffset: "-top-5",
+    bottomOffset: "-bottom-5",
+    padding: "my-4 mx-4",
   },
 }
 
