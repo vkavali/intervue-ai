@@ -1433,9 +1433,9 @@ export default function Home() {
           )}
 
           {/* All plans in a carousel */}
-          <Carousel autoScrollSpeed={0.3}>
+          <Carousel autoScrollSpeed={0.3} className="pt-5">
             {pricingPlans.map((plan) => (
-              <div key={plan.name} className="min-w-[260px] max-w-[280px] flex-shrink-0">
+              <div key={plan.name} className="min-w-[280px] max-w-[300px] flex-shrink-0">
                 {plan.highlighted ? (
                   <div className="rounded-2xl p-px bg-gradient-to-b from-saffron via-orange-400 to-india-green h-full shadow-[0_20px_60px_-15px_rgba(255,153,0,0.2)]">
                     <div className="relative rounded-[15px] bg-white p-6 h-full flex flex-col">
