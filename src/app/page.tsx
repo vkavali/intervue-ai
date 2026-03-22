@@ -227,10 +227,15 @@ const indianCompanies = [
 export default function Home() {
   const [region, setRegion] = useState<Region>("US");
   const [launchOffer, setLaunchOffer] = useState({ claimed: 0, remaining: 100, isActive: true });
+  const [isDev, setIsDev] = useState(false);
 
   useEffect(() => {
     const detected = detectRegion();
     setRegion(detected);
+
+    // Show region toggle on dev deployments (localhost or hostname contains "dev")
+    const host = window.location.hostname;
+    setIsDev(host === "localhost" || host.includes("dev"));
 
     fetch("/api/launch-offer/status")
       .then((res) => res.json())
@@ -511,7 +516,7 @@ export default function Home() {
             </div>
 
             {/* Region Toggle — dev only; production auto-detects from timezone */}
-            {process.env.NODE_ENV === "development" && (
+            {isDev && (
               <div className="flex justify-center mb-8">
                 <div className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white p-1 shadow-sm">
                   <button
