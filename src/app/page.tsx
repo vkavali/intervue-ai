@@ -1,11 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ScrollReveal";
 import Carousel from "@/components/Carousel";
 import Logo from "@/components/Logo";
 import { detectRegion, type Region } from "@/lib/payment";
+
+// Dynamic imports for 3D / WebGL components (SSR disabled)
+const FluidSimulation = dynamic(() => import("@/components/FluidSimulation"), { ssr: false });
+const AIBrain = dynamic(() => import("@/components/3d/AIBrain"), { ssr: false });
+const Globe = dynamic(() => import("@/components/3d/Globe"), { ssr: false });
+const GeometricShapes = dynamic(() => import("@/components/3d/GeometricShapes"), { ssr: false });
+const PracticeViz = dynamic(() => import("@/components/3d/PracticeViz"), { ssr: false });
 
 const aiLevels = [
   {
@@ -223,6 +231,14 @@ const indianCompanies = [
   { name: "Meesho", color: "text-pink-600", bg: "bg-pink-50 border-pink-200" },
   { name: "Google India", color: "text-blue-600", bg: "bg-blue-50 border-blue-200" },
 ];
+
+function Scene3DFallback() {
+  return (
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-saffron/30 border-t-saffron rounded-full animate-spin" />
+    </div>
+  );
+}
 
 export default function Home() {
   const [region, setRegion] = useState<Region>("US");
@@ -501,6 +517,13 @@ export default function Home() {
     <div className="min-h-screen overflow-hidden">
       {/* ===== 1. HERO ===== */}
       <section className="relative min-h-screen flex items-center justify-center bg-[#FAFAF8]">
+        {/* Interactive fluid simulation background */}
+        <div className="absolute inset-0 opacity-[0.15] pointer-events-none">
+          <Suspense fallback={null}>
+            <FluidSimulation />
+          </Suspense>
+        </div>
+
         <div className="gradient-orb w-[800px] h-[800px] bg-saffron/25 -top-60 -right-40 opacity-30" />
         <div className="gradient-orb w-[600px] h-[600px] bg-india-green/25 bottom-0 -left-40 opacity-30" />
         <div className="gradient-orb w-[400px] h-[400px] bg-pink-300/20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20" />
@@ -960,6 +983,13 @@ export default function Home() {
         <div className="gradient-orb w-[800px] h-[800px] bg-saffron/20 -top-60 -left-40 opacity-40" />
         <div className="gradient-orb w-[600px] h-[600px] bg-india-green/15 bottom-0 right-0 opacity-40" />
 
+        {/* Floating geometric shapes */}
+        <div className="absolute inset-0 pointer-events-none opacity-40 hidden lg:block">
+          <Suspense fallback={null}>
+            <GeometricShapes />
+          </Suspense>
+        </div>
+
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-20 lg:mb-24">
             <p className="text-sm font-medium uppercase tracking-widest text-gray-500 mb-4">{isIndia ? "Hire at India\u2019s Scale" : "The Complete Flow"}</p>
@@ -972,12 +1002,111 @@ export default function Home() {
           {/* Asymmetric bento grid */}
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-6 gap-4" staggerDelay={0.08}>
             {[
-              { step: "01", title: "Create Position", desc: "Define any role \u2014 engineering, sales, marketing, or executive. Configure interview type, questions, and AI levels.", span: "md:col-span-2" },
-              { step: "02", title: "Schedule & Invite", desc: "Find available slots, schedule sessions, and send candidates their unique links.", span: "md:col-span-2" },
-              { step: "03", title: "Live Interview", desc: "Candidates work in a role-appropriate environment \u2014 code editor, scenario workspace, or case study. Interviewer watches and adjusts AI on the fly.", span: "md:col-span-2" },
-              { step: "04", title: "AI Audits Everything", desc: "Every interaction logged. Role-specific scorecards generated automatically \u2014 code quality for engineers, persuasion for sales, strategy for PMs.", span: "md:col-span-3" },
-              { step: "05", title: "Pipeline & Compare", desc: "Move candidates through stages. Generate AI comparisons between candidates for the same role.", span: "md:col-span-3" },
-              { step: "06", title: "Hire with Confidence", desc: "Make data-backed decisions with AI recommendations, scorecards, risk flags, and comparisons.", span: "md:col-span-6 md:max-w-2xl md:mx-auto" },
+              { step: "01", title: "Create Position", desc: "Define any role \u2014 engineering, sales, marketing, or executive. Configure interview type, questions, and AI levels.", span: "md:col-span-2",
+                mockup: (
+                  <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5 space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] text-white font-medium">Senior Frontend Engineer</span>
+                      <span className="text-[8px] bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded">OPEN</span>
+                    </div>
+                    <div className="h-1 rounded-full bg-gray-800 overflow-hidden"><div className="w-2/3 h-full bg-saffron rounded-full" /></div>
+                    <div className="flex gap-1">
+                      <span className="text-[8px] bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded">React</span>
+                      <span className="text-[8px] bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded">TypeScript</span>
+                      <span className="text-[8px] bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded">3 rounds</span>
+                    </div>
+                  </div>
+                ),
+              },
+              { step: "02", title: "Schedule & Invite", desc: "Find available slots, schedule sessions, and send candidates their unique links.", span: "md:col-span-2",
+                mockup: (
+                  <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5">
+                    <div className="grid grid-cols-7 gap-0.5 mb-1">
+                      {["S","M","T","W","T","F","S"].map((d,i) => (
+                        <div key={i} className="text-center text-[7px] text-gray-500 font-medium">{d}</div>
+                      ))}
+                    </div>
+                    <div className="grid grid-cols-7 gap-0.5">
+                      {Array.from({length: 14}, (_, i) => (
+                        <div key={i} className={`text-center text-[8px] py-0.5 rounded ${
+                          i === 5 ? "bg-saffron text-white font-bold" :
+                          i === 8 ? "bg-india-green/30 text-india-green" :
+                          "text-gray-500"
+                        }`}>{i + 10}</div>
+                      ))}
+                    </div>
+                  </div>
+                ),
+              },
+              { step: "03", title: "Live Interview", desc: "Candidates work in a role-appropriate environment \u2014 code editor, scenario workspace, or case study. Interviewer watches and adjusts AI on the fly.", span: "md:col-span-2",
+                mockup: (
+                  <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5">
+                    <div className="flex gap-1.5">
+                      <div className="flex-1 rounded bg-gray-900 p-1.5">
+                        <div className="space-y-0.5 font-mono text-[7px] text-gray-400">
+                          <p><span className="text-purple-400">fn</span> solve() &#123;</p>
+                          <p className="pl-2"><span className="text-blue-300">let</span> result = <span className="text-green-300">vec!</span>[];</p>
+                          <p className="pl-2 text-gray-600">{"// optimizing..."}</p>
+                          <p>&#125;<span className="animate-pulse text-white">|</span></p>
+                        </div>
+                      </div>
+                      <div className="w-12 space-y-1">
+                        <div className="aspect-square rounded bg-saffron/20 flex items-center justify-center text-[7px] text-saffron">AI</div>
+                        <div className="aspect-square rounded bg-green-500/20 flex items-center justify-center text-[7px] text-green-300">HD</div>
+                      </div>
+                    </div>
+                  </div>
+                ),
+              },
+              { step: "04", title: "AI Audits Everything", desc: "Every interaction logged. Role-specific scorecards generated automatically \u2014 code quality for engineers, persuasion for sales, strategy for PMs.", span: "md:col-span-3",
+                mockup: (
+                  <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5 space-y-1">
+                    {[
+                      { label: "Problem Solving", pct: "88%", w: "w-[88%]", c: "bg-green-500" },
+                      { label: "Code Quality", pct: "76%", w: "w-[76%]", c: "bg-blue-500" },
+                      { label: "Communication", pct: "92%", w: "w-[92%]", c: "bg-saffron" },
+                    ].map((s) => (
+                      <div key={s.label} className="flex items-center gap-2">
+                        <span className="text-[8px] text-gray-400 w-20 truncate">{s.label}</span>
+                        <div className="flex-1 h-1.5 rounded-full bg-gray-800"><div className={`h-full rounded-full ${s.c} ${s.w}`} /></div>
+                        <span className="text-[8px] text-white font-medium w-6 text-right">{s.pct}</span>
+                      </div>
+                    ))}
+                  </div>
+                ),
+              },
+              { step: "05", title: "Pipeline & Compare", desc: "Move candidates through stages. Generate AI comparisons between candidates for the same role.", span: "md:col-span-3",
+                mockup: (
+                  <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5">
+                    <div className="space-y-1">
+                      {[
+                        { name: "Alex K.", stage: "TECHNICAL", score: "87", sc: "text-green-400" },
+                        { name: "Sara M.", stage: "BEHAVIORAL", score: "82", sc: "text-blue-400" },
+                        { name: "Jay P.", stage: "SCREENING", score: "--", sc: "text-gray-500" },
+                      ].map((c) => (
+                        <div key={c.name} className="flex items-center justify-between">
+                          <span className="text-[9px] text-white">{c.name}</span>
+                          <span className="text-[7px] bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded">{c.stage}</span>
+                          <span className={`text-[9px] font-bold ${c.sc}`}>{c.score}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ),
+              },
+              { step: "06", title: "Hire with Confidence", desc: "Make data-backed decisions with AI recommendations, scorecards, risk flags, and comparisons.", span: "md:col-span-6 md:max-w-2xl md:mx-auto",
+                mockup: (
+                  <div className="mt-3 rounded-lg bg-gray-950 border border-gray-800 p-2.5 text-center">
+                    <div className="inline-flex items-center gap-1.5 rounded-full bg-green-500/20 border border-green-500/30 px-3 py-1">
+                      <svg className="w-3 h-3 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span className="text-[10px] font-bold text-green-400">RECOMMEND: HIRE</span>
+                    </div>
+                    <p className="mt-1.5 text-[8px] text-gray-500">Confidence: 94% | Score: 87/100</p>
+                  </div>
+                ),
+              },
             ].map((card) => (
               <StaggerItem key={card.step} className={card.span}>
                 <div className="group rounded-2xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-sm p-6 transition-all hover:bg-white/[0.06] hover:border-white/[0.12] h-full">
@@ -988,6 +1117,7 @@ export default function Home() {
                     <h3 className="text-lg font-semibold text-white">{card.title}</h3>
                   </div>
                   <p className="text-sm text-gray-400 leading-relaxed">{card.desc}</p>
+                  {card.mockup}
                 </div>
               </StaggerItem>
             ))}
@@ -1096,27 +1226,37 @@ export default function Home() {
             </h2>
           </ScrollReveal>
 
-          {/* Level selector as horizontal strip */}
-          <ScrollReveal>
-            <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 max-w-5xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* 3D AI Brain */}
+            <ScrollReveal direction="left" className="h-[400px] hidden lg:block">
+              <Suspense fallback={<Scene3DFallback />}>
+                <AIBrain />
+              </Suspense>
+            </ScrollReveal>
+
+            {/* Level cards */}
+            <StaggerContainer className="space-y-3" staggerDelay={0.1}>
               {aiLevels.map((ai, i) => (
-                <div key={ai.level} className={`group rounded-2xl border p-5 text-center transition-all ${
-                  i === 2
-                    ? "border-saffron/30 bg-gradient-to-b from-saffron/10 to-transparent shadow-[0_0_40px_-10px_rgba(255,153,0,0.3)]"
-                    : "border-white/[0.06] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.12]"
-                }`}>
-                  <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl mb-3 ${
-                    i === 2 ? "bg-gradient-to-br from-saffron to-india-green shadow-lg" : "bg-white/[0.06] border border-white/10"
+                <StaggerItem key={ai.level}>
+                  <div className={`group relative flex items-center gap-4 rounded-xl border p-4 transition-all duration-300 hover:scale-[1.02] ${
+                    i === 2
+                      ? "border-saffron/30 bg-gradient-to-r from-saffron/10 to-transparent shadow-[0_0_40px_-10px_rgba(255,153,0,0.3)]"
+                      : "border-white/[0.06] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.12]"
                   }`}>
-                    <span className={`text-sm font-bold ${i === 2 ? "text-white" : "text-gray-400"}`}>{ai.level}</span>
+                    <div className={`flex-shrink-0 inline-flex items-center justify-center w-12 h-12 rounded-xl shadow-lg ${
+                      i === 2 ? "bg-gradient-to-br from-saffron to-india-green" : "bg-white/[0.06] border border-white/10"
+                    }`}>
+                      <span className={`text-sm font-bold ${i === 2 ? "text-white" : "text-gray-400"}`}>{ai.level}</span>
+                    </div>
+                    <div>
+                      <h3 className={`text-base font-semibold ${i === 2 ? "text-white" : "text-gray-300"}`}>{ai.label}</h3>
+                      <p className="text-sm text-gray-500">{ai.description}</p>
+                    </div>
                   </div>
-                  <h3 className={`text-base font-semibold mb-1 ${i === 2 ? "text-white" : "text-gray-300"}`}>{ai.label}</h3>
-                  <p className="text-xs text-gray-500">{ai.description}</p>
-                  {i === 2 && <span className="mt-3 inline-block text-[10px] font-medium text-saffron bg-saffron/10 rounded-full px-3 py-0.5">Selected</span>}
-                </div>
+                </StaggerItem>
               ))}
-            </div>
-          </ScrollReveal>
+            </StaggerContainer>
+          </div>
 
           <ScrollReveal delay={0.2} className="mt-12 text-center">
             <p className="text-gray-400 text-sm max-w-xl mx-auto">
@@ -1212,8 +1352,15 @@ export default function Home() {
       </section>
 
       {/* ===== 8. FOR CANDIDATES -- Neutral Badges ===== */}
-      <section className="relative py-32 lg:py-40 bg-[#FAFAF8]">
+      <section className="relative py-32 lg:py-40 bg-[#FAFAF8] overflow-hidden">
         <div className="gradient-orb w-[500px] h-[500px] bg-india-green/10 top-20 -right-40" />
+
+        {/* 3D Practice visualization background */}
+        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] opacity-10 pointer-events-none hidden lg:block">
+          <Suspense fallback={null}>
+            <PracticeViz />
+          </Suspense>
+        </div>
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -1309,8 +1456,15 @@ export default function Home() {
       </section>
 
       {/* ===== 9. COMPARISON TABLE (DARK) ===== */}
-      <section className="relative py-32 lg:py-40 bg-gray-950">
+      <section className="relative py-32 lg:py-40 bg-gray-950 overflow-hidden">
         <div className="gradient-orb w-[500px] h-[500px] bg-india-green/15 -top-20 -left-40 opacity-40" />
+
+        {/* 3D Globe background */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] opacity-20 pointer-events-none hidden lg:block">
+          <Suspense fallback={null}>
+            <Globe />
+          </Suspense>
+        </div>
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-20 lg:mb-24">
@@ -1501,6 +1655,12 @@ export default function Home() {
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
             <div className="relative rounded-3xl bg-gray-900 p-12 sm:p-20 text-center overflow-hidden">
+              {/* Fluid simulation background */}
+              <div className="absolute inset-0 opacity-30 pointer-events-none">
+                <Suspense fallback={null}>
+                  <FluidSimulation />
+                </Suspense>
+              </div>
               <div className="gradient-orb w-[500px] h-[500px] bg-saffron/30 -top-40 -right-40 opacity-50" />
               <div className="gradient-orb w-[400px] h-[400px] bg-india-green/30 -bottom-40 -left-40 opacity-50" />
 
