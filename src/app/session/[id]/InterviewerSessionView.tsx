@@ -285,7 +285,7 @@ export default function InterviewerSessionView({
       {/* Top Bar */}
       <div className="flex items-center justify-between border-b border-editor-border bg-editor-panel px-4 py-2 shrink-0">
         <div className="flex items-center gap-4">
-          <span className="text-sm font-bold text-white font-mono">printf<span className="text-saffron">(</span><span className="text-india-green">)</span></span>
+          <span className="relative text-sm font-bold text-white font-mono"><span className="absolute -top-1.5 -left-0.5 text-[6px] font-normal text-gray-500 font-sans">the</span>printf<span className="text-saffron">(</span><span className="text-india-green">)</span><span className="absolute -bottom-1.5 -right-0.5 text-[6px] font-normal text-gray-500 font-sans">.com</span></span>
           <span className="text-xs text-gray-500">|</span>
           <div className="flex items-center gap-2">
             <span className={`inline-block h-2 w-2 rounded-full ${candidateOnline ? "bg-green-400" : "bg-gray-500"}`} />

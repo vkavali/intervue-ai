@@ -1529,7 +1529,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
             <div>
-              <span className="text-2xl font-semibold tracking-tight text-gray-900 font-mono">printf<span className="text-saffron">(</span><span className="text-india-green">)</span></span>
+              <span className="relative text-2xl font-semibold tracking-tight text-gray-900 font-mono"><span className="absolute -top-2.5 -left-1 text-[8px] font-normal text-gray-400 font-sans">the</span>printf<span className="text-saffron">(</span><span className="text-india-green">)</span><span className="absolute -bottom-2.5 -right-1 text-[8px] font-normal text-gray-400 font-sans">.com</span></span>
               <p className="mt-3 text-sm text-gray-500 leading-relaxed">The AI-controlled interview platform for hiring across every department.</p>
             </div>
             {[

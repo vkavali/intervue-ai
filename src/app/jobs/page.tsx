@@ -59,7 +59,7 @@ export default async function JobsPage({ searchParams }: { searchParams: Record<
       <div className="bg-white border-b border-gray-200">
         <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 mb-4">
-            <Link href="/" className="text-xl font-bold text-gray-900 font-mono">printf<span className="text-saffron">(</span><span className="text-india-green">)</span></Link>
+            <Link href="/" className="relative text-xl font-bold text-gray-900 font-mono"><span className="absolute -top-2 -left-1 text-[8px] font-normal text-gray-400 font-sans">the</span>printf<span className="text-saffron">(</span><span className="text-india-green">)</span><span className="absolute -bottom-2 -right-1 text-[8px] font-normal text-gray-400 font-sans">.com</span></Link>
             <span className="text-gray-300">|</span>
             <span className="text-sm text-gray-500">Job Board</span>
           </div>

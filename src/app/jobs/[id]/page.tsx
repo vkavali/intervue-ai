@@ -86,7 +86,7 @@ export default function JobDetailPage() {
       <div className="border-b border-gray-200 bg-white">
         <div className="mx-auto max-w-4xl px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
-            <Link href="/" className="text-lg font-bold text-gray-900 font-mono">printf<span className="text-saffron">(</span><span className="text-india-green">)</span></Link>
+            <Link href="/" className="relative text-lg font-bold text-gray-900 font-mono"><span className="absolute -top-2 -left-1 text-[7px] font-normal text-gray-400 font-sans">the</span>printf<span className="text-saffron">(</span><span className="text-india-green">)</span><span className="absolute -bottom-2 -right-1 text-[7px] font-normal text-gray-400 font-sans">.com</span></Link>
             <span className="text-gray-300">|</span>
             <Link href="/jobs" className="text-sm text-gray-500 hover:text-saffron">Job Board</Link>
           </div>
