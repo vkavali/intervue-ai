@@ -1,89 +1,46 @@
 import { NextRequest, NextResponse } from "next/server"
-import { Ratelimit } from "@upstash/ratelimit"
-import { Redis } from "@upstash/redis"
 
 // ──────────────────────────────────────────
-// Redis rate limiters (initialized once at module load)
+// In-memory rate limiter (works on Railway persistent process)
 // ──────────────────────────────────────────
 
-const redisUrl = process.env.UPSTASH_REDIS_REST_URL
-const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN
+const store = new Map<string, { count: number; resetAt: number }>()
 
-const hasRedis = !!(redisUrl && redisToken)
-
-const redisClient = hasRedis ? new Redis({ url: redisUrl!, token: redisToken! }) : null
-
-const limiters = redisClient
-  ? {
-      auth: new Ratelimit({
-        redis: redisClient,
-        limiter: Ratelimit.slidingWindow(10, "1 m"),
-        prefix: "rl:mw:auth",
-      }),
-      ai: new Ratelimit({
-        redis: redisClient,
-        limiter: Ratelimit.slidingWindow(20, "1 m"),
-        prefix: "rl:mw:ai",
-      }),
-      sessions: new Ratelimit({
-        redis: redisClient,
-        limiter: Ratelimit.slidingWindow(30, "1 m"),
-        prefix: "rl:mw:sessions",
-      }),
-      practice: new Ratelimit({
-        redis: redisClient,
-        limiter: Ratelimit.slidingWindow(30, "1 m"),
-        prefix: "rl:mw:practice",
-      }),
-      api: new Ratelimit({
-        redis: redisClient,
-        limiter: Ratelimit.slidingWindow(60, "1 m"),
-        prefix: "rl:mw:general",
-      }),
-    }
-  : null
-
-// ──────────────────────────────────────────
-// In-memory fallback rate limiter
-// ──────────────────────────────────────────
-
-const memoryStore = new Map<string, { count: number; resetAt: number }>()
-
-const MEMORY_LIMITS: Record<string, { max: number; windowMs: number }> = {
-  auth: { max: 10, windowMs: 60_000 },
-  ai: { max: 20, windowMs: 60_000 },
-  sessions: { max: 30, windowMs: 60_000 },
-  practice: { max: 30, windowMs: 60_000 },
-  api: { max: 60, windowMs: 60_000 },
+const LIMITS: Record<string, { max: number; windowMs: number }> = {
+  auth:     { max: 10,  windowMs: 60_000 },   // 10 req/min for auth
+  ai:       { max: 20,  windowMs: 60_000 },   // 20 req/min for AI endpoints
+  sessions: { max: 30,  windowMs: 60_000 },   // 30 req/min for sessions
+  practice: { max: 30,  windowMs: 60_000 },   // 30 req/min for practice
+  api:      { max: 60,  windowMs: 60_000 },   // 60 req/min general
 }
 
-function memoryRateLimit(ip: string, category: string): { success: boolean; limit: number; remaining: number; reset: number } {
-  const config = MEMORY_LIMITS[category] || MEMORY_LIMITS.api
+function rateLimit(ip: string, category: string): { ok: boolean; limit: number; remaining: number; resetAt: number } {
+  const config = LIMITS[category] || LIMITS.api
   const key = `${ip}:${category}`
   const now = Date.now()
-  const entry = memoryStore.get(key)
+  const entry = store.get(key)
 
   if (!entry || now >= entry.resetAt) {
-    memoryStore.set(key, { count: 1, resetAt: now + config.windowMs })
-    return { success: true, limit: config.max, remaining: config.max - 1, reset: now + config.windowMs }
+    store.set(key, { count: 1, resetAt: now + config.windowMs })
+    return { ok: true, limit: config.max, remaining: config.max - 1, resetAt: now + config.windowMs }
   }
 
   if (entry.count >= config.max) {
-    return { success: false, limit: config.max, remaining: 0, reset: entry.resetAt }
+    return { ok: false, limit: config.max, remaining: 0, resetAt: entry.resetAt }
   }
 
   entry.count++
-  return { success: true, limit: config.max, remaining: config.max - entry.count, reset: entry.resetAt }
+  return { ok: true, limit: config.max, remaining: config.max - entry.count, resetAt: entry.resetAt }
 }
 
 // Cleanup stale entries every 5 minutes
-let lastMemoryCleanup = Date.now()
-function cleanupMemory() {
+let lastCleanup = Date.now()
+function cleanup() {
   const now = Date.now()
-  if (now - lastMemoryCleanup < 300_000) return
-  lastMemoryCleanup = now
-  for (const [key, entry] of Array.from(memoryStore.entries())) {
-    if (now >= entry.resetAt) memoryStore.delete(key)
+  if (now - lastCleanup < 300_000) return
+  lastCleanup = now
+  for (const [key, entry] of Array.from(store.entries())) {
+    if (now >= entry.resetAt) store.delete(key)
   }
 }
 
@@ -91,10 +48,23 @@ function cleanupMemory() {
 // Route categorization
 // ──────────────────────────────────────────
 
-function getRouteCategory(pathname: string): string {
+function getCategory(pathname: string): string {
   if (pathname.startsWith("/api/auth")) return "auth"
-  if (pathname.includes("/ai") || pathname.includes("/thinking") || pathname.includes("/generate") || pathname.includes("/enrich") || pathname.includes("/coach") || pathname.includes("/editorial") || pathname.includes("/quality-score") || pathname.includes("/weakness-profile") || pathname.includes("/hints") || pathname.includes("/parse") || pathname.includes("/compare")) return "ai"
-  if (pathname.startsWith("/api/sessions") || pathname.startsWith("/api/practice")) return "sessions"
+  if (
+    pathname.includes("/ai") ||
+    pathname.includes("/thinking") ||
+    pathname.includes("/generate") ||
+    pathname.includes("/enrich") ||
+    pathname.includes("/coach") ||
+    pathname.includes("/editorial") ||
+    pathname.includes("/quality-score") ||
+    pathname.includes("/weakness-profile") ||
+    pathname.includes("/hints") ||
+    pathname.includes("/parse") ||
+    pathname.includes("/compare")
+  ) return "ai"
+  if (pathname.startsWith("/api/sessions")) return "sessions"
+  if (pathname.startsWith("/api/practice")) return "practice"
   return "api"
 }
 
@@ -110,36 +80,17 @@ function getClientIp(request: NextRequest): string {
 // Middleware
 // ──────────────────────────────────────────
 
-export async function middleware(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Rate limit all API routes
   if (pathname.startsWith("/api")) {
+    cleanup()
     const ip = getClientIp(request)
-    const category = getRouteCategory(pathname)
+    const category = getCategory(pathname)
+    const { ok, limit, remaining, resetAt } = rateLimit(ip, category)
 
-    let success: boolean
-    let limit: number
-    let remaining: number
-    let reset: number
-
-    if (limiters) {
-      const limiter = limiters[category as keyof typeof limiters] || limiters.api
-      const result = await limiter.limit(ip)
-      success = result.success
-      limit = result.limit
-      remaining = result.remaining
-      reset = result.reset
-    } else {
-      cleanupMemory()
-      const result = memoryRateLimit(ip, category)
-      success = result.success
-      limit = result.limit
-      remaining = result.remaining
-      reset = result.reset
-    }
-
-    if (!success) {
+    if (!ok) {
       return NextResponse.json(
         { error: "Too many requests. Please slow down." },
         {
@@ -147,8 +98,7 @@ export async function middleware(request: NextRequest) {
           headers: {
             "X-RateLimit-Limit": String(limit),
             "X-RateLimit-Remaining": "0",
-            "X-RateLimit-Reset": String(reset),
-            "Retry-After": String(Math.ceil((reset - Date.now()) / 1000)),
+            "Retry-After": String(Math.ceil((resetAt - Date.now()) / 1000)),
           },
         }
       )

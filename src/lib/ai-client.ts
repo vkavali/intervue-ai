@@ -39,7 +39,7 @@ export async function callClaudeJSON<T>(
 
   validateInputLength(system, prompt)
 
-  const budget = await checkAIBudget()
+  const budget = checkAIBudget()
   if (!budget.allowed) {
     throw new Error('AI service temporarily unavailable due to high demand. Please try again later.')
   }
@@ -53,7 +53,7 @@ export async function callClaudeJSON<T>(
 
   // Record token spend
   if (response.usage) {
-    await recordAISpend(response.usage.input_tokens, response.usage.output_tokens)
+    recordAISpend(response.usage.input_tokens, response.usage.output_tokens)
   }
 
   const textBlock = response.content.find((block) => block.type === 'text')
@@ -84,7 +84,7 @@ export async function callClaudeText(
 
   validateInputLength(system, prompt)
 
-  const budget = await checkAIBudget()
+  const budget = checkAIBudget()
   if (!budget.allowed) {
     throw new Error('AI service temporarily unavailable due to high demand. Please try again later.')
   }
@@ -98,7 +98,7 @@ export async function callClaudeText(
 
   // Record token spend
   if (response.usage) {
-    await recordAISpend(response.usage.input_tokens, response.usage.output_tokens)
+    recordAISpend(response.usage.input_tokens, response.usage.output_tokens)
   }
 
   const textBlock = response.content.find((block) => block.type === 'text')
