@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
 import NotificationBell from "./NotificationBell"
+import Logo from "./Logo"
 
 const roleBadgeColors: Record<string, string> = {
   COMPANY_ADMIN: "border-saffron text-saffron-dark bg-saffron/10",
@@ -26,9 +27,7 @@ export default function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Left: Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <span className="relative text-xl font-bold tracking-tight text-gray-900 font-mono my-2 mx-3 inline-block"><span className="absolute -top-3.5 left-0 text-[8px] font-normal text-gray-400 font-sans leading-none">the</span>printf<span className="text-saffron">(</span><span className="text-india-green">)</span><span className="absolute -bottom-3.5 right-0 text-[8px] font-normal text-gray-400 font-sans leading-none">.com</span></span>
-          </Link>
+          <Logo size="lg" />
 
           {/* Right: Auth actions */}
           <div className="flex items-center gap-4">

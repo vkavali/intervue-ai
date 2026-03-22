@@ -5,6 +5,7 @@ import VideoCall from "@/components/VideoCall";
 import ScreenCapture from "@/components/ScreenCapture";
 import EditorSettingsPanel from "@/components/editor/EditorSettingsPanel";
 import type { EditorSettings } from "@/lib/editor-settings";
+import Logo from "@/components/Logo";
 
 interface Question {
   id: string;
@@ -112,7 +113,7 @@ export default function SessionTopBar({
       {/* Top Bar */}
       <div className="flex items-center justify-between border-b border-editor-border bg-editor-panel px-4 py-2">
         <div className="flex items-center gap-4">
-          <span className="relative text-sm font-bold text-white font-mono my-1.5 mx-2 inline-block"><span className="absolute -top-2.5 left-0 text-[6px] font-normal text-gray-500 font-sans leading-none">the</span>printf<span className="text-saffron">(</span><span className="text-india-green">)</span><span className="absolute -bottom-2.5 right-0 text-[6px] font-normal text-gray-500 font-sans leading-none">.com</span></span>
+          <Logo size="sm" variant="dark" href={false} />
           <span className="text-xs text-gray-500">|</span>
           <span className="text-sm text-gray-300">{templateTitle}</span>
           {/* Socket status indicator */}

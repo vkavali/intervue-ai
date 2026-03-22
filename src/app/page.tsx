@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ScrollReveal";
 import Carousel from "@/components/Carousel";
+import Logo from "@/components/Logo";
 import { detectRegion, type Region } from "@/lib/payment";
 
 const aiLevels = [
@@ -509,31 +510,33 @@ export default function Home() {
               Now hiring across Engineering, Sales, Marketing, Product & more
             </div>
 
-            {/* Region Toggle */}
-            <div className="flex justify-center mb-8">
-              <div className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white p-1 shadow-sm">
-                <button
-                  onClick={() => setRegion("US")}
-                  className={`rounded-full px-5 py-2 text-sm font-medium transition-all ${
-                    region === "US"
-                      ? "bg-gray-900 text-white shadow-sm"
-                      : "text-gray-500 hover:text-gray-700"
-                  }`}
-                >
-                  Global (USD)
-                </button>
-                <button
-                  onClick={() => setRegion("IN")}
-                  className={`rounded-full px-5 py-2 text-sm font-medium transition-all flex items-center gap-2 ${
-                    region === "IN"
-                      ? "bg-gradient-to-r from-saffron to-india-green text-white shadow-sm"
-                      : "text-gray-500 hover:text-gray-700"
-                  }`}
-                >
-                  India (INR)
-                </button>
+            {/* Region Toggle — dev only; production auto-detects from timezone */}
+            {process.env.NODE_ENV === "development" && (
+              <div className="flex justify-center mb-8">
+                <div className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white p-1 shadow-sm">
+                  <button
+                    onClick={() => setRegion("US")}
+                    className={`rounded-full px-5 py-2 text-sm font-medium transition-all ${
+                      region === "US"
+                        ? "bg-gray-900 text-white shadow-sm"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                  >
+                    Global (USD)
+                  </button>
+                  <button
+                    onClick={() => setRegion("IN")}
+                    className={`rounded-full px-5 py-2 text-sm font-medium transition-all flex items-center gap-2 ${
+                      region === "IN"
+                        ? "bg-gradient-to-r from-saffron to-india-green text-white shadow-sm"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                  >
+                    India (INR)
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
 
             <h1 className="text-6xl sm:text-7xl lg:text-[5.5rem] font-semibold tracking-tight leading-[1.05]">
               <span className="text-gray-900">{isIndia ? "India\u2019s smartest" : "One platform."}</span>
@@ -1529,7 +1532,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
             <div>
-              <span className="relative text-2xl font-semibold tracking-tight text-gray-900 font-mono my-2 mx-3 inline-block"><span className="absolute -top-4 left-0 text-[9px] font-normal text-gray-400 font-sans leading-none">the</span>printf<span className="text-saffron">(</span><span className="text-india-green">)</span><span className="absolute -bottom-4 right-0 text-[9px] font-normal text-gray-400 font-sans leading-none">.com</span></span>
+              <Logo size="xl" href={false} />
               <p className="mt-3 text-sm text-gray-500 leading-relaxed">The AI-controlled interview platform for hiring across every department.</p>
             </div>
             {[

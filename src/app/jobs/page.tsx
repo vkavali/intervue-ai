@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"
+import Logo from "@/components/Logo"
 
 export default async function JobsPage({ searchParams }: { searchParams: Record<string, string> }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -59,7 +60,7 @@ export default async function JobsPage({ searchParams }: { searchParams: Record<
       <div className="bg-white border-b border-gray-200">
         <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 mb-4">
-            <Link href="/" className="relative text-xl font-bold text-gray-900 font-mono my-2 mx-3 inline-block"><span className="absolute -top-3.5 left-0 text-[8px] font-normal text-gray-400 font-sans leading-none">the</span>printf<span className="text-saffron">(</span><span className="text-india-green">)</span><span className="absolute -bottom-3.5 right-0 text-[8px] font-normal text-gray-400 font-sans leading-none">.com</span></Link>
+            <Logo size="md" />
             <span className="text-gray-300">|</span>
             <span className="text-sm text-gray-500">Job Board</span>
           </div>
