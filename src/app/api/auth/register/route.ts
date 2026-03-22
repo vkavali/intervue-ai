@@ -1,12 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { verifyTurnstile } from "@/lib/rate-limiter";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, email: rawEmail, password, role, companyName, schoolName } = body;
+    const { name, email: rawEmail, password, role, companyName, schoolName, turnstileToken, website } = body;
     const email = rawEmail?.toLowerCase().trim();
+
+    // Honeypot — bots fill invisible fields; silently return success
+    if (website) {
+      return NextResponse.json({ user: { id: "ok" } }, { status: 201 });
+    }
+
+    // Turnstile bot verification
+    if (turnstileToken && !(await verifyTurnstile(turnstileToken))) {
+      return NextResponse.json(
+        { error: "Bot verification failed. Please try again." },
+        { status: 403 }
+      );
+    }
 
     // Validate required fields
     if (!name || !email || !password || !role) {

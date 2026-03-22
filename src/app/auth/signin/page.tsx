@@ -1,9 +1,10 @@
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect, useCallback } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import TurnstileWidget from "@/components/TurnstileWidget";
 
 export default function SignInPage() {
   return (
@@ -23,6 +24,11 @@ function SignInForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [_turnstileVerified, setTurnstileVerified] = useState(false);
+
+  const handleTurnstileVerify = useCallback(() => {
+    setTurnstileVerified(true);
+  }, []);
 
   // Redirect if already logged in
   useEffect(() => {
@@ -127,6 +133,8 @@ function SignInForm() {
                 Forgot password?
               </Link>
             </div>
+
+            <TurnstileWidget onVerify={handleTurnstileVerify} onExpire={() => setTurnstileVerified(false)} />
 
             <button
               type="submit"

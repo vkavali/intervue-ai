@@ -1,9 +1,10 @@
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect, useCallback } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import TurnstileWidget from "@/components/TurnstileWidget";
 
 type Role = "COMPANY_ADMIN" | "INTERVIEWER" | "CANDIDATE" | "SCHOOL_ADMIN";
 
@@ -58,6 +59,13 @@ function SignUpForm() {
   const [companyName, setCompanyName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [honeypot, setHoneypot] = useState("");
+  const [formLoadTime] = useState(Date.now());
+
+  const handleTurnstileVerify = useCallback((token: string) => {
+    setTurnstileToken(token);
+  }, []);
 
   const callbackUrl = searchParams.get("callbackUrl");
 
@@ -82,6 +90,13 @@ function SignUpForm() {
     setError("");
     setLoading(true);
 
+    // Reject suspiciously fast submissions (< 2 seconds)
+    if (Date.now() - formLoadTime < 2000) {
+      setError("Please take a moment to fill out the form.");
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch("/api/auth/register", {
         method: "POST",
@@ -93,6 +108,8 @@ function SignUpForm() {
           role,
           companyName: role === "COMPANY_ADMIN" ? companyName : undefined,
           schoolName: role === "SCHOOL_ADMIN" ? companyName : undefined,
+          turnstileToken: turnstileToken || undefined,
+          website: honeypot || undefined,
         }),
       });
 
@@ -256,6 +273,14 @@ function SignUpForm() {
                 />
               </div>
             )}
+
+            {/* Honeypot — invisible to humans, bots fill it */}
+            <div style={{ position: "absolute", left: "-9999px", opacity: 0 }} aria-hidden="true">
+              <label htmlFor="website">Website</label>
+              <input type="text" id="website" name="website" tabIndex={-1} autoComplete="off" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
+            </div>
+
+            <TurnstileWidget onVerify={handleTurnstileVerify} />
 
             <button
               type="submit"

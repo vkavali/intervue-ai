@@ -1,17 +1,22 @@
 /**
- * In-memory rate limiter with plan-based limits.
+ * Rate limiter with Upstash Redis (primary) and in-memory fallback.
  * Uses sliding window counters per user/IP.
  */
+import { Ratelimit } from '@upstash/ratelimit'
+import { redis } from './redis'
 
-// Plan-based limits (per day)
+// ──────────────────────────────────────────
+// Plan-based daily limits (per user)
+// ──────────────────────────────────────────
+
 const PLAN_LIMITS: Record<string, {
-  aiCalls: number;       // AI assist calls per day
-  aiGenerations: number; // AI question generation per day
-  practiceAi: number;    // Practice mode AI calls per day
-  enrichment: number;    // AI enrichment of bank problems per day
-  editorial: number;     // AI editorial generation per day
-  coaching: number;      // AI post-submit coaching per day
-  qualityScore: number;  // AI quality scoring per day
+  aiCalls: number;
+  aiGenerations: number;
+  practiceAi: number;
+  enrichment: number;
+  editorial: number;
+  coaching: number;
+  qualityScore: number;
 }> = {
   STARTER: {
     aiCalls: 10,
@@ -32,7 +37,7 @@ const PLAN_LIMITS: Record<string, {
     qualityScore: 20,
   },
   ENTERPRISE: {
-    aiCalls: -1, // unlimited
+    aiCalls: -1,
     aiGenerations: -1,
     practiceAi: -1,
     enrichment: -1,
@@ -51,7 +56,6 @@ const PLAN_LIMITS: Record<string, {
   },
 };
 
-// Free tier limits (no company/plan)
 const FREE_LIMITS = {
   aiCalls: 5,
   aiGenerations: 3,
@@ -62,14 +66,59 @@ const FREE_LIMITS = {
   qualityScore: 3,
 };
 
-// Global IP rate limits (per minute)
-const IP_RATE_LIMITS = {
-  general: 60,       // 60 requests/minute for general API
-  auth: 10,          // 10 login attempts/minute
-  ai: 20,            // 20 AI requests/minute
-};
+// ──────────────────────────────────────────
+// Redis-backed rate limiters (when available)
+// ──────────────────────────────────────────
 
-// In-memory stores
+export const redisRateLimiters = redis ? {
+  auth: new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(10, '1 m'),
+    prefix: 'rl:auth',
+    analytics: true,
+  }),
+  ai: new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(20, '1 m'),
+    prefix: 'rl:ai',
+    analytics: true,
+  }),
+  api: new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(60, '1 m'),
+    prefix: 'rl:api',
+    analytics: true,
+  }),
+  register: new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(5, '1 h'),
+    prefix: 'rl:register',
+    analytics: true,
+  }),
+  passwordReset: new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(3, '15 m'),
+    prefix: 'rl:pwreset',
+    analytics: true,
+  }),
+  sessions: new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(30, '1 m'),
+    prefix: 'rl:sessions',
+    analytics: true,
+  }),
+  practice: new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(30, '1 m'),
+    prefix: 'rl:practice',
+    analytics: true,
+  }),
+} : null;
+
+// ──────────────────────────────────────────
+// In-memory fallback (used when Redis unavailable)
+// ──────────────────────────────────────────
+
 interface RateEntry {
   count: number;
   windowStart: number;
@@ -78,7 +127,12 @@ interface RateEntry {
 const userDailyUsage: Map<string, Map<string, RateEntry>> = new Map();
 const ipMinuteUsage: Map<string, Map<string, RateEntry>> = new Map();
 
-// Cleanup old entries every 10 minutes
+const IP_RATE_LIMITS = {
+  general: 60,
+  auth: 10,
+  ai: 20,
+};
+
 const CLEANUP_INTERVAL = 10 * 60 * 1000;
 let lastCleanup = Date.now();
 
@@ -126,12 +180,12 @@ function getOrCreateEntry(
   return existing;
 }
 
+// ──────────────────────────────────────────
+// Public API (same interface, Redis or fallback)
+// ──────────────────────────────────────────
+
 export type RateLimitAction = "aiCalls" | "aiGenerations" | "practiceAi" | "enrichment" | "editorial" | "coaching" | "qualityScore";
 
-/**
- * Check and increment rate limit for a user based on their plan.
- * Returns { allowed, remaining, limit } or throws if blocked.
- */
 export function checkUserRateLimit(
   userId: string,
   action: RateLimitAction,
@@ -142,7 +196,6 @@ export function checkUserRateLimit(
   const limits = plan && PLAN_LIMITS[plan] ? PLAN_LIMITS[plan] : FREE_LIMITS;
   const limit = limits[action];
 
-  // Unlimited
   if (limit === -1) {
     return { allowed: true, remaining: -1, limit: -1, resetIn: 0 };
   }
@@ -164,10 +217,6 @@ export function checkUserRateLimit(
 
 export type IpRateLimitAction = "general" | "auth" | "ai";
 
-/**
- * Check and increment rate limit for an IP address.
- * Returns { allowed, remaining, limit } or indicates blocked.
- */
 export function checkIpRateLimit(
   ip: string,
   action: IpRateLimitAction
@@ -190,9 +239,6 @@ export function checkIpRateLimit(
   return { allowed: true, remaining, limit, retryAfter };
 }
 
-/**
- * Get current usage stats for a user (for display in UI).
- */
 export function getUserUsageStats(
   userId: string,
   plan?: string | null
@@ -222,4 +268,25 @@ export function getUserUsageStats(
   }
 
   return stats;
+}
+
+// ──────────────────────────────────────────
+// Turnstile verification helper
+// ──────────────────────────────────────────
+
+export async function verifyTurnstile(token: string): Promise<boolean> {
+  const secret = process.env.TURNSTILE_SECRET_KEY
+  if (!secret) return true // Skip verification if not configured
+
+  try {
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ secret, response: token }),
+    })
+    const data = await res.json()
+    return data.success === true
+  } catch {
+    return true // Allow through on verification errors (don't block users)
+  }
 }
