@@ -1,35 +1,25 @@
-import nodemailer from "nodemailer"
+import { Resend } from "resend"
 
-const transporter =
-  process.env.SMTP_HOST
-    ? nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: parseInt(process.env.SMTP_PORT || "587"),
-        secure: process.env.SMTP_SECURE === "true",
-        auth: {
-          user: process.env.SMTP_USER || "",
-          pass: process.env.SMTP_PASS || "",
-        },
-      })
-    : null
+const resend = process.env.RESEND_API_KEY
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null
 
-const FROM_ADDRESS = process.env.SMTP_FROM || "noreply@theprintf.com"
+const FROM_ADDRESS = process.env.EMAIL_FROM || "printf() <noreply@theprintf.com>"
 
 export async function sendPasswordResetEmail(
   to: string,
   resetUrl: string
 ): Promise<boolean> {
-  if (!transporter) {
-    console.warn("[Email] SMTP not configured — cannot send password reset email")
+  if (!resend) {
+    console.warn("[Email] RESEND_API_KEY not set — cannot send password reset email")
     return false
   }
 
   try {
-    await transporter.sendMail({
-      from: `"printf()" <${FROM_ADDRESS}>`,
+    const { error } = await resend.emails.send({
+      from: FROM_ADDRESS,
       to,
       subject: "Reset your printf password",
-      text: `You requested a password reset.\n\nClick this link to reset your password (expires in 1 hour):\n${resetUrl}\n\nIf you didn't request this, you can safely ignore this email.`,
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 480px; margin: 0 auto; padding: 32px 24px;">
           <h2 style="color: #111827; font-size: 20px; margin-bottom: 16px;">Reset your password</h2>
@@ -47,6 +37,12 @@ export async function sendPasswordResetEmail(
         </div>
       `,
     })
+
+    if (error) {
+      console.error("[Email] Resend error:", error)
+      return false
+    }
+
     return true
   } catch (error) {
     console.error("[Email] Failed to send password reset email:", error)
