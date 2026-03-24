@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { prisma } from "@/lib/prisma";
+import { sendPasswordResetEmail } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   try {
@@ -18,7 +19,7 @@ export async function POST(req: NextRequest) {
 
     // Always return success to prevent email enumeration
     if (!user) {
-      return NextResponse.json({ message: "If an account with that email exists, a reset link has been generated." });
+      return NextResponse.json({ message: "If an account with that email exists, a password reset link has been sent." });
     }
 
     const secret = process.env.NEXTAUTH_SECRET;
@@ -40,14 +41,16 @@ export async function POST(req: NextRequest) {
     const baseUrl = process.env.NEXTAUTH_URL || req.nextUrl.origin;
     const resetUrl = `${baseUrl}/auth/reset-password?token=${resetToken}`;
 
-    // Log the reset URL (visible in Railway logs)
-    console.log(`[Password Reset] Link for ${email}: ${resetUrl}`);
+    // Send the email
+    const emailSent = await sendPasswordResetEmail(email, resetUrl);
 
-    // TODO: Send email with resetUrl when email service is configured
-    // For now, the link is logged to server console
+    if (!emailSent) {
+      // Log for server-side debugging (visible in Railway logs)
+      console.log(`[Password Reset] Email send failed. Manual link for ${email}: ${resetUrl}`);
+    }
 
     return NextResponse.json({
-      message: "If an account with that email exists, a reset link has been generated.",
+      message: "If an account with that email exists, a password reset link has been sent.",
       // Include reset URL in development for convenience
       ...(process.env.NODE_ENV !== "production" && { resetUrl }),
     });

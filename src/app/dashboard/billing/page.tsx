@@ -86,8 +86,7 @@ export default function BillingPage() {
       return
     }
 
-    if (!plan.priceId) {
-      setError("Payment is not configured yet. Please contact support or try again later.")
+    if (plan.mode === "none") {
       return
     }
 
