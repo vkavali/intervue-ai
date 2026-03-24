@@ -70,8 +70,10 @@ function getCategory(pathname: string): string {
 
 function getClientIp(request: NextRequest): string {
   return (
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    // Cloudflare sends the real client IP here
+    request.headers.get("cf-connecting-ip") ||
     request.headers.get("x-real-ip") ||
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
     "127.0.0.1"
   )
 }
