@@ -1,19 +1,11 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ScrollReveal";
 import Carousel from "@/components/Carousel";
 import Logo from "@/components/Logo";
 import { detectRegion, type Region } from "@/lib/payment";
-
-// Dynamic imports for 3D / WebGL components (SSR disabled)
-const FluidSimulation = dynamic(() => import("@/components/FluidSimulation"), { ssr: false });
-const AIBrain = dynamic(() => import("@/components/3d/AIBrain"), { ssr: false });
-const Globe = dynamic(() => import("@/components/3d/Globe"), { ssr: false });
-const GeometricShapes = dynamic(() => import("@/components/3d/GeometricShapes"), { ssr: false });
-const PracticeViz = dynamic(() => import("@/components/3d/PracticeViz"), { ssr: false });
 
 const aiLevels = [
   {
@@ -231,14 +223,6 @@ const indianCompanies = [
   { name: "Meesho", color: "text-pink-600", bg: "bg-pink-50 border-pink-200" },
   { name: "Google India", color: "text-blue-600", bg: "bg-blue-50 border-blue-200" },
 ];
-
-function Scene3DFallback() {
-  return (
-    <div className="w-full h-full flex items-center justify-center">
-      <div className="w-8 h-8 border-2 border-saffron/30 border-t-saffron rounded-full animate-spin" />
-    </div>
-  );
-}
 
 export default function Home() {
   const [region, setRegion] = useState<Region>("US");
@@ -517,13 +501,6 @@ export default function Home() {
     <div className="min-h-screen overflow-hidden">
       {/* ===== 1. HERO ===== */}
       <section className="relative min-h-screen flex items-center justify-center bg-[#FAFAF8]">
-        {/* Interactive fluid simulation background */}
-        <div className="absolute inset-0 opacity-[0.15] pointer-events-none">
-          <Suspense fallback={null}>
-            <FluidSimulation />
-          </Suspense>
-        </div>
-
         <div className="gradient-orb w-[800px] h-[800px] bg-saffron/25 -top-60 -right-40 opacity-30" />
         <div className="gradient-orb w-[600px] h-[600px] bg-india-green/25 bottom-0 -left-40 opacity-30" />
         <div className="gradient-orb w-[400px] h-[400px] bg-pink-300/20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20" />
@@ -983,13 +960,6 @@ export default function Home() {
         <div className="gradient-orb w-[800px] h-[800px] bg-saffron/20 -top-60 -left-40 opacity-40" />
         <div className="gradient-orb w-[600px] h-[600px] bg-india-green/15 bottom-0 right-0 opacity-40" />
 
-        {/* Floating geometric shapes */}
-        <div className="absolute inset-0 pointer-events-none opacity-40 hidden lg:block">
-          <Suspense fallback={null}>
-            <GeometricShapes />
-          </Suspense>
-        </div>
-
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-20 lg:mb-24">
             <p className="text-sm font-medium uppercase tracking-widest text-gray-500 mb-4">{isIndia ? "Hire at India\u2019s Scale" : "The Complete Flow"}</p>
@@ -1226,37 +1196,27 @@ export default function Home() {
             </h2>
           </ScrollReveal>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* 3D AI Brain */}
-            <ScrollReveal direction="left" className="h-[400px] hidden lg:block">
-              <Suspense fallback={<Scene3DFallback />}>
-                <AIBrain />
-              </Suspense>
-            </ScrollReveal>
-
-            {/* Level cards */}
-            <StaggerContainer className="space-y-3" staggerDelay={0.1}>
+          {/* Level selector as horizontal strip */}
+          <ScrollReveal>
+            <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 max-w-5xl mx-auto">
               {aiLevels.map((ai, i) => (
-                <StaggerItem key={ai.level}>
-                  <div className={`group relative flex items-center gap-4 rounded-xl border p-4 transition-all duration-300 hover:scale-[1.02] ${
-                    i === 2
-                      ? "border-saffron/30 bg-gradient-to-r from-saffron/10 to-transparent shadow-[0_0_40px_-10px_rgba(255,153,0,0.3)]"
-                      : "border-white/[0.06] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.12]"
+                <div key={ai.level} className={`group rounded-2xl border p-5 text-center transition-all ${
+                  i === 2
+                    ? "border-saffron/30 bg-gradient-to-b from-saffron/10 to-transparent shadow-[0_0_40px_-10px_rgba(255,153,0,0.3)]"
+                    : "border-white/[0.06] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.12]"
+                }`}>
+                  <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl mb-3 ${
+                    i === 2 ? "bg-gradient-to-br from-saffron to-india-green shadow-lg" : "bg-white/[0.06] border border-white/10"
                   }`}>
-                    <div className={`flex-shrink-0 inline-flex items-center justify-center w-12 h-12 rounded-xl shadow-lg ${
-                      i === 2 ? "bg-gradient-to-br from-saffron to-india-green" : "bg-white/[0.06] border border-white/10"
-                    }`}>
-                      <span className={`text-sm font-bold ${i === 2 ? "text-white" : "text-gray-400"}`}>{ai.level}</span>
-                    </div>
-                    <div>
-                      <h3 className={`text-base font-semibold ${i === 2 ? "text-white" : "text-gray-300"}`}>{ai.label}</h3>
-                      <p className="text-sm text-gray-500">{ai.description}</p>
-                    </div>
+                    <span className={`text-sm font-bold ${i === 2 ? "text-white" : "text-gray-400"}`}>{ai.level}</span>
                   </div>
-                </StaggerItem>
+                  <h3 className={`text-base font-semibold mb-1 ${i === 2 ? "text-white" : "text-gray-300"}`}>{ai.label}</h3>
+                  <p className="text-xs text-gray-500">{ai.description}</p>
+                  {i === 2 && <span className="mt-3 inline-block text-[10px] font-medium text-saffron bg-saffron/10 rounded-full px-3 py-0.5">Selected</span>}
+                </div>
               ))}
-            </StaggerContainer>
-          </div>
+            </div>
+          </ScrollReveal>
 
           <ScrollReveal delay={0.2} className="mt-12 text-center">
             <p className="text-gray-400 text-sm max-w-xl mx-auto">
@@ -1352,15 +1312,8 @@ export default function Home() {
       </section>
 
       {/* ===== 8. FOR CANDIDATES -- Neutral Badges ===== */}
-      <section className="relative py-32 lg:py-40 bg-[#FAFAF8] overflow-hidden">
+      <section className="relative py-32 lg:py-40 bg-[#FAFAF8]">
         <div className="gradient-orb w-[500px] h-[500px] bg-india-green/10 top-20 -right-40" />
-
-        {/* 3D Practice visualization background */}
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] opacity-10 pointer-events-none hidden lg:block">
-          <Suspense fallback={null}>
-            <PracticeViz />
-          </Suspense>
-        </div>
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -1456,15 +1409,8 @@ export default function Home() {
       </section>
 
       {/* ===== 9. COMPARISON TABLE (DARK) ===== */}
-      <section className="relative py-32 lg:py-40 bg-gray-950 overflow-hidden">
+      <section className="relative py-32 lg:py-40 bg-gray-950">
         <div className="gradient-orb w-[500px] h-[500px] bg-india-green/15 -top-20 -left-40 opacity-40" />
-
-        {/* 3D Globe background */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] opacity-20 pointer-events-none hidden lg:block">
-          <Suspense fallback={null}>
-            <Globe />
-          </Suspense>
-        </div>
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-20 lg:mb-24">
@@ -1655,12 +1601,6 @@ export default function Home() {
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
             <div className="relative rounded-3xl bg-gray-900 p-12 sm:p-20 text-center overflow-hidden">
-              {/* Fluid simulation background */}
-              <div className="absolute inset-0 opacity-30 pointer-events-none">
-                <Suspense fallback={null}>
-                  <FluidSimulation />
-                </Suspense>
-              </div>
               <div className="gradient-orb w-[500px] h-[500px] bg-saffron/30 -top-40 -right-40 opacity-50" />
               <div className="gradient-orb w-[400px] h-[400px] bg-india-green/30 -bottom-40 -left-40 opacity-50" />
 
