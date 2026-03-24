@@ -7,11 +7,11 @@ import { NextRequest, NextResponse } from "next/server"
 const store = new Map<string, { count: number; resetAt: number }>()
 
 const LIMITS: Record<string, { max: number; windowMs: number }> = {
-  auth:     { max: 10,  windowMs: 60_000 },   // 10 req/min for auth
-  ai:       { max: 20,  windowMs: 60_000 },   // 20 req/min for AI endpoints
-  sessions: { max: 30,  windowMs: 60_000 },   // 30 req/min for sessions
-  practice: { max: 30,  windowMs: 60_000 },   // 30 req/min for practice
-  api:      { max: 60,  windowMs: 60_000 },   // 60 req/min general
+  auth:     { max: 30,  windowMs: 60_000 },   // 30 req/min for auth
+  ai:       { max: 40,  windowMs: 60_000 },   // 40 req/min for AI endpoints
+  sessions: { max: 60,  windowMs: 60_000 },   // 60 req/min for sessions
+  practice: { max: 60,  windowMs: 60_000 },   // 60 req/min for practice
+  api:      { max: 120, windowMs: 60_000 },   // 120 req/min general
 }
 
 function rateLimit(ip: string, category: string): { ok: boolean; limit: number; remaining: number; resetAt: number } {
