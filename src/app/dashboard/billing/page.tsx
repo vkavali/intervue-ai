@@ -5,7 +5,23 @@ import { PLANS, PlanKey } from "@/lib/stripe"
 import { RAZORPAY_LAUNCH_PLANS, RazorpayLaunchPlanKey } from "@/lib/razorpay"
 import { detectRegion, type Region } from "@/lib/payment"
 
-const planOrder: PlanKey[] = ["FREE", "PRO", "ENTERPRISE"]
+// Company plans shown on the billing page (in display order)
+const companyPlans: PlanKey[] = ["STARTER", "GROWTH", "ENTERPRISE", "PAY_PER_INTERVIEW"]
+
+// Mapping from Stripe plan keys to Razorpay plan keys
+const stripeToRazorpay: Partial<Record<PlanKey, RazorpayLaunchPlanKey>> = {
+  GROWTH: "PRO",
+  ENTERPRISE: "ENTERPRISE",
+  PAY_PER_INTERVIEW: "PAY_PER_INTERVIEW",
+}
+
+// Plan order for upgrade comparison (index-based)
+const planRank: Record<string, number> = {
+  STARTER: 0,
+  GROWTH: 1,
+  PAY_PER_INTERVIEW: 1,
+  ENTERPRISE: 2,
+}
 
 declare global {
   interface Window {
@@ -13,13 +29,22 @@ declare global {
   }
 }
 
+function Spinner() {
+  return (
+    <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+    </svg>
+  )
+}
+
 export default function BillingPage() {
   const [loading, setLoading] = useState<string | null>(null)
   const [portalLoading, setPortalLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [region, setRegion] = useState<Region>("US")
-
-  const [currentPlan] = useState<PlanKey>("FREE")
+  const [currentPlan, setCurrentPlan] = useState<string>("STARTER")
+  const [planLoading, setPlanLoading] = useState(true)
 
   const isIndia = region === "IN"
 
@@ -27,7 +52,6 @@ export default function BillingPage() {
     const detected = detectRegion()
     setRegion(detected)
 
-    // Load Razorpay checkout script for Indian users
     if (detected === "IN") {
       const script = document.createElement("script")
       script.src = "https://checkout.razorpay.com/v1/checkout.js"
@@ -36,10 +60,33 @@ export default function BillingPage() {
     }
   }, [])
 
+  // Fetch current plan from API
+  useEffect(() => {
+    async function fetchPlan() {
+      try {
+        const res = await fetch("/api/billing/current")
+        if (res.ok) {
+          const data = await res.json()
+          setCurrentPlan(data.plan || "STARTER")
+        }
+      } catch {
+        // Fall back to STARTER if fetch fails
+      } finally {
+        setPlanLoading(false)
+      }
+    }
+    fetchPlan()
+  }, [])
+
   const handleCheckout = async (planKey: PlanKey) => {
     const plan = PLANS[planKey]
-    if (!plan.priceId) {
-      setError("Payment is not configured yet. Please contact support or try again later.")
+
+    if (plan.mode === "contact_sales") {
+      window.location.href = "mailto:enterprise@theprintf.com?subject=Enterprise Plan Inquiry"
+      return
+    }
+
+    if (plan.mode === "none") {
       return
     }
 
@@ -50,10 +97,7 @@ export default function BillingPage() {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          priceId: plan.priceId,
-          planKey,
-        }),
+        body: JSON.stringify({ planKey }),
       })
 
       const data = await res.json()
@@ -74,6 +118,13 @@ export default function BillingPage() {
   }
 
   const handleRazorpayCheckout = async (planKey: RazorpayLaunchPlanKey) => {
+    const plan = RAZORPAY_LAUNCH_PLANS[planKey]
+
+    if (plan.mode === "contact_sales") {
+      window.location.href = "mailto:enterprise@theprintf.com?subject=Enterprise Plan Inquiry"
+      return
+    }
+
     setLoading(planKey)
     setError(null)
 
@@ -87,29 +138,27 @@ export default function BillingPage() {
       const data = await res.json()
 
       if (!res.ok) {
-        setError(data.error || "Failed to create Razorpay subscription")
+        setError(data.error || "Failed to create Razorpay order")
         return
       }
 
-      const options = {
+      const isPayment = data.mode === "payment"
+
+      const options: Record<string, unknown> = {
         key: data.razorpayKeyId,
-        subscription_id: data.subscriptionId,
         name: "printf",
-        description: `${data.planName} Plan - Launch Offer`,
+        description: `${data.planName} Plan`,
         currency: data.currency,
         handler: async (response: {
           razorpay_payment_id: string
-          razorpay_subscription_id: string
+          razorpay_subscription_id?: string
+          razorpay_order_id?: string
           razorpay_signature: string
         }) => {
-          // Verify payment
           const verifyRes = await fetch("/api/razorpay/verify", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              ...response,
-              planKey,
-            }),
+            body: JSON.stringify({ ...response, planKey }),
           })
 
           if (verifyRes.ok) {
@@ -119,6 +168,13 @@ export default function BillingPage() {
           }
         },
         theme: { color: "#FF9933" },
+      }
+
+      if (isPayment) {
+        options.order_id = data.orderId
+        options.amount = data.amount
+      } else {
+        options.subscription_id = data.subscriptionId
       }
 
       const rzp = new window.Razorpay(options)
@@ -157,16 +213,21 @@ export default function BillingPage() {
     }
   }
 
-  const isCurrentPlan = (planKey: PlanKey) => currentPlan === planKey
-  const isUpgrade = (planKey: PlanKey) =>
-    planOrder.indexOf(planKey) > planOrder.indexOf(currentPlan)
-  const hasSubscription = currentPlan !== "FREE"
+  const isCurrent = (planKey: string) => currentPlan === planKey
+  const isUpgrade = (planKey: string) =>
+    (planRank[planKey] ?? 0) > (planRank[currentPlan] ?? 0)
+  const hasSubscription = currentPlan !== "STARTER"
 
-  // Build display plans based on region
-  const razorpayPlanMap: Record<string, RazorpayLaunchPlanKey> = {
-    PRO: "PRO",
-    ENTERPRISE: "ENTERPRISE",
-  }
+  // Get display info for current plan
+  const currentPlanName =
+    currentPlan in PLANS
+      ? PLANS[currentPlan as PlanKey].name
+      : currentPlan.charAt(0) + currentPlan.slice(1).toLowerCase().replace(/_/g, " ")
+
+  const currentPlanPrice =
+    currentPlan in PLANS
+      ? PLANS[currentPlan as PlanKey].price
+      : 0
 
   return (
     <div>
@@ -179,7 +240,6 @@ export default function BillingPage() {
             {isIndia && " - India Launch Pricing (INR)"}
           </p>
         </div>
-        {/* Region Selector */}
         <div className="relative shrink-0">
           <select
             value={region}
@@ -226,60 +286,35 @@ export default function BillingPage() {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm text-gray-500">Current Plan</p>
-            <h2 className="mt-1 text-xl font-semibold text-gray-900">
-              {PLANS[currentPlan].name}
-            </h2>
-            <p className="mt-1 text-sm text-gray-500">
-              {currentPlan === "FREE"
-                ? "You are on the free plan"
-                : `$${PLANS[currentPlan].price}/month`}
-            </p>
+            {planLoading ? (
+              <div className="mt-1 h-7 w-24 animate-pulse rounded bg-gray-200" />
+            ) : (
+              <>
+                <h2 className="mt-1 text-xl font-semibold text-gray-900">
+                  {currentPlanName}
+                </h2>
+                <p className="mt-1 text-sm text-gray-500">
+                  {currentPlan === "STARTER"
+                    ? "You are on the free plan"
+                    : currentPlan === "PAY_PER_INTERVIEW"
+                    ? "$15 per interview session"
+                    : `$${currentPlanPrice}/month`}
+                </p>
+              </>
+            )}
           </div>
-          {hasSubscription && (
+          {hasSubscription && !isIndia && (
             <button
               onClick={handlePortal}
               disabled={portalLoading}
               className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {portalLoading ? (
-                <svg
-                  className="h-4 w-4 animate-spin"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                  />
-                </svg>
+                <Spinner />
               ) : (
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               )}
               Manage Billing
@@ -296,22 +331,35 @@ export default function BillingPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-        {planOrder.map((planKey) => {
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {companyPlans.map((planKey) => {
           const plan = PLANS[planKey]
-          const current = isCurrentPlan(planKey)
+          const current = isCurrent(planKey)
           const upgrade = isUpgrade(planKey)
-          const recommended = planKey === "PRO"
+          const recommended = planKey === "GROWTH"
+          const isEnterprise = planKey === "ENTERPRISE"
+          const isPPI = planKey === "PAY_PER_INTERVIEW"
 
           // Get INR pricing if India
-          const rzpKey = razorpayPlanMap[planKey]
+          const rzpKey = stripeToRazorpay[planKey]
           const rzpPlan = rzpKey ? RAZORPAY_LAUNCH_PLANS[rzpKey] : null
-          const displayPrice = isIndia && rzpPlan
-            ? `Rs.${rzpPlan.priceMonthly.toLocaleString("en-IN")}`
-            : plan.price === 0
-              ? "Free"
-              : `$${plan.price}`
-          const displayPeriod = plan.price === 0 ? "" : "/month"
+
+          let displayPrice: string
+          let displayPeriod: string
+
+          if (isIndia && rzpPlan) {
+            displayPrice = `Rs.${rzpPlan.priceMonthly.toLocaleString("en-IN")}`
+            displayPeriod = rzpPlan.mode === "payment" ? "/session" : "/month"
+          } else if (isEnterprise) {
+            displayPrice = "Custom"
+            displayPeriod = ""
+          } else if (plan.price === 0) {
+            displayPrice = "Free"
+            displayPeriod = ""
+          } else {
+            displayPrice = `$${plan.price}`
+            displayPeriod = isPPI ? "/session" : "/month"
+          }
 
           return (
             <div
@@ -321,13 +369,13 @@ export default function BillingPage() {
                   ? "border-saffron ring-1 ring-saffron/20"
                   : recommended
                   ? "border-saffron/50"
-                  : "border-gray-200 hover:border-gray-200"
+                  : "border-gray-200 hover:border-gray-300"
               }`}
             >
               {/* Recommended badge */}
               {recommended && !current && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="inline-flex items-center rounded-full border border-saffron bg-transparent px-3 py-1 text-xs font-semibold text-saffron">
+                  <span className="inline-flex items-center rounded-full border border-saffron bg-white px-3 py-1 text-xs font-semibold text-saffron">
                     {isIndia ? "3 Months Free" : "Recommended"}
                   </span>
                 </div>
@@ -336,7 +384,7 @@ export default function BillingPage() {
               {/* Current badge */}
               {current && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="inline-flex items-center rounded-full border border-india-green bg-transparent px-3 py-1 text-xs font-semibold text-gray-900">
+                  <span className="inline-flex items-center rounded-full border border-india-green bg-white px-3 py-1 text-xs font-semibold text-gray-900">
                     Current Plan
                   </span>
                 </div>
@@ -347,7 +395,7 @@ export default function BillingPage() {
                 <h3 className="text-lg font-semibold text-gray-900">
                   {plan.name}
                 </h3>
-                {isIndia && rzpPlan && (
+                {isIndia && rzpPlan && rzpPlan.mode !== "contact_sales" && (
                   <span className="inline-block mt-1 rounded-full bg-saffron/10 px-2 py-0.5 text-[10px] font-semibold text-saffron">
                     LAUNCH PRICE
                   </span>
@@ -356,7 +404,7 @@ export default function BillingPage() {
                   <span className="text-3xl font-bold text-gray-900">
                     {displayPrice}
                   </span>
-                  {displayPrice !== "Free" && (
+                  {displayPeriod && (
                     <span className="text-sm text-gray-500">{displayPeriod}</span>
                   )}
                 </div>
@@ -392,39 +440,30 @@ export default function BillingPage() {
                 >
                   Current Plan
                 </button>
-              ) : upgrade ? (
+              ) : isEnterprise ? (
+                <a
+                  href="mailto:enterprise@theprintf.com?subject=Enterprise Plan Inquiry"
+                  className="block w-full rounded-lg border border-saffron bg-transparent px-4 py-2.5 text-center text-sm font-medium text-saffron transition-colors hover:bg-saffron/10"
+                >
+                  Contact Sales
+                </a>
+              ) : upgrade || isPPI ? (
                 <button
                   onClick={() =>
                     isIndia && rzpKey
                       ? handleRazorpayCheckout(rzpKey)
                       : handleCheckout(planKey)
                   }
-                  disabled={loading === planKey || loading === rzpKey}
+                  disabled={loading === planKey || (!!rzpKey && loading === rzpKey)}
                   className="w-full rounded-lg border border-saffron bg-transparent px-4 py-2.5 text-sm font-medium text-saffron transition-colors hover:bg-saffron/10 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading === planKey || loading === rzpKey ? (
-                    <span className="inline-flex items-center gap-2">
-                      <svg
-                        className="h-4 w-4 animate-spin"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        />
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                        />
-                      </svg>
+                  {loading === planKey || (rzpKey && loading === rzpKey) ? (
+                    <span className="inline-flex items-center justify-center gap-2">
+                      <Spinner />
                       Processing...
                     </span>
+                  ) : isPPI ? (
+                    "Pay Per Interview"
                   ) : (
                     `Upgrade to ${plan.name}`
                   )}
@@ -466,7 +505,17 @@ export default function BillingPage() {
             <p className="mt-1 text-sm text-gray-500">
               If you cancel your subscription, you will retain access to your
               current plan until the end of your billing period. After that, your
-              account will revert to the Free plan.
+              account will revert to the Starter plan.
+            </p>
+          </div>
+          <div>
+            <h4 className="text-sm font-medium text-gray-700">
+              How does Pay Per Interview work?
+            </h4>
+            <p className="mt-1 text-sm text-gray-500">
+              {isIndia
+                ? "Pay Rs.999 per interview session with no monthly commitment. Each session includes full AI assist and an audit report."
+                : "Pay $15 per interview session with no monthly commitment. Each session includes full AI assist and an audit report."}
             </p>
           </div>
           <div>

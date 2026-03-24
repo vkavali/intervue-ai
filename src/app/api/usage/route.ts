@@ -25,7 +25,7 @@ export async function GET() {
     const stats = getUserUsageStats(user.id, plan);
 
     return NextResponse.json({
-      plan: plan || "FREE",
+      plan: plan || "STARTER",
       usage: stats,
     });
   } catch (error) {

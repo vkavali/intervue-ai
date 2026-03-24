@@ -43,17 +43,50 @@ export default function TemplateLibraryPage() {
     grouped[t.department].push(t);
   }
 
+  const [error, setError] = useState("");
+
   const handleUseTemplate = async (template: TemplatePreset) => {
     setLoading(template.id);
-    // Navigate to new interview page with template params pre-filled
-    const params = new URLSearchParams({
-      role: template.role,
-      seniority: template.seniority,
-      interviewType: template.interviewType,
-      roundType: template.roundType,
-      aiLevel: String(template.aiLevel),
-    });
-    router.push(`/dashboard/interviews/new?${params}`);
+    setError("");
+
+    try {
+      // Create the interview template directly via API
+      const timePerQuestion = Math.floor(template.durationMinutes / template.questionCount);
+      const questions = Array.from({ length: template.questionCount }, (_, i) => ({
+        title: `Question ${i + 1}`,
+        description: `${template.description} — question ${i + 1} of ${template.questionCount}. Edit this with your actual question.`,
+        difficulty: i === 0 ? "EASY" : i < template.questionCount - 1 ? "MEDIUM" : "HARD",
+        timeLimit: timePerQuestion,
+      }));
+
+      const res = await fetch("/api/interviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: template.name,
+          role: template.role,
+          seniority: template.seniority,
+          roundType: template.roundType,
+          interviewType: template.interviewType,
+          defaultAiLevel: template.aiLevel,
+          questions,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Failed to create template");
+        setLoading(null);
+        return;
+      }
+
+      // Navigate to the created template detail page
+      router.push(`/dashboard/interviews/${data.id}`);
+    } catch {
+      setError("Something went wrong. Please try again.");
+      setLoading(null);
+    }
   };
 
   return (
@@ -64,6 +97,12 @@ export default function TemplateLibraryPage() {
           Pre-built interview templates across all departments. Pick one to auto-populate your interview.
         </p>
       </div>
+
+      {error && (
+        <div className="mb-6 rounded-lg border border-accent-red/30 bg-accent-red/10 px-4 py-3 text-sm text-accent-red">
+          {error}
+        </div>
+      )}
 
       {/* Department filter pills */}
       <div className="mb-6 flex flex-wrap gap-2">
@@ -138,7 +177,7 @@ export default function TemplateLibraryPage() {
                     disabled={loading === t.id}
                     className="w-full rounded-lg border border-saffron bg-transparent px-4 py-2 text-sm font-medium text-saffron transition-colors hover:bg-saffron/10 disabled:opacity-50"
                   >
-                    {loading === t.id ? "Loading..." : "Use Template"}
+                    {loading === t.id ? "Creating..." : "Use Template"}
                   </button>
                 </div>
               );

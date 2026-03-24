@@ -17,10 +17,10 @@ export async function POST(req: NextRequest) {
       include: { company: true },
     })
 
-    if (!user || !user.companyId || !user.company) {
+    if (!user) {
       return NextResponse.json(
-        { error: "User must belong to a company" },
-        { status: 400 }
+        { error: "User not found" },
+        { status: 404 }
       )
     }
 
@@ -28,16 +28,18 @@ export async function POST(req: NextRequest) {
     const {
       razorpay_payment_id,
       razorpay_subscription_id,
+      razorpay_order_id,
       razorpay_signature,
       planKey,
     } = body as {
       razorpay_payment_id: string
-      razorpay_subscription_id: string
+      razorpay_subscription_id?: string
+      razorpay_order_id?: string
       razorpay_signature: string
       planKey: string
     }
 
-    if (!razorpay_payment_id || !razorpay_subscription_id || !razorpay_signature) {
+    if (!razorpay_payment_id || !razorpay_signature) {
       return NextResponse.json(
         { error: "Missing payment verification fields" },
         { status: 400 }
@@ -53,9 +55,14 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    // Signature verification differs for subscription vs one-time payment
+    const signaturePayload = razorpay_subscription_id
+      ? `${razorpay_payment_id}|${razorpay_subscription_id}`
+      : `${razorpay_order_id}|${razorpay_payment_id}`
+
     const expectedSignature = crypto
       .createHmac("sha256", secret)
-      .update(`${razorpay_payment_id}|${razorpay_subscription_id}`)
+      .update(signaturePayload)
       .digest("hex")
 
     if (expectedSignature !== razorpay_signature) {
@@ -69,20 +76,24 @@ export async function POST(req: NextRequest) {
     const planMap: Record<string, string> = {
       PRO: "GROWTH",
       ENTERPRISE: "ENTERPRISE",
+      PAY_PER_INTERVIEW: "PAY_PER_INTERVIEW",
+      CANDIDATE_PRO: "CANDIDATE_PRO",
       EDUCATION: "EDUCATION",
     }
 
     const dbPlan = planMap[planKey] || "STARTER"
 
-    // Update company plan
-    await prisma.company.update({
-      where: { id: user.companyId },
-      data: {
-        plan: dbPlan,
-        razorpaySubscriptionId: razorpay_subscription_id,
-        paymentGateway: "razorpay",
-      },
-    })
+    // Update company plan (only for company plans, not candidate)
+    if (user.companyId && planKey !== "CANDIDATE_PRO") {
+      await prisma.company.update({
+        where: { id: user.companyId },
+        data: {
+          plan: dbPlan,
+          razorpaySubscriptionId: razorpay_subscription_id || undefined,
+          paymentGateway: "razorpay",
+        },
+      })
+    }
 
     return NextResponse.json({ success: true, plan: dbPlan })
   } catch (error) {

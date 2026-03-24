@@ -5,9 +5,10 @@ import Stripe from "stripe"
 
 // Map PlanKey from our PLANS object to the database plan field values
 const planKeyToDbPlan: Record<string, string> = {
-  FREE: "STARTER",
-  PRO: "GROWTH",
+  STARTER: "STARTER",
+  GROWTH: "GROWTH",
   ENTERPRISE: "ENTERPRISE",
+  PAY_PER_INTERVIEW: "PAY_PER_INTERVIEW",
 }
 
 // POST /api/stripe/webhook - Handle Stripe webhook events
@@ -58,8 +59,8 @@ export async function POST(req: NextRequest) {
         const companyId = checkoutSession.metadata?.companyId
         const planKey = checkoutSession.metadata?.planKey
 
-        if (!companyId || !planKey) {
-          console.error("Missing metadata in checkout session:", checkoutSession.id)
+        if (!planKey) {
+          console.error("Missing planKey metadata in checkout session:", checkoutSession.id)
           break
         }
 
@@ -69,17 +70,20 @@ export async function POST(req: NextRequest) {
             ? checkoutSession.customer
             : checkoutSession.customer?.id
 
-        await prisma.company.update({
-          where: { id: companyId },
-          data: {
-            plan: dbPlan,
-            stripeCustomerId: customerId || undefined,
-          },
-        })
+        // Only update company if there's a companyId (not for candidate plans)
+        if (companyId) {
+          await prisma.company.update({
+            where: { id: companyId },
+            data: {
+              plan: dbPlan,
+              stripeCustomerId: customerId || undefined,
+            },
+          })
 
-        console.log(
-          `Company ${companyId} upgraded to ${dbPlan} (Stripe customer: ${customerId})`
-        )
+          console.log(
+            `Company ${companyId} upgraded to ${dbPlan} (Stripe customer: ${customerId})`
+          )
+        }
         break
       }
 
@@ -133,7 +137,7 @@ export async function POST(req: NextRequest) {
           break
         }
 
-        // Downgrade to free/starter plan when subscription is cancelled
+        // Downgrade to starter plan when subscription is cancelled
         await prisma.company.update({
           where: { id: company.id },
           data: { plan: "STARTER" },
