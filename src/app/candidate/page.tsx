@@ -55,9 +55,14 @@ export default async function CandidateDashboard() {
   const xpProgress = xpProgressInLevel(xp);
 
   // Fetch gamification stats
-  const problemsSolved = await prisma.practiceProgress.count({
-    where: { userId, status: "COMPLETED" },
-  });
+  let problemsSolved = 0;
+  try {
+    problemsSolved = await prisma.practiceProgress.count({
+      where: { userId, status: "COMPLETED" },
+    });
+  } catch {
+    // PracticeProgress table may not exist yet
+  }
 
   try {
     // Get recent badges
@@ -80,7 +85,7 @@ export default async function CandidateDashboard() {
   }
 
   // Fetch candidate's interview sessions
-  const sessions = await prisma.interviewSession.findMany({
+  const sessionQuery = prisma.interviewSession.findMany({
     where: { candidateId: userId },
     include: {
       template: {
@@ -104,13 +109,25 @@ export default async function CandidateDashboard() {
     },
     orderBy: { createdAt: "desc" },
   });
+  type SessionResult = Awaited<typeof sessionQuery>;
+  let sessions: SessionResult = [];
+  try {
+    sessions = await sessionQuery;
+  } catch {
+    // InterviewSession query may fail if schema mismatch
+  }
 
   // Fetch practice progress
-  const practiceProgress = await prisma.practiceProgress.findMany({
-    where: { userId },
-    select: { id: true, bankProblemId: true, problemId: true, status: true, timeSpentSeconds: true, updatedAt: true },
-    orderBy: { updatedAt: "desc" },
-  });
+  let practiceProgress: Array<{ id: string; bankProblemId: string | null; problemId: string | null; status: string; timeSpentSeconds: number; updatedAt: Date }> = [];
+  try {
+    practiceProgress = await prisma.practiceProgress.findMany({
+      where: { userId },
+      select: { id: true, bankProblemId: true, problemId: true, status: true, timeSpentSeconds: true, updatedAt: true },
+      orderBy: { updatedAt: "desc" },
+    });
+  } catch {
+    // PracticeProgress table may not exist yet
+  }
 
   const practiceSolved = practiceProgress.filter((p) => p.status === "COMPLETED").length;
   const practiceInProgress = practiceProgress.filter((p) => p.status === "IN_PROGRESS").length;

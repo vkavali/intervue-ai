@@ -47,6 +47,7 @@ export default function TemplateLibraryPage() {
     setLoading(template.id);
     // Navigate to new interview page with template params pre-filled
     const params = new URLSearchParams({
+      title: template.name,
       role: template.role,
       seniority: template.seniority,
       interviewType: template.interviewType,

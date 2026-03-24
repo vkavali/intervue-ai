@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { INTERVIEW_TYPES, INDUSTRIES, isNonCodingType } from "@/data/interview-types";
@@ -66,6 +66,14 @@ const aiLevelLabels: Record<number, string> = {
 };
 
 export default function NewInterviewPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center py-16"><div className="text-gray-500">Loading...</div></div>}>
+      <NewInterviewContent />
+    </Suspense>
+  );
+}
+
+function NewInterviewContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: session, status } = useSession();
@@ -86,11 +94,13 @@ export default function NewInterviewPage() {
 
   // Pre-fill form from URL query params (e.g. from template library "Use Template")
   useEffect(() => {
+    const t = searchParams.get("title");
     const r = searchParams.get("role");
     const s = searchParams.get("seniority");
     const rt = searchParams.get("roundType");
     const it = searchParams.get("interviewType");
     const al = searchParams.get("aiLevel");
+    if (t) setTitle(t);
     if (r) setRole(r);
     if (s) setSeniority(s);
     if (rt) setRoundType(rt);
