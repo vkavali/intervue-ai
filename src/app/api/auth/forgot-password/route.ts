@@ -38,14 +38,21 @@ export async function POST(req: NextRequest) {
       { expiresIn: "1h" }
     );
 
-    const baseUrl = process.env.NEXTAUTH_URL || req.nextUrl.origin;
+    // Use the request origin (what the user actually sees in their browser)
+    // Falls back to NEXTAUTH_URL, then to req.nextUrl.origin
+    const origin = req.headers.get("origin")
+      || process.env.NEXTAUTH_URL
+      || req.nextUrl.origin;
+    // Strip trailing slash
+    const baseUrl = origin.replace(/\/+$/, "");
     const resetUrl = `${baseUrl}/auth/reset-password?token=${resetToken}`;
+
+    console.log(`[Password Reset] Generating link for ${email}, baseUrl=${baseUrl}`);
 
     // Send the email
     const emailSent = await sendPasswordResetEmail(email, resetUrl);
 
     if (!emailSent) {
-      // Log for server-side debugging (visible in Railway logs)
       console.log(`[Password Reset] Email send failed. Manual link for ${email}: ${resetUrl}`);
     }
 

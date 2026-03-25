@@ -7,7 +7,8 @@ import { NextRequest, NextResponse } from "next/server"
 const store = new Map<string, { count: number; resetAt: number }>()
 
 const LIMITS: Record<string, { max: number; windowMs: number }> = {
-  auth:     { max: 30,  windowMs: 60_000 },   // 30 req/min for auth
+  auth:     { max: 30,  windowMs: 60_000 },   // 30 req/min for login, register
+  reset:    { max: 10,  windowMs: 60_000 },   // 10 req/min for password reset (own bucket)
   ai:       { max: 40,  windowMs: 60_000 },   // 40 req/min for AI endpoints
   sessions: { max: 60,  windowMs: 60_000 },   // 60 req/min for sessions
   practice: { max: 60,  windowMs: 60_000 },   // 60 req/min for practice
@@ -49,6 +50,8 @@ function cleanup() {
 // ──────────────────────────────────────────
 
 function getCategory(pathname: string): string {
+  // Password reset gets its own bucket so forgot-password retries don't block the actual reset
+  if (pathname.includes("/forgot-password") || pathname.includes("/reset-password")) return "reset"
   if (pathname.startsWith("/api/auth")) return "auth"
   if (
     pathname.includes("/ai") ||
