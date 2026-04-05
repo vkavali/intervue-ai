@@ -153,7 +153,7 @@ export default async function CareersPage({
             Browse jobs from companies on printf and top remote job boards — all in one place.
           </p>
 
-          <div className="mt-8 grid gap-3 sm:grid-cols-3">
+          <div className="mt-8 grid gap-3 md:grid-cols-3 xl:grid-cols-5">
             {[
               {
                 title: "Take the pathfinder",
@@ -172,6 +172,18 @@ export default async function CareersPage({
                 description: "Turn strong sessions into reports, badges, and a public talent profile.",
                 href: "/auth/signup?role=candidate",
                 accent: "border-blue-500/20 bg-blue-500/5 text-blue-500",
+              },
+              {
+                title: "Explore AI automation",
+                description: "See the India-first automation track built around workflows, mock interviews, and recruiter proof.",
+                href: "/india/ai-automation",
+                accent: "border-amber-500/20 bg-amber-500/5 text-amber-600",
+              },
+              {
+                title: "Join project sprints",
+                description: "Work through company-style briefs, present solutions, and turn the result into portfolio proof.",
+                href: "/india/project-sprints",
+                accent: "border-emerald-500/20 bg-emerald-500/5 text-emerald-600",
               },
             ].map((item) => (
               <Link

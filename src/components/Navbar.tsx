@@ -57,6 +57,13 @@ export default function Navbar() {
                   AI Tools
                 </Link>
 
+                <Link
+                  href="/india/ai-automation"
+                  className="rounded-md px-3 py-1.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
+                >
+                  AI Automation
+                </Link>
+
                 {session.user.role === "CANDIDATE" && (
                   <>
                     <Link
@@ -119,6 +126,12 @@ export default function Navbar() {
                   className="rounded-md px-3 py-1.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
                 >
                   Pathfinder
+                </Link>
+                <Link
+                  href="/india/ai-automation"
+                  className="rounded-md px-3 py-1.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
+                >
+                  AI Automation
                 </Link>
                 <Link
                   href="/auth/signin"

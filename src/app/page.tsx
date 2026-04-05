@@ -7,6 +7,8 @@ import Carousel from "@/components/Carousel";
 import Logo from "@/components/Logo";
 import AICapabilitiesSection from "@/components/home/AICapabilitiesSection";
 import CareerPathfinder from "@/components/home/CareerPathfinder";
+import IndiaAIAutomationSection from "@/components/home/IndiaAIAutomationSection";
+import IndiaProjectSprintsSection from "@/components/home/IndiaProjectSprintsSection";
 import VerifiedOutcomesSection from "@/components/home/VerifiedOutcomesSection";
 import { detectRegion, type Region } from "@/lib/payment";
 
@@ -716,6 +718,10 @@ export default function Home() {
       <CareerPathfinder />
 
       <AICapabilitiesSection />
+
+      {isIndia && <IndiaAIAutomationSection />}
+
+      {isIndia && <IndiaProjectSprintsSection />}
 
       {/* ===== 2. WHO IT'S FOR -- Glass Cards ===== */}
       <section className="relative py-32 lg:py-40 bg-[#FAFAF8]">
@@ -1668,9 +1674,9 @@ export default function Home() {
             </div>
             {[
               { title: "For Companies", links: [{ label: "Sign Up", href: "/auth/signup?role=company" }, { label: "Pricing", href: "/#pricing" }, { label: "Features", href: "/#features" }] },
-              { title: "For Candidates", links: [{ label: "Sign Up", href: "/auth/signup?role=candidate" }, { label: "Careers", href: "/careers" }, { label: "Practice Mode", href: "/practice" }, { label: "Study Plans", href: "/practice?tab=patterns" }, { label: "Leaderboard", href: "/leaderboard" }] },
+              { title: "For Candidates", links: [{ label: "Sign Up", href: "/auth/signup?role=candidate" }, { label: "Careers", href: "/careers" }, { label: "Practice Mode", href: "/practice" }, { label: "Study Plans", href: "/practice?tab=studyplans" }, { label: "Leaderboard", href: "/leaderboard" }] },
               { title: isIndia ? "For Colleges" : "For Schools", links: [{ label: "Sign Up", href: "/auth/signup?role=school" }, { label: "Enrollment", href: "/school/enrollment" }, { label: "Assignments", href: "/school/assignments" }, { label: "Analytics", href: "/school/analytics" }] },
-              { title: "Platform", links: [{ label: "AI Tools", href: "/ai-tools" }, { label: "Career Quiz", href: "/career-quiz" }, { label: "Sign In", href: "/auth/signin" }, { label: "Careers", href: "/careers" }, { label: "Job Board", href: "/jobs" }, { label: "Templates", href: "/dashboard/interviews/templates" }] },
+              { title: "Platform", links: [{ label: "AI Tools", href: "/ai-tools" }, { label: "Career Quiz", href: "/career-quiz" }, ...(isIndia ? [{ label: "AI Automation India", href: "/india/ai-automation" }, { label: "Project Sprints", href: "/india/project-sprints" }] : []), { label: "Sign In", href: "/auth/signin" }, { label: "Careers", href: "/careers" }, { label: "Job Board", href: "/jobs" }, { label: "Templates", href: "/dashboard/interviews/templates" }] },
             ].map((col) => (
               <div key={col.title}>
                 <h4 className="text-xs font-medium uppercase tracking-wider text-gray-400 mb-4">{col.title}</h4>

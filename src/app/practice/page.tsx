@@ -81,12 +81,18 @@ function PracticeModeContent() {
   // Progress tracking
   const [progressMap, setProgressMap] = useState<Record<string, string>>({});
 
-  // Initialize pattern filter from URL
+  // Initialize tab and pattern filters from URL
   useEffect(() => {
     const pattern = searchParamsHook.get("pattern");
+    const tab = searchParamsHook.get("tab");
     if (pattern) {
       setPatternFilter(pattern);
       setActiveTab("problems");
+      return;
+    }
+
+    if (tab === "problems" || tab === "generate" || tab === "studyplans") {
+      setActiveTab(tab);
     }
   }, [searchParamsHook]);
 
