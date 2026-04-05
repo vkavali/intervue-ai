@@ -78,9 +78,9 @@ export default function IndiaProjectSprintsSection({
             <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent"> Graduate with proof, not just prep.</span>
           </h2>
           <p className="mt-5 max-w-3xl text-base leading-7 text-gray-500 sm:text-lg">
-            The strongest idea on TripleTen&apos;s externships page is not the label. It is the shift from
-            studying alone to solving scoped business problems, presenting the work, and turning that
-            experience into portfolio signal. Intervue can own that with project sprints built for India.
+            The value here is the shift from studying alone to solving scoped business problems,
+            presenting the work, and turning that experience into portfolio signal. theprintf.com can
+            do that with project sprints built for India.
           </p>
         </ScrollReveal>
 
@@ -139,7 +139,7 @@ export default function IndiaProjectSprintsSection({
           <ScrollReveal delay={0.08} direction="right">
             <div className="rounded-[32px] bg-gray-950 p-6 text-white shadow-[0_28px_90px_-36px_rgba(15,23,42,0.6)] sm:p-8">
               <div className="border-b border-white/10 pb-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-500">How it should work in Intervue</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-500">How it should work on theprintf.com</p>
                 <h3 className="mt-2 text-2xl font-semibold">Brief, build, present, prove</h3>
               </div>
 
@@ -175,21 +175,21 @@ export default function IndiaProjectSprintsSection({
         </div>
 
         <ScrollReveal className="mt-10">
-          <div className="rounded-[32px] border border-gray-200 bg-white/85 p-6 backdrop-blur-sm sm:p-8">
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div className="rounded-[32px] border border-gray-200 bg-white/85 p-6 backdrop-blur-sm sm:p-8">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div className="max-w-3xl">
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-400">Intervue advantage</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-400">theprintf.com advantage</p>
                 <h3 className="mt-2 text-2xl font-semibold text-gray-900">We can connect project work directly to hiring readiness</h3>
                 <p className="mt-3 text-sm leading-6 text-gray-500">
-                  Most externship pages stop at the project. Intervue can connect the project sprint to
-                  mock interviews, AI learning briefs, recruiter messaging, and the job board. That makes
-                  the project useful after the demo day is over.
+                  theprintf.com can connect the project sprint to mock interviews, AI learning briefs,
+                  recruiter messaging, and the job board. That makes the project useful after the
+                  demo day is over.
                 </p>
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row">
-                <Link href="/practice?tab=generate" className="pill-cta-primary">
-                  Open project-style practice
+                <Link href="/career-quiz" className="pill-cta-primary">
+                  Find your sprint path
                 </Link>
                 <Link href="/candidate/career-kit" className="pill-cta-secondary">
                   Build project proof

@@ -5,7 +5,7 @@ import CareerPathfinder from "@/components/home/CareerPathfinder";
 export const metadata: Metadata = {
   title: "Career Pathfinder | printf",
   description:
-    "Map yourself to the right Intervue workflow for practice, hiring, or placement readiness in a few minutes.",
+    "Map yourself to the right theprintf.com workflow for practice, hiring, or placement readiness in a few minutes.",
 };
 
 export default function CareerQuizPage() {

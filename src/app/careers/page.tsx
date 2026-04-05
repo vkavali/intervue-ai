@@ -157,7 +157,7 @@ export default async function CareersPage({
             {[
               {
                 title: "Take the pathfinder",
-                description: "Map yourself to the fastest Intervue workflow before you start applying.",
+                description: "Map yourself to the fastest theprintf.com workflow before you start applying.",
                 href: "/career-quiz",
                 accent: "border-saffron/30 bg-saffron/5 text-saffron",
               },

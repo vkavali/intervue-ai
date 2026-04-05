@@ -69,7 +69,7 @@ const sprintCards = [
   {
     eyebrow: "Sprint 6",
     title: "Prove it in interviews",
-    detail: "Use Intervue mock interviews, AI briefs, and recruiter-facing assets to turn project work into hiring signal.",
+    detail: "Use theprintf.com mock interviews, AI briefs, and recruiter-facing assets to turn project work into hiring signal.",
   },
 ];
 
@@ -113,9 +113,9 @@ export default function IndiaAIAutomationSection({
             <span className="bg-gradient-to-r from-saffron to-india-green bg-clip-text text-transparent"> India&apos;s real workflows</span>
           </h2>
           <p className="mt-5 max-w-3xl text-base leading-7 text-gray-500 sm:text-lg">
-            TripleTen sells an AI automation future. Intervue can win in India by making that future
-            interviewable: business-case practice, mock interviews, AI coaching, and proof that works
-            for SaaS, fintech, GCC, support, and operations roles.
+            theprintf.com can make AI automation interviewable in India: business-case practice,
+            mock interviews, AI coaching, and hiring proof for SaaS, fintech, GCC, support,
+            and operations roles.
           </p>
         </ScrollReveal>
 
@@ -168,7 +168,7 @@ export default function IndiaAIAutomationSection({
           <ScrollReveal delay={0.08} direction="right">
             <div className="rounded-[32px] bg-gray-950 p-6 text-white shadow-[0_28px_90px_-36px_rgba(15,23,42,0.6)] sm:p-8">
               <div className="border-b border-white/10 pb-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-500">Intervue track</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-500">theprintf.com track</p>
                 <h3 className="mt-2 text-2xl font-semibold">From workflow thinking to hiring proof</h3>
                 <p className="mt-3 text-sm leading-6 text-gray-400">
                   This is not a generic bootcamp promise. It is a tighter loop: learn the workflow,
@@ -214,7 +214,7 @@ export default function IndiaAIAutomationSection({
 
           <ScrollReveal delay={0.06} direction="right">
             <div className="rounded-[32px] border border-gray-200 bg-white/85 p-6 backdrop-blur-sm sm:p-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-400">What makes Intervue stronger</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-400">What makes theprintf.com stronger</p>
               <div className="mt-5 grid gap-4 sm:grid-cols-3">
                 {outcomeCards.map((card) => (
                   <div key={card.title} className="rounded-3xl border border-gray-200 bg-gray-50/80 p-5">
@@ -225,8 +225,8 @@ export default function IndiaAIAutomationSection({
               </div>
 
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                <Link href="/practice?tab=generate" className="pill-cta-primary">
-                  Start AI automation practice
+                <Link href="/career-quiz" className="pill-cta-primary">
+                  Take the pathfinder
                 </Link>
                 <Link href="/candidate/career-kit" className="pill-cta-secondary">
                   Open career kit

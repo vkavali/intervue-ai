@@ -5,7 +5,7 @@ import AIToolsHub from "@/components/ai/AIToolsHub";
 export const metadata: Metadata = {
   title: "AI Tools | printf",
   description:
-    "Explore Intervue's AI capabilities for hints, theory explanations, code review, learning summaries, and AI-generated hiring workflows.",
+    "Explore theprintf.com's AI capabilities for hints, theory explanations, code review, learning summaries, and AI-generated hiring workflows.",
 };
 
 export default function AIToolsPage() {

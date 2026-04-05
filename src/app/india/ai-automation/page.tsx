@@ -5,7 +5,7 @@ import IndiaAIAutomationSection from "@/components/home/IndiaAIAutomationSection
 export const metadata: Metadata = {
   title: "AI Automation India | printf",
   description:
-    "Explore Intervue's India-first AI automation track for workflow practice, mock interviews, AI coaching, and recruiter-ready proof.",
+    "Explore theprintf.com's India-first AI automation track for workflow practice, mock interviews, AI coaching, and recruiter-ready proof.",
 };
 
 export default function IndiaAIAutomationPage() {

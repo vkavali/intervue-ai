@@ -80,7 +80,7 @@ export default function CandidateCareerKitPage() {
         <h1 className="mt-3 text-3xl font-bold text-gray-900">Generate recruiter-ready career assets</h1>
         <p className="mt-2 max-w-3xl text-sm leading-6 text-gray-500">
           Build LinkedIn copy, stronger resume bullets, recruiter outreach, and a sharper interview pitch
-          using your own background plus verified Intervue performance when available.
+          using your own background plus verified theprintf.com performance when available.
         </p>
       </div>
 
@@ -197,7 +197,7 @@ export default function CandidateCareerKitPage() {
                   "Achievement-focused resume bullets",
                   "Keyword gaps to close before you apply",
                   "A recruiter outreach note and interview pitch",
-                  "A practical action plan grounded in your Intervue history",
+                  "A practical action plan grounded in your theprintf.com history",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-2 text-sm text-gray-600">
                     <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-saffron" />

@@ -5,7 +5,7 @@ import IndiaProjectSprintsSection from "@/components/home/IndiaProjectSprintsSec
 export const metadata: Metadata = {
   title: "Project Sprints India | printf",
   description:
-    "Explore Intervue's India-first project sprint model for real briefs, live demos, portfolio proof, and interview-ready outcomes.",
+    "Explore theprintf.com's India-first project sprint model for real briefs, live demos, portfolio proof, and interview-ready outcomes.",
 };
 
 export default function IndiaProjectSprintsPage() {

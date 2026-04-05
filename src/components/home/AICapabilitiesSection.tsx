@@ -43,8 +43,8 @@ export default function AICapabilitiesSection() {
             AI should do more than chat.
           </h2>
           <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-gray-500 sm:text-lg">
-            TripleTen makes its AI visible. Intervue now does the same, but in our own product model:
-            interview prep, code review, summaries, recommendations, and workflow generation for teams.
+            theprintf.com makes AI visible where it matters: interview prep, code review, summaries,
+            recommendations, and workflow generation for teams.
           </p>
         </ScrollReveal>
 

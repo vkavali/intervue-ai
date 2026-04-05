@@ -64,7 +64,7 @@ ${params.existingBullets || "Not provided"}
 Target job description:
 ${params.jobDescription || "Not provided"}
 
-Verified Intervue performance context:
+Verified theprintf.com performance context:
 ${params.performanceContext || "No verified context available."}
 
 Generate a practical career kit tailored to this candidate.`;

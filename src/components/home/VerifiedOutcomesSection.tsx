@@ -63,7 +63,7 @@ export default function VerifiedOutcomesSection() {
               Proof should not be.
             </h2>
             <p className="mt-6 max-w-xl text-base leading-7 text-gray-500 sm:text-lg">
-              The strongest part of Intervue is not another content library. It is the proof layer:
+              The strongest part of theprintf.com is not another content library. It is the proof layer:
               real interview performance, public talent profiles, and recruiter-ready artifacts that are
               much harder to fake than a polished resume.
             </p>

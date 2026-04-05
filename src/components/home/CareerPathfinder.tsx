@@ -45,7 +45,7 @@ const personaConfig: Record<
     eyebrow: "Career Pathfinder",
     title: "Find your shortest path to a stronger application",
     description:
-      "Start with the goal that matters most and Intervue maps you to the right mix of practice, live interviews, proof, and job discovery.",
+      "Start with the goal that matters most and theprintf.com maps you to the right mix of practice, live interviews, proof, and job discovery.",
     focuses: [
       { id: "land-interviews", label: "Land interviews faster", helper: "Sharpen fundamentals and get interview ready" },
       { id: "prove-skills", label: "Show proof, not promises", helper: "Turn strong sessions into recruiter-facing evidence" },

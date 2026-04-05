@@ -38,7 +38,7 @@ type LearningBrief = {
 const candidateCapabilities = [
   {
     title: "AI career kit",
-    description: "Generate a stronger headline, About section, resume bullets, recruiter outreach, and interview pitch from your background and verified Intervue signals.",
+    description: "Generate a stronger headline, About section, resume bullets, recruiter outreach, and interview pitch from your background and verified theprintf.com signals.",
     cta: { label: "Build my kit", href: "/candidate/career-kit" },
   },
   {
@@ -162,9 +162,8 @@ export default function AIToolsHub() {
               </span>
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-gray-500">
-              TripleTen&apos;s AI story is compelling because it is visible. Intervue now exposes the same
-              class of help in our own context: hints, theory explanations, code review, content
-              summaries, personalized next steps, and AI-assisted workflow generation for hiring teams.
+              theprintf.com exposes AI directly in the workflow: hints, theory explanations, code review,
+              content summaries, personalized next steps, and AI-assisted workflow generation for hiring teams.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-2">
@@ -224,7 +223,7 @@ export default function AIToolsHub() {
             </div>
 
             <p className="mt-4 text-sm leading-6 text-gray-500">
-              This is where Intervue starts to behave like a real coach instead of just a problem list.
+              This is where theprintf.com starts to behave like a real coach instead of just a problem list.
               It can summarize your current state, recommend the next problem, and turn recent work into a clearer action plan.
             </p>
 
@@ -233,7 +232,7 @@ export default function AIToolsHub() {
               <h3 className="mt-2 text-lg font-semibold text-gray-900">AI career kit</h3>
               <p className="mt-2 text-sm leading-6 text-gray-500">
                 Build recruiter-ready assets from your own background, then strengthen them with verified
-                practice and interview evidence where Intervue has it.
+                practice and interview evidence where theprintf.com has it.
               </p>
               <Link
                 href="/candidate/career-kit"
