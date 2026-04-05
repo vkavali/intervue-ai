@@ -35,6 +35,15 @@ const sidebarLinks = [
     ),
   },
   {
+    href: "/candidate/career-kit",
+    label: "AI Career Kit",
+    icon: (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3l1.75 4.25L18 9l-4.25 1.75L12 15l-1.75-4.25L6 9l4.25-1.75L12 3zm-7 13l.9 2.1L8 19l-2.1.9L5 22l-.9-2.1L2 19l2.1-.9L5 16zm14 0l.9 2.1L22 19l-2.1.9L19 22l-.9-2.1L16 19l2.1-.9L19 16z" />
+      </svg>
+    ),
+  },
+  {
     href: "/candidate/badges",
     label: "Badges",
     icon: (
@@ -128,13 +137,13 @@ export default async function CandidateLayout({
 
         <div className="border-t border-gray-200 p-4">
           <div className="rounded-lg border border-saffron/30 bg-saffron/5 p-4">
-            <p className="text-xs font-medium text-saffron-dark">Practice Mode</p>
-            <p className="mt-1 text-sm text-gray-500">Sharpen your skills</p>
+            <p className="text-xs font-medium text-saffron-dark">AI Career Kit</p>
+            <p className="mt-1 text-sm text-gray-500">Turn verified practice into stronger hiring assets</p>
             <Link
-              href="/practice"
+              href="/candidate/career-kit"
               className="mt-2 block text-xs text-saffron hover:text-saffron-dark"
             >
-              Start practicing &rarr;
+              Build my career kit &rarr;
             </Link>
           </div>
         </div>

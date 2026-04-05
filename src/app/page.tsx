@@ -5,6 +5,9 @@ import Link from "next/link";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ScrollReveal";
 import Carousel from "@/components/Carousel";
 import Logo from "@/components/Logo";
+import AICapabilitiesSection from "@/components/home/AICapabilitiesSection";
+import CareerPathfinder from "@/components/home/CareerPathfinder";
+import VerifiedOutcomesSection from "@/components/home/VerifiedOutcomesSection";
 import { detectRegion, type Region } from "@/lib/payment";
 
 const aiLevels = [
@@ -584,6 +587,23 @@ export default function Home() {
                 <svg className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
               </Link>
             </div>
+
+            <div className="mt-5">
+              <div className="flex flex-wrap items-center justify-center gap-4">
+                <Link href="/career-quiz" className="inline-flex items-center gap-2 text-sm font-medium text-gray-500 transition-colors hover:text-gray-900">
+                  Not sure where to start? Take the 3-minute pathfinder
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+                <Link href="/ai-tools" className="inline-flex items-center gap-2 text-sm font-medium text-gray-500 transition-colors hover:text-gray-900">
+                  Explore the AI tool stack
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+              </div>
+            </div>
           </ScrollReveal>
 
           {/* Trust bar -- neutral colors */}
@@ -692,6 +712,10 @@ export default function Home() {
           </ScrollReveal>
         </div>
       </section>
+
+      <CareerPathfinder />
+
+      <AICapabilitiesSection />
 
       {/* ===== 2. WHO IT'S FOR -- Glass Cards ===== */}
       <section className="relative py-32 lg:py-40 bg-[#FAFAF8]">
@@ -1408,6 +1432,8 @@ export default function Home() {
         </div>
       </section>
 
+      <VerifiedOutcomesSection />
+
       {/* ===== 9. COMPARISON TABLE (DARK) ===== */}
       <section className="relative py-32 lg:py-40 bg-gray-950">
         <div className="gradient-orb w-[500px] h-[500px] bg-india-green/15 -top-20 -left-40 opacity-40" />
@@ -1644,7 +1670,7 @@ export default function Home() {
               { title: "For Companies", links: [{ label: "Sign Up", href: "/auth/signup?role=company" }, { label: "Pricing", href: "/#pricing" }, { label: "Features", href: "/#features" }] },
               { title: "For Candidates", links: [{ label: "Sign Up", href: "/auth/signup?role=candidate" }, { label: "Careers", href: "/careers" }, { label: "Practice Mode", href: "/practice" }, { label: "Study Plans", href: "/practice?tab=patterns" }, { label: "Leaderboard", href: "/leaderboard" }] },
               { title: isIndia ? "For Colleges" : "For Schools", links: [{ label: "Sign Up", href: "/auth/signup?role=school" }, { label: "Enrollment", href: "/school/enrollment" }, { label: "Assignments", href: "/school/assignments" }, { label: "Analytics", href: "/school/analytics" }] },
-              { title: "Platform", links: [{ label: "Sign In", href: "/auth/signin" }, { label: "Careers", href: "/careers" }, { label: "Job Board", href: "/jobs" }, { label: "Templates", href: "/dashboard/interviews/templates" }] },
+              { title: "Platform", links: [{ label: "AI Tools", href: "/ai-tools" }, { label: "Career Quiz", href: "/career-quiz" }, { label: "Sign In", href: "/auth/signin" }, { label: "Careers", href: "/careers" }, { label: "Job Board", href: "/jobs" }, { label: "Templates", href: "/dashboard/interviews/templates" }] },
             ].map((col) => (
               <div key={col.title}>
                 <h4 className="text-xs font-medium uppercase tracking-wider text-gray-400 mb-4">{col.title}</h4>

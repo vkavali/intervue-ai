@@ -17,7 +17,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "printf — AI-Controlled Interview Platform",
+  title: "printf - AI-Controlled Interview Platform",
   description:
     "The AI-controlled interview platform where AI assistance is deliberately controlled by the company and every session is automatically audited, scored, and summarized.",
 };

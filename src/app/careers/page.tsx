@@ -153,6 +153,41 @@ export default async function CareersPage({
             Browse jobs from companies on printf and top remote job boards — all in one place.
           </p>
 
+          <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            {[
+              {
+                title: "Take the pathfinder",
+                description: "Map yourself to the fastest Intervue workflow before you start applying.",
+                href: "/career-quiz",
+                accent: "border-saffron/30 bg-saffron/5 text-saffron",
+              },
+              {
+                title: "Practice before you apply",
+                description: "Use guided problem-solving and AI feedback to tighten weak spots.",
+                href: "/practice",
+                accent: "border-india-green/30 bg-india-green/5 text-india-green",
+              },
+              {
+                title: "Build a proof stack",
+                description: "Turn strong sessions into reports, badges, and a public talent profile.",
+                href: "/auth/signup?role=candidate",
+                accent: "border-blue-500/20 bg-blue-500/5 text-blue-500",
+              },
+            ].map((item) => (
+              <Link
+                key={item.title}
+                href={item.href}
+                className="rounded-2xl border border-gray-200 bg-gray-50/70 p-4 transition-all hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-sm"
+              >
+                <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] ${item.accent}`}>
+                  Launch tool
+                </span>
+                <h2 className="mt-3 text-base font-semibold text-gray-900">{item.title}</h2>
+                <p className="mt-2 text-sm leading-6 text-gray-500">{item.description}</p>
+              </Link>
+            ))}
+          </div>
+
           {/* Search + Filters */}
           <form className="mt-8">
             <div className="flex gap-3">
@@ -245,6 +280,13 @@ export default async function CareersPage({
               />
             </div>
           </form>
+
+          <div className="mt-5 flex flex-wrap items-center gap-2 text-xs text-gray-500">
+            <span className="rounded-full border border-gray-200 bg-white px-3 py-1">Practice</span>
+            <span className="rounded-full border border-gray-200 bg-white px-3 py-1">Live interview reports</span>
+            <span className="rounded-full border border-gray-200 bg-white px-3 py-1">Public talent profile</span>
+            <span className="rounded-full border border-gray-200 bg-white px-3 py-1">Job discovery</span>
+          </div>
         </div>
       </div>
 

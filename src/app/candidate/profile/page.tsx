@@ -58,7 +58,7 @@ export default async function CandidateProfilePage() {
         <div className="rounded-xl border border-gray-200 bg-white p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
           <div className="space-y-3">
-            <a
+            <Link
               href="/practice"
               className="flex items-center gap-3 rounded-lg border border-gray-200 p-3 hover:border-saffron/30 hover:bg-gray-50 transition-colors"
             >
@@ -71,8 +71,8 @@ export default async function CandidateProfilePage() {
                 <p className="text-sm font-medium text-gray-900">Practice Mode</p>
                 <p className="text-xs text-gray-500">Sharpen your coding skills</p>
               </div>
-            </a>
-            <a
+            </Link>
+            <Link
               href="/candidate/interviews"
               className="flex items-center gap-3 rounded-lg border border-gray-200 p-3 hover:border-india-green/30 hover:bg-gray-50 transition-colors"
             >
@@ -85,7 +85,21 @@ export default async function CandidateProfilePage() {
                 <p className="text-sm font-medium text-gray-900">My Interviews</p>
                 <p className="text-xs text-gray-500">View all interviews</p>
               </div>
-            </a>
+            </Link>
+            <Link
+              href="/candidate/career-kit"
+              className="flex items-center gap-3 rounded-lg border border-gray-200 p-3 hover:border-saffron/30 hover:bg-gray-50 transition-colors"
+            >
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-saffron/10">
+                <svg className="w-4 h-4 text-saffron" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3l1.75 4.25L18 9l-4.25 1.75L12 15l-1.75-4.25L6 9l4.25-1.75L12 3zm-7 13l.9 2.1L8 19l-2.1.9L5 22l-.9-2.1L2 19l2.1-.9L5 16zm14 0l.9 2.1L22 19l-2.1.9L19 22l-.9-2.1L16 19l2.1-.9L19 16z" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-900">AI Career Kit</p>
+                <p className="text-xs text-gray-500">Build recruiter-ready copy and interview positioning</p>
+              </div>
+            </Link>
           </div>
         </div>
       </div>

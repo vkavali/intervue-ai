@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { awardXP, updateStreak, checkAndAwardBadges, recordProblemSolved, DIFFICULTY_XP } from "@/lib/gamification";
+import { resolveProblem } from "@/lib/problem-resolver";
 
 // GET /api/practice/progress - Get all practice progress for user
 export async function GET() {
@@ -27,7 +28,20 @@ export async function GET() {
       orderBy: { lastSavedAt: "desc" },
     });
 
-    return NextResponse.json({ progress });
+    const enrichedProgress = progress.map((item) => {
+      const resolved = item.bankProblemId ? resolveProblem(item.bankProblemId) : null;
+
+      return {
+        ...item,
+        problemTitle: resolved?.title || null,
+        problemDifficulty: resolved?.difficulty || null,
+        problemCategory: resolved?.category || null,
+        problemPattern: resolved?.pattern || null,
+        problemTags: resolved?.tags || [],
+      };
+    });
+
+    return NextResponse.json({ progress: enrichedProgress });
   } catch (error) {
     console.error("GET /api/practice/progress error:", error);
     return NextResponse.json(
