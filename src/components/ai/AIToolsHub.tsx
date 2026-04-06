@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import CaseStudioTool from "@/components/ai/CaseStudioTool";
+import MockPackTool from "@/components/ai/MockPackTool";
 
 type ProgressItem = {
   id: string;
@@ -35,40 +37,77 @@ type LearningBrief = {
   interviewFraming: string[];
 };
 
-const candidateCapabilities = [
+const workflowTracks = [
+  {
+    eyebrow: "Non-coding roles",
+    title: "Generate proof for product, sales, ops, marketing, and automation roles",
+    description:
+      "Use Case Studio to create a realistic work sample, turn it into a Mock Pack for interview prep, then move the strongest evidence into your career kit.",
+    items: [
+      "Create a role-specific case brief with deliverables and evaluation criteria",
+      "Generate interviewer-style questions, answer shapes, and red flags",
+      "Convert the output into recruiter-ready bullets and talking points",
+    ],
+    cta: { label: "Start with case studio", href: "#case-studio" },
+  },
+  {
+    eyebrow: "Engineering prep",
+    title: "Use your coding history to plan the next reps",
+    description:
+      "Learning Briefs, recommendations, and AI-generated practice are the developer-side workflow. These tools depend on practice history and point you back into coding prep.",
+    items: [
+      "Summarize a recent coding attempt into strengths, weak spots, and next steps",
+      "Get the next recommended problems from your actual weakness profile",
+      "Generate fresh coding problems when you need more targeted practice",
+    ],
+    cta: { label: "Jump to developer AI", href: "#learning-brief" },
+  },
+];
+
+const candidateTools = [
+  {
+    title: "Case studio",
+    audience: "Non-coding roles",
+    description:
+      "Generate a realistic business case with deliverables, evaluation criteria, portfolio proof, and mock questions for product, sales, marketing, ops, finance, HR, and automation roles.",
+    cta: { label: "Open case studio", href: "#case-studio" },
+  },
+  {
+    title: "Mock pack",
+    audience: "Non-coding roles",
+    description:
+      "Build the opener, question set, scorecard signals, follow-ups, and prep checklist for your next business-role interview.",
+    cta: { label: "Open mock pack", href: "#mock-pack" },
+  },
   {
     title: "AI career kit",
-    description: "Generate a stronger headline, About section, resume bullets, recruiter outreach, and interview pitch from your background and verified theprintf.com signals.",
+    audience: "All candidates",
+    description:
+      "Generate a stronger headline, About section, resume bullets, recruiter outreach, and interview pitch from your background and verified theprintf.com signals.",
     cta: { label: "Build my kit", href: "/candidate/career-kit" },
   },
-  {
-    title: "24/7 AI hints",
-    description: "Progressive hints that start with pattern nudges and get more specific only when you need them.",
-    cta: { label: "Use hints", href: "/practice" },
-  },
-  {
-    title: "Theory explainers",
-    description: "Editorial-style AI explains why an approach works, when brute force fails, and how to reason about complexity.",
-    cta: { label: "Study with AI", href: "/practice" },
-  },
-  {
-    title: "Submission review",
-    description: "AI coaching reviews your solution, scores it, and gives concrete improvement notes after you run tests.",
-    cta: { label: "Review my code", href: "/practice" },
-  },
+];
+
+const engineeringTools = [
   {
     title: "Learning briefs",
-    description: "Summaries turn raw practice history into a concise diagnosis: what you understand, what is breaking, and what to do next.",
+    audience: "Developer practice",
+    description:
+      "Summaries turn raw coding-practice history into a concise diagnosis: what you understand, what is breaking, and what to do next.",
     cta: { label: "Generate a brief", href: "#learning-brief" },
   },
   {
     title: "Weakness-based recommendations",
-    description: "Your next practice set is chosen from actual weakness signals instead of random topic hopping.",
+    audience: "Developer practice",
+    description:
+      "Your next coding practice set is chosen from actual weakness signals instead of random topic hopping.",
     cta: { label: "See recommendations", href: "#recommendations" },
   },
   {
     title: "AI-generated practice",
-    description: "Generate problems tailored to a company, role, and job description when you need targeted reps quickly.",
+    audience: "Developer practice",
+    description:
+      "Generate coding problems tailored to a company, role, and job description when you need targeted reps quickly.",
     cta: { label: "Generate problems", href: "/practice?tab=generate" },
   },
 ];
@@ -162,12 +201,14 @@ export default function AIToolsHub() {
               </span>
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-gray-500">
-              theprintf.com exposes AI directly in the workflow: hints, theory explanations, code review,
-              content summaries, personalized next steps, and AI-assisted workflow generation for hiring teams.
+              This page has two working AI workflows. For product, sales, marketing, ops, customer success,
+              finance, HR, project management, and automation roles, use Case Studio, Mock Pack, and Career
+              Kit. For software interview prep, use Learning Briefs, recommendations, and AI-generated
+              coding practice.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-2">
-              {["24/7 guidance", "career assets", "code review", "learning briefs", "interview generation"].map((item) => (
+              {["case briefs", "mock packs", "career kit", "learning briefs", "AI practice"].map((item) => (
                 <span key={item} className="rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-600">
                   {item}
                 </span>
@@ -175,11 +216,11 @@ export default function AIToolsHub() {
             </div>
 
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-              <Link href="/practice" className="pill-cta-primary">
-                Open practice mode
+              <Link href="#case-studio" className="pill-cta-primary">
+                Open case studio
               </Link>
-              <Link href="/candidate/career-kit" className="pill-cta-secondary">
-                Build career kit
+              <Link href="#mock-pack" className="pill-cta-secondary">
+                Build mock pack
               </Link>
             </div>
           </div>
@@ -187,25 +228,99 @@ export default function AIToolsHub() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {candidateCapabilities.map((capability) => (
+        <div className="grid gap-6 lg:grid-cols-2">
+          {workflowTracks.map((track) => (
             <div
-              key={capability.title}
-              className="rounded-[28px] border border-gray-200 bg-white/80 p-6 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.25)] backdrop-blur-sm"
+              key={track.title}
+              className="rounded-[32px] border border-gray-200 bg-white/80 p-6 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.25)] backdrop-blur-sm"
             >
-              <h2 className="text-xl font-semibold text-gray-900">{capability.title}</h2>
-              <p className="mt-3 text-sm leading-6 text-gray-500">{capability.description}</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-400">{track.eyebrow}</p>
+              <h2 className="mt-3 text-2xl font-semibold text-gray-900">{track.title}</h2>
+              <p className="mt-3 text-sm leading-6 text-gray-500">{track.description}</p>
+              <ul className="mt-5 space-y-2">
+                {track.items.map((item) => (
+                  <li key={item} className="flex gap-2 text-sm leading-6 text-gray-600">
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-saffron" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
               <Link
-                href={capability.cta.href}
+                href={track.cta.href}
                 className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-gray-900 transition-colors hover:text-saffron"
               >
-                {capability.cta.label}
+                {track.cta.label}
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
             </div>
           ))}
+        </div>
+
+        <div className="mt-8 grid gap-8 xl:grid-cols-2">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-400">Non-coding roles</p>
+            <h2 className="mt-2 text-2xl font-semibold text-gray-900">Working tools for business-role prep</h2>
+            <div className="mt-5 grid gap-4">
+              {candidateTools.map((capability) => (
+                <div
+                  key={capability.title}
+                  className="rounded-[28px] border border-gray-200 bg-white/80 p-6 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.25)] backdrop-blur-sm"
+                >
+                  <span className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-medium text-gray-500">
+                    {capability.audience}
+                  </span>
+                  <h3 className="mt-4 text-xl font-semibold text-gray-900">{capability.title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-gray-500">{capability.description}</p>
+                  <Link
+                    href={capability.cta.href}
+                    className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-gray-900 transition-colors hover:text-saffron"
+                  >
+                    {capability.cta.label}
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-400">Engineering prep</p>
+            <h2 className="mt-2 text-2xl font-semibold text-gray-900">Working tools for coding interviews</h2>
+            <div className="mt-5 grid gap-4">
+              {engineeringTools.map((capability) => (
+                <div
+                  key={capability.title}
+                  className="rounded-[28px] border border-gray-200 bg-white/80 p-6 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.25)] backdrop-blur-sm"
+                >
+                  <span className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-medium text-gray-500">
+                    {capability.audience}
+                  </span>
+                  <h3 className="mt-4 text-xl font-semibold text-gray-900">{capability.title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-gray-500">{capability.description}</p>
+                  <Link
+                    href={capability.cta.href}
+                    className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-gray-900 transition-colors hover:text-saffron"
+                  >
+                    {capability.cta.label}
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
+        <div className="space-y-8">
+          <CaseStudioTool />
+          <MockPackTool />
         </div>
       </section>
 
@@ -214,8 +329,8 @@ export default function AIToolsHub() {
           <div className="rounded-[32px] border border-gray-200 bg-white/80 p-6 backdrop-blur-sm">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-400">Candidate workspace</p>
-                <h2 className="mt-2 text-2xl font-semibold text-gray-900">Personal AI support</h2>
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-400">Personal AI workspace</p>
+                <h2 className="mt-2 text-2xl font-semibold text-gray-900">Career proof plus developer practice AI</h2>
               </div>
               <span className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-medium text-gray-500">
                 {isAuthenticated ? "Connected" : "Sign in for personalization"}
@@ -223,8 +338,9 @@ export default function AIToolsHub() {
             </div>
 
             <p className="mt-4 text-sm leading-6 text-gray-500">
-              This is where theprintf.com starts to behave like a real coach instead of just a problem list.
-              It can summarize your current state, recommend the next problem, and turn recent work into a clearer action plan.
+              For non-coding roles, the main workflow is Case Studio, Mock Pack, and Career Kit. For software
+              interview prep, the panels on the right and below summarize your coding history, recommend the
+              next problems, and turn recent work into a clearer action plan.
             </p>
 
             <div className="mt-6 rounded-[28px] border border-gray-200 bg-white p-5">
@@ -287,8 +403,8 @@ export default function AIToolsHub() {
           <div id="learning-brief" className="rounded-[32px] bg-gray-950 p-6 text-white shadow-[0_28px_90px_-36px_rgba(15,23,42,0.65)]">
             <div className="flex flex-col gap-5 border-b border-white/10 pb-5 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-500">Learning brief</p>
-                <h2 className="mt-2 text-2xl font-semibold">Summarize my current state</h2>
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-500">Developer learning brief</p>
+                <h2 className="mt-2 text-2xl font-semibold">Summarize my coding practice</h2>
               </div>
               {isAuthenticated && progress.length > 0 && (
                 <button
@@ -417,23 +533,23 @@ export default function AIToolsHub() {
         <div className="rounded-[32px] border border-gray-200 bg-white/80 p-6 backdrop-blur-sm">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-400">Next best moves</p>
-              <h2 className="mt-2 text-2xl font-semibold text-gray-900">AI-picked recommendations</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-400">Developer next best moves</p>
+              <h2 className="mt-2 text-2xl font-semibold text-gray-900">AI-picked coding recommendations</h2>
             </div>
             <Link href="/practice" className="text-sm font-semibold text-gray-900 hover:text-saffron">
-              Open practice mode
+              Open coding practice
             </Link>
           </div>
 
           {!isAuthenticated && (
             <p className="mt-5 text-sm text-gray-500">
-              Sign in to get personalized recommendations based on your weakness profile.
+              Sign in to get personalized recommendations based on your coding weakness profile.
             </p>
           )}
 
           {isAuthenticated && recommendations.length === 0 && !loadingData && (
             <p className="mt-5 text-sm text-gray-500">
-              Recommendations will appear once you have enough practice history.
+              Recommendations will appear once you have enough coding practice history.
             </p>
           )}
 
