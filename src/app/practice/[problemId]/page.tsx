@@ -6,7 +6,6 @@ import Editor, { type OnMount } from "@monaco-editor/react";
 import Link from "next/link";
 import { PROBLEM_BANK, type ProblemEntry } from "@/data/problem-bank";
 import { CURATED_PROBLEMS } from "@/data/curated-75";
-import { GENERATED_PROBLEMS } from "@/data/generated-bank";
 import LevelUpModal from "@/components/gamification/LevelUpModal";
 
 // ─── Practice problem data ──────────────────────────────────────────────────────
@@ -131,9 +130,29 @@ function PracticeProblemContent() {
   const problemId = params.problemId as string;
 
   const curatedProblem = PRACTICE_PROBLEMS[problemId];
-  const bankProblem: ProblemEntry | undefined = !curatedProblem
-    ? PROBLEM_BANK.find((p) => p.id === problemId) || GENERATED_PROBLEMS.find((p) => p.id === problemId)
+  const staticBankProblem: ProblemEntry | undefined = !curatedProblem
+    ? PROBLEM_BANK.find((p) => p.id === problemId)
     : undefined;
+
+  // For generated problems (gen-*), fetch from DB via API
+  const [dbProblem, setDbProblem] = useState<ProblemEntry | null>(null);
+  const [dbLoading, setDbLoading] = useState(false);
+  const dbFetched = useRef(false);
+
+  useEffect(() => {
+    if (curatedProblem || staticBankProblem || dbFetched.current) return;
+    dbFetched.current = true;
+    setDbLoading(true);
+    fetch(`/api/practice/bank?id=${encodeURIComponent(problemId)}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.problem) setDbProblem(data.problem as ProblemEntry);
+      })
+      .catch(() => {})
+      .finally(() => setDbLoading(false));
+  }, [curatedProblem, staticBankProblem, problemId]);
+
+  const bankProblem: ProblemEntry | undefined = staticBankProblem || dbProblem || undefined;
 
   // Check if the problem already has full data (skip AI enrichment)
   const isAlreadyComplete = !!(
@@ -939,6 +958,15 @@ function PracticeProblemContent() {
   } : null;
 
   const visibleCount = 2;
+
+  // Loading state while fetching from DB
+  if (dbLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-gray-50">
+        <div className="text-gray-500">Loading problem...</div>
+      </div>
+    );
+  }
 
   // 404 for unknown problem
   if (!problem) {

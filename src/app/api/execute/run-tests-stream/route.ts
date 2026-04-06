@@ -1,4 +1,6 @@
 import { NextRequest } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { executeCode } from "@/lib/code-executor";
 import { wrapTestCode, normalizeOutput, supportsTestCases } from "@/lib/test-adapters";
 
@@ -11,6 +13,14 @@ interface TestCase {
 }
 
 export async function POST(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   const body = await req.json();
   const { language, code, testCases } = body as {
     language: string;

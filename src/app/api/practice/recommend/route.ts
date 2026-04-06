@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
         where: { userId: user.id },
         select: { bankProblemId: true, status: true, timeSpentSeconds: true },
       })
-      profile = buildWeaknessProfile(progress)
+      profile = await buildWeaknessProfile(progress)
     }
 
     // Get completed problem IDs

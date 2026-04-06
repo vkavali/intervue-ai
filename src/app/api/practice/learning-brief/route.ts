@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "bankProblemId is required" }, { status: 400 });
     }
 
-    const problem = resolveProblem(bankProblemId);
+    const problem = await resolveProblem(bankProblemId);
     if (!problem) {
       return NextResponse.json({ error: "Problem not found" }, { status: 404 });
     }

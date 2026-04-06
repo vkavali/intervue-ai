@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Find the problem across all banks (curated, bank, generated)
-    const problem = resolveProblem(bankProblemId)
+    const problem = await resolveProblem(bankProblemId)
     if (!problem) {
       return NextResponse.json(
         { error: 'Problem not found in bank' },

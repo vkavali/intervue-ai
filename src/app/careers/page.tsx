@@ -1,8 +1,21 @@
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"
-import { fetchExternalJobs, ExternalJob } from "@/lib/external-jobs"
 
 export const dynamic = "force-dynamic" // Always fetch fresh data, never pre-render
+
+interface Job {
+  id: string
+  title: string
+  company: string
+  companyLogo: string | null
+  location: string
+  type: string
+  category: string | null
+  salary: string | null
+  description: string | null
+  url: string
+  postedAt: string
+}
 
 export default async function CareersPage({
   searchParams,
@@ -10,14 +23,13 @@ export default async function CareersPage({
   searchParams: Record<string, string>
 }) {
   const search = searchParams.search || ""
-  const source = searchParams.source || "all" // all | printf | external
   const department = searchParams.department || ""
   const location = searchParams.location || ""
   const jobType = searchParams.jobType || ""
   const workMode = searchParams.workMode || "" // remote | onsite | hybrid
   const category = searchParams.category || ""
 
-  // Fetch internal positions from companies on printf
+  // Fetch positions from printf companies only
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const internalWhere: any = { status: "OPEN", isPublic: true }
   if (search) {
@@ -30,30 +42,20 @@ export default async function CareersPage({
   if (department) internalWhere.department = department
   if (location) internalWhere.location = { contains: location, mode: "insensitive" }
 
-  // Fetch both sources independently — if one fails, the other still works
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let internalPositions: any[] = []
-  let externalJobs: ExternalJob[] = []
 
   try {
-    if (source !== "external") {
-      internalPositions = await prisma.openPosition.findMany({
-        where: internalWhere,
-        include: { company: { select: { id: true, name: true, logo: true } } },
-        orderBy: { createdAt: "desc" },
-        take: 50,
-      })
-    }
+    internalPositions = await prisma.openPosition.findMany({
+      where: internalWhere,
+      include: { company: { select: { id: true, name: true, logo: true } } },
+      orderBy: { createdAt: "desc" },
+      take: 50,
+    })
   } catch { /* DB unavailable */ }
 
-  try {
-    if (source !== "printf") {
-      externalJobs = await fetchExternalJobs(search || undefined, 30)
-    }
-  } catch { /* External API unavailable */ }
-
-  // Normalize internal positions to common format
-  const internalJobs: ExternalJob[] = internalPositions.map((p) => ({
+  // Normalize to common format
+  const jobs: Job[] = internalPositions.map((p) => ({
     id: `printf-${p.id}`,
     title: p.title,
     company: p.company.name,
@@ -67,14 +69,11 @@ export default async function CareersPage({
         : null,
     description: p.description?.slice(0, 300) || null,
     url: `/jobs/${p.id}`,
-    source: "printf" as const,
     postedAt: p.createdAt.toISOString(),
   }))
 
-  // Combine all jobs
-  let allJobs = [...internalJobs, ...externalJobs]
-
   // Apply filters
+  let allJobs = [...jobs]
   if (location) {
     allJobs = allJobs.filter((j) =>
       j.location.toLowerCase().includes(location.toLowerCase())
@@ -111,10 +110,9 @@ export default async function CareersPage({
   // Sort by date (newest first)
   allJobs.sort((a, b) => new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime())
 
-  // Collect available filter values from all fetched jobs
-  const allUnfilteredJobs = [...internalJobs, ...externalJobs]
-  const jobTypes = Array.from(new Set(allUnfilteredJobs.map((j) => j.type).filter(Boolean))).sort()
-  const categories = Array.from(new Set(allUnfilteredJobs.map((j) => j.category).filter(Boolean))).sort()
+  // Collect available filter values
+  const jobTypes = Array.from(new Set(jobs.map((j) => j.type).filter(Boolean))).sort()
+  const categories = Array.from(new Set(jobs.map((j) => j.category).filter(Boolean))).sort()
 
   // Get department filter values from internal positions (graceful fallback)
   let filterPositions: { department: string | null; location: string | null }[] = []
@@ -128,11 +126,6 @@ export default async function CareersPage({
     new Set(filterPositions.map((p) => p.department).filter(Boolean))
   ) as string[]
 
-  const sourceLabel: Record<string, string> = {
-    all: "All Sources",
-    printf: "printf Companies",
-    external: "External Job Boards",
-  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -150,10 +143,10 @@ export default async function CareersPage({
             Find Your Next Role
           </h1>
           <p className="mt-3 text-lg text-gray-500">
-            Browse jobs from companies on printf and top remote job boards — all in one place.
+            Browse jobs from companies hiring on printf.
           </p>
 
-          <div className="mt-8 grid gap-3 md:grid-cols-3 xl:grid-cols-5">
+          <div className="mt-8 grid gap-3 md:grid-cols-3">
             {[
               {
                 title: "Take the pathfinder",
@@ -172,18 +165,6 @@ export default async function CareersPage({
                 description: "Turn strong sessions into reports, badges, and a public talent profile.",
                 href: "/auth/signup?role=candidate",
                 accent: "border-blue-500/20 bg-blue-500/5 text-blue-500",
-              },
-              {
-                title: "Explore AI automation",
-                description: "See the India-first automation track built around workflows, mock interviews, and recruiter proof.",
-                href: "/india/ai-automation",
-                accent: "border-amber-500/20 bg-amber-500/5 text-amber-600",
-              },
-              {
-                title: "Join project sprints",
-                description: "Work through company-style briefs, present solutions, and turn the result into portfolio proof.",
-                href: "/india/project-sprints",
-                accent: "border-emerald-500/20 bg-emerald-500/5 text-emerald-600",
               },
             ].map((item) => (
               <Link
@@ -219,17 +200,6 @@ export default async function CareersPage({
             </div>
 
             <div className="mt-4 flex flex-wrap gap-3">
-              {/* Source filter */}
-              <select
-                name="source"
-                defaultValue={source}
-                className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-saffron focus:outline-none"
-              >
-                <option value="all">All Sources</option>
-                <option value="printf">printf Companies</option>
-                <option value="external">External Job Boards</option>
-              </select>
-
               {/* Work mode filter */}
               <select
                 name="workMode"
@@ -307,19 +277,7 @@ export default async function CareersPage({
         <div className="flex items-center justify-between mb-6">
           <p className="text-sm text-gray-500">
             {allJobs.length} job{allJobs.length !== 1 ? "s" : ""} found
-            {source !== "all" && ` from ${sourceLabel[source]}`}
           </p>
-          <div className="flex items-center gap-2 text-xs text-gray-400">
-            <span className="inline-flex items-center gap-1 rounded-full bg-saffron/10 border border-saffron/30 px-2 py-0.5 text-saffron">
-              printf
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full bg-blue-500/10 border border-blue-500/30 px-2 py-0.5 text-blue-500">
-              Remotive
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full bg-green-500/10 border border-green-500/30 px-2 py-0.5 text-green-500">
-              Arbeitnow
-            </span>
-          </div>
         </div>
 
         {allJobs.length === 0 ? (
@@ -346,140 +304,76 @@ export default async function CareersPage({
           </div>
         ) : (
           <div className="space-y-3">
-            {allJobs.map((job) => {
-              const sourceConfig = {
-                printf: {
-                  badge: "printf",
-                  color: "bg-saffron/10 text-saffron border-saffron/30",
-                },
-                remotive: {
-                  badge: "Remotive",
-                  color: "bg-blue-500/10 text-blue-500 border-blue-500/30",
-                },
-                arbeitnow: {
-                  badge: "Arbeitnow",
-                  color: "bg-green-500/10 text-green-500 border-green-500/30",
-                },
-              }[job.source]
-
-              const isInternal = job.source === "printf"
-              const href = isInternal ? job.url : job.url
-
-              return (
-                <a
-                  key={job.id}
-                  href={href}
-                  target={isInternal ? undefined : "_blank"}
-                  rel={isInternal ? undefined : "noopener noreferrer"}
-                  className="block rounded-xl border border-gray-200 bg-white p-5 transition-all hover:border-saffron/30 hover:shadow-sm"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex items-start gap-4 min-w-0">
-                      {/* Company logo or initial */}
-                      {job.companyLogo ? (
-                        /* eslint-disable-next-line @next/next/no-img-element */
-                        <img
-                          src={job.companyLogo}
-                          alt={job.company}
-                          className="h-10 w-10 shrink-0 rounded-lg object-contain bg-gray-50 border border-gray-100"
-                        />
-                      ) : (
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-sm font-semibold text-gray-500">
-                          {job.company.charAt(0).toUpperCase()}
-                        </div>
-                      )}
-
-                      <div className="min-w-0">
-                        <h2 className="text-base font-semibold text-gray-900 truncate">
-                          {job.title}
-                        </h2>
-                        <p className="mt-0.5 text-sm text-gray-500">
-                          {job.company}
-                          {job.location && ` · ${job.location}`}
-                        </p>
-                        {job.description && (
-                          <p className="mt-2 text-sm text-gray-500 line-clamp-2">
-                            {job.description}
-                          </p>
-                        )}
+            {allJobs.map((job) => (
+              <Link
+                key={job.id}
+                href={job.url}
+                className="block rounded-xl border border-gray-200 bg-white p-5 transition-all hover:border-saffron/30 hover:shadow-sm"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-start gap-4 min-w-0">
+                    {job.companyLogo ? (
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img
+                        src={job.companyLogo}
+                        alt={job.company}
+                        className="h-10 w-10 shrink-0 rounded-lg object-contain bg-gray-50 border border-gray-100"
+                      />
+                    ) : (
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-sm font-semibold text-gray-500">
+                        {job.company.charAt(0).toUpperCase()}
                       </div>
-                    </div>
+                    )}
 
-                    <div className="flex shrink-0 flex-col items-end gap-2">
-                      <span
-                        className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${sourceConfig.color}`}
-                      >
-                        {sourceConfig.badge}
-                      </span>
-                      {job.salary && (
-                        <span className="text-xs font-medium text-india-green">
-                          {job.salary}
-                        </span>
+                    <div className="min-w-0">
+                      <h2 className="text-base font-semibold text-gray-900 truncate">
+                        {job.title}
+                      </h2>
+                      <p className="mt-0.5 text-sm text-gray-500">
+                        {job.company}
+                        {job.location && ` · ${job.location}`}
+                      </p>
+                      {job.description && (
+                        <p className="mt-2 text-sm text-gray-500 line-clamp-2">
+                          {job.description}
+                        </p>
                       )}
                     </div>
                   </div>
 
-                  <div className="mt-3 flex flex-wrap items-center gap-2">
-                    <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">
-                      {job.type}
-                    </span>
-                    {job.category && (
-                      <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">
-                        {job.category}
+                  <div className="flex shrink-0 flex-col items-end gap-2">
+                    {job.salary && (
+                      <span className="text-xs font-medium text-india-green">
+                        {job.salary}
                       </span>
                     )}
-                    <span className="text-xs text-gray-400">
-                      {new Date(job.postedAt).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      })}
-                    </span>
-                    {!isInternal && (
-                      <svg
-                        className="ml-auto h-4 w-4 text-gray-300"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                        />
-                      </svg>
-                    )}
                   </div>
-                </a>
-              )
-            })}
+                </div>
+
+                <div className="mt-3 flex flex-wrap items-center gap-2">
+                  <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">
+                    {job.type}
+                  </span>
+                  {job.category && (
+                    <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">
+                      {job.category}
+                    </span>
+                  )}
+                  <span className="text-xs text-gray-400">
+                    {new Date(job.postedAt).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </span>
+                </div>
+              </Link>
+            ))}
           </div>
         )}
 
-        {/* Attribution */}
         <div className="mt-12 text-center text-xs text-gray-400">
-          <p>
-            External jobs sourced from{" "}
-            <a
-              href="https://remotive.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 hover:underline"
-            >
-              Remotive
-            </a>{" "}
-            and{" "}
-            <a
-              href="https://arbeitnow.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-green-500 hover:underline"
-            >
-              Arbeitnow
-            </a>
-            . Company-posted positions are managed through printf.
-          </p>
+          <p>All positions are posted by companies hiring on printf.</p>
         </div>
       </div>
     </div>

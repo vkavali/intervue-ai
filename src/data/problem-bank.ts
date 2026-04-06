@@ -1208,9 +1208,8 @@ const MEESHO: ProblemEntry[] = [
 
 const RAW_BANK: ProblemEntry[] = [...GOOGLE, ...GOOGLE2, ...AMAZON, ...META, ...APPLE, ...NETFLIX, ...FLIPKART, ...RAZORPAY, ...SWIGGY, ...ZERODHA, ...PHONEPE, ...CRED, ...MEESHO, ...GENERAL1, ...GENERAL2];
 
-// Import generated problems (3000+ with full test cases, starter code, constraints)
-import { GENERATED_PROBLEMS } from "./generated-bank";
-
 const HAND_CURATED: ProblemEntry[] = RAW_BANK.map(p => ({ ...p, pattern: derivePattern(p) }));
 
-export const PROBLEM_BANK: ProblemEntry[] = [...HAND_CURATED, ...GENERATED_PROBLEMS];
+// Generated problems (3000+) are now served from the database via /api/practice/bank
+// Run `npx tsx scripts/seed-problems.ts` to populate the DB from src/data/generated-bank.ts
+export const PROBLEM_BANK: ProblemEntry[] = HAND_CURATED;

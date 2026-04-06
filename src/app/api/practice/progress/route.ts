@@ -28,8 +28,8 @@ export async function GET() {
       orderBy: { lastSavedAt: "desc" },
     });
 
-    const enrichedProgress = progress.map((item) => {
-      const resolved = item.bankProblemId ? resolveProblem(item.bankProblemId) : null;
+    const enrichedProgress = await Promise.all(progress.map(async (item) => {
+      const resolved = item.bankProblemId ? await resolveProblem(item.bankProblemId) : null;
 
       return {
         ...item,
@@ -39,7 +39,7 @@ export async function GET() {
         problemPattern: resolved?.pattern || null,
         problemTags: resolved?.tags || [],
       };
-    });
+    }));
 
     return NextResponse.json({ progress: enrichedProgress });
   } catch (error) {

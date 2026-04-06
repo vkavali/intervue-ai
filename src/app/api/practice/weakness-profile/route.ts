@@ -42,7 +42,7 @@ export async function GET() {
       select: { bankProblemId: true, status: true, timeSpentSeconds: true },
     })
 
-    const profile = buildWeaknessProfile(progress)
+    const profile = await buildWeaknessProfile(progress)
 
     // Upsert cache
     await prisma.weaknessProfile.upsert({
@@ -88,7 +88,7 @@ export async function POST(_req: NextRequest) {
       select: { bankProblemId: true, status: true, timeSpentSeconds: true },
     })
 
-    const profile = buildWeaknessProfile(progress)
+    const profile = await buildWeaknessProfile(progress)
 
     await prisma.weaknessProfile.upsert({
       where: { userId: user.id },

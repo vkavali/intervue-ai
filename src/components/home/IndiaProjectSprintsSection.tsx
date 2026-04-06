@@ -194,8 +194,8 @@ export default function IndiaProjectSprintsSection({
                 <Link href="/candidate/career-kit" className="pill-cta-secondary">
                   Build project proof
                 </Link>
-                <Link href="/india/ai-automation" className="pill-cta-secondary">
-                  See automation track
+                <Link href="/practice" className="pill-cta-secondary">
+                  Start practicing
                 </Link>
               </div>
             </div>

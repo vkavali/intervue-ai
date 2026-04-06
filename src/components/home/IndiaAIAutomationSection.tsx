@@ -231,17 +231,17 @@ export default function IndiaAIAutomationSection({
                 <Link href="/candidate/career-kit" className="pill-cta-secondary">
                   Open career kit
                 </Link>
-                <Link href="/india/project-sprints" className="pill-cta-secondary">
-                  Explore project sprints
+                <Link href="/practice" className="pill-cta-secondary">
+                  Start practicing
                 </Link>
               </div>
 
               {!standalone && (
                 <Link
-                  href="/india/ai-automation"
+                  href="/practice"
                   className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-gray-900 transition-colors hover:text-saffron"
                 >
-                  Explore the full India automation page
+                  Start practicing now
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>

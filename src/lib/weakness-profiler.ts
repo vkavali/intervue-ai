@@ -32,9 +32,9 @@ interface ProgressRecord {
 /**
  * Build a weakness profile from practice progress records.
  */
-export function buildWeaknessProfile(
+export async function buildWeaknessProfile(
   progressRecords: ProgressRecord[]
-): WeaknessProfileData {
+): Promise<WeaknessProfileData> {
   // Group progress by pattern/category
   const patternMap = new Map<string, {
     attempted: number
@@ -51,7 +51,7 @@ export function buildWeaknessProfile(
   for (const record of progressRecords) {
     if (!record.bankProblemId) continue
 
-    const problem = resolveProblem(record.bankProblemId)
+    const problem = await resolveProblem(record.bankProblemId)
     const pattern = problem?.pattern || problem?.category || 'Unknown'
 
     if (!patternMap.has(pattern)) {

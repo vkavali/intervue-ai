@@ -292,24 +292,28 @@ model Notification {
 }
 
 // ─── PracticeProblem ─────────────────────────────────────────────────────────
-// AI-generated practice problems persisted for users
+// AI-generated practice problems persisted for users, or global bank problems (userId = null)
 
 model PracticeProblem {
   id          String   @id @default(cuid())
-  userId      String
+  userId      String?  // Null for global bank problems
+  bankId      String?  @unique // Original ID from generated-bank (e.g. "gen-1")
   title       String
   difficulty  String   // EASY | MEDIUM | HARD
   description String
   constraints String?
   examples    String?
   tags        String   // JSON array as text
+  category    String?  // e.g. StackQueue, Arrays, etc.
+  pattern     String?  // e.g. Stack, SlidingWindow, etc.
+  hints       String?  // JSON array as text
   starterCode String?  // JSON object as text { javascript: "...", python: "..." }
   testCases   String?  // JSON: [{ input: "fnName(args)", expected: "result" }]
   company     String?  // Company context if generated for specific company
   role        String?  // Role context if generated for specific role
   createdAt   DateTime @default(now())
 
-  user            User               @relation("UserPracticeProblems", fields: [userId], references: [id])
+  user            User?              @relation("UserPracticeProblems", fields: [userId], references: [id])
   progress        PracticeProgress[] @relation("ProblemProgress")
   dailyChallenges DailyChallenge[]   @relation("ChallengeProblem")
 }

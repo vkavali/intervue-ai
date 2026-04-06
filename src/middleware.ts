@@ -10,6 +10,7 @@ const LIMITS: Record<string, { max: number; windowMs: number }> = {
   auth:     { max: 30,  windowMs: 60_000 },   // 30 req/min for login, register
   reset:    { max: 10,  windowMs: 60_000 },   // 10 req/min for password reset (own bucket)
   ai:       { max: 40,  windowMs: 60_000 },   // 40 req/min for AI endpoints
+  execute:  { max: 20,  windowMs: 60_000 },   // 20 req/min for code execution
   sessions: { max: 60,  windowMs: 60_000 },   // 60 req/min for sessions
   practice: { max: 60,  windowMs: 60_000 },   // 60 req/min for practice
   api:      { max: 120, windowMs: 60_000 },   // 120 req/min general
@@ -52,6 +53,7 @@ function cleanup() {
 function getCategory(pathname: string): string {
   // Password reset gets its own bucket so forgot-password retries don't block the actual reset
   if (pathname.includes("/forgot-password") || pathname.includes("/reset-password")) return "reset"
+  if (pathname.startsWith("/api/execute")) return "execute"
   if (pathname.startsWith("/api/auth")) return "auth"
   if (
     pathname.includes("/ai") ||

@@ -133,6 +133,17 @@ export default async function CandidateDashboard() {
   const practiceInProgress = practiceProgress.filter((p) => p.status === "IN_PROGRESS").length;
   const recentPractice = practiceProgress.slice(0, 5);
 
+  // Pre-resolve problem data (resolveProblem is async)
+  const resolvedProblemMap = new Map<string, Awaited<ReturnType<typeof resolveProblem>>>();
+  await Promise.all(
+    recentPractice.map(async (p) => {
+      const id = p.bankProblemId || p.problemId || "";
+      if (id && !resolvedProblemMap.has(id)) {
+        resolvedProblemMap.set(id, await resolveProblem(id));
+      }
+    })
+  );
+
   const now = new Date();
   const completedSessions = sessions.filter((s) => s.status === "COMPLETED");
 
@@ -234,7 +245,7 @@ export default async function CandidateDashboard() {
           </div>
           <div className="space-y-2">
             {recentPractice.map((p) => {
-              const problemData = resolveProblem(p.bankProblemId || p.problemId || "");
+              const problemData = resolvedProblemMap.get(p.bankProblemId || p.problemId || "") ?? null;
               const title = problemData?.title || p.bankProblemId || p.problemId || "Unknown Problem";
               const practiceStatusColors: Record<string, { bg: string; text: string }> = {
                 COMPLETED: { bg: "bg-green-500/10", text: "text-green-400" },
