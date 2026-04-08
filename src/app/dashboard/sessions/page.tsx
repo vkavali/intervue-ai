@@ -46,6 +46,32 @@ export default async function SessionsPage() {
       },
       data: { status: "EXPIRED" },
     });
+
+    // Auto-expire ACTIVE sessions whose duration has elapsed
+    const activeSessions = await prisma.interviewSession.findMany({
+      where: {
+        companyId: user.companyId,
+        status: "ACTIVE",
+        startedAt: { not: null },
+        totalDurationMinutes: { not: null, gt: 0 },
+      },
+      select: { id: true, startedAt: true, totalDurationMinutes: true },
+    });
+
+    const now = Date.now();
+    const expiredActiveIds = activeSessions
+      .filter((s) => {
+        const expiresAt = new Date(s.startedAt!).getTime() + s.totalDurationMinutes! * 60 * 1000;
+        return now > expiresAt;
+      })
+      .map((s) => s.id);
+
+    if (expiredActiveIds.length > 0) {
+      await prisma.interviewSession.updateMany({
+        where: { id: { in: expiredActiveIds } },
+        data: { status: "EXPIRED", endedAt: new Date() },
+      });
+    }
   }
 
   if (user?.companyId) {
