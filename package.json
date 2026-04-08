@@ -7,8 +7,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "postinstall": "prisma generate --schema=prisma/schema.prisma",
-    "build": "next build && npx tsc --project tsconfig.server.json",
+    "build": "prisma generate --schema=prisma/schema.prisma && next build && npx tsc --project tsconfig.server.json",
     "start": "node server.js",
     "start:next": "next start",
     "lint": "next lint"
